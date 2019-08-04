@@ -1,10 +1,11 @@
 export type Direction = "across" | "down";
+
 export type GridStyle = "standard" | "barred";
+export type ClueGroupId = "across" | "down";
 
 export class Blog {
     puzzleId: string;
-    acrossEntries: BlogEntry[];
-    downEntries: BlogEntry[];
+    blogEntries: BlogEntry[];
 }
 
 export class BlogEntry {
@@ -16,12 +17,12 @@ export class BlogEntry {
 
 export class Puzzle {
     grid: Grid;
-    acrossClues: Clue[];
-    downClues: Clue[];
+    clues: Clue[];
 }
 
 export class Clue {
     id: string;
+    groupId: ClueGroupId;
     caption: string;        // "1 across, 2 down"
     text: string;           // "How to train a dragon (5, 4)"
     letterCount: string;    // "(5, 4)"

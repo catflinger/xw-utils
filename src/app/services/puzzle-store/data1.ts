@@ -1,10 +1,10 @@
 import { GridStyle } from 'src/app/model/puzzle';
 
 export const data = {
-    "acrossClues": [
+    "clues": [
       {
         "id": "clue1",
-        "direction": "across",
+        "groupId": "across",
         "caption": "1",
         "text": "Maiden is full of anger, things being not what they seem to be (7)",
         "letterCount": "7",
@@ -24,7 +24,7 @@ export const data = {
       },
       {
         "id": "clue2",
-        "direction": "across",
+        "groupId": "across",
         "caption": "5",
         "text": "Plant donkey found by East Anglian river (6)",
         "letterCount": "6",
@@ -43,7 +43,7 @@ export const data = {
       },
       {
         "id": "clue3",
-        "direction": "across",
+        "groupId": "across",
         "caption": "8",
         "text": "Biscuit with rotten egg in – nasty turn ensues (6,3)",
         "letterCount": "6,3",
@@ -65,7 +65,7 @@ export const data = {
       },
       {
         "id": "clue4",
-        "direction": "across",
+        "groupId": "across",
         "caption": "9",
         "text": "Old soldier in sixties show suitable for kids making comeback (5)",
         "letterCount": "5",
@@ -83,7 +83,7 @@ export const data = {
       },
       {
         "id": "clue5",
-        "direction": "across",
+        "groupId": "across",
         "caption": "11",
         "text": "Work of poet being performed in cinema? (5)",
         "letterCount": "5",
@@ -101,7 +101,7 @@ export const data = {
       },
       {
         "id": "clue6",
-        "direction": "across",
+        "groupId": "across",
         "caption": "12",
         "text": "Scottish island, say – one with a learner in an academic setting (9)",
         "letterCount": "9",
@@ -123,7 +123,7 @@ export const data = {
       },
       {
         "id": "clue7",
-        "direction": "across",
+        "groupId": "across",
         "caption": "13",
         "text": "Enticers manoeuvring without anybody seeing (2,6)",
         "letterCount": "2,6",
@@ -144,7 +144,7 @@ export const data = {
       },
       {
         "id": "clue8",
-        "direction": "across",
+        "groupId": "across",
         "caption": "15, 3",
         "text": "Unruly gang re-enter border village (6,5)",
         "letterCount": "6,5",
@@ -172,7 +172,7 @@ export const data = {
       },
       {
         "id": "clue9",
-        "direction": "across",
+        "groupId": "across",
         "caption": "17",
         "text": "Servant of broadcaster appearing around 4 to 5 (6)",
         "letterCount": "6",
@@ -191,7 +191,7 @@ export const data = {
       },
       {
         "id": "clue10",
-        "direction": "across",
+        "groupId": "across",
         "caption": "19",
         "text": "Fellow going to room cut bread (8)",
         "letterCount": "8",
@@ -212,7 +212,7 @@ export const data = {
       },
       {
         "id": "clue11",
-        "direction": "across",
+        "groupId": "across",
         "caption": "22",
         "text": "What a lecturer wants to be paid? (9)",
         "letterCount": "9",
@@ -234,7 +234,7 @@ export const data = {
       },
       {
         "id": "clue12",
-        "direction": "across",
+        "groupId": "across",
         "caption": "23",
         "text": "Strips, having returned for rest (5)",
         "letterCount": "5",
@@ -252,7 +252,7 @@ export const data = {
       },
       {
         "id": "clue13",
-        "direction": "across",
+        "groupId": "across",
         "caption": "24",
         "text": "Boredom with EU in Britain finally  resolved? (5)",
         "letterCount": "5",
@@ -270,7 +270,7 @@ export const data = {
       },
       {
         "id": "clue14",
-        "direction": "across",
+        "groupId": "across",
         "caption": "25",
         "text": "Cartoon character on the web? (9)",
         "letterCount": "9",
@@ -292,7 +292,7 @@ export const data = {
       },
       {
         "id": "clue15",
-        "direction": "across",
+        "groupId": "across",
         "caption": "26",
         "text": "He may get involved with IT etc with no end of excitement (6)",
         "letterCount": "6",
@@ -311,7 +311,7 @@ export const data = {
       },
       {
         "id": "clue16",
-        "direction": "across",
+        "groupId": "across",
         "caption": "27",
         "text": "High wind besetting one lake gone finally – this one? (7)",
         "letterCount": "7",
@@ -328,12 +328,10 @@ export const data = {
             ]
           }
         ]
-      }
-    ],
-    "downClues": [
+      },
       {
         "id": "clue17",
-        "direction": "down",
+        "groupId": "down",
         "caption": "1",
         "text": "Friend full of nostalgia surprisingly for Mississippi (8,5)",
         "letterCount": "8,5",
@@ -359,7 +357,7 @@ export const data = {
       },
       {
         "id": "clue18",
-        "direction": "down",
+        "groupId": "down",
         "caption": "2",
         "text": "Ref initially enrages football team (7)",
         "letterCount": "7",
@@ -379,7 +377,7 @@ export const data = {
       },
       {
         "id": "clue19",
-        "direction": "down",
+        "groupId": "down",
         "caption": "3",
         "text": "See 15",
         "letterCount": "",
@@ -397,7 +395,7 @@ export const data = {
       },
       {
         "id": "clue20",
-        "direction": "down",
+        "groupId": "down",
         "caption": "4",
         "text": "Nice lass arranged plants (8)",
         "letterCount": "8",
@@ -418,7 +416,7 @@ export const data = {
       },
       {
         "id": "clue21",
-        "direction": "down",
+        "groupId": "down",
         "caption": "5",
         "text": "Cross put above cathedral city in an attractive way (6)",
         "letterCount": "6",
@@ -437,7 +435,7 @@ export const data = {
       },
       {
         "id": "clue22",
-        "direction": "down",
+        "groupId": "down",
         "caption": "6",
         "text": "A super tom around? Maybe this isn’t needed then! (9)",
         "letterCount": "9",
@@ -459,7 +457,7 @@ export const data = {
       },
       {
         "id": "clue23",
-        "direction": "down",
+        "groupId": "down",
         "caption": "7",
         "text": "Endless expertise shown with two newspapers presenting winter sports feature (3,4)",
         "letterCount": "3,4",
@@ -479,7 +477,7 @@ export const data = {
       },
       {
         "id": "clue24",
-        "direction": "down",
+        "groupId": "down",
         "caption": "10",
         "text": "3D show of yesteryear? (4,1,8)",
         "letterCount": "4,1,8",
@@ -505,7 +503,7 @@ export const data = {
       },
       {
         "id": "clue25",
-        "direction": "down",
+        "groupId": "down",
         "caption": "14",
         "text": "Scientist in den with container for absorbing nitrogen (9)",
         "letterCount": "9",
@@ -527,7 +525,7 @@ export const data = {
       },
       {
         "id": "clue26",
-        "direction": "down",
+        "groupId": "down",
         "caption": "16",
         "text": "Conservative wanting capital punishment is coming to different view (8)",
         "letterCount": "8",
@@ -548,7 +546,7 @@ export const data = {
       },
       {
         "id": "clue27",
-        "direction": "down",
+        "groupId": "down",
         "caption": "18",
         "text": "Trendy present maybe making one passionate (7)",
         "letterCount": "7",
@@ -568,7 +566,7 @@ export const data = {
       },
       {
         "id": "clue28",
-        "direction": "down",
+        "groupId": "down",
         "caption": "20",
         "text": "Hot air from the group believing everything – almost everything (7)",
         "letterCount": "7",
@@ -588,7 +586,7 @@ export const data = {
       },
       {
         "id": "clue29",
-        "direction": "down",
+        "groupId": "down",
         "caption": "21",
         "text": "Load of lies in paper (6)",
         "letterCount": "6",
@@ -607,7 +605,7 @@ export const data = {
       },
       {
         "id": "clue30",
-        "direction": "down",
+        "groupId": "down",
         "caption": "23",
         "text": "Groovy dude (5)",
         "letterCount": "5",
