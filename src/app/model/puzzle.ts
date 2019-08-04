@@ -16,16 +16,16 @@ export class Clue {
 }
 
 export class GridEntry {
-    cells: GridCell[];
+    cellIds: string[];
 }
 
 export class Grid {
     style: GridStyle;
-    dimension: GridDimension;
+    size: GridSize;
     cells: GridCell[];
 }
 
-export class GridDimension {
+export class GridSize {
     across: number;
     down: number;
 }
