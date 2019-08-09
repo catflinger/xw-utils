@@ -23,5 +23,4 @@ export class GridTestComponent implements OnInit {
         })
         .catch((err) => { this.err = err; });
     }
-
 }
