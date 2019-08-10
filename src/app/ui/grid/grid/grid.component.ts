@@ -106,43 +106,39 @@ export class GridComponent implements OnInit, AfterViewInit {
         const left = cell.x * this.gridParams.cellSize;
         const size = this.gridParams.cellSize;
 
-        // fill the cell
         if (!cell.light) {
+            // blank-out  the cells that can't hold content
             this.fillCell(context, left, top, this.gridParams.gridColor);
+        
         } else {
 
+            // highlight cells that are in focus
             if (cell.highlight){
                 this.fillCell(context, left, top, this.gridParams.highlightColor);
             }
 
             // draw the caption
             if (cell.caption.trim()) {
-                context.font = this.gridParams.captionFont;
-                context.textAlign = "start";
-                context.textBaseline = "hanging";
-                context.direction = "ltr";
-                context.fillStyle = this.gridParams.gridColor;
-
-                context.fillText(
-                    cell.caption.trim(), 
-                    left + this.gridParams.cellPadding, 
-                    top + this.gridParams.cellPadding );
+                this.drawCaption(
+                    context,
+                    left,
+                    top,
+                    cell.caption.trim());
             }
 
             // draw the cell context
             if (cell.content.trim()) {
-                context.font = this.gridParams.textFont;
-                context.textAlign = "center";
-                context.textBaseline = "middle";
-                context.direction = "ltr";
-                context.fillStyle = this.gridParams.gridColor;
-
-                context.fillText(
-                    cell.content.trim(), 
-                    left + this.gridParams.cellSize / 2, 
-                    top + this.gridParams.cellSize / 2 );
+                this.drawContent(
+                    context,
+                    left,
+                    top,
+                    cell.content.trim());
             }
-    }
+
+            // TO DO: draw in bars and other decorations
+        }
+
+        // all cells get borders regardless of whether they hold content
 
         // draw top border for cells at the top of the grid
         if (cell.y === 0) {
@@ -169,7 +165,7 @@ export class GridComponent implements OnInit, AfterViewInit {
             context, 
             [left + size - 0.5, top],
             [left + size - 0.5, top + size],
-            cell.rightBar ? this.gridParams.barWidth : this.gridParams.borderWidth,
+            this.gridParams.borderWidth,
             this.gridParams.gridColor);
 
         // draw bottom border for all cells
@@ -177,7 +173,7 @@ export class GridComponent implements OnInit, AfterViewInit {
             context, 
             [left, top + size - 0.5],
             [left + size, top + size -0.5],
-            cell.bottomBar ? this.gridParams.barWidth : this.gridParams.borderWidth,
+            this.gridParams.borderWidth,
             this.gridParams.gridColor);
     }
 
@@ -202,4 +198,32 @@ export class GridComponent implements OnInit, AfterViewInit {
         context.lineTo(to[0], to[1]);
         context.stroke();
     }
+
+    private drawCaption(context: CanvasRenderingContext2D, left: number, top: number, caption: string)
+    {
+        context.font = this.gridParams.captionFont;
+        context.textAlign = "start";
+        context.textBaseline = "hanging";
+        context.direction = "ltr";
+        context.fillStyle = this.gridParams.gridColor;
+
+        context.fillText(
+            caption, 
+            left + this.gridParams.cellPadding, 
+            top + this.gridParams.cellPadding );
+    }
+
+    private drawContent(context: CanvasRenderingContext2D, left: number, top: number, content: string)
+    {
+        context.font = this.gridParams.textFont;
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.direction = "ltr";
+        context.fillStyle = this.gridParams.gridColor;
+
+        context.fillText(
+            content, 
+            left + this.gridParams.cellSize / 2, 
+            top + this.gridParams.cellSize / 2 );
+}
 }
