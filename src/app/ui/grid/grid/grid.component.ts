@@ -8,6 +8,9 @@ class GridParameters {
     public readonly borderWidth = 1;
     public readonly barWidth = 3;
     public readonly gridPadding = 5;
+    public readonly cellPadding = 2;
+    public readonly captionFont = "9px serif";
+    public readonly textFont = "20px sans-serif";
     public readonly gridColor = "#000000";
     public readonly highlightColor = "BurlyWood";
 }
@@ -86,7 +89,6 @@ export class GridComponent implements OnInit, AfterViewInit {
     }
 
     private drawGrid(): void {
-        console.log("drawGrid");
         const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
         const context = canvasEl.getContext('2d');
         context.setTransform(1, 0, 0, 1, 0, 0);
@@ -113,10 +115,34 @@ export class GridComponent implements OnInit, AfterViewInit {
                 this.fillCell(context, left, top, this.gridParams.highlightColor);
             }
 
-            // TO DO: draw the caption 
+            // draw the caption
+            if (cell.caption.trim()) {
+                context.font = this.gridParams.captionFont;
+                context.textAlign = "start";
+                context.textBaseline = "hanging";
+                context.direction = "ltr";
+                context.fillStyle = this.gridParams.gridColor;
 
-            // TO DO: draw the cell text 
-        }
+                context.fillText(
+                    cell.caption.trim(), 
+                    left + this.gridParams.cellPadding, 
+                    top + this.gridParams.cellPadding );
+            }
+
+            // draw the cell context
+            if (cell.content.trim()) {
+                context.font = this.gridParams.textFont;
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.direction = "ltr";
+                context.fillStyle = this.gridParams.gridColor;
+
+                context.fillText(
+                    cell.content.trim(), 
+                    left + this.gridParams.cellSize / 2, 
+                    top + this.gridParams.cellSize / 2 );
+            }
+    }
 
         // draw top border for cells at the top of the grid
         if (cell.y === 0) {

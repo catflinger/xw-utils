@@ -650,7 +650,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "A"
         },
         {
           "id": "2",
@@ -660,7 +660,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "B"
         },
         {
           "id": "3",
@@ -670,7 +670,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "C"
         },
         {
           "id": "4",
@@ -680,7 +680,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "D"
         },
         {
           "id": "5",
@@ -690,7 +690,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "E"
         },
         {
           "id": "6",
@@ -700,7 +700,7 @@ export const data = {
           "light": true,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "F"
         },
         {
           "id": "7",
@@ -710,7 +710,7 @@ export const data = {
           "light": false,
           "rightBar": false,
           "bottomBar": false,
-          "content": " "
+          "content": "G"
         },
         {
           "id": "8",
