@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PuzzleStoreService } from './puzzle-store.service';
+import { PuzzleService } from './puzzle.service';
 
-describe('PuzzleStoreService', () => {
+describe('PuzzleServiceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PuzzleStoreService = TestBed.get(PuzzleStoreService);
+    const service: PuzzleService = TestBed.get(PuzzleService);
     expect(service).toBeTruthy();
   });
 });

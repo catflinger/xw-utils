@@ -27,6 +27,7 @@ export class Clue {
     text: string;           // "How to train a dragon (5, 4)"
     letterCount: string;    // "(5, 4)"
     entries: GridEntry[];
+    highlight: boolean;
 }
 
 export class GridEntry {

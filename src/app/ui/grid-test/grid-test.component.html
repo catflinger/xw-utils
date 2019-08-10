@@ -1,5 +1,8 @@
 <h3>Grid Test</h3>
 
-<app-grid *ngIf="puzzle" [grid]="puzzle.grid"></app-grid>
+<button (click)="OnClick()">LOAD</button>
 
-<div *ngIf="source">{{source}}</div>
+<app-grid></app-grid>
+
+<app-clue-list direction="across"></app-clue-list>
+<app-clue-list direction="down"></app-clue-list>
