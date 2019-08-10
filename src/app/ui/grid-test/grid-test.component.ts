@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
-import { Puzzle } from 'src/app/model/puzzle';
-import { Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'app-grid-test',

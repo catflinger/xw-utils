@@ -1,8 +1,20 @@
-<h3>Grid Test</h3>
 
-<button (click)="OnClick()">LOAD</button>
+<div class="row">
+    <div class="col">
+        <button (click)="OnClick()">LOAD</button>
+    </div>
+</div>
 
-<app-grid></app-grid>
+<div class="row">
+    <div class="col">
+        <app-grid></app-grid>
+    </div>
 
-<app-clue-list direction="across"></app-clue-list>
-<app-clue-list direction="down"></app-clue-list>
+    <div class="col">
+        <app-clue-list direction="across"></app-clue-list>
+    </div>
+
+    <div class="col">
+        <app-clue-list direction="down"></app-clue-list>
+    </div>
+</div>

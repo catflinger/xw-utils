@@ -1,5 +1,13 @@
 <div *ngIf="clues.length">
+
     <h3>{{direction}}</h3>
 
-    <div *ngFor="let clue of clues" (click)="onClueClick(clue.id)" [ngClass]="{ highlight: clue.highlight }">{{clue.caption}} {{clue.text}}</div>
+    <table>
+        <tbody>
+            <tr *ngFor="let clue of clues" (click)="onClueClick(clue)">
+                <td class="caption">{{clue.caption}}</td>
+                <td [ngClass]="{ highlight: clue.highlight }">{{clue.text}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

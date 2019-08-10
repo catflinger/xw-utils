@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Puzzle, Clue } from '../model/puzzle';
+import { Puzzle, Clue, GridCell } from '../model/puzzle';
 
 import { data } from "./data1";
 
@@ -21,6 +21,28 @@ export class PuzzleService {
 
     public loadPuzzle(puzzleId: string) {
         this.bs.next(data);
+    }
+
+    public cellAt(x: number, y: number): GridCell {
+        let result: GridCell = null;
+
+        let puzzle = this.bs.value;
+        
+        if (puzzle) {
+            result = this.bs.value.grid.cells.find((cell) => cell.x === x && cell.y === y );
+        }
+        return result;
+    }
+
+    public getSelectedClue(): Clue {
+        let result: Clue = null;
+        let puzzle = this.bs.value;
+
+        if (puzzle) {
+            result = puzzle.clues.find((clue) => clue.highlight );
+        }
+
+        return result;
     }
 
     public selectClue(clueId: string) {

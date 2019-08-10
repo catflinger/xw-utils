@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Direction, Clue } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 })
 export class ClueListComponent implements OnInit {
     @Input() public direction: Direction;
+    @Output() public clueClick = new EventEmitter<Clue>();
+
     private subs: Subscription[] = [];
     public clues: Clue[] = [];
 
@@ -25,7 +27,11 @@ export class ClueListComponent implements OnInit {
         ));
     }
 
-    public onClueClick(clueId: string) {
-        this.puzzleService.selectClue(clueId);
+    public onClueClick(clue: Clue) {
+        if (clue.highlight) {
+            this.clueClick.emit(clue);
+        } else {
+            this.puzzleService.selectClue(clue.id);
+        }
     }
 }

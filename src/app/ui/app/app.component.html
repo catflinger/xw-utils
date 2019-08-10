@@ -1,4 +1,27 @@
-<div>THIS IS THE BLOGGER MENU <a [routerLink]="['/home']">Home</a></div>
-<div>
+<div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+
+    <header class="navbar navbar-light navbar-fixed-top navbar-expand-lg">
+
+        <a class="navbar-brand" [routerLink]="['/']" (click)="navbarCollapsed = true">xw-utils</a>
+
+        <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+            [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/grid-test']" (click)="navbarCollapsed = true">Grid Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/solver']" (click)="navbarCollapsed = true">Solver</a>
+                </li>
+            </ul>
+
+        </div>
+    </header>
+
     <router-outlet></router-outlet>
 </div>

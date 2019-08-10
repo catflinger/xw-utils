@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Grid, GridCell, Puzzle } from 'src/app/model/puzzle';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Grid, GridCell, Puzzle, Clue } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 
@@ -23,6 +23,7 @@ class GridParameters {
 export class GridComponent implements OnInit, AfterViewInit {
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
+    @Output() cellClick = new EventEmitter<GridCell>();
 
     private gridParams: GridParameters;
 
@@ -84,7 +85,13 @@ export class GridComponent implements OnInit, AfterViewInit {
         let top = params.clientY - bounds.top - this.gridParams.gridPadding;
         let y = Math.floor(top / this.gridParams.cellSize);
 
-        this.puzzleService.selectClueByCell(x, y);
+        let cell: GridCell = this.puzzleService.cellAt(x, y);
+
+        if (cell.highlight) {
+            this.cellClick.emit(cell);
+        } else {
+            this.puzzleService.selectClueByCell(x, y);
+        }
 
     }
 
