@@ -10,13 +10,15 @@ import { ClueUpdate } from 'src/app/services/clue-update';
 })
 export class ClueEditorComponent implements OnInit {
     @Input() clue: Clue;
+    @Input() starterText: string;
 
     public model: ClueUpdate = new ClueUpdate;
 
     constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        this.model.answer = this.clue.answer;
+        console.log("OnInit");
+        this.model.answer = this.starterText ? this.starterText : this.clue.answer;
         this.model.comment = this.clue.comment;
     }
 

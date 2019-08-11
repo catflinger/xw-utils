@@ -7,11 +7,11 @@ import { ClueUpdate } from './clue-update';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
-//      changes are made through public funstions on this service
-//      an new updated model is produced an added to teh Behaviour Subject
+//      changes are made only through public functions on this service
+//      an new updated model is produced an added to the Behaviour Subject
 //      application components listen for new models by subscribing to the BS
 
-// This might be better done using a storage framework such as Redux, but I don't have the time to learn another framework right now.
+// This might be better done using a storage framework such as Redux, but I don't have the time to learn a framework right now.
 // Once I get on top of the rest of the app then I might try and go back and retro fit Redux or similar later
 
 
@@ -31,7 +31,15 @@ export class PuzzleService {
     }
 
     public loadPuzzle(puzzleId: string) {
-        this.bs.next(data);
+        let puzzle: Puzzle;
+        
+        const json = localStorage.getItem("xw-puzzle");
+        if (json) {
+            puzzle = JSON.parse(json);
+        } else {
+            puzzle = data;
+        }
+        this.bs.next(puzzle);
     }
 
     public cellAt(x: number, y: number): GridCell {
@@ -57,7 +65,7 @@ export class PuzzleService {
     }
 
     public selectClue(clueId: string) {
-        let puzzle = this.bs.value;
+        let puzzle = this.getMutable();
 
         if (puzzle) {
 
@@ -73,12 +81,12 @@ export class PuzzleService {
                     });
                 });
             }
-            this.bs.next(JSON.parse(JSON.stringify(puzzle)));
+            this.commit(puzzle);
         }
     }
 
     public selectClueByCell(x: number, y: number) : void {
-        let puzzle = this.bs.value;
+        let puzzle = this.getMutable();
 
         if (puzzle) {
 
@@ -118,13 +126,13 @@ export class PuzzleService {
                     this.highlightClue(puzzle, result)
                 }
 
-                this.bs.next(JSON.parse(JSON.stringify(puzzle)));
+                this.commit(puzzle);
             }
         }
     }
 
     public updateClue(id: string, delta: ClueUpdate) {
-        let puzzle: Puzzle = this.bs.value;
+        let puzzle = this.getMutable();
 
         if (puzzle) {
             let clue = puzzle.clues.find((c) => c.id === id );
@@ -133,12 +141,23 @@ export class PuzzleService {
                 // TO DO: do some validation on the values in the delta here
 
                 // commit the change
-                clue.answer = delta.answer;
+                clue.answer = delta.answer.toUpperCase();
                 clue.comment = delta.comment;
 
                 this.updateGridText(puzzle);
+
+                this.commit(puzzle);
             }
         }
+    }
+
+    private getMutable(): Puzzle {
+        return JSON.parse(JSON.stringify(this.bs.value));
+    }
+
+    private commit(puzzle: Puzzle) {
+        localStorage.setItem("xw-puzzle", JSON.stringify(puzzle));
+        this.bs.next(puzzle);
     }
 
     private clearHighlights(puzzle: Puzzle) {
@@ -208,9 +227,25 @@ export class PuzzleService {
     }
 
     private updateGridText(puzzle: Puzzle) {
-        puzzle.clues.forEach((clue) => {
 
+        // clear the grid
+        puzzle.grid.cells.forEach(cell => cell.content = "");
+
+        puzzle.clues.forEach((clue) => {
+            let answer = clue.answer;
+            let index = 0;
+
+            if (answer) {
+                clue.entries.forEach((entry) => {
+                    entry.cellIds.forEach((id) => {
+                        let cell = puzzle.grid.cells.find(c => c.id === id);
+                        if (index < answer.length) {
+                            cell.content = answer.charAt(index); 
+                        }
+                        index++;
+                    });
+                });
+            }
         });
     }
-
 }

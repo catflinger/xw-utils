@@ -9,7 +9,7 @@
     <form>
         <div class="form-group">
             <label for="answer">Answer</label>
-            <input id="answer" name="answer" class="form-control" [(ngModel)]="model.answer" #answer (blur)="answer.value = answer.value.toUpperCase()">
+            <input id="answer" name="answer" class="form-control" ngbAutofocus [(ngModel)]="model.answer">
         </div>
 
         <div class="form-group">
