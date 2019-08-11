@@ -3,6 +3,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle, Clue, GridCell } from '../model/puzzle';
 
 import { data } from "./data1";
+import { ClueUpdate } from './clue-update';
+
+// This is a basic implimentation of an immutable store:
+//      the model (Puzzle) is not to be changed by the application
+//      changes are made through public funstions on this service
+//      an new updated model is produced an added to teh Behaviour Subject
+//      application components listen for new models by subscribing to the BS
+
+// This might be better done using a storage framework such as Redux, but I don't have the time to learn another framework right now.
+// Once I get on top of the rest of the app then I might try and go back and retro fit Redux or similar later
+
 
 @Injectable({
     providedIn: 'root'
@@ -112,6 +123,24 @@ export class PuzzleService {
         }
     }
 
+    public updateClue(id: string, delta: ClueUpdate) {
+        let puzzle: Puzzle = this.bs.value;
+
+        if (puzzle) {
+            let clue = puzzle.clues.find((c) => c.id === id );
+            
+            if (clue) {
+                // TO DO: do some validation on the values in the delta here
+
+                // commit the change
+                clue.answer = delta.answer;
+                clue.comment = delta.comment;
+
+                this.updateGridText(puzzle);
+            }
+        }
+    }
+
     private clearHighlights(puzzle: Puzzle) {
         puzzle.clues.forEach((clue) => {
             clue.highlight = false;
@@ -121,7 +150,6 @@ export class PuzzleService {
         });
     }
 
-    
     private highlightClue(puzzle: Puzzle, clue: Clue) {
 
         clue.highlight = true;
@@ -132,7 +160,6 @@ export class PuzzleService {
             });
         });
     }
-
 
     private getAcrossClues(puzzle: Puzzle): Clue[] {
         return puzzle.clues.filter((clue) => clue.group === "across" );
@@ -178,6 +205,12 @@ export class PuzzleService {
             }
         }
         return result;
+    }
+
+    private updateGridText(puzzle: Puzzle) {
+        puzzle.clues.forEach((clue) => {
+
+        });
     }
 
 }

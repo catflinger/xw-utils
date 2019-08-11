@@ -10,6 +10,7 @@ import { PuzzleService } from './services/puzzle.service';
 import { ClueListComponent } from './ui/clue-list/clue-list.component';
 import { SolverComponent } from './ui/solver/solver.component';
 import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     NgbModule
   ],
   providers: [

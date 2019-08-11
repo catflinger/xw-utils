@@ -1,12 +1,25 @@
 <div class="modal-header">
-        <h4 class="modal-title">{{clue.text}}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Hello, {{clue.id}}!</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
-      </div>
+    <h4 class="modal-title">{{clue.caption}} {{clue.text}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+            <label for="answer">Answer</label>
+            <input id="answer" name="answer" class="form-control" [(ngModel)]="model.answer" #answer (blur)="answer.value = answer.value.toUpperCase()">
+        </div>
+
+        <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea id="comment" name="comment" class="form-control" [(ngModel)]="model.comment" ></textarea>
+            </div>
+        </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="close()">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+</div>

@@ -28,6 +28,8 @@ export class Clue {
     letterCount: string;    // "(5, 4)"
     entries: GridEntry[];
     highlight: boolean;
+    answer: string;
+    comment: string;
 }
 
 export class GridEntry {
