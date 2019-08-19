@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Clue } from 'src/app/model/puzzle';
 import { ClueUpdate } from 'src/app/services/clue-update';
+import { PuzzleService } from 'src/app/services/puzzle.service';
 
 @Component({
     selector: 'app-clue-editor',
@@ -9,17 +10,27 @@ import { ClueUpdate } from 'src/app/services/clue-update';
     styleUrls: ['./clue-editor.component.css']
 })
 export class ClueEditorComponent implements OnInit {
-    @Input() clue: Clue;
+    @Input() clueId: string;
     @Input() starterText: string;
     @Input() latestAnswer: string;
 
-    public model: ClueUpdate;;
+    public model: ClueUpdate;
 
-    constructor(public activeModal: NgbActiveModal) { }
+    constructor(
+        private puzzleService: PuzzleService, 
+        public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        this.model = new ClueUpdate(this.clue);
-        this.model.answer = this.starterText ? this.starterText : this.clue.answer;
+        let puzzle = this.puzzleService.getObservable().subscribe(
+            (puzzle) => {
+                if (puzzle) {
+                    let clue = puzzle.clues.find((c) => c.id === this.clueId);
+                    this.model = new ClueUpdate(clue);
+                    this.model.answer = this.starterText ? this.starterText : clue.answer;
+                }
+            }
+        );
+
     }
 
     public close() {

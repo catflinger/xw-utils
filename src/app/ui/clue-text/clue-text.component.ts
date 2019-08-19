@@ -88,9 +88,13 @@ export class ClueTextComponent implements OnInit {
 
                     let newMask = this.makeDefinitionMask(startChunk, endChunk);
                     this.model.definition = newMask;
+
+                    this.chunks = this.makeChunkArray(this.model);
                 }
             }
+            selection.removeAllRanges();
         }
+
     }
 
     private makeChunkArray(clue: ClueUpdate): ClueTextChunk[] {

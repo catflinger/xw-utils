@@ -54,23 +54,29 @@ export class SolverComponent implements AfterViewInit {
     }
 
     private openEditor(clue, starterText: string) {
-        setTimeout(() => {
-            this.modalRef = this.modalService.open(ClueEditorComponent);
-            this.modalRef.componentInstance.clue = clue;
-            this.modalRef.componentInstance.starterText = starterText;
-            this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
 
-            this.modalRef.result
-                .then((result: ClueUpdate) => {
-                    if (result) {
-                        this.puzzleService.updateClue(clue.id, result);
-                    }
-                })
-                .catch((error) => {
-                })
-                .finally(() => this.modalRef = null);
-            },
-            0
-        );
+        this.modalRef = this.modalService.open(ClueEditorComponent);
+        this.modalRef.componentInstance.clueId = clue.id;
+        this.modalRef.componentInstance.starterText = starterText;
+        this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
+
+        // setTimeout(() => {
+        //     this.modalRef = this.modalService.open(ClueEditorComponent);
+        //     this.modalRef.componentInstance.clueId = clue.id;
+        //     this.modalRef.componentInstance.starterText = starterText;
+        //     this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
+
+        //     this.modalRef.result
+        //         .then((result: ClueUpdate) => {
+        //             if (result) {
+        //                 this.puzzleService.updateClue(clue.id, result);
+        //             }
+        //         })
+        //         .catch((error) => {
+        //         })
+        //         .finally(() => this.modalRef = null);
+        //     },
+        //     0
+        // );
     }
 }
