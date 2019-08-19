@@ -12,8 +12,12 @@ export class GridTestComponent {
     constructor(private puzzleService: PuzzleService) {
     }
 
-    public OnClick(){
+    public OnLoad(){
         this.puzzleService.loadPuzzle("abc");
-
     }
+
+    public OnClear(){
+        this.puzzleService.clearPuzzles();
+    }
+
 }

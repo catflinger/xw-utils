@@ -32,23 +32,28 @@ export class PuzzleService {
 
     public loadPuzzle(puzzleId: string) {
         let puzzle: Puzzle;
-        
+
         const json = localStorage.getItem("xw-puzzle");
         if (json) {
             puzzle = JSON.parse(json);
         } else {
             puzzle = data;
         }
+        this.updateGridText(puzzle);
         this.bs.next(puzzle);
+    }
+
+    public clearPuzzles() {
+        localStorage.clear();
     }
 
     public cellAt(x: number, y: number): GridCell {
         let result: GridCell = null;
 
         let puzzle = this.bs.value;
-        
+
         if (puzzle) {
-            result = this.bs.value.grid.cells.find((cell) => cell.x === x && cell.y === y );
+            result = this.bs.value.grid.cells.find((cell) => cell.x === x && cell.y === y);
         }
         return result;
     }
@@ -58,10 +63,29 @@ export class PuzzleService {
         let puzzle = this.bs.value;
 
         if (puzzle) {
-            result = puzzle.clues.find((clue) => clue.highlight );
+            result = puzzle.clues.find((clue) => clue.highlight);
         }
 
         return result;
+    }
+
+    public getLatestAnswer(clueId: string): string {
+        let result: string = "";
+        let puzzle = this.bs.value;
+
+        if (puzzle) {
+
+            let clue = this.findClue(puzzle, clueId);
+            clue.entries.forEach((entry) => {
+                entry.cellIds.forEach((id) => {
+                    let cell = this.findCell(puzzle, id);
+                    let letter = cell.content.length > 0 ? cell.content.charAt(0) : "_"
+                    result += letter + " ";
+                })
+            });
+        }
+
+        return result.trim();
     }
 
     public selectClue(clueId: string) {
@@ -71,7 +95,7 @@ export class PuzzleService {
 
             this.clearHighlights(puzzle);
 
-            let clue = puzzle.clues.find((clue) => clue.id === clueId );
+            let clue = puzzle.clues.find((clue) => clue.id === clueId);
             if (clue) {
                 clue.highlight = true;
                 clue.entries.forEach((entry) => {
@@ -85,14 +109,14 @@ export class PuzzleService {
         }
     }
 
-    public selectClueByCell(x: number, y: number) : void {
+    public selectClueByCell(x: number, y: number): void {
         let puzzle = this.getMutable();
 
         if (puzzle) {
 
             this.clearHighlights(puzzle);
 
-            let cell = puzzle.grid.cells.find((cell) => cell.x === x && cell.y === y );
+            let cell = puzzle.grid.cells.find((cell) => cell.x === x && cell.y === y);
             if (cell) {
 
                 // Find a clue that contains this cell.  
@@ -103,7 +127,7 @@ export class PuzzleService {
                 const acrossClues = this.getAcrossClues(puzzle)
                 const downClues = this.getDownClues(puzzle)
                 let result: Clue = null;
-                
+
                 // Look in across clues, first entry only
                 result = this.findCellInFirstEntry(acrossClues, cell.id);
 
@@ -135,14 +159,15 @@ export class PuzzleService {
         let puzzle = this.getMutable();
 
         if (puzzle) {
-            let clue = puzzle.clues.find((c) => c.id === id );
-            
+            let clue = puzzle.clues.find((c) => c.id === id);
+
             if (clue) {
                 // TO DO: do some validation on the values in the delta here
 
                 // commit the change
                 clue.answer = delta.answer.toUpperCase();
                 clue.comment = delta.comment;
+                clue.definition = delta.definition;
 
                 this.updateGridText(puzzle);
 
@@ -158,6 +183,14 @@ export class PuzzleService {
     private commit(puzzle: Puzzle) {
         localStorage.setItem("xw-puzzle", JSON.stringify(puzzle));
         this.bs.next(puzzle);
+    }
+
+    private findClue(puzzle: Puzzle, id: string): Clue {
+        return puzzle.clues.find((clue) => clue.id === id);
+    }
+
+    private findCell(puzzle: Puzzle, id: string): GridCell {
+        return puzzle.grid.cells.find((cell) => cell.id === id);
     }
 
     private clearHighlights(puzzle: Puzzle) {
@@ -181,11 +214,11 @@ export class PuzzleService {
     }
 
     private getAcrossClues(puzzle: Puzzle): Clue[] {
-        return puzzle.clues.filter((clue) => clue.group === "across" );
+        return puzzle.clues.filter((clue) => clue.group === "across");
     }
 
     private getDownClues(puzzle: Puzzle): Clue[] {
-        return puzzle.clues.filter((clue) => clue.group === "down" );
+        return puzzle.clues.filter((clue) => clue.group === "down");
     }
 
     private findCellInFirstEntry(clues: Clue[], cellId: string): Clue {
@@ -232,7 +265,7 @@ export class PuzzleService {
         puzzle.grid.cells.forEach(cell => cell.content = "");
 
         puzzle.clues.forEach((clue) => {
-            let answer = clue.answer;
+            let answer = clue.answer.toUpperCase().replace(/[^A-Z]/g, "");
             let index = 0;
 
             if (answer) {
@@ -240,7 +273,7 @@ export class PuzzleService {
                     entry.cellIds.forEach((id) => {
                         let cell = puzzle.grid.cells.find(c => c.id === id);
                         if (index < answer.length) {
-                            cell.content = answer.charAt(index); 
+                            cell.content = answer.charAt(index);
                         }
                         index++;
                     });

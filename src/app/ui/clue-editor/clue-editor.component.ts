@@ -11,15 +11,15 @@ import { ClueUpdate } from 'src/app/services/clue-update';
 export class ClueEditorComponent implements OnInit {
     @Input() clue: Clue;
     @Input() starterText: string;
+    @Input() latestAnswer: string;
 
-    public model: ClueUpdate = new ClueUpdate;
+    public model: ClueUpdate;;
 
     constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        console.log("OnInit");
+        this.model = new ClueUpdate(this.clue);
         this.model.answer = this.starterText ? this.starterText : this.clue.answer;
-        this.model.comment = this.clue.comment;
     }
 
     public close() {
@@ -30,4 +30,12 @@ export class ClueEditorComponent implements OnInit {
         this.activeModal.close(null);
     }
 
+    public onDefinitionChange(definition: string) {
+        console.log("definitionCHange " + JSON.stringify(definition));
+        this.model.definition = definition;
+    }
+
+    public showLatestAnswer(): boolean {
+        return this.latestAnswer && /_+/.test(this.latestAnswer);
+    }
 }

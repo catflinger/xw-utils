@@ -11,6 +11,8 @@ import { ClueListComponent } from './ui/clue-list/clue-list.component';
 import { SolverComponent } from './ui/solver/solver.component';
 import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
 import { FormsModule } from '@angular/forms';
+import { ClueTextComponent } from './ui/clue-text/clue-text.component';
+import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { FormsModule } from '@angular/forms';
     GridComponent,
     ClueListComponent,
     SolverComponent,
-    ClueEditorComponent
+    ClueEditorComponent,
+    ClueTextComponent,
+    ClueTextChunkComponent
   ],
   imports: [
     BrowserModule,

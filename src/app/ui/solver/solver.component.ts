@@ -58,6 +58,7 @@ export class SolverComponent implements AfterViewInit {
             this.modalRef = this.modalService.open(ClueEditorComponent);
             this.modalRef.componentInstance.clue = clue;
             this.modalRef.componentInstance.starterText = starterText;
+            this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
 
             this.modalRef.result
                 .then((result: ClueUpdate) => {

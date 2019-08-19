@@ -26,11 +26,15 @@ export class Clue {
     caption: string;        // "1 across, 2 down"
     text: string;           // "How to train a dragon (5, 4)"
     letterCount: string;    // "(5, 4)"
-    entries: GridEntry[];
-    highlight: boolean;
     answer: string;
+    definition: string;
+    format: string;
     comment: string;
+    highlight: boolean;
+    entries: GridEntry[];
 }
+
+export const definitionMaskMarker: string = "d"; 
 
 export class GridEntry {
     cellIds: string[];
