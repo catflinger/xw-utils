@@ -30,20 +30,15 @@ export class ClueEditorComponent implements OnInit {
                 }
             }
         );
-
     }
 
     public close() {
-        this.activeModal.close(this.model);
+        this.puzzleService.updateClue(this.clueId, this.model);
+        this.activeModal.close();
     }
 
     public cancel() {
-        this.activeModal.close(null);
-    }
-
-    public onDefinitionChange(definition: string) {
-        console.log("definitionCHange " + JSON.stringify(definition));
-        this.model.definition = definition;
+        this.activeModal.close();
     }
 
     public showLatestAnswer(): boolean {
