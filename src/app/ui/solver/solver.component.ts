@@ -3,31 +3,38 @@ import { PuzzleService } from 'src/app/services/puzzle.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
 import { Clue, GridCell } from 'src/app/model/puzzle';
-import { ClueUpdate } from 'src/app/services/clue-update';
 
 @Component({
     selector: 'app-solver',
     templateUrl: './solver.component.html',
     styleUrls: ['./solver.component.css']
 })
-export class SolverComponent implements AfterViewInit {
+export class SolverComponent implements OnInit {
     private modalRef: NgbModalRef = null;
+    public puzzle = null;
+
+    constructor(private puzzleService: PuzzleService, private modalService: NgbModal) { }
+
+    ngOnInit() {
+        this.puzzleService.getObservable().subscribe(
+            (puzzle) => {
+                this.puzzle = puzzle;
+            }
+        );
+    }
 
     @HostListener('document:keypress', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) {
-        if (!this.modalRef) {
-
-            console.log("KEY=" + event.key);
-
+        if (this.puzzle && !this.modalRef) {
             if (event.key === "Enter") {
                 event.stopPropagation();
-                let clue = this.puzzleService.getSelectedClue();
-                if (clue) {
+                let clue = this.puzzle.getSelectedClue();
+                if (clue) { 
                     this.openEditor(clue, null);
                 }
             } else if (/[a-zA-Z]/.test(event.key)) {
                 event.stopPropagation();
-                let clue = this.puzzleService.getSelectedClue();
+                let clue = this.puzzle.getSelectedClue();
                 if (clue) {
                     this.openEditor(clue, event.key);
                 }
@@ -35,18 +42,12 @@ export class SolverComponent implements AfterViewInit {
         }
     }
 
-    constructor(private puzzleService: PuzzleService, private modalService: NgbModal) { }
-
-    ngAfterViewInit() {
-        setTimeout(() => this.puzzleService.loadPuzzle("abc"), 0);
-    }
-
     onClueClick(clue: Clue) {
         this.openEditor(clue, null);
     }
 
     onCellClick(cell: GridCell) {
-        let clue = this.puzzleService.getSelectedClue();
+        let clue = this.puzzle.getSelectedClue();
 
         if (clue) {
             this.openEditor(clue, null);
@@ -55,17 +56,12 @@ export class SolverComponent implements AfterViewInit {
 
     private openEditor(clue, starterText: string) {
 
-        // this.modalRef = this.modalService.open(ClueEditorComponent);
-        // this.modalRef.componentInstance.clueId = clue.id;
-        // this.modalRef.componentInstance.starterText = starterText;
-        // this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
-
         setTimeout(
             () => {
                 this.modalRef = this.modalService.open(ClueEditorComponent);
                 this.modalRef.componentInstance.clueId = clue.id;
                 this.modalRef.componentInstance.starterText = starterText;
-                this.modalRef.componentInstance.latestAnswer = this.puzzleService.getLatestAnswer(clue.id);
+                this.modalRef.componentInstance.latestAnswer = this.puzzle.getLatestAnswer(clue.id);
 
                 // this.modalRef.result.finally(() => this.modalRef = null);
             },

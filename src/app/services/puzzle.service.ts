@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle, Clue, GridCell } from '../model/puzzle';
 
-import { data } from "./data1";
 import { ClueUpdate } from './clue-update';
+import { HttpPuzzleService } from './http-puzzle.service';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -26,66 +26,12 @@ export class PuzzleService {
         this.bs = new BehaviorSubject<Puzzle>(null);
     }
 
-    public getObservable(): Observable<Puzzle> {
-        return this.bs.asObservable();
-    }
-
-    public loadPuzzle(puzzleId: string) {
-        let puzzle: Puzzle;
-
-        const json = localStorage.getItem("xw-puzzle");
-        if (json) {
-            puzzle = JSON.parse(json);
-        } else {
-            puzzle = data;
-        }
-        this.updateGridText(puzzle);
+    public usePuzzle(puzzle: Puzzle) {
         this.bs.next(puzzle);
     }
 
-    public clearPuzzles() {
-        localStorage.clear();
-    }
-
-    public cellAt(x: number, y: number): GridCell {
-        let result: GridCell = null;
-
-        let puzzle = this.bs.value;
-
-        if (puzzle) {
-            result = this.bs.value.grid.cells.find((cell) => cell.x === x && cell.y === y);
-        }
-        return result;
-    }
-
-    public getSelectedClue(): Clue {
-        let result: Clue = null;
-        let puzzle = this.bs.value;
-
-        if (puzzle) {
-            result = puzzle.clues.find((clue) => clue.highlight);
-        }
-
-        return result;
-    }
-
-    public getLatestAnswer(clueId: string): string {
-        let result: string = "";
-        let puzzle = this.bs.value;
-
-        if (puzzle) {
-
-            let clue = this.findClue(puzzle, clueId);
-            clue.entries.forEach((entry) => {
-                entry.cellIds.forEach((id) => {
-                    let cell = this.findCell(puzzle, id);
-                    let letter = cell.content.length > 0 ? cell.content.charAt(0) : "_"
-                    result += letter + " ";
-                })
-            });
-        }
-
-        return result.trim();
+    public getObservable(): Observable<Puzzle> {
+        return this.bs.asObservable();
     }
 
     public selectClue(clueId: string) {
@@ -177,20 +123,12 @@ export class PuzzleService {
     }
 
     private getMutable(): Puzzle {
-        return JSON.parse(JSON.stringify(this.bs.value));
+        return new Puzzle(JSON.parse(JSON.stringify(this.bs.value)));
     }
 
     private commit(puzzle: Puzzle) {
         localStorage.setItem("xw-puzzle", JSON.stringify(puzzle));
         this.bs.next(puzzle);
-    }
-
-    private findClue(puzzle: Puzzle, id: string): Clue {
-        return puzzle.clues.find((clue) => clue.id === id);
-    }
-
-    private findCell(puzzle: Puzzle, id: string): GridCell {
-        return puzzle.grid.cells.find((cell) => cell.id === id);
     }
 
     private clearHighlights(puzzle: Puzzle) {
@@ -258,9 +196,8 @@ export class PuzzleService {
         }
         return result;
     }
-
+    
     private updateGridText(puzzle: Puzzle) {
-
         // clear the grid
         puzzle.grid.cells.forEach(cell => cell.content = "");
 
@@ -281,4 +218,5 @@ export class PuzzleService {
             }
         });
     }
+
 }

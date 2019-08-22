@@ -98,6 +98,7 @@ export class ClueTextComponent implements OnInit {
     }
 
     private makeChunkArray(clue: ClueUpdate): ClueTextChunk[] {
+
         let chunks: ClueTextChunk[] = [];
         let textIndex = 0;
         let definitionMode = false;
@@ -141,7 +142,6 @@ export class ClueTextComponent implements OnInit {
     }
 
     public makeDefinitionMask(startChunk: ClueTextChunk, endChunk: ClueTextChunk): string {
-        //console.log("MAKING MASK FOR: " + JSON.stringify(chunks));
         let mask = "";
 
         for(let i = 0; i < this.chunks.length; i++) {
@@ -149,13 +149,11 @@ export class ClueTextComponent implements OnInit {
 
             if (i < startChunk.index) {
                 // before start of selection
-                console.log("A");
 
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.text.length);
 
             } else if (i === startChunk.index && i === endChunk.index) {
                 // selection starts and ends here
-                console.log("B");
             
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.selectionStartOffset);
                 mask += this.fillString("d", chunk.selectionEndOffset - chunk.selectionStartOffset);
@@ -163,27 +161,23 @@ export class ClueTextComponent implements OnInit {
 
             } else if (i === startChunk.index && i < endChunk.index) {
                 // selection starts here but ends later
-                console.log("C");
 
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.selectionStartOffset);
                 mask += this.fillString("d", chunk.text.length - chunk.selectionEndOffset);
 
             } else if (i > startChunk.index && i < endChunk.index) {
                 // this chunk is between start and end chunks
-                console.log("D");
 
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.text.length);
 
             } else if (i > startChunk.index && i === endChunk.index) {
                 // this is the end chunk
-                console.log("E");
 
                 mask += this.fillString("d", chunk.selectionEndOffset);
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.text.length - chunk.selectionEndOffset);
 
             } else if (i > endChunk.index) {
                 // after the end chunk
-                console.log("F");
 
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.text.length);
             }

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Clue } from 'src/app/model/puzzle';
 import { ClueUpdate } from 'src/app/services/clue-update';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 

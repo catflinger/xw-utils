@@ -13,6 +13,7 @@ import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
 import { FormsModule } from '@angular/forms';
 import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,10 +30,12 @@ import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.com
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
   providers: [
-      PuzzleService
+      PuzzleService,
+      HttpClient
   ],
   entryComponents: [
       ClueEditorComponent

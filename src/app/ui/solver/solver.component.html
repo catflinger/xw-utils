@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="puzzle">
     <div class="col">
         <app-grid (cellClick) = "onCellClick($event)"></app-grid>
     </div>
