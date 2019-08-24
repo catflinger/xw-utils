@@ -3,27 +3,39 @@ export type Direction = "across" | "down";
 export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 
-export class Blog {
-    puzzleId: string;
-    blogEntries: BlogEntry[];
+export class TextStyle {
+    constructor (
+        public color: string,
+        public bold: boolean,
+        public italic: boolean,
+        public underline: boolean) { }
+
 }
 
-export class BlogEntry {
-    clueId: string;
-    answer: string;
-    annotation: string;
-    definitionMask: string;
+export class PublishOptions {
+    public clueStyle: TextStyle;
+    public definitionStyle: TextStyle;
+    public answerStyle: TextStyle;
 }
 
 export class Puzzle {
     grid: Grid;
     clues: Clue[];
 
+    title: string;
+    publishOptions: PublishOptions;
+
     constructor(data: any) {
         this.grid = new Grid(data.grid);
         this.clues = [];
 
         data.clues.forEach(clue => this.clues.push(new Clue(clue)));
+
+        this.title = "untitled";
+        this.publishOptions = new PublishOptions();
+        this.publishOptions.clueStyle = new TextStyle("blue", false, false, false);
+        this.publishOptions.definitionStyle = new TextStyle("blue", false, true, true);
+        this.publishOptions.answerStyle = new TextStyle("black", true, false, false);
     }
 
     public cellAt(x: number, y: number): GridCell {

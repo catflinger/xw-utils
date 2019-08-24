@@ -1,26 +1,37 @@
-import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
 import { Clue, GridCell } from 'src/app/model/puzzle';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-solver',
     templateUrl: './solver.component.html',
     styleUrls: ['./solver.component.css']
 })
-export class SolverComponent implements OnInit {
+export class SolverComponent implements OnInit, OnDestroy {
     private modalRef: NgbModalRef = null;
     public puzzle = null;
+    private subs: Subscription[] = [];
 
-    constructor(private puzzleService: PuzzleService, private modalService: NgbModal) { }
+    constructor(
+        private puzzleService: PuzzleService, 
+        private modalService: NgbModal,
+        private router: Router) { }
 
     ngOnInit() {
-        this.puzzleService.getObservable().subscribe(
-            (puzzle) => {
-                this.puzzle = puzzle;
-            }
-        );
+        this.subs.push(
+            this.puzzleService.getObservable().subscribe(
+                (puzzle) => {
+                    this.puzzle = puzzle;
+                }
+        ));
+    }
+
+    ngOnDestroy(){
+        this.subs.forEach(sub => sub.unsubscribe());
     }
 
     @HostListener('document:keypress', ['$event'])
@@ -40,6 +51,10 @@ export class SolverComponent implements OnInit {
                 }
             }
         }
+    }
+
+    onPublish() {
+        this.router.navigate(["/publish-options"]);
     }
 
     onClueClick(clue: Clue) {

@@ -11,3 +11,9 @@
         <app-clue-list direction="down" (clueClick)="onClueClick($event)"></app-clue-list>
     </div>
 </div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary" (click)="onPublish()">Continue</button>
+    </div>
+</div>

@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
         private puzzleService: PuzzleService,
         private httpPuzzleService: HttpPuzzleService,
         private devPuzzleService: DevelopmentPuzzleSourceService,
-        private localPuzzleService: LocalstoragePuzzleSourceService,
         private router: Router) {
     }
 
@@ -33,8 +32,6 @@ export class AppComponent implements OnInit {
     }
 
     public solvePuzzle(service: any, provider: string) {
-
-
         service.getPuzzle(provider)
             .then((puzzle) => {
                 this.puzzleService.usePuzzle(puzzle);

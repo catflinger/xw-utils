@@ -16,6 +16,9 @@ import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.com
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './ui/navbar/navbar.component';
 import { HomeComponent } from './ui/home/home.component';
+import { PublishOptionsComponent } from './ui/publish-options/publish-options.component';
+import { UsernamePasswordComponent } from './ui/username-password/username-password.component';
+import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { HomeComponent } from './ui/home/home.component';
     ClueTextComponent,
     ClueTextChunkComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    PublishOptionsComponent,
+    UsernamePasswordComponent,
+    PublishCompleteComponent
   ],
   imports: [
     BrowserModule,
