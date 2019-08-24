@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbDropdown} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './ui/app/app.component';
@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NavbarComponent } from './ui/navbar/navbar.component';
+import { HomeComponent } from './ui/home/home.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     SolverComponent,
     ClueEditorComponent,
     ClueTextComponent,
-    ClueTextChunkComponent
+    ClueTextChunkComponent,
+    NavbarComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
