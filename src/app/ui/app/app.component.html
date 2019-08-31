@@ -1,8 +1,8 @@
-<div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+<div class="container" style="padding-left: 0; padding-right: 0;">
 
     <app-navbar (solve)="onSolve($event)"></app-navbar>
 
-    <p>{{message}}</p>
+    <p *ngFor="let alert of alerts"><ngb-alert [type]="alert.type" (close)="clearAlerts()">{{ alert.message }}</ngb-alert></p>
 
     <router-outlet></router-outlet>
 </div>

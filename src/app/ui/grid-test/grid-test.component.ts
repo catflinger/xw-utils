@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
-import { HttpPuzzleService } from 'src/app/services/http-puzzle.service';
 import { DevelopmentPuzzleSourceService } from 'src/app/services/development-puzzle-source.service';
-import { LocalstoragePuzzleSourceService } from 'src/app/services/localstorage-puzzle-source.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { HttpPuzzleSourceService } from 'src/app/services/http-puzzle-source.service';
 
 
 @Component({
@@ -16,9 +16,9 @@ export class GridTestComponent {
 
     constructor(
         private puzzleService: PuzzleService,
-        private httpPuzzleService: HttpPuzzleService,
+        private httpPuzzleService: HttpPuzzleSourceService,
         private devPuzzleService: DevelopmentPuzzleSourceService,
-        private localPuzzleService: LocalstoragePuzzleSourceService) {
+        private localStorageService: LocalStorageService) {
     }
 
     public onLoadTest(){
@@ -46,7 +46,7 @@ export class GridTestComponent {
     public onLoadLocal(){
         this.errorMessage = "working...";
 
-        this.localPuzzleService.getPuzzle()
+        this.localStorageService.getPuzzle()
         .then( (puzzle) => {
             this.errorMessage = "LOADED OK";
             return this.puzzleService.usePuzzle(puzzle)
@@ -55,7 +55,7 @@ export class GridTestComponent {
     }
 
     public onClear(){
-        this.localPuzzleService.clearPuzzles();
+        this.localStorageService.clearPuzzles();
     }
 
 }

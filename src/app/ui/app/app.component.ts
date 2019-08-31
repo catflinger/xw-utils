@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { PuzzleService } from 'src/app/services/puzzle.service';
-import { HttpPuzzleService } from 'src/app/services/http-puzzle.service';
-import { DevelopmentPuzzleSourceService } from 'src/app/services/development-puzzle-source.service';
-import { LocalstoragePuzzleSourceService } from 'src/app/services/localstorage-puzzle-source.service';
 import { Router } from '@angular/router';
+import { HttpPuzzleSourceService } from 'src/app/services/http-puzzle-source.service';
+import { Alert } from '../common';
 
 @Component({
     selector: 'app-root',
@@ -12,12 +11,11 @@ import { Router } from '@angular/router';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    public message: string = "";
+    public alerts: Alert[] = [];
 
     constructor(
         private puzzleService: PuzzleService,
-        private httpPuzzleService: HttpPuzzleService,
-        private devPuzzleService: DevelopmentPuzzleSourceService,
+        private httpPuzzleService: HttpPuzzleSourceService,
         private router: Router) {
     }
 
@@ -25,6 +23,7 @@ export class AppComponent implements OnInit {
     }
 
     public onSolve(provider: string) {
+        this.clearAlerts();
         // TO DO: warn before clearing current puzzle
         this.puzzleService.usePuzzle(null);
 
@@ -37,6 +36,12 @@ export class AppComponent implements OnInit {
                 this.puzzleService.usePuzzle(puzzle);
                 this.router.navigate(["/solver"])
             })
-            .catch((error) => this.message = JSON.stringify(error));
+            .catch((error) => this.alerts.push(new Alert("danger", JSON.stringify(error))));
+    }
+
+    public clearAlerts() {
+        while (this.alerts.length) {
+            this.alerts.pop();
+        }
     }
 }

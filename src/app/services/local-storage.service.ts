@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Puzzle } from '../model/puzzle';
+import { Puzzle, PuzzleInfo } from '../model/puzzle';
 
 @Injectable({
     providedIn: 'root'
 })
-export class LocalstoragePuzzleSourceService {
+export class LocalStorageService {
 
     constructor() { }
-
 
     public getPuzzle(): Promise<Puzzle> {
 

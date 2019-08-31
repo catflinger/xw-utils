@@ -6,6 +6,7 @@ import { HomeComponent } from './ui/home/home.component';
 import { PublishOptionsComponent } from './ui/publish-options/publish-options.component';
 import { UsernamePasswordComponent } from './ui/username-password/username-password.component';
 import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
+import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: "grid-test", component: GridTestComponent },
     { path: "solver", component: SolverComponent },
     { path: "publish-options", component: PublishOptionsComponent },
+    { path: "publish-preamble", component: PublishPreambleComponent },
     { path: "user-password", component: UsernamePasswordComponent },
     { path: "publish-complete", component: PublishCompleteComponent },
     { path: "", redirectTo: "/home", pathMatch: "full" },

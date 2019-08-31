@@ -10,7 +10,7 @@ import { PuzzleService } from './services/puzzle.service';
 import { ClueListComponent } from './ui/clue-list/clue-list.component';
 import { SolverComponent } from './ui/solver/solver.component';
 import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { HomeComponent } from './ui/home/home.component';
 import { PublishOptionsComponent } from './ui/publish-options/publish-options.component';
 import { UsernamePasswordComponent } from './ui/username-password/username-password.component';
 import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
+import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble.component';
 
 @NgModule({
   declarations: [
@@ -34,14 +35,16 @@ import { PublishCompleteComponent } from './ui/publish-complete/publish-complete
     HomeComponent,
     PublishOptionsComponent,
     UsernamePasswordComponent,
-    PublishCompleteComponent
+    PublishCompleteComponent,
+    PublishPreambleComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
   ],
   providers: [
       PuzzleService,

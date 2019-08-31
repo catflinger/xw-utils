@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle, Clue, GridCell } from '../model/puzzle';
 
 import { ClueUpdate } from './clue-update';
-import { HttpPuzzleService } from './http-puzzle.service';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -119,6 +118,17 @@ export class PuzzleService {
 
                 this.commit(puzzle);
             }
+        }
+    }
+
+    public updatePreamble(header: string, body: string) {
+        let puzzle = this.getMutable();
+
+        if (puzzle) {
+            puzzle.notes.header = header;
+            puzzle.notes.body = body;
+
+            this.commit(puzzle);
         }
     }
 

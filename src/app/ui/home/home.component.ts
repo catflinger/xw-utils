@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { LocalstoragePuzzleSourceService } from 'src/app/services/localstorage-puzzle-source.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Router } from '@angular/router';
+import { PuzzleInfo } from 'src/app/model/puzzle';
+import { RemoteStorageService } from 'src/app/services/remote-storage.service';
 
 @Component({
     selector: 'app-home',
@@ -9,18 +11,22 @@ import { Router } from '@angular/router';
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+    public puzzleList: PuzzleInfo[] = [];
 
     constructor(
         private router: Router,
         private puzzleService: PuzzleService,
-        private localPuzzleService: LocalstoragePuzzleSourceService ) {
+        private localStorage: LocalStorageService,
+        private remoteStorage: RemoteStorageService ) {
     }
 
     ngOnInit() {
+        // this.remoteStorage.listPuzzles()
+        // .then((list) => this.puzzleList = list );
     }
 
     public onOpenCurrent() {
-        this.localPuzzleService.getPuzzle()
+        this.localStorage.getPuzzle()
         .then(puzzle => {
             if (puzzle) {
                 this.puzzleService.usePuzzle(puzzle);

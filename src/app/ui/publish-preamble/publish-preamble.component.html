@@ -1,0 +1,30 @@
+<h3>preamble</h3>
+<p>On this screen enter the introduction sections for the blog</p>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <form [formGroup]="form">
+            <div class="form">
+                <div class="form-group">
+                    <label>
+                        Header:
+                        <input class="form-control" type="text" formControlName="header">
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Body:
+                        <input class="form-control" type="text" formControlName="body">
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary" (click)="onContinue()">Continue</button>
+    </div>
+</div>

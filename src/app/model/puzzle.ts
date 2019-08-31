@@ -4,7 +4,7 @@ export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 
 export class TextStyle {
-    constructor (
+    constructor(
         public color: string,
         public bold: boolean,
         public italic: boolean,
@@ -18,24 +18,65 @@ export class PublishOptions {
     public answerStyle: TextStyle;
 }
 
+export class PuzzleInfo {
+    public id: string;
+    public title: string;
+    public puzzleDate: Date;
+    public providerName: string;
+    public setter: string;
+
+    constructor(data: any) {
+        this.id = data.id;
+        this.title = data.title;
+        this.puzzleDate = new Date(data.puzzleDate);
+        this.providerName = data.providerName;
+        this.setter = data.setter;
+    }
+}
+
+export class PuzzleAnnotation {
+    public header: string;
+    public body: string;
+    public footer: string;
+
+    constructor(data: any) {
+        this.header = data.header; 
+        this.body = data.body; 
+        this.footer = data.footer; 
+    }
+}
+
 export class Puzzle {
+    info: PuzzleInfo;
+    publishOptions: PublishOptions;
+    notes: PuzzleAnnotation;
+
     grid: Grid;
     clues: Clue[];
 
-    title: string;
-    publishOptions: PublishOptions;
+    linked: boolean;
+    version: string;
+    createdWithVersion: string;
 
     constructor(data: any) {
+
         this.grid = new Grid(data.grid);
         this.clues = [];
 
         data.clues.forEach(clue => this.clues.push(new Clue(clue)));
 
-        this.title = "untitled";
+        this.info = new PuzzleInfo(data.info);
+
+        this.notes = new PuzzleAnnotation(data.notes);
+
         this.publishOptions = new PublishOptions();
         this.publishOptions.clueStyle = new TextStyle("blue", false, false, false);
         this.publishOptions.definitionStyle = new TextStyle("blue", false, true, true);
         this.publishOptions.answerStyle = new TextStyle("black", true, false, false);
+
+        this.linked = data.linked;
+        this.version = data.version;
+        this.createdWithVersion = data.createdWithVersion;
     }
 
     public cellAt(x: number, y: number): GridCell {
@@ -92,7 +133,7 @@ export class Clue {
     }
 }
 
-export const definitionMaskMarker: string = "d"; 
+export const definitionMaskMarker: string = "d";
 
 export class GridEntry {
     cellIds: string[];

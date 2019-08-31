@@ -28,7 +28,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.router.navigate(["/user-password"]);
+        this.router.navigate(["/publish-preamble"]);
     }
 
 }
