@@ -22,6 +22,7 @@ import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.com
 import { GridComponent } from './ui/grid/grid/grid.component';
 
 import { PuzzleService } from './services/puzzle.service';
+import { AlertComponent } from './ui/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { PuzzleService } from './services/puzzle.service';
     PublishComponent,
     PublishCompleteComponent,
     PublishPreambleComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,

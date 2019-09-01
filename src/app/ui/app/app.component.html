@@ -1,8 +1,8 @@
-<div class="container" style="padding-left: 0; padding-right: 0;">
+<div *ngIf="appStatus" class="container" style="padding-left: 0; padding-right: 0;">
 
     <app-navbar (solve)="onSolve($event)"></app-navbar>
 
-    <p *ngFor="let alert of alerts"><ngb-alert [type]="alert.type" (close)="clearAlerts()">{{ alert.message }}</ngb-alert></p>
+    <app-alert></app-alert>
 
     <router-outlet></router-outlet>
 </div>

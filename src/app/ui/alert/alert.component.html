@@ -1,0 +1,4 @@
+<p *ngFor="let alert of appStatus.alerts">
+    <ngb-alert [type]="alert.type" (close)="onClose()">{{ alert.message }}</ngb-alert>
+</p>
+

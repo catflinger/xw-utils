@@ -1,4 +1,6 @@
+export type AlertType = "info" | "danger";
+
 export class Alert {
-    constructor(public type: string, public message: string) {}
+    constructor(public readonly type: AlertType, public readonly message: string) {}
 }
 

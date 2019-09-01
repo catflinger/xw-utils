@@ -14,10 +14,6 @@ import { Clue, IClue } from '../model/clue';
 // This might be better done using a storage framework such as Redux, but I don't have the time to learn a framework right now.
 // Once I get on top of the rest of the app then I might try and go back and retro fit Redux or similar later
 
-type Writable<T> = {
-    -readonly [K in keyof T]: T[K]
-}
-
 @Injectable({
     providedIn: 'root'
 })
