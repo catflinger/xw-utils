@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Puzzle, PuzzleInfo } from '../model/puzzle';
+import { Puzzle } from '../model/puzzle';
 
 @Injectable({
     providedIn: 'root'

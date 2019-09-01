@@ -17,28 +17,33 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private router: Router, 
+        private router: Router,
         private puzzleService: PuzzleService,
         private publiationService: PublicationService) { }
 
     ngOnInit() {
-        this.subs.push(
-            this.puzzleService.getObservable().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                }
-        ));
-    }
+        if (!this.puzzleService.hasPuzzle) {
+            this.router.navigate(["/home"]);
+        } else {
 
-    ngOnDestroy(){
+            this.subs.push(
+                this.puzzleService.getObservable().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                    }
+                ));
+        }
+    }
+    
+    ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
     onContinue() {
         this.publiationService.publish(this.puzzle, this.username, this.password)
-        .then(() => {
-            this.router.navigate(["/home"]);
-        });
+            .then(() => {
+                this.router.navigate(["/home"]);
+            });
     }
 
 }

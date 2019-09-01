@@ -20,6 +20,7 @@ export class ClueEditorComponent implements OnInit {
         public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
+
         let puzzle = this.puzzleService.getObservable().subscribe(
             (puzzle) => {
                 if (puzzle) {

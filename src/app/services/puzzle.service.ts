@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Puzzle, Clue, GridCell } from '../model/puzzle';
+import { Puzzle, IPuzzle } from '../model/puzzle';
 
 import { ClueUpdate } from './clue-update';
+import { Clue, IClue } from '../model/clue';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -13,6 +14,9 @@ import { ClueUpdate } from './clue-update';
 // This might be better done using a storage framework such as Redux, but I don't have the time to learn a framework right now.
 // Once I get on top of the rest of the app then I might try and go back and retro fit Redux or similar later
 
+type Writable<T> = {
+    -readonly [K in keyof T]: T[K]
+}
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +37,10 @@ export class PuzzleService {
         return this.bs.asObservable();
     }
 
+    public get hasPuzzle(): boolean {
+        return !!(this.bs.value);
+    }
+
     public selectClue(clueId: string) {
         let puzzle = this.getMutable();
 
@@ -50,7 +58,7 @@ export class PuzzleService {
                     });
                 });
             }
-            this.commit(puzzle);
+            this.commit(puzzle as Puzzle);
         }
     }
 
@@ -95,7 +103,7 @@ export class PuzzleService {
                     this.highlightClue(puzzle, result)
                 }
 
-                this.commit(puzzle);
+                this.commit(puzzle as Puzzle);
             }
         }
     }
@@ -116,7 +124,7 @@ export class PuzzleService {
 
                 this.updateGridText(puzzle);
 
-                this.commit(puzzle);
+                this.commit(puzzle as Puzzle);
             }
         }
     }
@@ -128,11 +136,11 @@ export class PuzzleService {
             puzzle.notes.header = header;
             puzzle.notes.body = body;
 
-            this.commit(puzzle);
+            this.commit(puzzle as Puzzle);
         }
     }
 
-    private getMutable(): Puzzle {
+    private getMutable(): IPuzzle {
         return new Puzzle(JSON.parse(JSON.stringify(this.bs.value)));
     }
 
@@ -141,7 +149,7 @@ export class PuzzleService {
         this.bs.next(puzzle);
     }
 
-    private clearHighlights(puzzle: Puzzle) {
+    private clearHighlights(puzzle: IPuzzle) {
         puzzle.clues.forEach((clue) => {
             clue.highlight = false;
         });
@@ -150,7 +158,7 @@ export class PuzzleService {
         });
     }
 
-    private highlightClue(puzzle: Puzzle, clue: Clue) {
+    private highlightClue(puzzle: IPuzzle, clue: IClue) {
 
         clue.highlight = true;
         clue.entries.forEach((entry) => {
@@ -161,11 +169,11 @@ export class PuzzleService {
         });
     }
 
-    private getAcrossClues(puzzle: Puzzle): Clue[] {
+    private getAcrossClues(puzzle: IPuzzle): Clue[] {
         return puzzle.clues.filter((clue) => clue.group === "across");
     }
 
-    private getDownClues(puzzle: Puzzle): Clue[] {
+    private getDownClues(puzzle: IPuzzle): Clue[] {
         return puzzle.clues.filter((clue) => clue.group === "down");
     }
 
@@ -207,8 +215,9 @@ export class PuzzleService {
         return result;
     }
     
-    private updateGridText(puzzle: Puzzle) {
-        // clear the grid
+    // private updateGridText(puzzle: Puzzle) {
+    private updateGridText(puzzle: any) {
+            // clear the grid
         puzzle.grid.cells.forEach(cell => cell.content = "");
 
         puzzle.clues.forEach((clue) => {

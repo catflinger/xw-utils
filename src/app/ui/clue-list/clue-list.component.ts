@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
-import { Direction, Clue } from 'src/app/model/puzzle';
+import { Direction } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
+import { Clue } from 'src/app/model/clue';
 
 @Component({
     selector: 'app-clue-list',

@@ -15,20 +15,29 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private puzzleService: PuzzleService) { }
 
     ngOnInit() {
-        this.subs.push(
-            this.puzzleService.getObservable().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                }
-        ));
+        if (!this.puzzleService.hasPuzzle) {
+            this.router.navigate(["/home"]);
+        } else {
+
+            this.subs.push(
+                this.puzzleService.getObservable().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                    }
+                ));
+        }
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
     onContinue() {
         this.router.navigate(["/publish-preamble"]);
+    }
+
+    onBack() {
+        this.router.navigate(["/solver"]);
     }
 
 }

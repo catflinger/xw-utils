@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PuzzleInfo } from '../model/puzzle';
+import { PuzzleInfo } from '../model/puzzle-info';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

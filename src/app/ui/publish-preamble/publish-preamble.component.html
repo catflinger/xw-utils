@@ -1,30 +1,18 @@
 <h3>preamble</h3>
-<p>On this screen enter the introduction sections for the blog</p>
 
-<div class="row" *ngIf="puzzle">
-    <div class="col">
-        <form [formGroup]="form">
-            <div class="form">
-                <div class="form-group">
-                    <label>
-                        Header:
-                        <input class="form-control" type="text" formControlName="header">
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        Body:
-                        <input class="form-control" type="text" formControlName="body">
-                    </label>
-                </div>
-            </div>
-        </form>
+<form [formGroup]="form" *ngIf="puzzle">
+    <div class="mt-4">
+        <p>enter the headline for the fifteensquared home page</p>
+        <quill-editor formControlName="header"></quill-editor>
     </div>
-</div>
 
-<div class="row" *ngIf="puzzle">
-    <div class="col">
-        <button type="button" class="btn btn-primary" (click)="onContinue()">Continue</button>
+    <div class="mt-4">
+        <p>further comments, not visible on the home page</p>
+        <quill-editor formControlName="body"></quill-editor>
     </div>
-</div>
+
+    <div class="mt-4">
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+    </div>
+</form>

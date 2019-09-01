@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Grid, GridCell, Puzzle, Clue } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { PuzzleService } from 'src/app/services/puzzle.service';
+import { GridCell } from 'src/app/model/grid-cell';
 
 class GridParameters {
     public readonly cellSize = 33;

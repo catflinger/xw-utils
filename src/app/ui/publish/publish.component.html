@@ -1,7 +1,7 @@
 <p *ngFor="let alert of alerts">
     <ngb-alert [type]="alert.type" (close)="clearAlerts()">{{ alert.message }}</ngb-alert>
 </p>
-<h3>Credentials</h3>
+<h3>Publish</h3>
 <p>On this screen enter the fifteensquared username and password</p>
 
 <div class="row" *ngIf="puzzle">
@@ -28,6 +28,7 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <button [disabled]="working" type="button" class="btn btn-primary" (click)="onContinue()">Continue</button>
+        <button [disabled]="working" type="button" class="btn btn-primary mr-3" (click)="onContinue()">Publish</button>
+        <button [disabled]="working" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
     </div>
 </div>

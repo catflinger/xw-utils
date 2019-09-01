@@ -7,11 +7,11 @@ import { Alert } from '../common';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
-    selector: 'app-username-password',
-    templateUrl: './username-password.component.html',
-    styleUrls: ['./username-password.component.css']
+    selector: 'app-publish',
+    templateUrl: './publish.component.html',
+    styleUrls: ['./publish.component.css']
 })
-export class UsernamePasswordComponent implements OnInit, OnDestroy {
+export class PublishComponent implements OnInit, OnDestroy {
     public puzzle = null;
     private subs: Subscription[] = [];
     public alerts: Alert[] = [];
@@ -19,26 +19,31 @@ export class UsernamePasswordComponent implements OnInit, OnDestroy {
     public form: FormGroup;
 
     constructor(
-        private router: Router, 
+        private router: Router,
         private puzzleService: PuzzleService,
         private publicationService: PublicationService,
         private builder: FormBuilder) { }
 
     ngOnInit() {
-        this.form = this.builder.group({
-            'username': [""],
-            'password': [""],
-        });
+        if (!this.puzzleService.hasPuzzle) {
+            this.router.navigate(["/home"]);
+        } else {
 
-        this.subs.push(
-            this.puzzleService.getObservable().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                }
-        ));
+            this.form = this.builder.group({
+                'username': [""],
+                'password': [""],
+            });
+
+            this.subs.push(
+                this.puzzleService.getObservable().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                    }
+                ));
+        }
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
@@ -47,15 +52,18 @@ export class UsernamePasswordComponent implements OnInit, OnDestroy {
         this.clearAlerts();
 
         this.publicationService.publish(this.puzzle, "public", "public")
-        .then(() => {
-            this.router.navigate(["/publish-complete"]);
-        })
-        .catch(error => {
-            this.working = false;
-            this.alerts.push(new Alert("danger", "ERROR: " + error))
-        });
+            .then(() => {
+                this.router.navigate(["/publish-complete"]);
+            })
+            .catch(error => {
+                this.working = false;
+                this.alerts.push(new Alert("danger", "ERROR: " + error))
+            });
     }
 
+    onBack() {
+        this.router.navigate(["/publish-preamble"]);
+    }
     public clearAlerts() {
         while (this.alerts.length) {
             this.alerts.pop();

@@ -11,34 +11,35 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class PublishPreambleComponent implements OnInit {
     public puzzle = null;
-    public form: FormGroup;
     private subs: Subscription[] = [];
+    public form: FormGroup;
 
     constructor(
         private router: Router,
         private puzzleService: PuzzleService,
-        private builder: FormBuilder) { }
+        private formBuilder: FormBuilder) { }
 
     ngOnInit() {
+        if (!this.puzzleService.hasPuzzle) {
+            this.router.navigate(["/home"]);
+        } else {
 
-        this.form = this.builder.group({
-            'header': [""],
-            'body': [""],
-        });
 
-        this.subs.push(
-            this.puzzleService.getObservable().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                    if (puzzle) {
-                        this.form.controls.header.patchValue(puzzle.notes.header);
-                        this.form.controls.body.patchValue(puzzle.notes.body);
-                    } else {
-                        this.form.controls.header.patchValue("");
-                        this.form.controls.body.patchValue("");
+            this.form = this.formBuilder.group({
+                header: [""],
+                body: [""]
+            });
+
+            this.subs.push(
+                this.puzzleService.getObservable().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                        if (puzzle) {
+                            this.form.patchValue(puzzle.notes);
+                        }
                     }
-                }
-            ));
+                ));
+        }
     }
 
     ngOnDestroy() {
@@ -46,12 +47,11 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        let updates = this.form.value;
-
-        console.log("FORM: " + JSON.stringify(updates));
-
-        this.puzzleService.updatePreamble(updates.header, updates.body);
+        this.puzzleService.updatePreamble(this.form.value.header, this.form.value.body);
         this.router.navigate(["/user-password"]);
     }
 
+    onBack() {
+        this.router.navigate(["/publish-options"]);
+    }
 }

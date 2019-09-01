@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Router } from '@angular/router';
-import { PuzzleInfo } from 'src/app/model/puzzle';
+import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { RemoteStorageService } from 'src/app/services/remote-storage.service';
 
 @Component({

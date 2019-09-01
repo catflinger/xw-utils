@@ -2,9 +2,10 @@ import { Component, OnInit, AfterViewInit, HostListener, OnDestroy } from '@angu
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
-import { Clue, GridCell } from 'src/app/model/puzzle';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Clue } from 'src/app/model/clue';
+import { GridCell } from 'src/app/model/grid-cell';
 
 @Component({
     selector: 'app-solver',
@@ -22,12 +23,17 @@ export class SolverComponent implements OnInit, OnDestroy {
         private router: Router) { }
 
     ngOnInit() {
-        this.subs.push(
-            this.puzzleService.getObservable().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                }
-        ));
+
+        if (!this.puzzleService.hasPuzzle) {
+            this.router.navigate(["/home"]);
+        } else {
+            this.subs.push(
+                this.puzzleService.getObservable().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                    }
+            ));
+        }
     }
 
     ngOnDestroy(){
@@ -53,8 +59,12 @@ export class SolverComponent implements OnInit, OnDestroy {
         }
     }
 
-    onPublish() {
+    onContinue() {
         this.router.navigate(["/publish-options"]);
+    }
+
+    onBack() {
+        this.router.navigate(["/home"]);
     }
 
     onClueClick(clue: Clue) {

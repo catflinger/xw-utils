@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, ViewChildren, QueryList, EventEmitter, OnChanges } from '@angular/core';
-import { Clue } from 'src/app/model/puzzle';
 import { ClueTextChunkComponent } from '../clue-text-chunk/clue-text-chunk.component';
 import { ClueUpdate } from 'src/app/services/clue-update';
 

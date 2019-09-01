@@ -1,5 +1,5 @@
 import { DefinitionKind } from '@angular/compiler/src/constant_pool';
-import { Clue } from '../model/puzzle';
+import { Clue } from '../model/clue';
 
 export class ClueUpdate {
     public definition: string;
