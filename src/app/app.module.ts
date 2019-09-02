@@ -23,40 +23,53 @@ import { GridComponent } from './ui/grid/grid/grid.component';
 
 import { PuzzleService } from './services/puzzle.service';
 import { AlertComponent } from './ui/alert/alert.component';
+import { TextStyleComponent } from './ui/text-style/text-style.component';
+
+const quillGlobalConfig = {
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            ['link', 'image']
+        ]
+    }
+};
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GridComponent,
-    ClueListComponent,
-    SolverComponent,
-    ClueEditorComponent,
-    ClueTextComponent,
-    ClueTextChunkComponent,
-    NavbarComponent,
-    HomeComponent,
-    PublishOptionsComponent,
-    PublishComponent,
-    PublishCompleteComponent,
-    PublishPreambleComponent,
-    AlertComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    NgbModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    QuillModule.forRoot(),
-  ],
-  providers: [
-      PuzzleService,
-      HttpClient
-  ],
-  entryComponents: [
-      ClueEditorComponent
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        GridComponent,
+        ClueListComponent,
+        SolverComponent,
+        ClueEditorComponent,
+        ClueTextComponent,
+        ClueTextChunkComponent,
+        NavbarComponent,
+        HomeComponent,
+        PublishOptionsComponent,
+        PublishComponent,
+        PublishCompleteComponent,
+        PublishPreambleComponent,
+        AlertComponent,
+        TextStyleComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        NgbModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        QuillModule.forRoot(quillGlobalConfig),
+    ],
+    providers: [
+        PuzzleService,
+        HttpClient
+    ],
+    entryComponents: [
+        ClueEditorComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
