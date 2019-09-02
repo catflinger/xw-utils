@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, ViewChildren, QueryList, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChildren, QueryList, EventEmitter, OnChanges, forwardRef } from '@angular/core';
 import { ClueTextChunkComponent } from '../clue-text-chunk/clue-text-chunk.component';
 import { ClueUpdate } from 'src/app/services/clue-update';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 // ClueTextChunk is a ViewModel representing the definition mask string in a ui-friendly way 
 export class ClueTextChunk {
@@ -14,12 +15,19 @@ export class ClueTextChunk {
 @Component({
     selector: 'app-clue-text',
     templateUrl: './clue-text.component.html',
-    styleUrls: ['./clue-text.component.css']
+    styleUrls: ['./clue-text.component.css'],
+    providers: [    { 
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ClueTextComponent),
+        multi: true
+      }],
 })
-export class ClueTextComponent implements OnInit {
+export class ClueTextComponent implements ControlValueAccessor, OnInit {
 
-    @Input() model: ClueUpdate;
-    @Output() definitionChange = new EventEmitter<string>();
+    @Input() clueText: string;
+    public definition: string;
+
+    private propagateChange = (_: any) => { };
 
     @ViewChildren(ClueTextChunkComponent) children: QueryList<ClueTextChunkComponent>;
 
@@ -28,8 +36,20 @@ export class ClueTextComponent implements OnInit {
     constructor() {
     }
 
+    writeValue(definition: any) {
+        if (definition !== undefined) {
+            this.definition = definition;
+            this.chunks = this.makeChunkArray();
+        }
+    }
+    registerOnChange(fn) {
+        this.propagateChange = fn;
+    }
+
+    registerOnTouched() {
+    }
+
     ngOnInit() {
-        this.chunks = this.makeChunkArray(this.model);
     }
 
     public onChunkMouseUp() {
@@ -62,7 +82,7 @@ export class ClueTextComponent implements OnInit {
                     }
                 });
 
-                // work out which chunk is the start of the selection and which is hte end 
+                // work out which chunk is the start of the selection and which is the end 
                 let startChunk: ClueTextChunk;
                 let endChunk: ClueTextChunk;
 
@@ -86,17 +106,16 @@ export class ClueTextComponent implements OnInit {
                     }
 
                     let newMask = this.makeDefinitionMask(startChunk, endChunk);
-                    this.model.definition = newMask;
+                    this.definition = newMask;
 
-                    this.chunks = this.makeChunkArray(this.model);
-                }
+                    this.chunks = this.makeChunkArray();
+               }
             }
             selection.removeAllRanges();
         }
-
     }
 
-    private makeChunkArray(clue: ClueUpdate): ClueTextChunk[] {
+    private makeChunkArray(): ClueTextChunk[] {
 
         let chunks: ClueTextChunk[] = [];
         let textIndex = 0;
@@ -107,10 +126,10 @@ export class ClueTextComponent implements OnInit {
         chunk.text = "";
         chunk.isDefinition = definitionMode;
 
-        while (textIndex < clue.text.length) {
-            if (textIndex < clue.definition.length) {
+        while (textIndex < this.clueText.length) {
+            if (textIndex < this.definition.length) {
 
-                if ((clue.definition.charAt(textIndex) === "d") !== definitionMode) {
+                if ((this.definition.charAt(textIndex) === "d") !== definitionMode) {
                     definitionMode = !definitionMode;
 
                     //start a new chunk
@@ -125,8 +144,10 @@ export class ClueTextComponent implements OnInit {
                     chunk.text = "";
                 }
 
-                chunk.text = chunk.text + clue.text.charAt(textIndex);
+                chunk.text = chunk.text + this.clueText.charAt(textIndex);
                 chunk.isDefinition = definitionMode;
+
+                this.propagateChange(this.definition);
             }
             textIndex++;
         }
@@ -137,13 +158,13 @@ export class ClueTextComponent implements OnInit {
             chunks.push(chunk);
             chunkIndex++;
         }
-    return chunks;
+        return chunks;
     }
 
     public makeDefinitionMask(startChunk: ClueTextChunk, endChunk: ClueTextChunk): string {
         let mask = "";
 
-        for(let i = 0; i < this.chunks.length; i++) {
+        for (let i = 0; i < this.chunks.length; i++) {
             let chunk = this.chunks[i];
 
             if (i < startChunk.index) {
@@ -153,7 +174,7 @@ export class ClueTextComponent implements OnInit {
 
             } else if (i === startChunk.index && i === endChunk.index) {
                 // selection starts and ends here
-            
+
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.selectionStartOffset);
                 mask += this.fillString("d", chunk.selectionEndOffset - chunk.selectionStartOffset);
                 mask += this.fillString(chunk.isDefinition ? "d" : "0", chunk.text.length - chunk.selectionEndOffset);

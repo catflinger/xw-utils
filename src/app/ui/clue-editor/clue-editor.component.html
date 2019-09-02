@@ -1,31 +1,33 @@
-<div class="modal-header">
-    <h4 class="modal-title">
-        <app-clue-text [model]="model" (definitionChange)="onDefinitionChange($event)"></app-clue-text>
-    </h4>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+<div *ngIf="clue">
+<form [formGroup]="form">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <app-clue-text [clueText]="clue.text" formControlName="definition"></app-clue-text>
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
-<div *ngIf="showLatestAnswer()" class="modal-body">
-    <h4>{{latestAnswer}}</h4>
-</div>
+    <div *ngIf="showLatestAnswer()" class="modal-body">
+        <h4>{{latestAnswer}}</h4>
+    </div>
 
-<div class="modal-body">
-    <form>
+    <div class="modal-body">
         <div class="form-group">
             <label for="answer">Answer</label>
-            <input id="answer" name="answer" class="form-control" ngbAutofocus [(ngModel)]="model.answer">
+            <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer">
         </div>
 
         <div class="form-group">
             <label for="comment">Comment</label>
-            <quill-editor id="comment" formControlName="model.comment"></quill-editor>
+            <quill-editor id="comment" formControlName="comment"></quill-editor>
         </div>
-    </form>
-</div>
+    </div>
 
-<div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="close()">Save</button>
-    <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="close()">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+    </div>
+</form>
 </div>

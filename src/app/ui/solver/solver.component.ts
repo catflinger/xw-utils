@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
+import { Puzzle } from 'src/app/model/puzzle';
 
 @Component({
     selector: 'app-solver',
@@ -14,7 +15,7 @@ import { GridCell } from 'src/app/model/grid-cell';
 })
 export class SolverComponent implements OnInit, OnDestroy {
     private modalRef: NgbModalRef = null;
-    public puzzle = null;
+    public puzzle: Puzzle = null;
     private subs: Subscription[] = [];
 
     constructor(
@@ -83,7 +84,7 @@ export class SolverComponent implements OnInit, OnDestroy {
 
         setTimeout(
             () => {
-                this.modalRef = this.modalService.open(ClueEditorComponent);
+                this.modalRef = this.modalService.open(ClueEditorComponent, { backdrop: "static"});
                 this.modalRef.componentInstance.clueId = clue.id;
                 this.modalRef.componentInstance.starterText = starterText;
                 this.modalRef.componentInstance.latestAnswer = this.puzzle.getLatestAnswer(clue.id);
