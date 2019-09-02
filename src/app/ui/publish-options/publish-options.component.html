@@ -1,7 +1,53 @@
-<h3>publish options</h3>
-<p>On this screen enter colours for the clue text etc</p>
+<div class="row">
+    <div class="col">
+        <h3>publish options</h3>
+        <p>On this screen enter colours for the clue text etc</p>
+    </div>
+</div>
 
-<div class="row" *ngIf="puzzle">
+<div class="row">
+    <div class="col">
+        <div>
+            <span [ngStyle]="answerStyle">FISH </span>
+        </div>
+        <div>
+            <span [ngStyle]="clueStyle">1. </span>
+            <span [ngStyle]="definitionStyle">Marine creature</span>
+            <span [ngStyle]="clueStyle"> found in wharf is heavy (4)</span>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3" *ngIf="puzzle">
+    <div class="col">
+        <div class="card-deck">
+
+            <div class="card">
+                <h5 class="card-header">Answer</h5>
+                <div class="card-body">
+                    <app-text-style textStyleName="answerStyle" caption="answer"></app-text-style>
+                </div>
+            </div>
+
+            <div class="card">
+                <h5 class="card-header">Clue</h5>
+                <div class="card-body">
+                    <app-text-style textStyleName="clueStyle" caption="clue text"></app-text-style>
+                </div>
+            </div>
+
+            <div class="card">
+                <h5 class="card-header">Definition</h5>
+                <div class="card-body">
+                    <app-text-style textStyleName="definitionStyle" caption="definition"></app-text-style>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3" *ngIf="puzzle">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
         <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>

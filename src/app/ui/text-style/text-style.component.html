@@ -1,0 +1,36 @@
+<div class="container-fluid mr-5">
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="form">
+                <div>
+                    <p>{{caption}} colour</p>
+                    
+                    <select [ngStyle]="{ 'background-color' : form.value.color.value }" formControlName="color">
+                        <option *ngFor="let option of options" [ngValue]="option"
+                            [ngStyle]="{ 'background-color' : option.value }">
+                            {{option.name}}
+                        </option>
+                    </select>
+                    
+                    <div>
+                        <label>
+                            <input type="checkbox" formControlName="bold">Bold
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label>
+                            <input type="checkbox" formControlName="italic">Italic
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="form-check-label">
+                            <input type="checkbox" formControlName="underline">Underline
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

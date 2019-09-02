@@ -14,8 +14,8 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public puzzleList: PuzzleInfo[] = [];
-    public appStatus: AppStatus;
     private subs: Subscription[] = [];
+    public appStatus: AppStatus;
 
     constructor(
         private appService: AppService,

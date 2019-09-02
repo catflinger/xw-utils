@@ -23,6 +23,8 @@ export interface IPuzzle {
     linked: boolean;
     version: string;
     createdWithVersion: string;
+
+    revision: number;
 }
 
 export class Puzzle implements IPuzzle {
@@ -37,7 +39,11 @@ export class Puzzle implements IPuzzle {
     public readonly version: string;
     public readonly createdWithVersion: string;
 
+    public readonly revision: number;
+
     constructor(data: any) {
+
+        this.revision = data.revision ? data.revision : 0;
 
         this.grid = new Grid(data.grid);
         
@@ -49,10 +55,7 @@ export class Puzzle implements IPuzzle {
 
         this.notes = new PuzzleAnnotation(data.notes);
 
-        this.publishOptions = new PublishOptions(
-            new TextStyle("blue", false, false, false),
-            new TextStyle("blue", false, true, true),
-            new TextStyle("black", true, false, false));
+        this.publishOptions = new PublishOptions(data.publishOptions);
 
         this.linked = data.linked;
         this.version = data.version;

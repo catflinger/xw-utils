@@ -6,10 +6,16 @@ export interface ITextStyle {
 }
 
 export class TextStyle implements ITextStyle {
-    constructor(
-        public readonly color: string,
-        public readonly bold: boolean,
-        public readonly italic: boolean,
-        public readonly underline: boolean) { }
+        public readonly color: string;
+        public readonly bold: boolean;
+        public readonly italic: boolean;
+        public readonly underline: boolean;
+
+        constructor(data) {
+            this.color = data.color;
+            this.bold = data.bold;
+            this.italic = data.italic;
+            this.underline = data.underline;
+        }
 
 }

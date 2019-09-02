@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AppStatus, AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -13,13 +14,17 @@ export class PublishPreambleComponent implements OnInit {
     public puzzle = null;
     private subs: Subscription[] = [];
     public form: FormGroup;
+    public appStatus: AppStatus;
 
     constructor(
+        private appService: AppService,
         private router: Router,
         private puzzleService: PuzzleService,
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
+        this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
+
         if (!this.puzzleService.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {

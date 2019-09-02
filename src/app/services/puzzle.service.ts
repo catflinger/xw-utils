@@ -4,6 +4,8 @@ import { Puzzle, IPuzzle } from '../model/puzzle';
 
 import { ClueUpdate } from './clue-update';
 import { Clue, IClue } from '../model/clue';
+import { TextStyle } from '../model/text-style';
+import { TextStyleName } from '../ui/common';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -54,7 +56,7 @@ export class PuzzleService {
                     });
                 });
             }
-            this.commit(puzzle as Puzzle);
+            this.commit(puzzle);
         }
     }
 
@@ -99,7 +101,7 @@ export class PuzzleService {
                     this.highlightClue(puzzle, result)
                 }
 
-                this.commit(puzzle as Puzzle);
+                this.commit(puzzle);
             }
         }
     }
@@ -120,7 +122,7 @@ export class PuzzleService {
 
                 this.updateGridText(puzzle);
 
-                this.commit(puzzle as Puzzle);
+                this.commit(puzzle);
             }
         }
     }
@@ -132,7 +134,22 @@ export class PuzzleService {
             puzzle.notes.header = header;
             puzzle.notes.body = body;
 
-            this.commit(puzzle as Puzzle);
+            this.commit(puzzle);
+        }
+    }
+
+    public updatePublishOptionTextStyle(textStyleName: TextStyleName, color: string, bold: boolean, italic: boolean, underline: boolean) {
+        let puzzle = this.getMutable();
+
+        if (puzzle) {
+            
+            let ts = puzzle.publishOptions[textStyleName];
+            ts.color = color;
+            ts.bold = bold;
+            ts.italic = italic;
+            ts.underline = underline;
+
+            this.commit(puzzle);
         }
     }
 
@@ -140,9 +157,10 @@ export class PuzzleService {
         return new Puzzle(JSON.parse(JSON.stringify(this.bs.value)));
     }
 
-    private commit(puzzle: Puzzle) {
+    private commit(puzzle: IPuzzle) {
+        puzzle.revision += 1;
         localStorage.setItem("xw-puzzle", JSON.stringify(puzzle));
-        this.bs.next(puzzle);
+        this.bs.next(new Puzzle(puzzle));
     }
 
     private clearHighlights(puzzle: IPuzzle) {
