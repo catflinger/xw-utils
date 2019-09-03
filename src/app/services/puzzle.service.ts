@@ -39,6 +39,15 @@ export class PuzzleService {
         return !!(this.bs.value);
     }
 
+    public clearSelection() {
+        let puzzle = this.getMutable();
+
+        if (puzzle) {
+            this.clearHighlights(puzzle);
+            this.commit(puzzle);
+        }
+    }
+
     public selectClue(clueId: string) {
         let puzzle = this.getMutable();
 
@@ -55,6 +64,20 @@ export class PuzzleService {
                         cell.highlight = true;
                     });
                 });
+            }
+            this.commit(puzzle);
+        }
+    }
+
+    public selectNextClue(clueId: string) {
+        let puzzle = this.getMutable();
+
+        if (puzzle) {
+            this.clearHighlights(puzzle);
+
+            let index = puzzle.clues.findIndex((clue) => clue.id === clueId);
+            if (index >= 0 && index + 1 < puzzle.clues.length) {
+                puzzle.clues[index + 1].highlight = true;
             }
             this.commit(puzzle);
         }
@@ -142,7 +165,7 @@ export class PuzzleService {
         let puzzle = this.getMutable();
 
         if (puzzle) {
-            
+
             let ts = puzzle.publishOptions[textStyleName];
             ts.color = color;
             ts.bold = bold;
@@ -228,10 +251,10 @@ export class PuzzleService {
         }
         return result;
     }
-    
+
     // private updateGridText(puzzle: Puzzle) {
     private updateGridText(puzzle: any) {
-            // clear the grid
+        // clear the grid
         puzzle.grid.cells.forEach(cell => cell.content = "");
 
         puzzle.clues.forEach((clue) => {

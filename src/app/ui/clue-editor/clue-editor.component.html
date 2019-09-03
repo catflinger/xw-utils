@@ -4,9 +4,6 @@
         <h4 class="modal-title">
             <app-clue-text [clueText]="clue.text" formControlName="definition"></app-clue-text>
         </h4>
-        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
     </div>
 
     <div *ngIf="showLatestAnswer()" class="modal-body">
@@ -26,8 +23,8 @@
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="close()">Save</button>
-        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-outline-dark" (click)="onSave()">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Cancel</button>
     </div>
 </form>
 </div>

@@ -4,7 +4,7 @@ import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { RemoteStorageService } from 'src/app/services/remote-storage.service';
-import { AppService, AppStatus } from 'src/app/services/app.service';
+import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -36,12 +36,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onOpenCurrent() {
+    public onOpenCurrent(editor: EditorType) {
         this.localStorage.getPuzzle()
         .then(puzzle => {
             if (puzzle) {
                 this.puzzleService.usePuzzle(puzzle);
-                this.router.navigate(["/solver"]);
+                this.appService.setEditor(editor);
+                this.router.navigate(["/" + editor]);
             }
         });
     }

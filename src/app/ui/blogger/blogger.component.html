@@ -1,0 +1,31 @@
+
+<ng-container *ngIf="puzzle">
+    <ng-container *ngFor="let clue of puzzle.clues">
+        <div class="row border-top bg-light" (click)="onRowClick(clue)" *ngIf="!clue.highlight">
+            <div class="col-1">
+                    {{clue.caption}}.
+            </div>
+            <div class="col-2 font-weight-bold">
+                {{clue.answer}}
+            </div>
+            <div class="col-9">
+                 {{clue.text}}
+            </div>
+        </div>
+
+        <div class="row" *ngIf="clue.highlight">
+            <div class="col">
+                <div class="border rounded">
+                    <app-clue-editor [clueId]="clue.id" (close)="onEditorClose(clue, $event)"></app-clue-editor>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+    </div>
+</div>

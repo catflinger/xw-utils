@@ -58,7 +58,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     onBack() {
-        this.router.navigate(["/solver"]);
+        this.router.navigate(["/", this.appStatus.editor]);
     }
 
     private makeNgStyle(textStyle: TextStyle): any {

@@ -24,6 +24,7 @@ import { GridComponent } from './ui/grid/grid/grid.component';
 import { PuzzleService } from './services/puzzle.service';
 import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
+import { BloggerComponent } from './ui/blogger/blogger.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -53,6 +54,7 @@ const quillGlobalConfig = {
         PublishPreambleComponent,
         AlertComponent,
         TextStyleComponent,
+        BloggerComponent,
     ],
     imports: [
         BrowserModule,

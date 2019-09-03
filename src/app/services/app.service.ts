@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Alert, AlertType } from '../ui/common';
 
+export type EditorType = "blogger" | "solver";
+
 export class AppStatus {
     constructor(
         public readonly busy: boolean,
-        public readonly alerts: readonly Alert[]) 
+        public readonly alerts: readonly Alert[],
+        public readonly editor: EditorType,
+    )
     {}
 }
 
@@ -15,11 +19,12 @@ export class AppStatus {
 export class AppService {
     private busy: boolean = false;
     private alerts: Alert[] = [];
+    private editor: EditorType = "blogger";
 
     private bs: BehaviorSubject<AppStatus>;
 
     constructor() {
-        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, []));
+        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, [], "blogger"));
     }
     
     public getObservable(): Observable<AppStatus> {
@@ -46,8 +51,12 @@ export class AppService {
         this.emitNext();
     }
 
+    setEditor(editor: EditorType) {
+        this.editor = editor;
+    }
+
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
-        this.bs.next(new AppStatus(this.busy, alerts));
+        this.bs.next(new AppStatus(this.busy, alerts, this.editor));
     }
 }

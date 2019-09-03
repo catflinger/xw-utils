@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+// import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClueUpdate } from 'src/app/services/clue-update';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
@@ -16,6 +16,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     @Input() starterText: string;
     @Input() latestAnswer: string;
 
+    @Output() close = new EventEmitter<string>();
+
     public clue: Clue;
     public form: FormGroup;
 
@@ -23,7 +25,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     constructor(
         private puzzleService: PuzzleService, 
-        public activeModal: NgbActiveModal,
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
@@ -55,7 +56,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public close() {
+    public onSave() {
         this.puzzleService.updateClue(
             this.clueId,
             new ClueUpdate(
@@ -64,11 +65,11 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 this.form.value.comment
             )
         );
-        this.activeModal.close();
+        this.close.emit("save");
     }
 
-    public cancel() {
-        this.activeModal.close();
+    public onCancel() {
+        this.close.emit("cancel");
     }
 
     public showLatestAnswer(): boolean {

@@ -6,11 +6,13 @@ import { PublishOptionsComponent } from './ui/publish-options/publish-options.co
 import { PublishComponent } from './ui/publish/publish.component';
 import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
 import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble.component';
+import { BloggerComponent } from './ui/blogger/blogger.component';
 
 
 const routes: Routes = [
     { path: "home", component: HomeComponent },
     { path: "solver", component: SolverComponent },
+    { path: "blogger", component: BloggerComponent },
     { path: "publish-options", component: PublishOptionsComponent },
     { path: "publish-preamble", component: PublishPreambleComponent },
     { path: "user-password", component: PublishComponent },
