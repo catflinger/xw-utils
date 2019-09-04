@@ -47,7 +47,6 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        console.log("clicked " + clue.id)
         this.puzzleService.selectClue(clue.id);
     }
 

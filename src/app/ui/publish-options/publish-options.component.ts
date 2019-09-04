@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';

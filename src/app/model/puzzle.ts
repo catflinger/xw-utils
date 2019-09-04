@@ -21,6 +21,7 @@ export interface IPuzzle {
     clues: readonly IClue[];
 
     linked: boolean;
+    solveable: boolean;
     version: string;
     createdWithVersion: string;
 
@@ -36,6 +37,7 @@ export class Puzzle implements IPuzzle {
     public readonly clues: readonly Clue[];
 
     public readonly linked: boolean;
+    public readonly solveable;
     public readonly version: string;
     public readonly createdWithVersion: string;
 
@@ -45,7 +47,11 @@ export class Puzzle implements IPuzzle {
 
         this.revision = data.revision ? data.revision : 0;
 
-        this.grid = new Grid(data.grid);
+        if (data.grid) {
+            this.grid = new Grid(data.grid);
+        } else {
+            this.grid = null;
+        }
         
         let clues: Clue[] = [];
         data.clues.forEach(clue => clues.push(new Clue(clue)));
@@ -58,6 +64,7 @@ export class Puzzle implements IPuzzle {
         this.publishOptions = new PublishOptions(data.publishOptions);
 
         this.linked = data.linked;
+        this.solveable = data.solveable;
         this.version = data.version;
         this.createdWithVersion = data.createdWithVersion;
     }

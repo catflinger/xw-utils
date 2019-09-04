@@ -190,9 +190,12 @@ export class PuzzleService {
         puzzle.clues.forEach((clue) => {
             clue.highlight = false;
         });
-        puzzle.grid.cells.forEach((cell) => {
-            cell.highlight = false;
-        });
+
+        if (puzzle.grid) {
+            puzzle.grid.cells.forEach((cell) => {
+                cell.highlight = false;
+            });
+        }
     }
 
     private highlightClue(puzzle: IPuzzle, clue: IClue) {
@@ -254,6 +257,9 @@ export class PuzzleService {
 
     // private updateGridText(puzzle: Puzzle) {
     private updateGridText(puzzle: any) {
+        if (!puzzle.grid) {
+            return;
+        }
         // clear the grid
         puzzle.grid.cells.forEach(cell => cell.content = "");
 

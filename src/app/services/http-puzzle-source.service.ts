@@ -10,13 +10,14 @@ export class HttpPuzzleSourceService {
     constructor(private http: HttpClient) { }
 
     public getPuzzle(provider: string): Promise<Puzzle> {
-        return this.http.get("http://localhost:49323/getpuzzle.ashx?u=public&p=public&provider=" + provider)
+        return this.http.get("http://localhost:49323/getpuzzle?u=public&p=public&provider=" + provider)
         .toPromise()
         .then( (data) => {
-            let puzzle =new Puzzle(data);
-            puzzle
-            return puzzle;
-         } );
+            return new Puzzle(data);
+         })
+         .catch((error) => {
+             throw new Error("Failed to load puzzle");
+         });
     }
 
     public putPuzzle(puzzle: Puzzle): Promise<any> {
