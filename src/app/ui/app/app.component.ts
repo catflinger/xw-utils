@@ -20,7 +20,6 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(
         private puzzleService: PuzzleService,
         private appService: AppService,
-        private httpPuzzleService: HttpPuzzleSourceService,
         private router: Router) {
     }
 
@@ -38,12 +37,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
 
         // TO DO: warn before clearing current puzzle
-        this.puzzleService.usePuzzle(null);
 
-        this.httpPuzzleService.getPuzzle(provider)
+        this.puzzleService.loadNewPuzzle(provider)
         .then((puzzle) => {
             this.appService.clearBusy();
-            this.puzzleService.usePuzzle(puzzle);
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
             this.router.navigate(["/", editor])

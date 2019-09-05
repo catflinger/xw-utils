@@ -1,4 +1,3 @@
-import { TextStyle } from './text-style';
 import { PublishOptions, IPublishOptions } from './publish-options';
 import { PuzzleInfo, IPuzzleInfo } from './puzzle-info';
 import { PuzzleAnnotation, IPuzzleAnnotation } from './puzzle-annotation';

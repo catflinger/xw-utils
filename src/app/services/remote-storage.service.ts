@@ -11,25 +11,22 @@ export class RemoteStorageService {
 
   public listPuzzles() : Promise<PuzzleInfo[]> {
 
-    return this.httpClient.get("/api/puzzle")
+    return this.httpClient.get("/puzzleList")
     .toPromise()
-    .then((response) => {
+    .then((data: any) => {
         let results: PuzzleInfo[] = [];
 
-        let json = localStorage.getItem("xw-puzzle-index");
-    
-        if (json) {
-            let data = JSON.parse(json);
-    
-            if (data.puzzles && Array.isArray(data.puzzles)) {
-                data.forEach(info => {
-                    results.push(new PuzzleInfo(info))
-                });
-            }
+        if (data && data.puzzles && Array.isArray(data.puzzles)) {
+            data.forEach(puzzle => {
+                results.push(new PuzzleInfo(puzzle))
+            });
         }
-    
         return results;
     
+    })
+    .catch((error) => {
+        console.log("ERROR getting puzzle list: " + error);
+        throw error;
     });
 }
 

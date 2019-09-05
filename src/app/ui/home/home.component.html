@@ -3,27 +3,23 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Setter</th>
                     <th>Title</th>
                     <th>Date</th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr *ngFor="let info of puzzleList">
-                    <td>{{info.id}}</td>
+                    <td>{{info.setter}}</td>
                     <td>{{info.title}}</td>
-                    <td>{{info.puzzleDate}}</td>
+                    <td>{{info.puzzleDate | date : "fullDate"}}</td>
+                    <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(info.id)">Open</button></td>
+                    <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-</div>
-
-<div class="row">
-    <div class="col">
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary mr-3" (click)="onOpenCurrent('solver')">Solve local puzzle</button>
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onOpenCurrent('blogger')">Blog local puzzle</button>
-    </div>
 </div>

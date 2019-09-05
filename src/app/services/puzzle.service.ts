@@ -6,6 +6,9 @@ import { ClueUpdate } from './clue-update';
 import { Clue, IClue } from '../model/clue';
 import { TextStyle } from '../model/text-style';
 import { TextStyleName } from '../ui/common';
+import { LocalStorageService } from './local-storage.service';
+import { HttpPuzzleSourceService } from './http-puzzle-source.service';
+import { PuzzleInfo } from '../model/puzzle-info';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -22,21 +25,74 @@ import { TextStyleName } from '../ui/common';
 export class PuzzleService {
 
     private bs: BehaviorSubject<Puzzle>;
+    private bsList: BehaviorSubject<PuzzleInfo[]>;
 
-    constructor() {
+    constructor(
+        private httpPuzzleService: HttpPuzzleSourceService,
+        private localStorageService: LocalStorageService,
+    ) {
         this.bs = new BehaviorSubject<Puzzle>(null);
-    }
-
-    public usePuzzle(puzzle: Puzzle) {
-        this.bs.next(puzzle);
+        this.bsList = new BehaviorSubject<PuzzleInfo[]>([]);
+         this.refreshPuzzleList();
     }
 
     public getObservable(): Observable<Puzzle> {
         return this.bs.asObservable();
     }
 
+    public getListObservable(): Observable<PuzzleInfo[]> {
+        return this.bsList.asObservable();
+    }
+
     public get hasPuzzle(): boolean {
         return !!(this.bs.value);
+    }
+
+    public loadLatestPuzzle(): Promise<Puzzle> {
+        return this.localStorageService.getLastest()
+        .then(puzzle => {
+            this.bs.next(puzzle);
+            return puzzle;
+        });
+    }
+
+    public loadSavedPuzzle(id: string): Promise<Puzzle> {
+        return this.localStorageService.getPuzzle(id)
+        .then((puzzle) => {
+            this.localStorageService.putPuzzle(puzzle);
+            this.bs.next(puzzle);
+            return puzzle;
+        });
+    }
+
+    public deletePuzzle(id: string): Promise<void> {
+        return this.localStorageService.deletePuzzle(id)
+        .then(() => {
+
+            let current = this.bs.value;
+
+            if (current && current.info.id === id) {
+                this.bs.next(null);
+            }
+
+            this.refreshPuzzleList();
+        });
+    }
+
+    public loadNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
+        return this.httpPuzzleService.getPuzzle(providerName)
+        .then((puzzle) => {
+            this.localStorageService.putPuzzle(puzzle);
+            this.bs.next(puzzle);
+
+            this.refreshPuzzleList();
+
+            return puzzle;
+        })
+        .catch((error) => {
+            console.log("Failed to get puzzle:" + error.toString());
+            throw new Error("Failed to load puzzle from " + providerName);
+        });
     }
 
     public clearSelection() {
@@ -182,7 +238,7 @@ export class PuzzleService {
 
     private commit(puzzle: IPuzzle) {
         puzzle.revision += 1;
-        localStorage.setItem("xw-puzzle", JSON.stringify(puzzle));
+        this.localStorageService.putPuzzle(puzzle);
         this.bs.next(new Puzzle(puzzle));
     }
 
@@ -281,4 +337,8 @@ export class PuzzleService {
         });
     }
 
+    private refreshPuzzleList() {
+        let list = this.localStorageService.listPuzzles();
+        this.bsList.next(list);
+    }
 }
