@@ -25,7 +25,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.appService.clearBusy();
-        this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus);
+        this.appService.getObservable().subscribe(appStatus => {
+            this.appStatus = appStatus;
+
+        });
+
+        setInterval
     }
 
     public ngOnDestroy() {

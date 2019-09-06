@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { Alert, AlertType } from '../ui/common';
 
 export type EditorType = "blogger" | "solver";
@@ -7,6 +7,7 @@ export type EditorType = "blogger" | "solver";
 export class AppStatus {
     constructor(
         public readonly busy: boolean,
+        public readonly late: boolean,
         public readonly alerts: readonly Alert[],
         public readonly editor: EditorType,
     )
@@ -16,15 +17,36 @@ export class AppStatus {
 @Injectable({
     providedIn: 'root'
 })
-export class AppService {
+export class AppService implements OnDestroy {
     private busy: boolean = false;
+    private late: boolean = false;
+    private busyCounter: number = 0;
+    
     private alerts: Alert[] = [];
     private editor: EditorType = "blogger";
+    private subs: Subscription[]= [];
 
     private bs: BehaviorSubject<AppStatus>;
 
     constructor() {
-        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, [], "blogger"));
+        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, false, [], "blogger"));
+
+        // add a timer that records how long the app has been busy
+        // when this time passes a threshold mark the app as late
+        this.subs.push(timer(100, 100).subscribe((t) => {
+            if (this.busy) {
+                this.busyCounter++;
+                if (this.busyCounter === 2) {
+                    this.late = true;
+                    this.emitNext();
+                }
+            }
+        }));
+
+    }
+
+    public ngOnDestroy() {
+        this.subs.forEach(s => s.unsubscribe());
     }
     
     public getObservable(): Observable<AppStatus> {
@@ -33,11 +55,15 @@ export class AppService {
 
     public setBusy() {
         this.busy = true;
+        this.late = false;
+        this.busyCounter = 0;
         this.emitNext();
     }
 
     public clearBusy() {
         this.busy = false;
+        this.late = false;
+        this.busyCounter = 0;
         this.emitNext();
     }
 
@@ -57,6 +83,6 @@ export class AppService {
 
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
-        this.bs.next(new AppStatus(this.busy, alerts, this.editor));
+        this.bs.next(new AppStatus(this.busy, this.late, alerts, this.editor));
     }
 }

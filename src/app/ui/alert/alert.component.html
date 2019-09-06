@@ -1,3 +1,6 @@
+<p *ngIf="appStatus.late">
+    <ngb-alert type="info">Working...</ngb-alert>
+</p>
 <p *ngFor="let alert of appStatus.alerts">
     <ngb-alert [type]="alert.type" (close)="onClose()">{{ alert.message }}</ngb-alert>
 </p>

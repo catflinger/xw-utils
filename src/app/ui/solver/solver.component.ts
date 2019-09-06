@@ -90,6 +90,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                 this.modalRef.componentInstance.latestAnswer = this.puzzle.getLatestAnswer(clue.id);
                 this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
                     this.modalRef.close();
+                    this.modalRef = null;
                 }));
                 // this.modalRef.result.finally(() => this.modalRef = null);
             },
