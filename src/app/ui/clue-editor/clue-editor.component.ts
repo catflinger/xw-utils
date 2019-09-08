@@ -5,6 +5,8 @@ import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
+import { ClueTextChunk } from '../clue-text/clue-text.component';
+import { ClueTextChunkComponent } from '../clue-text-chunk/clue-text-chunk.component';
 
 @Component({
     selector: 'app-clue-editor',
@@ -31,7 +33,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.form = this.formBuilder.group({
             answer: [""],
             comment: [""],
-            definition: [""]
+            chunks: [[]]
         });
 
         this.subs.push(
@@ -44,7 +46,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                         this.form.patchValue({
                             comment: clue.comment,
                             answer: this.starterText ? this.starterText : clue.answer,
-                            definition: clue.definition,
+                            chunks: clue.chunks,
                         });
                     }
                 }
@@ -56,13 +58,29 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
+    public onClearDefinition() {
+        this.form.patchValue({
+            chunks: [new ClueTextChunk(0, this.clue.text, false)]
+        });
+    }
+
+    public hasDefinition(): boolean {
+        let definitionCount = 0;
+        this.form.value.chunks.forEach((chunk: ClueTextChunk) => {
+            if (chunk.isDefinition) {
+                definitionCount++;
+            } 
+         });
+         return definitionCount > 0;
+    }
+    
     public onSave() {
         this.puzzleService.updateClue(
             this.clueId,
             new ClueUpdate(
-                this.form.value.definition,
                 this.form.value.answer,
-                this.form.value.comment
+                this.form.value.comment,
+                this.form.value.chunks
             )
         );
         this.close.emit("save");

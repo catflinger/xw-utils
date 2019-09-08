@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
+import { TextChunk } from 'src/app/model/clue-text-chunk';
 
 @Component({
   selector: 'app-blogger',
@@ -56,5 +57,15 @@ export class BloggerComponent implements OnInit, OnDestroy {
         } else {
             this.puzzleService.selectNextClue(clue.id);
         }
+    }
+
+    makeChunkStyle(chunk: TextChunk): any {
+        let result: any = {};
+
+        result.color = "blue";
+        if (chunk.isDefinition) {
+            result["text-decoration"] = "underline";
+        }
+        return result;
     }
 }

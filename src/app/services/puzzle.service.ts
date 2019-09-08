@@ -197,7 +197,7 @@ export class PuzzleService {
                 // commit the change
                 clue.answer = delta.answer.toUpperCase();
                 clue.comment = delta.comment;
-                clue.definition = delta.definition;
+                clue.chunks = delta.chunks;
 
                 this.updateGridText(puzzle);
 

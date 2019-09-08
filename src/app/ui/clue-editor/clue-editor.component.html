@@ -1,30 +1,34 @@
 <div *ngIf="clue">
-<form [formGroup]="form">
-    <div class="modal-header">
-        <h4 class="modal-title">
-            <app-clue-text [clueText]="clue.text" formControlName="definition"></app-clue-text>
-        </h4>
-    </div>
-
-    <div *ngIf="showLatestAnswer()" class="modal-body">
-        <h4>{{latestAnswer}}</h4>
-    </div>
-
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="answer">Answer</label>
-            <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer">
+    <form [formGroup]="form">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <app-clue-text formControlName="chunks"></app-clue-text>
+            </h4>
+            <div>
+                <button type="button" class="btn btn-link" *ngIf="hasDefinition()"
+                    (click)="onClearDefinition()">clear</button>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="comment">Comment</label>
-            <quill-editor id="comment" formControlName="comment"></quill-editor>
+        <div *ngIf="showLatestAnswer()" class="modal-body">
+            <h4>{{latestAnswer}}</h4>
         </div>
-    </div>
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="onSave()">Save</button>
-        <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Cancel</button>
-    </div>
-</form>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer">
+            </div>
+
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <quill-editor id="comment" formControlName="comment"></quill-editor>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="onSave()">Save</button>
+            <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
 </div>

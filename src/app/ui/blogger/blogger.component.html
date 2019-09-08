@@ -9,7 +9,7 @@
                 {{clue.answer}}
             </div>
             <div class="col-9">
-                 {{clue.text}}
+                <span *ngFor="let chunk of clue.chunks" [ngStyle]="makeChunkStyle(chunk)">{{chunk.text}}</span>
             </div>
         </div>
 

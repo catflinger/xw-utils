@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     public onOpenSaved(id: string) {
         this.puzzleService.loadSavedPuzzle(id)
         .then((puzzle) => {
-            console.log("GOT " + puzzle);
             if (puzzle) {
                 let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
                 this.appService.setEditor(editor);
