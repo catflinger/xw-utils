@@ -1,12 +1,10 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-// import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClueUpdate } from 'src/app/services/clue-update';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
-import { ClueTextChunk } from '../clue-text/clue-text.component';
-import { ClueTextChunkComponent } from '../clue-text-chunk/clue-text-chunk.component';
+import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 
 @Component({
     selector: 'app-clue-editor',

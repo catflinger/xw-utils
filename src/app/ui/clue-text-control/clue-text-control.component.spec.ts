@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClueTextComponent } from './clue-text.component';
+import { ClueTextControlComponent } from './clue-text-control.component';
 
 describe('ClueTextComponent', () => {
-  let component: ClueTextComponent;
-  let fixture: ComponentFixture<ClueTextComponent>;
+  let component: ClueTextControlComponent;
+  let fixture: ComponentFixture<ClueTextControlComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClueTextComponent ]
+      declarations: [ ClueTextControlComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClueTextComponent);
+    fixture = TestBed.createComponent(ClueTextControlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

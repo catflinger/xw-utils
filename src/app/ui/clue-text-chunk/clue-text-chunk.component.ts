@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ContentChildren, QueryList, ElementRef, ViewChildren, ViewChild } from '@angular/core';
-import { ClueTextChunk } from '../clue-text/clue-text.component';
+import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 
 @Component({
     selector: 'app-clue-text-chunk',

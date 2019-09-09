@@ -15,16 +15,16 @@ export class ClueTextChunk {
 }
 
 @Component({
-    selector: 'app-clue-text',
-    templateUrl: './clue-text.component.html',
-    styleUrls: ['./clue-text.component.css'],
+    selector: 'app-clue-text-control',
+    templateUrl: './clue-text-control.component.html',
+    styleUrls: ['./clue-text-control.component.css'],
     providers: [    { 
         provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => ClueTextComponent),
+        useExisting: forwardRef(() => ClueTextControlComponent),
         multi: true
     }],
 })
-export class ClueTextComponent implements ControlValueAccessor, OnInit {
+export class ClueTextControlComponent implements ControlValueAccessor, OnInit {
 
     public chunks: ClueTextChunk[] = [];
     public definition: string;

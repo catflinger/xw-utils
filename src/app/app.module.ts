@@ -17,7 +17,6 @@ import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble
 import { ClueListComponent } from './ui/clue-list/clue-list.component';
 import { SolverComponent } from './ui/solver/solver.component';
 import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
-import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
 
@@ -25,6 +24,7 @@ import { PuzzleService } from './services/puzzle.service';
 import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
 import { BloggerComponent } from './ui/blogger/blogger.component';
+import { ClueTextControlComponent } from './ui/clue-text-control/clue-text-control.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -44,7 +44,7 @@ const quillGlobalConfig = {
         ClueListComponent,
         SolverComponent,
         ClueEditorComponent,
-        ClueTextComponent,
+        ClueTextControlComponent,
         ClueTextChunkComponent,
         NavbarComponent,
         HomeComponent,
