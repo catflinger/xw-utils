@@ -9,10 +9,10 @@ export interface IClue {
     text: string;           // "How to train a dragon (5, 4)"
     letterCount: string;    // "(5, 4)"
     answer: string;
-    // definition: string;
     format: string;
     comment: string;
     highlight: boolean;
+    validationMessage: string; 
     entries: readonly IGridEntry[];
     chunks: readonly TextChunk[];
 }
@@ -24,7 +24,7 @@ export class Clue implements IClue {
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
-    // public readonly definition: string;
+    public readonly validationMessage: string; 
     public readonly format: string;
     public readonly comment: string;
     public readonly highlight: boolean;
@@ -38,7 +38,7 @@ export class Clue implements IClue {
         this.text = data.text;
         this.letterCount = data.letterCount;
         this.answer = data.answer;
-        //this.definition = data.definition;
+        this.validationMessage = data.validationMessage;
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;

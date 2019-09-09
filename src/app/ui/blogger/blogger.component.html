@@ -8,8 +8,11 @@
             <div class="col-2 font-weight-bold">
                 {{clue.answer}}
             </div>
-            <div class="col-9">
-                <span *ngFor="let chunk of clue.chunks" [ngStyle]="makeChunkStyle(chunk)">{{chunk.text}}</span>
+            <div class="col-7">
+                <app-clue-text [clue]="clue" [textStyle]="puzzle.publishOptions.clueStyle"></app-clue-text>
+            </div>
+            <div class="col-2">
+                    {{clue.validationMessage}}
             </div>
         </div>
 

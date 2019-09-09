@@ -25,6 +25,7 @@ import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
 import { BloggerComponent } from './ui/blogger/blogger.component';
 import { ClueTextControlComponent } from './ui/clue-text-control/clue-text-control.component';
+import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -55,6 +56,7 @@ const quillGlobalConfig = {
         AlertComponent,
         TextStyleComponent,
         BloggerComponent,
+        ClueTextComponent,
     ],
     imports: [
         BrowserModule,

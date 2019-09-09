@@ -1,0 +1,3 @@
+<ng-container *ngIf="clue">
+    <span *ngFor="let chunk of clue.chunks" [ngStyle]="makeChunkStyle(chunk)">{{chunk.text}}</span>
+</ng-container>

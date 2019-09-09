@@ -58,14 +58,4 @@ export class BloggerComponent implements OnInit, OnDestroy {
             this.puzzleService.selectNextClue(clue.id);
         }
     }
-
-    makeChunkStyle(chunk: TextChunk): any {
-        let result: any = {};
-
-        result.color = "blue";
-        if (chunk.isDefinition) {
-            result["text-decoration"] = "underline";
-        }
-        return result;
-    }
 }

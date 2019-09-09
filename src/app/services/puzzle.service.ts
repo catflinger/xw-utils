@@ -9,6 +9,7 @@ import { TextStyleName } from '../ui/common';
 import { LocalStorageService } from './local-storage.service';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { PuzzleInfo } from '../model/puzzle-info';
+import { PuzzleManagementService } from './puzzle-management.service';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -16,7 +17,7 @@ import { PuzzleInfo } from '../model/puzzle-info';
 //      an new updated model is produced an added to the Behaviour Subject
 //      application components listen for new models by subscribing to the BS
 
-// This might be better done using a storage framework such as Redux, but I don't have the time to learn a framework right now.
+// TO DO: This might be better done using a storage framework such as Redux, but I don't have the time to learn a new framework right now.
 // Once I get on top of the rest of the app then I might try and go back and retro fit Redux or similar later
 
 @Injectable({
@@ -25,75 +26,32 @@ import { PuzzleInfo } from '../model/puzzle-info';
 export class PuzzleService {
 
     private bs: BehaviorSubject<Puzzle>;
-    private bsList: BehaviorSubject<PuzzleInfo[]>;
 
-    constructor(
-        private httpPuzzleService: HttpPuzzleSourceService,
-        private localStorageService: LocalStorageService,
-    ) {
+    constructor(private puzzleManagement: PuzzleManagementService) {
         this.bs = new BehaviorSubject<Puzzle>(null);
-        this.bsList = new BehaviorSubject<PuzzleInfo[]>([]);
-         this.refreshPuzzleList();
     }
 
     public getObservable(): Observable<Puzzle> {
         return this.bs.asObservable();
     }
 
-    public getListObservable(): Observable<PuzzleInfo[]> {
-        return this.bsList.asObservable();
-    }
-
     public get hasPuzzle(): boolean {
         return !!(this.bs.value);
     }
 
-    public loadLatestPuzzle(): Promise<Puzzle> {
-        return this.localStorageService.getLastest()
-        .then(puzzle => {
-            this.bs.next(puzzle);
-            return puzzle;
-        });
+    public usePuzzle(puzzle: Puzzle) {
+        this.bs.next(puzzle);
     }
 
-    public loadSavedPuzzle(id: string): Promise<Puzzle> {
-        return this.localStorageService.getPuzzle(id)
-        .then((puzzle) => {
-            this.localStorageService.putPuzzle(puzzle);
-            this.bs.next(puzzle);
-            return puzzle;
-        });
+    public clearPuzzle(id?: string) {
+        let current = this.bs.value;
+
+        if (!id || (current && current.info.id === id)) {
+            this.bs.next(null);
+        }
     }
 
-    public deletePuzzle(id: string): Promise<void> {
-        return this.localStorageService.deletePuzzle(id)
-        .then(() => {
-
-            let current = this.bs.value;
-
-            if (current && current.info.id === id) {
-                this.bs.next(null);
-            }
-
-            this.refreshPuzzleList();
-        });
-    }
-
-    public loadNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
-        return this.httpPuzzleService.getPuzzle(providerName)
-        .then((puzzle) => {
-            this.localStorageService.putPuzzle(puzzle);
-            this.bs.next(puzzle);
-
-            this.refreshPuzzleList();
-
-            return puzzle;
-        })
-        .catch((error) => {
-            console.log("Failed to get puzzle:" + error.toString());
-            throw new Error("Failed to load puzzle from " + providerName);
-        });
-    }
+    //#region Amending puzzles 
 
     public clearSelection() {
         let puzzle = this.getMutable();
@@ -232,14 +190,20 @@ export class PuzzleService {
         }
     }
 
+    //#endregion
+
+    //#region Private helper methods 
+
     private getMutable(): IPuzzle {
         return new Puzzle(JSON.parse(JSON.stringify(this.bs.value)));
     }
 
     private commit(puzzle: IPuzzle) {
         puzzle.revision += 1;
-        this.localStorageService.putPuzzle(puzzle);
-        this.bs.next(new Puzzle(puzzle));
+        const updated: Puzzle = new Puzzle(puzzle); 
+        
+        this.puzzleManagement.savePuzzle(updated);
+        this.bs.next(updated);
     }
 
     private clearHighlights(puzzle: IPuzzle) {
@@ -337,8 +301,5 @@ export class PuzzleService {
         });
     }
 
-    private refreshPuzzleList() {
-        let list = this.localStorageService.listPuzzles();
-        this.bsList.next(list);
-    }
+    //#endregion
 }
