@@ -3,6 +3,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { GridCell } from 'src/app/model/grid-cell';
+import { SelectCLueByCell } from 'src/app/services/reducers/select-clue-by-cell';
 
 class GridParameters {
     public readonly cellSize = 33;
@@ -93,7 +94,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (cell.highlight) {
             this.cellClick.emit(cell);
         } else {
-            this.puzzleService.selectClueByCell(x, y);
+            this.puzzleService.updatePuzzle(new SelectCLueByCell(x, y));
         }
 
     }

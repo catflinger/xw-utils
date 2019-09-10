@@ -6,6 +6,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { Puzzle } from 'src/app/model/puzzle';
 import { TextStyle } from 'src/app/model/text-style';
+import { UpdatePublsihOptionTextStyle } from 'src/app/services/reducers/update-publish-option-text-style';
 
 class ColorPickerOption {
     public name: string;
@@ -45,12 +46,12 @@ export class TextStyleComponent implements OnInit, OnDestroy {
         this.subs.push(this.form.valueChanges.subscribe((val) => {
             if (this.puzzle && this.appStatus) {
 
-                this.puzzleService.updatePublishOptionTextStyle(
+                this.puzzleService.updatePuzzle(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
                     val.color.value, 
                     val.bold, 
                     val.italic, 
-                    val.underline);
+                    val.underline));
             }
         }));
 

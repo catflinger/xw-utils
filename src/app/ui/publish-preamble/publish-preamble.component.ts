@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
+import { UpdatePreamble } from 'src/app/services/reducers/update-preamble';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -52,7 +53,7 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        this.puzzleService.updatePreamble(this.form.value.header, this.form.value.body);
+        this.puzzleService.updatePuzzle(new UpdatePreamble(this.form.value.header, this.form.value.body));
         this.router.navigate(["/user-password"]);
     }
 

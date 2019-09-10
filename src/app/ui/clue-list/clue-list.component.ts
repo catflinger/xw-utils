@@ -3,6 +3,7 @@ import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Direction } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
+import { SelectClue } from 'src/app/services/reducers/select-clue';
 
 @Component({
     selector: 'app-clue-list',
@@ -32,7 +33,7 @@ export class ClueListComponent implements OnInit {
         if (clue.highlight) {
             this.clueClick.emit(clue);
         } else {
-            this.puzzleService.selectClue(clue.id);
+            this.puzzleService.updatePuzzle(new SelectClue(clue.id));
         }
     }
 }

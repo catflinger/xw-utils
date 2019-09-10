@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { ClueUpdate } from 'src/app/services/clue-update';
 import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
+import { UpdateClue } from 'src/app/services/reducers/update-clue';
 
 @Component({
     selector: 'app-clue-editor',
@@ -73,14 +73,12 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
     
     public onSave() {
-        this.puzzleService.updateClue(
+        this.puzzleService.updatePuzzle(new UpdateClue(
             this.clueId,
-            new ClueUpdate(
-                this.form.value.answer,
-                this.form.value.comment,
-                this.form.value.chunks
-            )
-        );
+            this.form.value.answer,
+            this.form.value.comment,
+            this.form.value.chunks
+        ));
         this.close.emit("save");
     }
 

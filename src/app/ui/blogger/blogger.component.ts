@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { PuzzleService } from 'src/app/services/puzzle.service';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { ClearSelection } from 'src/app/services/reducers/clear-selection';
+import { SelectClue } from 'src/app/services/reducers/select-clue';
+import { SelectNextClue } from 'src/app/services/reducers/select-next-clue';
 
 @Component({
   selector: 'app-blogger',
@@ -48,14 +48,14 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        this.puzzleService.selectClue(clue.id);
+        this.puzzleService.updatePuzzle(new SelectClue(clue.id));
     }
 
     onEditorClose(clue: Clue, reason: string) {
         if (reason === "cancel") {
-            this.puzzleService.clearSelection();
+            this.puzzleService.updatePuzzle(new ClearSelection());
         } else {
-            this.puzzleService.selectNextClue(clue.id);
+            this.puzzleService.updatePuzzle(new SelectNextClue(clue.id));
         }
     }
 }

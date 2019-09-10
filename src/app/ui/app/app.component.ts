@@ -43,12 +43,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // TO DO: warn before clearing current puzzle
 
-        this.puzzleManagementService.loadNewPuzzle(provider)
+        this.puzzleManagementService.getNewPuzzle(provider)
         .then((puzzle) => {
-            this.appService.clearBusy();
             this.puzzleService.usePuzzle(puzzle);
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
+
+            this.appService.clearBusy();
             this.router.navigate(["/", editor])
         })
         .catch((error) => {

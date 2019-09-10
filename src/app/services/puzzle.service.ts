@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle, IPuzzle } from '../model/puzzle';
 
-import { ClueUpdate } from './clue-update';
 import { Clue, IClue, ClueValidationWarning } from '../model/clue';
-import { TextStyle } from '../model/text-style';
 import { TextStyleName } from '../ui/common';
-import { LocalStorageService } from './local-storage.service';
-import { HttpPuzzleSourceService } from './http-puzzle-source.service';
-import { PuzzleInfo } from '../model/puzzle-info';
 import { PuzzleManagementService } from './puzzle-management.service';
 import { TextChunk } from '../model/clue-text-chunk';
+import { IReducer } from './reducers/reducer';
+import { ClearSelection } from './reducers/clear-selection';
+import { Validate } from './reducers/validate';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -42,7 +40,9 @@ export class PuzzleService {
 
     public usePuzzle(puzzle: Puzzle) {
         let iPuzzle = new Puzzle(JSON.parse(JSON.stringify(puzzle)));
-        this.validateClues(iPuzzle);
+        new ClearSelection().exec(iPuzzle);
+        new Validate().exec(iPuzzle);
+
         this.bs.next(new Puzzle(iPuzzle));
     }
 
@@ -54,157 +54,15 @@ export class PuzzleService {
         }
     }
 
-    //#region Amending puzzles 
-
-    public validatePuzzle(): void {
+    public updatePuzzle(reducer: IReducer) {
         let puzzle = this.getMutable();
 
         if (puzzle) {
-            this.validateClues(puzzle);
+            reducer.exec(puzzle);
             this.commit(puzzle);
         }
+
     }
-
-    public clearSelection() {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-            this.clearHighlights(puzzle);
-            this.commit(puzzle);
-        }
-    }
-
-    public selectClue(clueId: string) {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-
-            this.clearHighlights(puzzle);
-
-            let clue = puzzle.clues.find((clue) => clue.id === clueId);
-            if (clue) {
-                clue.highlight = true;
-                clue.entries.forEach((entry) => {
-                    entry.cellIds.forEach((cellId) => {
-                        let cell = puzzle.grid.cells.find((cell) => cell.id === cellId);
-                        cell.highlight = true;
-                    });
-                });
-            }
-            this.commit(puzzle);
-        }
-    }
-
-    public selectNextClue(clueId: string) {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-            this.clearHighlights(puzzle);
-
-            let index = puzzle.clues.findIndex((clue) => clue.id === clueId);
-            if (index >= 0 && index + 1 < puzzle.clues.length) {
-                puzzle.clues[index + 1].highlight = true;
-            }
-            this.commit(puzzle);
-        }
-    }
-
-    public selectClueByCell(x: number, y: number): void {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-
-            this.clearHighlights(puzzle);
-
-            let cell = puzzle.grid.cells.find((cell) => cell.x === x && cell.y === y);
-            if (cell) {
-
-                // Find a clue that contains this cell.  
-                // Try across clues first then down clues.
-                // Prefer clues that have cell in first entry over clues that have
-                // the cell in linked entries
-
-                const acrossClues = this.getAcrossClues(puzzle)
-                const downClues = this.getDownClues(puzzle)
-                let result: Clue = null;
-
-                // Look in across clues, first entry only
-                result = this.findCellInFirstEntry(acrossClues, cell.id);
-
-                // Look in down clues, first entry only
-                if (!result) {
-                    result = this.findCellInFirstEntry(downClues, cell.id);
-                }
-
-                // Look in across clues, all entries
-                if (!result) {
-                    result = this.findCellInAnyEntry(acrossClues, cell.id);
-                }
-
-                // Look in down clues, all entries
-                if (!result) {
-                    result = this.findCellInAnyEntry(downClues, cell.id);
-                }
-
-                if (result) {
-                    this.highlightClue(puzzle, result)
-                }
-
-                this.commit(puzzle);
-            }
-        }
-    }
-
-    public updateClue(id: string, delta: ClueUpdate) {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-            let clue = puzzle.clues.find((c) => c.id === id);
-
-            if (clue) {
-
-                // commit the change
-                clue.answer = delta.answer.trim().toUpperCase();
-                clue.comment = delta.comment.trim();
-                clue.chunks = delta.chunks;
-                clue.warnings = this.validateClue(delta.answer, delta.comment, delta.chunks);
-
-                this.updateGridText(puzzle);
-
-                this.commit(puzzle);
-            }
-        }
-    }
-
-    public updatePreamble(header: string, body: string) {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-            puzzle.notes.header = header;
-            puzzle.notes.body = body;
-
-            this.commit(puzzle);
-        }
-    }
-
-    public updatePublishOptionTextStyle(textStyleName: TextStyleName, color: string, bold: boolean, italic: boolean, underline: boolean) {
-        let puzzle = this.getMutable();
-
-        if (puzzle) {
-
-            let ts = puzzle.publishOptions[textStyleName];
-            ts.color = color;
-            ts.bold = bold;
-            ts.italic = italic;
-            ts.underline = underline;
-
-            this.commit(puzzle);
-        }
-    }
-
-    //#endregion
-
-    //#region Private helper methods 
 
     private getMutable(): IPuzzle {
         return new Puzzle(JSON.parse(JSON.stringify(this.bs.value)));
@@ -217,150 +75,4 @@ export class PuzzleService {
         this.puzzleManagement.savePuzzle(updated);
         this.bs.next(updated);
     }
-
-    private clearHighlights(puzzle: IPuzzle) {
-        puzzle.clues.forEach((clue) => {
-            clue.highlight = false;
-        });
-
-        if (puzzle.grid) {
-            puzzle.grid.cells.forEach((cell) => {
-                cell.highlight = false;
-            });
-        }
-    }
-
-    private highlightClue(puzzle: IPuzzle, clue: IClue) {
-
-        clue.highlight = true;
-        clue.entries.forEach((entry) => {
-            entry.cellIds.forEach((cellId) => {
-                let cell = puzzle.grid.cells.find((cell) => cell.id === cellId);
-                cell.highlight = true;
-            });
-        });
-    }
-
-    private getAcrossClues(puzzle: IPuzzle): Clue[] {
-        return puzzle.clues.filter((clue) => clue.group === "across");
-    }
-
-    private getDownClues(puzzle: IPuzzle): Clue[] {
-        return puzzle.clues.filter((clue) => clue.group === "down");
-    }
-
-    private findCellInFirstEntry(clues: Clue[], cellId: string): Clue {
-        let result: Clue = null;
-
-        for (let clue of clues) {
-            if (clue.entries.length) {
-                let entry = clue.entries[0];
-                entry.cellIds.forEach(id => {
-                    if (id === cellId) {
-                        result = clue;
-                    }
-                });
-            }
-            if (result) {
-                break;
-            }
-        }
-        return result;
-    }
-
-    private findCellInAnyEntry(clues: Clue[], cellId: string): Clue {
-        let result: Clue = null;
-
-        for (let clue of clues) {
-            clue.entries.forEach((entry) => {
-                entry.cellIds.forEach(id => {
-                    if (id === cellId) {
-                        result = clue;
-                    }
-                });
-            });
-
-            if (result) {
-                break;
-            }
-        }
-        return result;
-    }
-
-    // private updateGridText(puzzle: Puzzle) {
-    private updateGridText(puzzle: any) {
-        if (!puzzle.grid) {
-            return;
-        }
-        // clear the grid
-        puzzle.grid.cells.forEach(cell => cell.content = "");
-
-        puzzle.clues.forEach((clue) => {
-            let answer = clue.answer.toUpperCase().replace(/[^A-Z]/g, "");
-            let index = 0;
-
-            if (answer) {
-                clue.entries.forEach((entry) => {
-                    entry.cellIds.forEach((id) => {
-                        let cell = puzzle.grid.cells.find(c => c.id === id);
-                        if (index < answer.length) {
-                            cell.content = answer.charAt(index);
-                        }
-                        index++;
-                    });
-                });
-            }
-        });
-    }
-
-    private validateClues(puzzle: IPuzzle): void {
-        puzzle.clues.forEach((clue) => {
-            clue.warnings = this.validateClue(clue.answer, clue.comment, clue.chunks);
-        });
-    }
-
-
-    private validateClue(answer: string, comment: string, chunks: readonly TextChunk[]): ClueValidationWarning[] {
-        let warnings: ClueValidationWarning[] = [];
-
-        if (!answer || answer.trim().length === 0) {
-            warnings.push("missing answer");
-        }
-
-        let commentOK = false;
-
-        if (comment && comment.length > 0) {
-            console.log(comment);
-            let quill = JSON.parse(comment);
-            if (quill.ops && Array.isArray(quill.ops)) {
-                let text = "";
-                quill.ops.forEach(op => {
-                    if (op.insert) {
-                        text += op.insert;
-                    }
-                });
-                commentOK = text.trim().length > 0;
-            }
-        }
-
-        if (!commentOK) {
-            warnings.push("missing comment");
-        }
-
-
-        let definitionCount = 0;
-        chunks.forEach(chunk => {
-            if (chunk.isDefinition) {
-                definitionCount++;
-            }
-        })
-
-        if (definitionCount === 0) {
-            warnings.push("missing definition");
-        }
-
-        return warnings;
-}
-
-    //#endregion
 }

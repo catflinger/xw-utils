@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onOpenSaved(id: string) {
-        this.puzzleManagement.loadSavedPuzzle(id)
+        this.puzzleManagement.getSavedPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
                 this.puzzleService.usePuzzle(puzzle);

@@ -24,11 +24,11 @@ export class PuzzleManagementService {
         return this.bsList.asObservable();
     }
 
-    public loadLatestPuzzle(): Promise<Puzzle> {
+    public getLatestPuzzle(): Promise<Puzzle> {
         return this.localStorageService.getLastest();
     }
 
-    public loadSavedPuzzle(id: string): Promise<Puzzle> {
+    public getSavedPuzzle(id: string): Promise<Puzzle> {
         return this.localStorageService.getPuzzle(id)
             .then((puzzle) => {
                 this.localStorageService.putPuzzle(puzzle);
@@ -43,7 +43,7 @@ export class PuzzleManagementService {
             });
     }
 
-    public loadNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
+    public getNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
         return this.httpPuzzleService.getPuzzle(providerName)
             .then((puzzle) => {
                 this.localStorageService.putPuzzle(puzzle);
