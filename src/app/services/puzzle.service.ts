@@ -3,13 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle, IPuzzle } from '../model/puzzle';
 
 import { ClueUpdate } from './clue-update';
-import { Clue, IClue } from '../model/clue';
+import { Clue, IClue, ClueValidationWarning } from '../model/clue';
 import { TextStyle } from '../model/text-style';
 import { TextStyleName } from '../ui/common';
 import { LocalStorageService } from './local-storage.service';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { PuzzleInfo } from '../model/puzzle-info';
 import { PuzzleManagementService } from './puzzle-management.service';
+import { TextChunk } from '../model/clue-text-chunk';
 
 // This is a basic implimentation of an immutable store:
 //      the model (Puzzle) is not to be changed by the application
@@ -40,7 +41,9 @@ export class PuzzleService {
     }
 
     public usePuzzle(puzzle: Puzzle) {
-        this.bs.next(puzzle);
+        let iPuzzle = new Puzzle(JSON.parse(JSON.stringify(puzzle)));
+        this.validateClues(iPuzzle);
+        this.bs.next(new Puzzle(iPuzzle));
     }
 
     public clearPuzzle(id?: string) {
@@ -52,6 +55,15 @@ export class PuzzleService {
     }
 
     //#region Amending puzzles 
+
+    public validatePuzzle(): void {
+        let puzzle = this.getMutable();
+
+        if (puzzle) {
+            this.validateClues(puzzle);
+            this.commit(puzzle);
+        }
+    }
 
     public clearSelection() {
         let puzzle = this.getMutable();
@@ -150,12 +162,12 @@ export class PuzzleService {
             let clue = puzzle.clues.find((c) => c.id === id);
 
             if (clue) {
-                // TO DO: do some validation on the values in the delta here
 
                 // commit the change
-                clue.answer = delta.answer.toUpperCase();
-                clue.comment = delta.comment;
+                clue.answer = delta.answer.trim().toUpperCase();
+                clue.comment = delta.comment.trim();
                 clue.chunks = delta.chunks;
+                clue.warnings = this.validateClue(delta.answer, delta.comment, delta.chunks);
 
                 this.updateGridText(puzzle);
 
@@ -300,6 +312,55 @@ export class PuzzleService {
             }
         });
     }
+
+    private validateClues(puzzle: IPuzzle): void {
+        puzzle.clues.forEach((clue) => {
+            clue.warnings = this.validateClue(clue.answer, clue.comment, clue.chunks);
+        });
+    }
+
+
+    private validateClue(answer: string, comment: string, chunks: readonly TextChunk[]): ClueValidationWarning[] {
+        let warnings: ClueValidationWarning[] = [];
+
+        if (!answer || answer.trim().length === 0) {
+            warnings.push("missing answer");
+        }
+
+        let commentOK = false;
+
+        if (comment && comment.length > 0) {
+            console.log(comment);
+            let quill = JSON.parse(comment);
+            if (quill.ops && Array.isArray(quill.ops)) {
+                let text = "";
+                quill.ops.forEach(op => {
+                    if (op.insert) {
+                        text += op.insert;
+                    }
+                });
+                commentOK = text.trim().length > 0;
+            }
+        }
+
+        if (!commentOK) {
+            warnings.push("missing comment");
+        }
+
+
+        let definitionCount = 0;
+        chunks.forEach(chunk => {
+            if (chunk.isDefinition) {
+                definitionCount++;
+            }
+        })
+
+        if (definitionCount === 0) {
+            warnings.push("missing definition");
+        }
+
+        return warnings;
+}
 
     //#endregion
 }

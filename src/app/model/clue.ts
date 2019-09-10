@@ -2,6 +2,8 @@ import { ClueGroup } from './puzzle';
 import { GridEntry, IGridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 
+export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
+
 export interface IClue {
     id: string;
     group: ClueGroup;
@@ -12,9 +14,9 @@ export interface IClue {
     format: string;
     comment: string;
     highlight: boolean;
-    validationMessage: string; 
     entries: readonly IGridEntry[];
     chunks: readonly TextChunk[];
+    warnings: ClueValidationWarning[]; 
 }
 
 export class Clue implements IClue {
@@ -24,12 +26,12 @@ export class Clue implements IClue {
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
-    public readonly validationMessage: string; 
     public readonly format: string;
     public readonly comment: string;
     public readonly highlight: boolean;
     public readonly entries: readonly GridEntry[];
     public readonly chunks: readonly TextChunk[];
+    public readonly warnings: ClueValidationWarning[]; 
 
     constructor(data: any) {
         this.id = data.id;
@@ -38,7 +40,6 @@ export class Clue implements IClue {
         this.text = data.text;
         this.letterCount = data.letterCount;
         this.answer = data.answer;
-        this.validationMessage = data.validationMessage;
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;
@@ -50,5 +51,11 @@ export class Clue implements IClue {
         let chunks: TextChunk[] = [];
         data.chunks.forEach(chunk => chunks.push(new TextChunk(chunk)));
         this.chunks = chunks;
+
+        let warnings: ClueValidationWarning[] = [];
+        if (data.warnings) {
+            data.warnings.forEach(warning => warnings.push(warning));
+        }
+        this.warnings = warnings;
     }
 }
