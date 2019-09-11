@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 import { UpdateClue } from 'src/app/services/reducers/update-clue';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-clue-editor',
@@ -24,7 +24,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: PuzzleService, 
+        private puzzleService: IActivePuzzle, 
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
@@ -35,7 +35,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         });
 
         this.subs.push(
-            this.puzzleService.getObservable().subscribe(
+            this.puzzleService.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
                         let clue = puzzle.clues.find((c) => c.id === this.clueId);
@@ -73,7 +73,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
     
     public onSave() {
-        this.puzzleService.updatePuzzle(new UpdateClue(
+        this.puzzleService.update(new UpdateClue(
             this.clueId,
             this.form.value.answer,
             this.form.value.comment,

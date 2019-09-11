@@ -1,10 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { PuzzleService } from 'src/app/services/puzzle.service';
+import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
 import { Subscription } from 'rxjs';
-import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-home',
@@ -19,14 +18,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleManagement: PuzzleManagementService,
-        private puzzleService: PuzzleService,
+        private puzzleManagement: IPuzzleManager,
     ) { }
 
     ngOnInit() {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
-        this.subs.push(this.puzzleManagement.getListObservable().subscribe(
+        this.subs.push(this.puzzleManagement.getPuzzleList().subscribe(
             (list) => this.puzzleList = list,
             (error) => this.appService.setAlert("danger", error.toString())
         ));
@@ -37,10 +35,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onOpenSaved(id: string) {
-        this.puzzleManagement.getSavedPuzzle(id)
+        this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.puzzleService.usePuzzle(puzzle);
                 let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
                 this.appService.setEditor(editor);
                 this.router.navigate(["/" + editor]);
@@ -49,8 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onDelete(id: string) {
-        this.puzzleManagement.deletePuzzle(id)
-        .then(() => this.puzzleService.clearPuzzle(id));
+        this.puzzleManagement.deletePuzzle(id);
     }
 
 }

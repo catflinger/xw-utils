@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-solver',
@@ -19,7 +19,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: PuzzleService, 
+        private puzzleService: IActivePuzzle, 
         private modalService: NgbModal,
         private router: Router) { }
 
@@ -29,7 +29,7 @@ export class SolverComponent implements OnInit, OnDestroy {
             this.router.navigate(["/home"]);
         } else {
             this.subs.push(
-                this.puzzleService.getObservable().subscribe(
+                this.puzzleService.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                     }

@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService } from 'src/app/services/publication.service';
-import { Alert } from '../common';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-publish',
@@ -22,7 +21,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleService: PuzzleService,
+        private puzzleService: IActivePuzzle,
         private publicationService: PublicationService,
         private builder: FormBuilder) { }
 
@@ -39,7 +38,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             });
 
             this.subs.push(
-                this.puzzleService.getObservable().subscribe(
+                this.puzzleService.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                     }

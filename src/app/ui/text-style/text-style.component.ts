@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TextStyleName } from '../common';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { Puzzle } from 'src/app/model/puzzle';
-import { TextStyle } from 'src/app/model/text-style';
 import { UpdatePublsihOptionTextStyle } from 'src/app/services/reducers/update-publish-option-text-style';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 class ColorPickerOption {
     public name: string;
@@ -30,7 +29,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
-        private puzzleService: PuzzleService,
+        private puzzleService: IActivePuzzle,
         private formBuilder: FormBuilder
         ) { }
 
@@ -46,7 +45,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
         this.subs.push(this.form.valueChanges.subscribe((val) => {
             if (this.puzzle && this.appStatus) {
 
-                this.puzzleService.updatePuzzle(new UpdatePublsihOptionTextStyle(
+                this.puzzleService.update(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
                     val.color.value, 
                     val.bold, 
@@ -55,7 +54,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
             }
         }));
 
-        let latest = combineLatest(this.appService.getObservable(), this.puzzleService.getObservable());
+        let latest = combineLatest(this.appService.getObservable(), this.puzzleService.observe());
 
         this.subs.push(latest.subscribe((result) => {
             this.appStatus = result[0];

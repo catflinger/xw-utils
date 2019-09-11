@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { TextStyle } from 'src/app/model/text-style';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-publish-options',
@@ -24,7 +24,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private router: Router, 
-        private puzzleService: PuzzleService,
+        private puzzleService: IActivePuzzle,
     ) { }
 
     ngOnInit() {
@@ -36,7 +36,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         } else {
 
             this.subs.push(
-                this.puzzleService.getObservable().subscribe(
+                this.puzzleService.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
 

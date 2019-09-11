@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-
-import { PuzzleService } from 'src/app/services/puzzle.service';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
 import { Subscription } from 'rxjs';
-import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-root',
@@ -17,8 +15,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleManagementService: PuzzleManagementService,
-        private puzzleService: PuzzleService,
+        private puzzleService: IActivePuzzle,
+        private puzzleManagementService: IPuzzleManager,
         private appService: AppService,
         private router: Router) {
     }
@@ -43,9 +41,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // TO DO: warn before clearing current puzzle
 
-        this.puzzleManagementService.getNewPuzzle(provider)
+        this.puzzleManagementService.openNewPuzzle(provider)
         .then((puzzle) => {
-            this.puzzleService.usePuzzle(puzzle);
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
 

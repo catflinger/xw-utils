@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { GridCell } from 'src/app/model/grid-cell';
 import { SelectCLueByCell } from 'src/app/services/reducers/select-clue-by-cell';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 class GridParameters {
     public readonly cellSize = 33;
@@ -40,14 +40,14 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     private subs: Subscription[] = [];
 
-    constructor(private puzzleService: PuzzleService) {
+    constructor(private puzzleService: IActivePuzzle) {
     }
 
     public ngOnInit() {
         this.gridParams = new GridParameters();
 
         this.subs.push(
-            this.puzzleService.getObservable()
+            this.puzzleService.observe()
                 .subscribe(
                     (puzzle) => {
 
@@ -94,7 +94,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (cell.highlight) {
             this.cellClick.emit(cell);
         } else {
-            this.puzzleService.updatePuzzle(new SelectCLueByCell(x, y));
+            this.puzzleService.update(new SelectCLueByCell(x, y));
         }
 
     }

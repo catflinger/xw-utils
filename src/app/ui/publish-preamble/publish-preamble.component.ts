@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
 import { UpdatePreamble } from 'src/app/services/reducers/update-preamble';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -20,7 +20,7 @@ export class PublishPreambleComponent implements OnInit {
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleService: PuzzleService,
+        private puzzleService: IActivePuzzle,
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
@@ -37,7 +37,7 @@ export class PublishPreambleComponent implements OnInit {
             });
 
             this.subs.push(
-                this.puzzleService.getObservable().subscribe(
+                this.puzzleService.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                         if (puzzle) {
@@ -53,7 +53,7 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        this.puzzleService.updatePuzzle(new UpdatePreamble(this.form.value.header, this.form.value.body));
+        this.puzzleService.update(new UpdatePreamble(this.form.value.header, this.form.value.body));
         this.router.navigate(["/user-password"]);
     }
 

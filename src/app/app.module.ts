@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +20,7 @@ import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
 
-import { PuzzleService } from './services/puzzle.service';
+import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle-management.service';
 import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
 import { BloggerComponent } from './ui/blogger/blogger.component';
@@ -68,7 +68,8 @@ const quillGlobalConfig = {
         QuillModule.forRoot(quillGlobalConfig),
     ],
     providers: [
-        PuzzleService,
+        {provide: IPuzzleManager, useExisting: PuzzleManagementService},
+        {provide: IActivePuzzle, useExisting: PuzzleManagementService},
         HttpClient
     ],
     entryComponents: [

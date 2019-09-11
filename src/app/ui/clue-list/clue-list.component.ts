@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PuzzleService } from 'src/app/services/puzzle.service';
 import { Direction } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from 'src/app/services/reducers/select-clue';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-clue-list',
@@ -17,10 +17,10 @@ export class ClueListComponent implements OnInit {
     private subs: Subscription[] = [];
     public clues: Clue[] = [];
 
-    constructor(private puzzleService: PuzzleService) { }
+    constructor(private puzzleService: IActivePuzzle) { }
 
     ngOnInit() {
-        this.subs.push(this.puzzleService.getObservable().subscribe(
+        this.subs.push(this.puzzleService.observe().subscribe(
             (puzzle) => {
                 if (puzzle) {
                     this.clues = puzzle.clues.filter((clue) => clue.group === this.direction)
@@ -33,7 +33,7 @@ export class ClueListComponent implements OnInit {
         if (clue.highlight) {
             this.clueClick.emit(clue);
         } else {
-            this.puzzleService.updatePuzzle(new SelectClue(clue.id));
+            this.puzzleService.update(new SelectClue(clue.id));
         }
     }
 }
