@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Clue } from 'src/app/model/clue';
 import { TextStyle } from 'src/app/model/text-style';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { PublishOptions } from 'src/app/model/publish-options';
 
 @Component({
     selector: 'app-clue-text',
@@ -10,7 +11,7 @@ import { TextChunk } from 'src/app/model/clue-text-chunk';
 })
 export class ClueTextComponent implements OnInit {
     @Input() clue: Clue;
-    @Input() textStyle: TextStyle;
+    @Input() publishOptions: PublishOptions;
 
     constructor() { }
 
@@ -19,11 +20,16 @@ export class ClueTextComponent implements OnInit {
 
     makeChunkStyle(chunk: TextChunk): any {
         let result: any = {};
+        let textStyle: TextStyle = chunk.isDefinition ? 
+            this.publishOptions.definitionStyle :
+            this.publishOptions.clueStyle;
 
-        result.color = "blue";
-        if (chunk.isDefinition) {
-            result["text-decoration"] = "underline";
-        }
+        result.color = textStyle.color;
+
+        result["text-decoration"] = textStyle.underline ?  "underline": "none";
+        result["font-weight"] = textStyle.bold ?  "bold": "normal";
+        result["font-style"] = textStyle.italic ?  "italic": "normal";
+
         return result;
     }
 }

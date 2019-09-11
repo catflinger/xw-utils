@@ -1,20 +1,22 @@
 <div class="row">
     <div class="col">
         <h3>publish options</h3>
-        <p>On this screen enter colours for the clue text etc</p>
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <div>
-            <span [ngStyle]="answerStyle">FISH </span>
-        </div>
-        <div>
-            <span [ngStyle]="clueStyle">1. </span>
-            <span [ngStyle]="definitionStyle">Marine creature</span>
-            <span [ngStyle]="clueStyle"> found in wharf is heavy (4)</span>
-        </div>
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <table>
+            <tr *ngFor="let clue of sample">
+                <td>
+                    <span [ngStyle]="answerStyle">{{clue.answer}} </span>
+                </td>
+                <td class="col">
+                    <span [ngStyle]="clueStyle">{{clue.caption}} </span>
+                    <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

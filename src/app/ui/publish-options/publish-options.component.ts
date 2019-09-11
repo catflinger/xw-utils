@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { TextStyle } from 'src/app/model/text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { Clue } from 'src/app/model/clue';
+import { Puzzle } from 'src/app/model/puzzle';
 
 @Component({
     selector: 'app-publish-options',
@@ -11,8 +13,9 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
     styleUrls: ['./publish-options.component.css']
 })
 export class PublishOptionsComponent implements OnInit, OnDestroy {
-    public puzzle = null;
+    public puzzle: Puzzle = null;
     public appStatus: AppStatus;
+    public sample: Clue[] = [];
     
     public answerStyle: any = {};
     public clueStyle: any = {};
@@ -38,11 +41,15 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.puzzleService.observe().subscribe(
                     (puzzle) => {
-                        this.puzzle = puzzle;
+                        if (puzzle) {
+                            this.puzzle = puzzle;
 
-                        this.answerStyle = this.makeNgStyle(puzzle.publishOptions.answerStyle); 
-                        this.clueStyle = this.makeNgStyle(puzzle.publishOptions.clueStyle); 
-                        this.definitionStyle = this.makeNgStyle(puzzle.publishOptions.definitionStyle); 
+                            this.answerStyle = this.makeNgStyle(puzzle.publishOptions.answerStyle); 
+                            this.clueStyle = this.makeNgStyle(puzzle.publishOptions.clueStyle); 
+                            this.definitionStyle = this.makeNgStyle(puzzle.publishOptions.definitionStyle); 
+
+                            this.sample = this.puzzle.clues.filter((c, i) => i <= 5); 
+                        } 
                     }
                 ));
         }

@@ -68,6 +68,7 @@ const quillGlobalConfig = {
         QuillModule.forRoot(quillGlobalConfig),
     ],
     providers: [
+        PuzzleManagementService,
         {provide: IPuzzleManager, useExisting: PuzzleManagementService},
         {provide: IActivePuzzle, useExisting: PuzzleManagementService},
         HttpClient

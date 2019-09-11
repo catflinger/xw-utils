@@ -9,7 +9,7 @@
                 {{clue.answer}}
             </div>
             <div class="col-7">
-                <app-clue-text [clue]="clue" [textStyle]="puzzle.publishOptions.clueStyle"></app-clue-text>
+                <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
             </div>
             <div class="col-2"  class="text-warning">
                 <ng-container *ngIf="clue.warnings.length">

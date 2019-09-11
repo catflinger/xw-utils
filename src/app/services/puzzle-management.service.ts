@@ -25,9 +25,7 @@ export abstract class IPuzzleManager {
     abstract deletePuzzle(id: string): Promise<void>;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     private bsList: BehaviorSubject<PuzzleInfo[]>;
