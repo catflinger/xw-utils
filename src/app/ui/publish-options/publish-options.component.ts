@@ -16,7 +16,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public sample: Clue[] = [];
-    
+
     public answerStyle: any = {};
     public clueStyle: any = {};
     public definitionStyle: any = {};
@@ -26,14 +26,14 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
-        private router: Router, 
+        private router: Router,
         private puzzleService: IActivePuzzle,
     ) { }
 
     ngOnInit() {
 
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
-        
+
         if (!this.puzzleService.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
@@ -44,12 +44,12 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                         if (puzzle) {
                             this.puzzle = puzzle;
 
-                            this.answerStyle = this.makeNgStyle(puzzle.publishOptions.answerStyle); 
-                            this.clueStyle = this.makeNgStyle(puzzle.publishOptions.clueStyle); 
-                            this.definitionStyle = this.makeNgStyle(puzzle.publishOptions.definitionStyle); 
+                            this.answerStyle = this.makeNgStyle(puzzle.publishOptions.answerStyle);
+                            this.clueStyle = this.makeNgStyle(puzzle.publishOptions.clueStyle);
+                            this.definitionStyle = this.makeNgStyle(puzzle.publishOptions.definitionStyle);
 
-                            this.sample = this.puzzle.clues.filter((c, i) => i <= 5); 
-                        } 
+                            this.sample = this.puzzle.clues.filter((c, i) => i < 3);
+                        }
                     }
                 ));
         }
