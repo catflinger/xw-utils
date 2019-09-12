@@ -24,7 +24,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle, 
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
@@ -35,7 +35,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         });
 
         this.subs.push(
-            this.puzzleService.observe().subscribe(
+            this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
                         let clue = puzzle.clues.find((c) => c.id === this.clueId);
@@ -73,7 +73,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
     
     public onSave() {
-        this.puzzleService.update(new UpdateClue(
+        this.activePuzzle.update(new UpdateClue(
             this.clueId,
             this.form.value.answer,
             this.form.value.comment,

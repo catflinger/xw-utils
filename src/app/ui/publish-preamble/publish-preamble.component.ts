@@ -20,13 +20,13 @@ export class PublishPreambleComponent implements OnInit {
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleService: IActivePuzzle,
+        private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
-        if (!this.puzzleService.hasPuzzle) {
+        if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
 
@@ -37,7 +37,7 @@ export class PublishPreambleComponent implements OnInit {
             });
 
             this.subs.push(
-                this.puzzleService.observe().subscribe(
+                this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                         if (puzzle) {
@@ -53,7 +53,7 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        this.puzzleService.update(new UpdatePreamble(this.form.value.header, this.form.value.body));
+        this.activePuzzle.update(new UpdatePreamble(this.form.value.header, this.form.value.body));
         this.router.navigate(["/user-password"]);
     }
 

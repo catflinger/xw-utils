@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { SelectClueByCell } from 'src/app/services/puzzle-management/reducers/select-clue-by-cell';
 
 @Component({
     selector: 'app-solver',
@@ -19,17 +20,17 @@ export class SolverComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle, 
         private modalService: NgbModal,
         private router: Router) { }
 
     ngOnInit() {
 
-        if (!this.puzzleService.hasPuzzle) {
+        if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
             this.subs.push(
-                this.puzzleService.observe().subscribe(
+                this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                     }
@@ -73,10 +74,15 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onCellClick(cell: GridCell) {
-        let clue = this.puzzle.getSelectedClue();
 
-        if (clue) {
-            this.openEditor(clue, null);
+        if (!cell.highlight) {
+            this.activePuzzle.update(new SelectClueByCell(cell));
+        } else {
+            let clue = this.puzzle.getSelectedClue();
+
+            if (clue) {
+                this.openEditor(clue, null);
+            }
         }
     }
 

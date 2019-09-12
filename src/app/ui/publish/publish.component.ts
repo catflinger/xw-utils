@@ -21,12 +21,12 @@ export class PublishComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleService: IActivePuzzle,
+        private activePuzzle: IActivePuzzle,
         private publicationService: PublicationService,
         private builder: FormBuilder) { }
 
     ngOnInit() {
-        if (!this.puzzleService.hasPuzzle) {
+        if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
 
@@ -38,7 +38,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             });
 
             this.subs.push(
-                this.puzzleService.observe().subscribe(
+                this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                     }

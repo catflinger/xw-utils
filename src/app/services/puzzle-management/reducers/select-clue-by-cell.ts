@@ -4,17 +4,17 @@ import { ClearSelection } from './clear-selection';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';
 import { PuzzleM } from './mutable-model/puzzle-m';
+import { GridCell } from 'src/app/model/grid-cell';
 
-export class SelectCLueByCell implements IReducer {
+export class SelectClueByCell implements IReducer {
     constructor(
-        private x: number, 
-        private y: number) { }
+        private cell: GridCell
+        ) { }
 
     exec(puzzle: PuzzleM) {
         new ClearSelection().exec(puzzle);
 
-        let cell = puzzle.grid.cells.find((cell) => cell.x === this.x && cell.y === this.y);
-        if (cell) {
+        if (this.cell) {
 
             // Find a clue that contains this cell.  
             // Try across clues first then down clues.
@@ -26,21 +26,21 @@ export class SelectCLueByCell implements IReducer {
             let result: Clue = null;
 
             // Look in across clues, first entry only
-            result = this.findCellInFirstEntry(acrossClues, cell.id);
+            result = this.findCellInFirstEntry(acrossClues, this.cell.id);
 
             // Look in down clues, first entry only
             if (!result) {
-                result = this.findCellInFirstEntry(downClues, cell.id);
+                result = this.findCellInFirstEntry(downClues, this.cell.id);
             }
 
             // Look in across clues, all entries
             if (!result) {
-                result = this.findCellInAnyEntry(acrossClues, cell.id);
+                result = this.findCellInAnyEntry(acrossClues, this.cell.id);
             }
 
             // Look in down clues, all entries
             if (!result) {
-                result = this.findCellInAnyEntry(downClues, cell.id);
+                result = this.findCellInAnyEntry(downClues, this.cell.id);
             }
 
             if (result) {

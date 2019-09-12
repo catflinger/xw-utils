@@ -18,16 +18,16 @@ export class BloggerComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle, 
         private router: Router) { }
 
     ngOnInit() {
 
-        if (!this.puzzleService.hasPuzzle) {
+        if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
             this.subs.push(
-                this.puzzleService.observe().subscribe(
+                this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
                     }
@@ -48,14 +48,14 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        this.puzzleService.update(new SelectClue(clue.id));
+        this.activePuzzle.update(new SelectClue(clue.id));
     }
 
     onEditorClose(clue: Clue, reason: string) {
         if (reason === "cancel") {
-            this.puzzleService.update(new ClearSelection());
+            this.activePuzzle.update(new ClearSelection());
         } else {
-            this.puzzleService.update(new SelectNextClue(clue.id));
+            this.activePuzzle.update(new SelectNextClue(clue.id));
         }
     }
 }

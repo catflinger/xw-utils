@@ -15,7 +15,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private puzzleService: IActivePuzzle,
         private puzzleManagementService: IPuzzleManager,
         private appService: AppService,
         private router: Router) {

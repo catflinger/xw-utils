@@ -21,25 +21,27 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     public clueStyle: any = {};
     public definitionStyle: any = {};
 
+    public includeGrid: boolean;
+    
     private subs: Subscription[] = [];
 
 
     constructor(
         private appService: AppService,
         private router: Router,
-        private puzzleService: IActivePuzzle,
+        private activePuzzle: IActivePuzzle,
     ) { }
 
     ngOnInit() {
 
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
-        if (!this.puzzleService.hasPuzzle) {
+        if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
 
             this.subs.push(
-                this.puzzleService.observe().subscribe(
+                this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (puzzle) {
                             this.puzzle = puzzle;

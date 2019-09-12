@@ -17,10 +17,10 @@ export class ClueListComponent implements OnInit {
     private subs: Subscription[] = [];
     public clues: Clue[] = [];
 
-    constructor(private puzzleService: IActivePuzzle) { }
+    constructor(private activePuzzle: IActivePuzzle) { }
 
     ngOnInit() {
-        this.subs.push(this.puzzleService.observe().subscribe(
+        this.subs.push(this.activePuzzle.observe().subscribe(
             (puzzle) => {
                 if (puzzle) {
                     this.clues = puzzle.clues.filter((clue) => clue.group === this.direction)
@@ -33,7 +33,7 @@ export class ClueListComponent implements OnInit {
         if (clue.highlight) {
             this.clueClick.emit(clue);
         } else {
-            this.puzzleService.update(new SelectClue(clue.id));
+            this.activePuzzle.update(new SelectClue(clue.id));
         }
     }
 }

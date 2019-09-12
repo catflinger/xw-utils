@@ -29,7 +29,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
-        private puzzleService: IActivePuzzle,
+        private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder
         ) { }
 
@@ -45,7 +45,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
         this.subs.push(this.form.valueChanges.subscribe((val) => {
             if (this.puzzle && this.appStatus) {
 
-                this.puzzleService.update(new UpdatePublsihOptionTextStyle(
+                this.activePuzzle.update(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
                     val.color.value, 
                     val.bold, 
@@ -54,7 +54,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
             }
         }));
 
-        let latest = combineLatest(this.appService.getObservable(), this.puzzleService.observe());
+        let latest = combineLatest(this.appService.getObservable(), this.activePuzzle.observe());
 
         this.subs.push(latest.subscribe((result) => {
             this.appStatus = result[0];

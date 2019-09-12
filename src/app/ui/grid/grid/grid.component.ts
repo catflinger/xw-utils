@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output,
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
-import { SelectCLueByCell } from 'src/app/services/puzzle-management/reducers/select-clue-by-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 class GridParameters {
@@ -23,9 +22,10 @@ class GridParameters {
     styleUrls: ['./grid.component.css']
 })
 export class GridComponent implements OnInit, AfterViewInit {
+    @Input() readonly: boolean;
+    @Output() cellClick = new EventEmitter<GridCell>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
-    @Output() cellClick = new EventEmitter<GridCell>();
 
     private gridParams: GridParameters;
 
@@ -40,14 +40,14 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     private subs: Subscription[] = [];
 
-    constructor(private puzzleService: IActivePuzzle) {
+    constructor(private activePuzzle: IActivePuzzle) {
     }
 
     public ngOnInit() {
         this.gridParams = new GridParameters();
 
         this.subs.push(
-            this.puzzleService.observe()
+            this.activePuzzle.observe()
                 .subscribe(
                     (puzzle) => {
 
@@ -80,6 +80,10 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     onCanvasClick(params: any, cellId: string) {
 
+        if (this.readonly) {
+            return;
+        }
+
         // TO DO: ignore mouse click on grid padding
 
         const bounds = this.canvas.nativeElement.getBoundingClientRect();
@@ -90,11 +94,8 @@ export class GridComponent implements OnInit, AfterViewInit {
         let y = Math.floor(top / this.gridParams.cellSize);
 
         let cell: GridCell = this.puzzle.cellAt(x, y);
-
-        if (cell.highlight) {
+        if (cell) {
             this.cellClick.emit(cell);
-        } else {
-            this.puzzleService.update(new SelectCLueByCell(x, y));
         }
 
     }
