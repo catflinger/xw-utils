@@ -1,13 +1,18 @@
 <h3>preamble</h3>
 
 <form [formGroup]="form" *ngIf="puzzle">
-    <div class="mt-4">
-        <p>enter the headline for the fifteensquared home page</p>
+        <div class="mt-4">
+                <p>enter the title to be displayed on the fifteensquared home page</p>
+                <input id="title" type="text" formControlName="title">
+            </div>
+        
+            <div class="mt-4">
+        <p>comment to be displayed below the title on the home page</p>
         <quill-editor formControlName="header"></quill-editor>
     </div>
 
     <div class="mt-4">
-        <p>further comments inside your blog</p>
+        <p>further comment inside your blog</p>
         <quill-editor formControlName="body"></quill-editor>
     </div>
 

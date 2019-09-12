@@ -32,6 +32,7 @@ export class PublishPreambleComponent implements OnInit {
 
 
             this.form = this.formBuilder.group({
+                title: [""],
                 header: [""],
                 body: [""]
             });
@@ -42,6 +43,7 @@ export class PublishPreambleComponent implements OnInit {
                         this.puzzle = puzzle;
                         if (puzzle) {
                             this.form.patchValue(puzzle.notes);
+                            this.form.patchValue({ title: puzzle.info.title});
                         }
                     }
                 ));
@@ -53,7 +55,10 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        this.activePuzzle.update(new UpdatePreamble(this.form.value.header, this.form.value.body));
+        this.activePuzzle.update(new UpdatePreamble(
+            this.form.value.title,
+            this.form.value.header,
+            this.form.value.body));
         this.router.navigate(["/user-password"]);
     }
 
