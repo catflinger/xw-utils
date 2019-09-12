@@ -20,7 +20,7 @@ import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
 
-import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle/puzzle-management.service';
+import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle-management/puzzle-management.service';
 import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
 import { BloggerComponent } from './ui/blogger/blogger.component';

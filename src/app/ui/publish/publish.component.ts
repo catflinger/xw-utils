@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService } from 'src/app/services/publication.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
-import { IActivePuzzle } from 'src/app/services/puzzle/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 @Component({
     selector: 'app-publish',
