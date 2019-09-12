@@ -1,7 +1,4 @@
-export interface ITextChunk {
-    text: string;
-    isDefinition: boolean;
-}
+import { ITextChunk } from './interfaces';
 
 export class TextChunk implements ITextChunk {
     public readonly text: string;

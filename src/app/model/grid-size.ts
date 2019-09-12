@@ -1,7 +1,5 @@
-export interface IGridSize {
-    across: number;
-    down: number;
-}
+import { IGridSize } from './interfaces';
+
 
 export class GridSize implements IGridSize {
     public readonly across: number;

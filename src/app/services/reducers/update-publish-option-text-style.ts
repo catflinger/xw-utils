@@ -1,5 +1,5 @@
 import { IReducer } from './reducer';
-import { IPuzzle } from 'src/app/model/puzzle';
+import { IPuzzle } from 'src/app/model/interfaces';
 import { TextStyleName } from 'src/app/ui/common';
 
 export class UpdatePublsihOptionTextStyle implements IReducer {

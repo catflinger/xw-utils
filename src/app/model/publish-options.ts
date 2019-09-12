@@ -1,10 +1,6 @@
-import { TextStyle, ITextStyle } from './text-style';
+import { TextStyle } from './text-style';
+import { IPublishOptions } from './interfaces';
 
-export interface IPublishOptions {
-    answerStyle: ITextStyle;
-    clueStyle: ITextStyle;
-    definitionStyle: ITextStyle;
-}
 
 export class PublishOptions implements IPublishOptions {
     

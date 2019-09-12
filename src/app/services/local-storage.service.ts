@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Puzzle, IPuzzle } from '../model/puzzle';
+import { Puzzle } from '../model/puzzle';
 import { PuzzleInfo } from '../model/puzzle-info';
+import { IPuzzle } from '../model/interfaces';
 
 @Injectable({
     providedIn: 'root'

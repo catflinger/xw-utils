@@ -1,12 +1,6 @@
-import { GridStyle } from './puzzle';
+import { GridStyle, IGrid } from './interfaces';
 import { GridSize } from './grid-size';
-import { GridCell, IGridCell } from './grid-cell';
-
-export interface IGrid {
-    style: GridStyle;
-    size: GridSize;
-    cells: readonly IGridCell[];
-}
+import { GridCell } from './grid-cell';
 
 export class Grid implements IGrid {
     public readonly style: GridStyle;

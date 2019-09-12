@@ -1,31 +1,12 @@
-import { PublishOptions, IPublishOptions } from './publish-options';
-import { PuzzleInfo, IPuzzleInfo } from './puzzle-info';
-import { PuzzleAnnotation, IPuzzleAnnotation } from './puzzle-annotation';
-import { Grid, IGrid } from './grid';
-import { Clue, IClue } from './clue';
+import { PublishOptions } from './publish-options';
+import { PuzzleInfo } from './puzzle-info';
+import { PuzzleAnnotation } from './puzzle-annotation';
+import { Grid } from './grid';
+import { Clue } from './clue';
 import { GridCell } from './grid-cell';
-
-export type Direction = "across" | "down";
-export type GridStyle = "standard" | "barred";
-export type ClueGroup = "across" | "down";
+import { IPuzzle } from './interfaces';
 
 export const definitionMaskMarker: string = "d";
-
-export interface IPuzzle {
-    info: IPuzzleInfo;
-    publishOptions: IPublishOptions;
-    notes: IPuzzleAnnotation;
-
-    grid: IGrid;
-    clues: readonly IClue[];
-
-    linked: boolean;
-    solveable: boolean;
-    version: string;
-    createdWithVersion: string;
-
-    revision: number;
-}
 
 export class Puzzle implements IPuzzle {
     public readonly info: PuzzleInfo;

@@ -1,8 +1,4 @@
-export interface IPuzzleAnnotation {
-    header: string;
-    body: string;
-    footer: string;
-}
+import { IPuzzleAnnotation } from './interfaces';
 
 export class PuzzleAnnotation implements IPuzzleAnnotation {
     public readonly header: string;

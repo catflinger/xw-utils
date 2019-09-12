@@ -1,9 +1,4 @@
-export interface ITextStyle {
-    color: string;
-    bold: boolean;
-    italic: boolean;
-    underline: boolean;
-}
+import { ITextStyle } from './interfaces';
 
 export class TextStyle implements ITextStyle {
         public readonly color: string;

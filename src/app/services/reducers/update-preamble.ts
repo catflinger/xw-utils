@@ -1,5 +1,5 @@
 import { IReducer } from './reducer';
-import { IPuzzle } from 'src/app/model/puzzle';
+import { IPuzzle } from 'src/app/model/interfaces';
 
 export class UpdatePreamble implements IReducer {
     constructor(

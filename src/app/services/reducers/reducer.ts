@@ -1,4 +1,4 @@
-import { IPuzzle } from '../../model/puzzle';
+import { IPuzzle } from 'src/app/model/interfaces';
 
 export interface IReducer {
     exec(puzzle: IPuzzle);

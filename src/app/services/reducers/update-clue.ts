@@ -1,5 +1,5 @@
 import { IReducer } from './reducer';
-import { IPuzzle } from 'src/app/model/puzzle';
+import { IPuzzle } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { Validate } from './validate';
 

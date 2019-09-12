@@ -1,5 +1,5 @@
 import { IReducer } from './reducer';
-import { IPuzzle } from 'src/app/model/puzzle';
+import { IPuzzle } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';

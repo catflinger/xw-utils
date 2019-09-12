@@ -1,6 +1,5 @@
-export interface IGridEntry {
-    cellIds: readonly string[];
-}
+import { IGridEntry } from './interfaces';
+
 export class GridEntry implements IGridEntry {
     public readonly cellIds: readonly string[];
 

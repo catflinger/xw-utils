@@ -1,10 +1,4 @@
-export interface IPuzzleInfo {
-    id: string;
-    title: string;
-    puzzleDate: Date;
-    providerName: string;
-    setter: string;
-} 
+import { IPuzzleInfo } from './interfaces';
 
 export class PuzzleInfo implements IPuzzleInfo {
     public readonly id: string;

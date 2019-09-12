@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PuzzleInfo } from '../model/puzzle-info';
 import { LocalStorageService } from './local-storage.service';
-import { Puzzle, IPuzzle } from '../model/puzzle';
+import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { ClearSelection } from './reducers/clear-selection';
 import { Validate } from './reducers/validate';
 import { IReducer } from './reducers/reducer';
+import { IPuzzle } from '../model/interfaces';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.

@@ -1,14 +1,5 @@
-export interface IGridCell {
-    id: string;
-    x: number;
-    y: number;
-    caption: string;
-    content: string;
-    light: boolean;
-    rightBar: boolean;
-    bottomBar: boolean;
-    highlight: boolean;
-}
+import { IGridCell } from './interfaces';
+
 export class GridCell implements IGridCell {
     public readonly id: string;
     public readonly x: number;
