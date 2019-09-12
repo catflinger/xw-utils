@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
 import { Subscription } from 'rxjs';
-import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle/puzzle-management.service';
 
 @Component({
     selector: 'app-root',

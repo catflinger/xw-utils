@@ -1,10 +1,11 @@
 import { IReducer } from './reducer';
 import { IPuzzle } from 'src/app/model/interfaces';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class ClearSelection implements IReducer {
     constructor() { }
 
-    exec(puzzle: IPuzzle) {
+    exec(puzzle: PuzzleM) {
         puzzle.clues.forEach((clue) => {
             clue.highlight = false;
         });

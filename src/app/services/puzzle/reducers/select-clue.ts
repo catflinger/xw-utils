@@ -1,11 +1,12 @@
 import { IReducer } from './reducer';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class SelectClue implements IReducer {
     constructor(public readonly clueId: string) { }
 
-    exec(puzzle: IPuzzle) {
+    exec(puzzle: PuzzleM) {
         if (puzzle) {
             let red = new ClearSelection();
             red.exec(puzzle);

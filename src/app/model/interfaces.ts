@@ -1,96 +1,97 @@
-import { TextChunk } from './clue-text-chunk';
-import { GridSize } from './grid-size';
-
 export type Direction = "across" | "down";
 export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 
-export interface ITextChunk {
-    text: string;
-    isDefinition: boolean;
+// NOTE: using abtract classe rather than interface so that the members can be 
+// marked as read-only
+
+export abstract class ITextChunk {
+    abstract readonly text: string;
+    abstract readonly isDefinition: boolean;
 }
 
-export interface IClue {
-    id: string;
-    group: ClueGroup;
-    caption: string;        // "1 across, 2 down"
-    text: string;           // "How to train a dragon (5, 4)"
-    letterCount: string;    // "(5, 4)"
-    answer: string;
-    format: string;
-    comment: string;
-    highlight: boolean;
-    entries: readonly IGridEntry[];
-    chunks: readonly TextChunk[];
-    warnings: readonly ClueValidationWarning[]; 
+export abstract class IClue {
+    abstract readonly id: string;
+    abstract readonly group: ClueGroup;
+    abstract readonly caption: string;        // "1 across, 2 down"
+    abstract readonly text: string;           // "How to train a dragon (5, 4)"
+    abstract readonly letterCount: string;    // "(5, 4)"
+    abstract readonly answer: string;
+    abstract readonly format: string;
+    abstract readonly comment: string;
+    abstract readonly highlight: boolean;
+    abstract readonly entries: readonly IGridEntry[];
+    abstract readonly chunks: readonly ITextChunk[];
+    abstract readonly warnings: readonly ClueValidationWarning[]; 
 }
 
-export interface IGridEntry {
-    cellIds: readonly string[];
+export abstract class IGridEntry {
+    abstract readonly cellIds: readonly string[];
 }
 
-export interface IGridCell {
-    id: string;
-    x: number;
-    y: number;
-    caption: string;
-    content: string;
-    light: boolean;
-    rightBar: boolean;
-    bottomBar: boolean;
-    highlight: boolean;
+export abstract class IGridCell {
+    abstract readonly id: string;
+    abstract readonly x: number;
+    abstract readonly y: number;
+    abstract readonly caption: string;
+    abstract readonly content: string;
+    abstract readonly light: boolean;
+    abstract readonly rightBar: boolean;
+    abstract readonly bottomBar: boolean;
+    abstract readonly highlight: boolean;
 }
 
-export interface IGrid {
-    style: GridStyle;
-    size: GridSize;
-    cells: readonly IGridCell[];
+export abstract class IGrid {
+    abstract readonly style: GridStyle;
+    abstract readonly size: IGridSize;
+    abstract readonly cells: readonly IGridCell[];
 }
 
-export interface IPuzzle {
-    info: IPuzzleInfo;
-    publishOptions: IPublishOptions;
-    notes: IPuzzleAnnotation;
+export abstract class IPuzzle {
+    abstract readonly info: IPuzzleInfo;
+    abstract readonly publishOptions: IPublishOptions;
+    abstract readonly notes: IPuzzleAnnotation;
 
-    grid: IGrid;
-    clues: readonly IClue[];
+    abstract readonly grid: IGrid;
+    abstract readonly clues: readonly IClue[];
 
-    linked: boolean;
-    solveable: boolean;
-    version: string;
-    createdWithVersion: string;
+    abstract readonly linked: boolean;
+    abstract readonly solveable: boolean;
+    abstract readonly version: string;
+    abstract readonly createdWithVersion: string;
 
-    revision: number;
+    abstract readonly revision: number;
 }
 
-export interface IPuzzleInfo {
-    id: string;
-    title: string;
-    puzzleDate: Date;
-    providerName: string;
-    setter: string;
+export abstract class IPuzzleInfo {
+    abstract readonly id: string;
+    abstract readonly title: string;
+    abstract readonly puzzleDate: Date;
+    abstract readonly providerName: string;
+    abstract readonly setter: string;
 } 
 
-export interface IPublishOptions {
-    answerStyle: ITextStyle;
-    clueStyle: ITextStyle;
-    definitionStyle: ITextStyle;
+export abstract class IPublishOptions {
+    abstract readonly answerStyle: ITextStyle;
+    abstract readonly clueStyle: ITextStyle;
+    abstract readonly definitionStyle: ITextStyle;
 }
 
-export interface ITextStyle {
-    color: string;
-    bold: boolean;
-    italic: boolean;
-    underline: boolean;
+export abstract class ITextStyle {
+    abstract readonly color: string;
+    abstract readonly bold: boolean;
+    abstract readonly italic: boolean;
+    abstract readonly underline: boolean;
 }
 
-export interface IPuzzleAnnotation {
-    header: string;
-    body: string;
-    footer: string;
+export abstract class IPuzzleAnnotation {
+    abstract readonly header: string;
+    abstract readonly body: string;
+    abstract readonly footer: string;
 }
-export interface IGridSize {
-    across: number;
-    down: number;
+
+export abstract class IGridSize {
+    abstract readonly across: number;
+    abstract readonly down: number;
 }

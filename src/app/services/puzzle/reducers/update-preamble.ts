@@ -1,12 +1,12 @@
 import { IReducer } from './reducer';
-import { IPuzzle } from 'src/app/model/interfaces';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class UpdatePreamble implements IReducer {
     constructor(
         private header: string, 
         private body: string) { }
 
-    exec(puzzle: IPuzzle) {
+    exec(puzzle: PuzzleM) {
         puzzle.notes.header = this.header;
         puzzle.notes.body = this.body;
     }

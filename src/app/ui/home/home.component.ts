@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager } from 'src/app/services/puzzle/puzzle-management.service';
 import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';

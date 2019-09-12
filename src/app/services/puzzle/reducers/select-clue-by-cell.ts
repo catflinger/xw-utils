@@ -3,13 +3,14 @@ import { IPuzzle } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class SelectCLueByCell implements IReducer {
     constructor(
         private x: number, 
         private y: number) { }
 
-    exec(puzzle: IPuzzle) {
+    exec(puzzle: PuzzleM) {
         new ClearSelection().exec(puzzle);
 
         let cell = puzzle.grid.cells.find((cell) => cell.x === this.x && cell.y === this.y);

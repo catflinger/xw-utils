@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output,
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
-import { SelectCLueByCell } from 'src/app/services/reducers/select-clue-by-cell';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { SelectCLueByCell } from 'src/app/services/puzzle/reducers/select-clue-by-cell';
+import { IActivePuzzle } from 'src/app/services/puzzle/puzzle-management.service';
 
 class GridParameters {
     public readonly cellSize = 33;

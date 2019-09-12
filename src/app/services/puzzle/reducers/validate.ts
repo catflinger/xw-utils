@@ -2,11 +2,12 @@ import { IReducer } from './reducer';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { ClueValidationWarning } from 'src/app/model/interfaces';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class Validate implements IReducer {
     constructor() { }
 
-    public exec(puzzle: IPuzzle) {
+    public exec(puzzle: PuzzleM) {
         puzzle.clues.forEach((clue) => {
             clue.warnings = this.validateClue(clue.answer, clue.comment, clue.chunks);
         });

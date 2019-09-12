@@ -2,6 +2,7 @@ import { IReducer } from './reducer';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { Validate } from './validate';
+import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class UpdateClue implements IReducer {
     constructor(
@@ -10,7 +11,7 @@ export class UpdateClue implements IReducer {
         private comment: string,
         private chunks: TextChunk[]) { }
 
-    exec(puzzle: IPuzzle) {
+    exec(puzzle: PuzzleM) {
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {
@@ -26,7 +27,7 @@ export class UpdateClue implements IReducer {
         }
     }
 
-    private updateGridText(puzzle: IPuzzle) {
+    private updateGridText(puzzle: PuzzleM) {
         if (!puzzle.grid) {
             return;
         }

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PuzzleInfo } from '../model/puzzle-info';
-import { LocalStorageService } from './local-storage.service';
-import { Puzzle } from '../model/puzzle';
-import { HttpPuzzleSourceService } from './http-puzzle-source.service';
+import { PuzzleInfo } from '../../model/puzzle-info';
+import { LocalStorageService } from '../local-storage.service';
+import { Puzzle } from '../../model/puzzle';
+import { HttpPuzzleSourceService } from '../http-puzzle-source.service';
 import { ClearSelection } from './reducers/clear-selection';
 import { Validate } from './reducers/validate';
 import { IReducer } from './reducers/reducer';
-import { IPuzzle } from '../model/interfaces';
+import { IPuzzle } from '../../model/interfaces';
+import { PuzzleM } from './reducers/mutable-model/puzzle-m';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -138,24 +139,27 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.bsList.next(list);
     }
 
-    private usePuzzle(puzzle: Puzzle) {
-        let iPuzzle = new Puzzle(JSON.parse(JSON.stringify(puzzle)));
-        new ClearSelection().exec(iPuzzle);
-        new Validate().exec(iPuzzle);
+    private usePuzzle(puzzle: IPuzzle) {
+        // create a mutable copy
+        let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
 
-        this.bsActive.next(new Puzzle(iPuzzle));
+        // modify it
+        new ClearSelection().exec(puzzleM);
+        new Validate().exec(puzzleM);
+
+        // push a read-only version
+        this.bsActive.next(new Puzzle(puzzleM));
     }
 
-    private getMutableCopy(puzzle: Puzzle): IPuzzle {
-        return new Puzzle(JSON.parse(JSON.stringify(this.bsActive.value)));
+    private getMutableCopy(puzzle: Puzzle): PuzzleM {
+        return JSON.parse(JSON.stringify(this.bsActive.value)) as PuzzleM;
     }
 
-    private commit(puzzle: IPuzzle) {
+    private commit(puzzle: PuzzleM) {
         puzzle.revision += 1;
-        const updated: Puzzle = new Puzzle(puzzle); 
         
-        this.savePuzzle(updated);
-        this.bsActive.next(updated);
+        this.savePuzzle(puzzle);
+        this.bsActive.next(new Puzzle(puzzle));
     }
 
     private getSavedPuzzle(id: string): Promise<Puzzle> {
@@ -166,7 +170,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             });
     }
 
-    private savePuzzle(puzzle: Puzzle): void {
+    private savePuzzle(puzzle: IPuzzle): void {
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
     }
