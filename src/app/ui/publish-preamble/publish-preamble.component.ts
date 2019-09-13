@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
 import { UpdatePreamble } from 'src/app/services/puzzle-management/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { Clue } from 'src/app/model/clue';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -13,9 +14,12 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-managem
 })
 export class PublishPreambleComponent implements OnInit {
     public puzzle = null;
-    private subs: Subscription[] = [];
     public form: FormGroup;
     public appStatus: AppStatus;
+    public sample: Clue[];
+    public today = new Date();
+
+    private subs: Subscription[] = [];
 
     constructor(
         private appService: AppService,
@@ -33,8 +37,8 @@ export class PublishPreambleComponent implements OnInit {
 
             this.form = this.formBuilder.group({
                 title: [""],
-                header: [""],
-                body: [""]
+                header: [[]],
+                body: [[]]
             });
 
             this.subs.push(
@@ -42,6 +46,8 @@ export class PublishPreambleComponent implements OnInit {
                     (puzzle) => {
                         this.puzzle = puzzle;
                         if (puzzle) {
+                            // this.header = puzzle.notes.header;
+                            this.sample = this.puzzle.clues.filter((c, i) => i < 3);
                             this.form.patchValue(puzzle.notes);
                             this.form.patchValue({ title: puzzle.info.title});
                         }
@@ -63,6 +69,11 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onBack() {
+        this.activePuzzle.update(new UpdatePreamble(
+            this.form.value.title,
+            this.form.value.header,
+            this.form.value.body));
         this.router.navigate(["/publish-options"]);
     }
+
 }

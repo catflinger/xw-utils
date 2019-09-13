@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-content-preview',
-  templateUrl: './content-preview.component.html',
-  styleUrls: ['./content-preview.component.css']
+    selector: 'app-content-preview',
+    templateUrl: './content-preview.component.html',
+    styleUrls: ['./content-preview.component.css'],
 })
 export class ContentPreviewComponent implements OnInit {
 
-  constructor() { }
+    @Input() content: any;
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() 
+    {
+    }
 
 }

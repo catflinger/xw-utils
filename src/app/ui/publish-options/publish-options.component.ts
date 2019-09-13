@@ -6,6 +6,7 @@ import { TextStyle } from 'src/app/model/text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
+import { UpdatePublsihOptionIncludeGrid } from 'src/app/services/puzzle-management/modifiers/update-publish-option-include-grid';
 
 @Component({
     selector: 'app-publish-options',
@@ -16,9 +17,9 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public includeGrid: boolean;
+    public sample: Clue[];
     
     private subs: Subscription[] = [];
-
 
     constructor(
         private appService: AppService,
@@ -39,6 +40,10 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                     (puzzle) => {
                         if (puzzle) {
                             this.puzzle = puzzle;
+                            this.sample = this.puzzle.clues.filter((c, i) => i < 3);
+                            if (this.includeGrid === undefined) {
+                                this.includeGrid = puzzle.publishOptions.includeGrid;
+                            }
                         }
                     }
                 ));
@@ -50,6 +55,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
+        this.activePuzzle.update(new UpdatePublsihOptionIncludeGrid(this.includeGrid));
         this.router.navigate(["/publish-preamble"]);
     }
 

@@ -1,1 +1,4 @@
-<p>content-preview works!</p>
+<ng-container *ngIf="content">
+    <quill-view [content]="content" format="object" theme="snow"></quill-view>
+</ng-container>
+

@@ -1,4 +1,35 @@
-#title {
-    width: 100%;
+.title {
+    color: #0b6d90;
+    font-weight: bold;
+    font-size:  x-large;
   }
 
+.mug-shot {
+    border: 1px solid;
+    padding: 8px;
+}
+
+.mug-shot img {
+    height: 100px;
+    width: 80px;
+}
+
+.anchor-like {
+    font-weight: bolder;
+    color: #0b6d90;
+    padding: 15px;
+}
+
+.anchor-like:hover {
+    text-decoration: underline;
+}
+
+.body-top {
+    border-bottom: 1px black dashed;
+    padding-bottom: 1px;
+    margin-bottom: 0px;
+}
+
+.smaller {
+    font-size: smaller;
+}

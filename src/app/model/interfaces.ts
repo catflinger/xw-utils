@@ -1,3 +1,5 @@
+import { DeltaOperation } from 'quill';
+
 export type Direction = "across" | "down";
 export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
@@ -87,9 +89,9 @@ export abstract class ITextStyle {
 }
 
 export abstract class IPuzzleAnnotation {
-    abstract readonly header: string;
-    abstract readonly body: string;
-    abstract readonly footer: string;
+    abstract readonly header: DeltaOperation[];
+    abstract readonly body:  DeltaOperation[];
+    abstract readonly footer:  DeltaOperation[];
 }
 
 export abstract class IGridSize {

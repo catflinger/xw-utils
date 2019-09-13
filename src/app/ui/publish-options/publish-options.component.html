@@ -5,8 +5,8 @@
 </div>
 
 <div class="row justify-content-center" *ngIf="puzzle">
-    <div class="col-auto">
-        <app-clues-preview [includeGrid]="includeGrid"></app-clues-preview>
+    <div class="col-auto bg-light p-5">
+        <app-clues-preview [includeGrid]="includeGrid" [clues]="sample" [publishOptions]="puzzle.publishOptions"></app-clues-preview>
     </div>
 </div>
 

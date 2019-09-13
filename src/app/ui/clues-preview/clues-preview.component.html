@@ -2,18 +2,21 @@
     <app-grid [readonly]="true"></app-grid>
 </div>
 
-<table>
-    <ng-container *ngFor="let clue of sample">
+<table *ngIf="clues">
+    <ng-container *ngFor="let clue of clues">
         <tr>
             <td>
-                <span [ngStyle]="answerStyle">{{clue.answer}} </span>
+                <span [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
+            </td>
+            <td>
+                <span [ngStyle]="makeAnswerStyle()">{{clue.answer}} </span>
             </td>
             <td class="col">
-                <span [ngStyle]="clueStyle">{{clue.caption}} </span>
-                <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
+                <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
             </td>
         </tr>
         <tr>
+            <td></td>
             <td></td>
             <td>
                 <quill-view [content]="clue.comment" format="json" theme="snow"></quill-view>

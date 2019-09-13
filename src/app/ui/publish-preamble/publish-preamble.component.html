@@ -1,15 +1,48 @@
 <h3>preamble</h3>
+<form [formGroup]="form" *ngIf="puzzle">
 
-<div class="row justify-content-center" *ngIf="puzzle">
-    <div class="col-auto">
-        <app-clues-preview [includeGrid]="true"></app-clues-preview>
+    <div class="row justify-content-center mt-5" *ngIf="puzzle">
+        <div class="col bg-light p-5">
+            <div class="title">{{form.value.title}}</div>
+            <div class="border-bottom">Posted by Somebody on {{today | date : "MMMM d, y"}}</div>
+            <div class="clearfix mt-2">
+                <div class="mug-shot float-left">
+                    <img src="">
+                </div>
+                <div class="float-left">
+                    <div>
+                        <app-content-preview [content]="form.value.header"></app-content-preview>
+                    </div>
+                    <div class="anchor-like">Read the rest of this entry >></div>
+                </div>
+            </div>
+            <div class="border-bottom">Posted in <span class="anchor-like">{{puzzle.info.providerName}}</span> | <span
+                    class="anchor-like">0 Comments</span> >></div>
+        </div>
     </div>
-</div>
 
+    <div class="row justify-content-center mt-5" *ngIf="puzzle">
+        <div class="col bg-light p-5">
+            <div class="body-top clearfix">
+                <div class="float-left anchor-like smaller m-0">&lt;&lt; Guardian cryptic 23,456 by Paul</div>
+                <div class="float-right anchor-like smaller m-0">&gt;&gt; Financial Times 12,345 by Julius</div>
+            </div>
+            <div class="title mt-3">{{form.value.title}}</div>
+            <div class="border-bottom">Posted by Somebody on {{today | date : "MMMM d, y"}}</div>
 
-<div class="row" *ngIf="puzzle">
-    <div class="col">
-        <form [formGroup]="form" *ngIf="puzzle">
+            <div>
+                <app-content-preview [content]="form.value.header"></app-content-preview>
+            </div>
+            <div>
+                <app-content-preview [content]="form.value.body"></app-content-preview>
+            </div>
+            <app-clues-preview [includeGrid]="puzzle.publishOptions.includeGrid" [clues]="sample"
+                [publishOptions]="puzzle.publishOptions"></app-clues-preview>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="puzzle">
+        <div class="col">
             <div class="mt-4">
                 <p>enter the title to be displayed on the fifteensquared home page</p>
                 <input id="title" type="text" formControlName="title">
@@ -17,18 +50,19 @@
 
             <div class="mt-4">
                 <p>comment to be displayed below the title on the home page</p>
-                <quill-editor formControlName="header"></quill-editor>
+                <quill-editor formControlName="header" format="object"></quill-editor>
             </div>
 
             <div class="mt-4">
                 <p>further comment inside your blog</p>
-                <quill-editor formControlName="body"></quill-editor>
+                <quill-editor formControlName="body" format="object"></quill-editor>
             </div>
 
             <div class="mt-4">
                 <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
                 <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+
+</form>
