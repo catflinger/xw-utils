@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { ClearSelection } from 'src/app/services/puzzle-management/reducers/clear-selection';
-import { SelectClue } from 'src/app/services/puzzle-management/reducers/select-clue';
-import { SelectNextClue } from 'src/app/services/puzzle-management/reducers/select-next-clue';
+import { ClearSelection } from 'src/app/services/puzzle-management/modifiers/clear-selection';
+import { SelectClue } from 'src/app/services/puzzle-management/modifiers/select-clue';
+import { SelectNextClue } from 'src/app/services/puzzle-management/modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 @Component({

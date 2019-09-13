@@ -1,4 +1,4 @@
-import { IReducer } from './reducer';
+import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
 import { Clue } from 'src/app/model/clue';
@@ -6,7 +6,7 @@ import { SelectClue } from './select-clue';
 import { PuzzleM } from './mutable-model/puzzle-m';
 import { GridCell } from 'src/app/model/grid-cell';
 
-export class SelectClueByCell implements IReducer {
+export class SelectClueByCell implements IPuzzleModifier {
     constructor(
         private cell: GridCell
         ) { }

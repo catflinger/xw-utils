@@ -76,6 +76,7 @@ export abstract class IPublishOptions {
     abstract readonly answerStyle: ITextStyle;
     abstract readonly clueStyle: ITextStyle;
     abstract readonly definitionStyle: ITextStyle;
+    abstract readonly includeGrid: boolean;
 }
 
 export abstract class ITextStyle {

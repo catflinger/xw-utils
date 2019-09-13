@@ -7,10 +7,12 @@ export class PublishOptions implements IPublishOptions {
     public readonly answerStyle: TextStyle;
     public readonly clueStyle: TextStyle;
     public readonly definitionStyle: TextStyle;
+    public readonly includeGrid: boolean;
 
     constructor(data) {
         this.answerStyle = new TextStyle(data.answerStyle);
         this.clueStyle   = new TextStyle(data.clueStyle);
         this.definitionStyle = new TextStyle(data.definitionStyle);
+        this.includeGrid = data.includeGrid;
      }
 }

@@ -15,12 +15,6 @@ import { Puzzle } from 'src/app/model/puzzle';
 export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
-    public sample: Clue[] = [];
-
-    public answerStyle: any = {};
-    public clueStyle: any = {};
-    public definitionStyle: any = {};
-
     public includeGrid: boolean;
     
     private subs: Subscription[] = [];
@@ -45,12 +39,6 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                     (puzzle) => {
                         if (puzzle) {
                             this.puzzle = puzzle;
-
-                            this.answerStyle = this.makeNgStyle(puzzle.publishOptions.answerStyle);
-                            this.clueStyle = this.makeNgStyle(puzzle.publishOptions.clueStyle);
-                            this.definitionStyle = this.makeNgStyle(puzzle.publishOptions.definitionStyle);
-
-                            this.sample = this.puzzle.clues.filter((c, i) => i < 3);
                         }
                     }
                 ));
@@ -67,14 +55,5 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     onBack() {
         this.router.navigate(["/", this.appStatus.editor]);
-    }
-
-    private makeNgStyle(textStyle: TextStyle): any {
-        return {
-            "color": textStyle.color,
-            "font-weight": textStyle.bold ? "bold" : "normal",
-            "font-style": textStyle.italic ? "italic" : "normal",
-            "text-decoration": textStyle.underline ? "underline" : "unset",
-        }
     }
 }

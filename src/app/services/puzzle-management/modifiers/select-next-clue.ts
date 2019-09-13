@@ -1,9 +1,9 @@
-import { IReducer } from './reducer';
+import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
-export class SelectNextClue implements IReducer {
+export class SelectNextClue implements IPuzzleModifier {
     constructor(public readonly clueId: string) { }
 
     exec(puzzle: PuzzleM) {

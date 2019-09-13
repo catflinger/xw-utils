@@ -4,11 +4,11 @@ import { PuzzleInfo } from '../../model/puzzle-info';
 import { LocalStorageService } from '../local-storage.service';
 import { Puzzle } from '../../model/puzzle';
 import { HttpPuzzleSourceService } from '../http-puzzle-source.service';
-import { ClearSelection } from './reducers/clear-selection';
-import { Validate } from './reducers/validate';
-import { IReducer } from './reducers/reducer';
+import { ClearSelection } from './modifiers/clear-selection';
+import { Validate } from './modifiers/validate';
+import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
-import { PuzzleM } from './reducers/mutable-model/puzzle-m';
+import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -18,7 +18,7 @@ export abstract class IActivePuzzle {
     abstract observe(): Observable<Puzzle>;
     abstract hasPuzzle: boolean;
     abstract clear(id?: string);
-    abstract update(reducer: IReducer);
+    abstract update(reducer: IPuzzleModifier);
 }
 export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
@@ -79,7 +79,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         }
     }
 
-    public update(reducer: IReducer) {
+    public update(reducer: IPuzzleModifier) {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {

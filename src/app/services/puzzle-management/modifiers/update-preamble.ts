@@ -1,7 +1,7 @@
-import { IReducer } from './reducer';
+import { IPuzzleModifier } from './puzzle-modifier';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
-export class UpdatePreamble implements IReducer {
+export class UpdatePreamble implements IPuzzleModifier {
     constructor(
         private title: string,
         private header: string, 

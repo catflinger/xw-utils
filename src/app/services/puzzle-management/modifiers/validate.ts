@@ -1,10 +1,10 @@
-import { IReducer } from './reducer';
+import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
-export class Validate implements IReducer {
+export class Validate implements IPuzzleModifier {
     constructor() { }
 
     public exec(puzzle: PuzzleM) {

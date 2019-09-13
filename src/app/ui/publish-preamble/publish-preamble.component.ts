@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
-import { UpdatePreamble } from 'src/app/services/puzzle-management/reducers/update-preamble';
+import { UpdatePreamble } from 'src/app/services/puzzle-management/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 @Component({

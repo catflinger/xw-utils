@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Direction } from 'src/app/model/interfaces';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
-import { SelectClue } from 'src/app/services/puzzle-management/reducers/select-clue';
+import { SelectClue } from 'src/app/services/puzzle-management/modifiers/select-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 @Component({

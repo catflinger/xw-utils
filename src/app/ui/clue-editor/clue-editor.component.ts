@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
-import { UpdateClue } from 'src/app/services/puzzle-management/reducers/update-clue';
+import { UpdateClue } from 'src/app/services/puzzle-management/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
 
 @Component({

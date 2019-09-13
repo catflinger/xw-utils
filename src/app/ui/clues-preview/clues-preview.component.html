@@ -1,0 +1,23 @@
+<div *ngIf="includeGrid">
+    <app-grid [readonly]="true"></app-grid>
+</div>
+
+<table>
+    <ng-container *ngFor="let clue of sample">
+        <tr>
+            <td>
+                <span [ngStyle]="answerStyle">{{clue.answer}} </span>
+            </td>
+            <td class="col">
+                <span [ngStyle]="clueStyle">{{clue.caption}} </span>
+                <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <quill-view [content]="clue.comment" format="json" theme="snow"></quill-view>
+            </td>
+        </tr>
+    </ng-container>
+</table>
