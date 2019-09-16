@@ -5,6 +5,8 @@ export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 
+export type QuillDelta = { ops: DeltaOperation[] }
+
 // NOTE: using abtract classe rather than interface so that the members can be 
 // marked as read-only
 
@@ -21,7 +23,7 @@ export abstract class IClue {
     abstract readonly letterCount: string;    // "(5, 4)"
     abstract readonly answer: string;
     abstract readonly format: string;
-    abstract readonly comment: string;
+    abstract readonly comment: QuillDelta;
     abstract readonly highlight: boolean;
     abstract readonly entries: readonly IGridEntry[];
     abstract readonly chunks: readonly ITextChunk[];
@@ -89,9 +91,9 @@ export abstract class ITextStyle {
 }
 
 export abstract class IPuzzleAnnotation {
-    abstract readonly header: DeltaOperation[];
-    abstract readonly body:  DeltaOperation[];
-    abstract readonly footer:  DeltaOperation[];
+    abstract readonly header: QuillDelta;
+    abstract readonly body:  QuillDelta;
+    abstract readonly footer:  QuillDelta;
 }
 
 export abstract class IGridSize {

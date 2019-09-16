@@ -20,7 +20,7 @@ import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
 import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
 
-import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle-management/puzzle-management.service';
+import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle-management.service';
 import { AlertComponent } from './ui/alert/alert.component';
 import { TextStyleComponent } from './ui/text-style/text-style.component';
 import { BloggerComponent } from './ui/blogger/blogger.component';
@@ -28,6 +28,7 @@ import { ClueTextControlComponent } from './ui/clue-text-control/clue-text-contr
 import { ClueTextComponent } from './ui/clue-text/clue-text.component';
 import { CluesPreviewComponent } from './ui/clues-preview/clues-preview.component';
 import { ContentPreviewComponent } from './ui/content-preview/content-preview.component';
+import { HtmlAsIsPipe } from './ui/html-as-is.pipe';
 
 const quillGlobalConfig = {
     modules: {
@@ -42,6 +43,7 @@ const quillGlobalConfig = {
 
 @NgModule({
     declarations: [
+        HtmlAsIsPipe,
         AppComponent,
         GridComponent,
         ClueListComponent,

@@ -1,4 +1,4 @@
-import { ClueGroup } from './interfaces';
+import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
@@ -11,7 +11,7 @@ export class Clue implements IClue {
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
     public readonly format: string;
-    public readonly comment: string;
+    public readonly comment: QuillDelta;
     public readonly highlight: boolean;
     public readonly entries: readonly GridEntry[];
     public readonly chunks: readonly TextChunk[];

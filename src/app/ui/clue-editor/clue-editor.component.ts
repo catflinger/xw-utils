@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
-import { UpdateClue } from 'src/app/services/puzzle-management/modifiers/update-clue';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { UpdateClue } from 'src/app/services/modifiers/update-clue';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-clue-editor',

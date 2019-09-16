@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { TextStyle } from 'src/app/model/text-style';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { UpdatePublsihOptionIncludeGrid } from 'src/app/services/puzzle-management/modifiers/update-publish-option-include-grid';
+import { UpdatePublsihOptionIncludeGrid } from 'src/app/services/modifiers/update-publish-option-include-grid';
 
 @Component({
     selector: 'app-publish-options',

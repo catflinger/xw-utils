@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output,
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 class GridParameters {
     public readonly cellSize = 33;

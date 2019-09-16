@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PublicationService } from 'src/app/services/publication.service';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-publish-complete',

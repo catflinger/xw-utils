@@ -1,13 +1,27 @@
 <h3>preamble</h3>
 <form [formGroup]="form" *ngIf="puzzle">
 
+    <div class="row" *ngIf="puzzle">
+        <div class="col">
+            <div class="mt-4">
+                <p>Enter the title to be displayed on the fifteensquared home page</p>
+                <input id="title" type="text" class="w-100 pl-2" formControlName="title">
+            </div>
+
+            <div class="mt-4">
+                <p>Comment to be displayed below the title on the home page</p>
+                <quill-editor formControlName="header" format="object"></quill-editor>
+            </div>
+        </div>
+    </div>
+    
     <div class="row justify-content-center mt-5" *ngIf="puzzle">
         <div class="col bg-light p-5">
             <div class="title">{{form.value.title}}</div>
             <div class="border-bottom">Posted by Somebody on {{today | date : "MMMM d, y"}}</div>
             <div class="clearfix mt-2">
                 <div class="mug-shot float-left">
-                    <img src="">
+                    <img src="/assets/kitten.png">
                 </div>
                 <div class="float-left">
                     <div>
@@ -21,6 +35,15 @@
         </div>
     </div>
 
+    <div class="row" *ngIf="puzzle">
+        <div class="col">
+            <div class="mt-4">
+                <p>further comment inside your blog</p>
+                <quill-editor formControlName="body" format="object"></quill-editor>
+            </div>
+        </div>
+    </div>
+
     <div class="row justify-content-center mt-5" *ngIf="puzzle">
         <div class="col bg-light p-5">
             <div class="body-top clearfix">
@@ -29,35 +52,28 @@
             </div>
             <div class="title mt-3">{{form.value.title}}</div>
             <div class="border-bottom">Posted by Somebody on {{today | date : "MMMM d, y"}}</div>
-
-            <div>
-                <app-content-preview [content]="form.value.header"></app-content-preview>
+            <div class="row">
+                <div class="col-auto">
+                    <div class="mug-shot">
+                        <img src="/assets/kitten.png">
+                    </div>
+                    </div>
+                <div class="col-auto">
+                    <div>
+                        <app-content-preview [content]="form.value.header"></app-content-preview>
+                    </div>
+                    <div>
+                        <app-content-preview [content]="form.value.body"></app-content-preview>
+                    </div>
+                    <app-clues-preview [includeGrid]="puzzle.publishOptions.includeGrid" [clues]="sample"
+                        [publishOptions]="puzzle.publishOptions"></app-clues-preview>
+                        </div>
             </div>
-            <div>
-                <app-content-preview [content]="form.value.body"></app-content-preview>
-            </div>
-            <app-clues-preview [includeGrid]="puzzle.publishOptions.includeGrid" [clues]="sample"
-                [publishOptions]="puzzle.publishOptions"></app-clues-preview>
         </div>
     </div>
 
     <div class="row" *ngIf="puzzle">
         <div class="col">
-            <div class="mt-4">
-                <p>enter the title to be displayed on the fifteensquared home page</p>
-                <input id="title" type="text" formControlName="title">
-            </div>
-
-            <div class="mt-4">
-                <p>comment to be displayed below the title on the home page</p>
-                <quill-editor formControlName="header" format="object"></quill-editor>
-            </div>
-
-            <div class="mt-4">
-                <p>further comment inside your blog</p>
-                <quill-editor formControlName="body" format="object"></quill-editor>
-            </div>
-
             <div class="mt-4">
                 <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
                 <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>

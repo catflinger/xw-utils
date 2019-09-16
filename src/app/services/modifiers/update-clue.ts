@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
+import { QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { Validate } from './validate';
 import { PuzzleM } from './mutable-model/puzzle-m';
@@ -8,7 +8,7 @@ export class UpdateClue implements IPuzzleModifier {
     constructor(
         private id: string,
         private answer: string,
-        private comment: string,
+        private comment: QuillDelta,
         private chunks: TextChunk[]) { }
 
     exec(puzzle: PuzzleM) {
@@ -18,7 +18,7 @@ export class UpdateClue implements IPuzzleModifier {
 
             // commit the change
             clue.answer = this.answer.trim().toUpperCase();
-            clue.comment = this.comment.trim();
+            clue.comment = this.comment;
             clue.chunks = this.chunks;
 
             this.updateGridText(puzzle);

@@ -31,7 +31,7 @@
 </div>
 
 <div class="row" *ngIf="appStatus && puzzle">
-    <div class="col">
+    <div class="col" [innerHTML]="preview | htmlAsIs">
     </div>
 </div>
 

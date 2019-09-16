@@ -1,12 +1,12 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { PuzzleM } from './mutable-model/puzzle-m';
-import { DeltaOperation } from 'quill';
+import { QuillDelta } from 'src/app/model/interfaces';
 
 export class UpdatePreamble implements IPuzzleModifier {
     constructor(
         private title:  string,
-        private header:  DeltaOperation[], 
-        private body:  DeltaOperation[]) { }
+        private header:  QuillDelta, 
+        private body:  QuillDelta) { }
 
     exec(puzzle: PuzzleM) {
         puzzle.info.title = this.title ? this.title : "untitled";

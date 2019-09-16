@@ -13,4 +13,21 @@ export class TextStyle implements ITextStyle {
             this.underline = data.underline;
         }
 
+        public toCssStyleString(): string {
+            let result = `color: ${this.color};`;
+
+            if (this.bold) {
+                result = result.concat(" font-weight: bold;")
+            }
+            
+            if (this.italic) {
+                result = result.concat(" font-style: italic;")
+            }
+            
+            if (this.underline) {
+                result = result.concat(" text-decoration: underline;")
+            }
+            
+            return result;
+        }
 }

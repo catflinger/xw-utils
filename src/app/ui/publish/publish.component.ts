@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService } from 'src/app/services/publication.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-publish',
@@ -15,6 +15,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public puzzle = null;
     public form: FormGroup;
     public appStatus: AppStatus;
+    public preview: string = "";
 
     private subs: Subscription[] = [];
 
@@ -55,9 +56,10 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.appService.clearAlerts();
 
         this.publicationService.publish(this.puzzle, "public", "public")
-            .then(() => {
+            .then((html) => {
+                this.preview = html;
                 this.appService.clearBusy();
-                this.router.navigate(["/publish-complete"]);
+                // this.router.navigate(["/publish-complete"]);
             })
             .catch(error => {
                 this.appService.clearBusy();

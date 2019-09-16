@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
+import { IPuzzle, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { PuzzleM } from './mutable-model/puzzle-m';
@@ -13,7 +13,7 @@ export class Validate implements IPuzzleModifier {
         });
     }
 
-    private validateClue(answer: string, comment: string, chunks: readonly TextChunk[]): ClueValidationWarning[] {
+    private validateClue(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];
 
         if (!answer || answer.trim().length === 0) {
@@ -22,18 +22,15 @@ export class Validate implements IPuzzleModifier {
 
         let commentOK = false;
 
-        if (comment && comment.length > 0) {
-            let quill: any = JSON.parse(comment);
-            if (quill.ops && Array.isArray(quill.ops)) {
-                let text = "";
+        if (comment && comment.ops && Array.isArray(comment.ops)) {
+            let text = "";
 
-                quill.ops.forEach(op => {
-                    if (op.insert) {
-                        text += op.insert;
-                    }
-                });
-                commentOK = text.trim().length > 0;
-            }
+            comment.ops.forEach(op => {
+                if (op.insert) {
+                    text += op.insert;
+                }
+            });
+            commentOK = text.trim().length > 0;
         }
 
         if (!commentOK) {

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PuzzleInfo } from '../../model/puzzle-info';
-import { LocalStorageService } from '../local-storage.service';
-import { Puzzle } from '../../model/puzzle';
-import { HttpPuzzleSourceService } from '../http-puzzle-source.service';
+import { PuzzleInfo } from '../model/puzzle-info';
+import { LocalStorageService } from './local-storage.service';
+import { Puzzle } from '../model/puzzle';
+import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { ClearSelection } from './modifiers/clear-selection';
 import { Validate } from './modifiers/validate';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
-import { IPuzzle } from '../../model/interfaces';
+import { IPuzzle } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
@@ -117,7 +117,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 return puzzle;
             })
             .catch((error) => {
-                console.log("Failed to get puzzle:" + error.toString());
                 throw new Error("Failed to load puzzle from " + providerName);
             });
     }

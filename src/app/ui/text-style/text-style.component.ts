@@ -4,8 +4,8 @@ import { TextStyleName } from '../common';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { Puzzle } from 'src/app/model/puzzle';
-import { UpdatePublsihOptionTextStyle } from 'src/app/services/puzzle-management/modifiers/update-publish-option-text-style';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { UpdatePublsihOptionTextStyle } from 'src/app/services/modifiers/update-publish-option-text-style';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
 class ColorPickerOption {
     public name: string;

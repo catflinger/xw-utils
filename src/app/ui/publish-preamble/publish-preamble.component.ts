@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
-import { UpdatePreamble } from 'src/app/services/puzzle-management/modifiers/update-preamble';
-import { IActivePuzzle } from 'src/app/services/puzzle-management/puzzle-management.service';
+import { UpdatePreamble } from 'src/app/services/modifiers/update-preamble';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 
 @Component({
@@ -37,8 +37,8 @@ export class PublishPreambleComponent implements OnInit {
 
             this.form = this.formBuilder.group({
                 title: [""],
-                header: [[]],
-                body: [[]]
+                header: { ops: [] },
+                body: { ops: [] }
             });
 
             this.subs.push(
