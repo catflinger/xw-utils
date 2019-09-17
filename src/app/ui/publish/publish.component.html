@@ -8,14 +8,16 @@
                 <div class="form-group">
                     <label>
                         Username:
-                        <input class="form-control" type="text" formControlName="username">
+                        <app-validation-message [control]="this.form.get('username')"></app-validation-message>
+                        <input class="form-control" type="text" formControlName="username" required>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label>
                         Password:
-                        <input class="form-control" type="text" formControlName="password">
+                        <app-validation-message [control]="this.form.get('password')"></app-validation-message>
+                        <input class="form-control" type="text" formControlName="password" required>
                     </label>
                 </div>
             </div>
@@ -25,13 +27,8 @@
 
 <div class="row" *ngIf="appStatus && puzzle">
     <div class="col">
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary mr-3" (click)="onContinue()">Publish</button>
+        <button [disabled]="appStatus.busy || !form.valid" type="button" class="btn btn-primary mr-3" (click)="onContinue()">Publish</button>
         <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
-    </div>
-</div>
-
-<div class="row" *ngIf="appStatus && puzzle">
-    <div class="col" [innerHTML]="preview | htmlAsIs">
     </div>
 </div>
 

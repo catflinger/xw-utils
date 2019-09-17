@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService } from 'src/app/services/publication.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
@@ -34,8 +34,8 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
 
             this.form = this.builder.group({
-                'username': [""],
-                'password': [""],
+                'username': ["", Validators.required],
+                'password': ["", Validators.required],
             });
 
             this.subs.push(
@@ -55,15 +55,15 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
         this.appService.clearAlerts();
 
-        this.publicationService.publish(this.puzzle, "public", "public")
-            .then((html) => {
-                this.preview = html;
+        this.publicationService.publish(this.puzzle, this.form.value.username, this.form.value.password)
+            .then((wordpressId) => {
+                console.log("WORDPRESSS ID = " + wordpressId);
                 this.appService.clearBusy();
-                // this.router.navigate(["/publish-complete"]);
+                this.router.navigate(["/publish-complete"]);
             })
             .catch(error => {
                 this.appService.clearBusy();
-                this.appService.setAlert("danger", "ERROR: " + error);
+                this.appService.setAlert("danger", "ERROR: " + error.toString());
             });
     }
 

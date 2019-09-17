@@ -72,7 +72,7 @@ export abstract class IPuzzleInfo {
     abstract readonly id: string;
     abstract readonly title: string;
     abstract readonly puzzleDate: Date;
-    abstract readonly providerName: string;
+    abstract readonly provider: string;
     abstract readonly setter: string;
 } 
 
