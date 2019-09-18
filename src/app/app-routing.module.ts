@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SolverComponent } from './ui/solver/solver.component';
-import { HomeComponent } from './ui/home/home.component';
-import { PublishOptionsComponent } from './ui/publish-options/publish-options.component';
-import { PublishComponent } from './ui/publish/publish.component';
-import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
-import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble.component';
-import { BloggerComponent } from './ui/blogger/blogger.component';
+import { SolverComponent } from './ui/pages/solver/solver.component';
+import { HomeComponent } from './ui/pages/home/home.component';
+import { PublishOptionsComponent } from './ui/pages/publish-options/publish-options.component';
+import { PublishComponent } from './ui/pages/publish/publish.component';
+import { PublishCompleteComponent } from './ui/pages/publish-complete/publish-complete.component';
+import { PublishPreambleComponent } from './ui/pages/publish-preamble/publish-preamble.component';
+import { BloggerComponent } from './ui/pages/blogger/blogger.component';
 
 
 const routes: Routes = [

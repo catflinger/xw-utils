@@ -1,118 +1,22 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle';
-import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { GridParameters } from '../common';
+import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
-class GridParameters {
-    public readonly cellSize = 33;
-    public readonly borderWidth = 1;
-    public readonly barWidth = 3;
-    public readonly gridPadding = 5;
-    public readonly cellPadding = 2;
-    public readonly captionFont = "9px serif";
-    public readonly textFont = "20px sans-serif";
-    public readonly gridColor = "#000000";
-    public readonly highlightColor = "BurlyWood";
-}
-
-@Component({
-    selector: 'app-grid',
-    templateUrl: './grid.component.html',
-    styleUrls: ['./grid.component.css']
+@Injectable({
+    providedIn: 'root'
 })
-export class GridComponent implements OnInit, AfterViewInit {
-    @Input() readonly: boolean;
-    @Output() cellClick = new EventEmitter<GridCell>();
+export class GridPainterService {
 
-    @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
+    private gridParams: GridParameters = new GridParameters();
 
-    private gridParams: GridParameters;
+    constructor() { }
 
-    public canvasHeight: number = 0;
-    public canvasWidth: number = 0;
+    public drawGrid(context: CanvasRenderingContext2D, grid: Grid): void {
+        grid.cells.forEach((cell) => {
+            this.drawCell(context, cell);
+        });
 
-    public puzzle: Puzzle;
-    public source: string = "";
-    public err: any;
-
-    private viewInitiated = false;
-
-    private subs: Subscription[] = [];
-
-    constructor(private activePuzzle: IActivePuzzle) {
-    }
-
-    public ngOnInit() {
-        this.gridParams = new GridParameters();
-
-        this.subs.push(
-            this.activePuzzle.observe()
-                .subscribe(
-                    (puzzle) => {
-
-                        if (puzzle) {
-                            this.puzzle = puzzle;
-
-                            this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.size.across + this.gridParams.gridPadding * 2;
-                            this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.size.down + this.gridParams.gridPadding * 2;
-
-                            setTimeout(() => this.drawGrid(), 0);
-
-                        } else {
-                        }
-                    },
-                    (err) => {
-                        this.err = err;
-                    }
-                )
-        );
-    }
-
-    public ngOnDestroy() {
-        this.subs.forEach((s) => s.unsubscribe());
-    }
-
-    ngAfterViewInit() {
-        this.viewInitiated = true;
-        this.drawGrid()
-    }
-
-    onCanvasClick(params: any, cellId: string) {
-
-        if (this.readonly) {
-            return;
-        }
-
-        // TO DO: ignore mouse click on grid padding
-
-        const bounds = this.canvas.nativeElement.getBoundingClientRect();
-        let left = params.clientX - bounds.left - this.gridParams.gridPadding;
-        let x = Math.floor(left / this.gridParams.cellSize);
-
-        let top = params.clientY - bounds.top - this.gridParams.gridPadding;
-        let y = Math.floor(top / this.gridParams.cellSize);
-
-        let cell: GridCell = this.puzzle.cellAt(x, y);
-        if (cell) {
-            this.cellClick.emit(cell);
-        }
-
-    }
-
-    private drawGrid(): void {
-        if (this.viewInitiated && this.canvas) {
-            const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
-            const context = canvasEl.getContext('2d');
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, canvasEl.width, canvasEl.height);
-
-            context.translate(this.gridParams.gridPadding, this.gridParams.gridPadding);
-
-            this.puzzle.grid.cells.forEach((cell) => {
-                this.drawCell(context, cell);
-            });
-        }
     }
 
     private drawCell(context: CanvasRenderingContext2D, cell: GridCell) {
@@ -238,4 +142,5 @@ export class GridComponent implements OnInit, AfterViewInit {
             left + this.gridParams.cellSize / 2,
             top + this.gridParams.cellSize / 2);
     }
+
 }

@@ -8,28 +8,28 @@ import { QuillModule } from "ngx-quill";
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './ui/app/app.component';
-import { NavbarComponent } from './ui/navbar/navbar.component';
-import { HomeComponent } from './ui/home/home.component';
-import { PublishOptionsComponent } from './ui/publish-options/publish-options.component';
-import { PublishComponent } from './ui/publish/publish.component';
-import { PublishCompleteComponent } from './ui/publish-complete/publish-complete.component';
-import { PublishPreambleComponent } from './ui/publish-preamble/publish-preamble.component';
-import { ClueListComponent } from './ui/clue-list/clue-list.component';
-import { SolverComponent } from './ui/solver/solver.component';
-import { ClueEditorComponent } from './ui/clue-editor/clue-editor.component';
-import { ClueTextChunkComponent } from './ui/clue-text-chunk/clue-text-chunk.component';
-import { GridComponent } from './ui/grid/grid/grid.component';
+import { NavbarComponent } from './ui/components/navbar/navbar.component';
+import { HomeComponent } from './ui/pages/home/home.component';
+import { PublishOptionsComponent } from './ui/pages/publish-options/publish-options.component';
+import { PublishComponent } from './ui/pages/publish/publish.component';
+import { PublishCompleteComponent } from './ui/pages/publish-complete/publish-complete.component';
+import { PublishPreambleComponent } from './ui/pages/publish-preamble/publish-preamble.component';
+import { ClueListComponent } from './ui/components/clue-list/clue-list.component';
+import { SolverComponent } from './ui/pages/solver/solver.component';
+import { ClueEditorComponent } from './ui/components/clue-editor/clue-editor.component';
+import { ClueTextChunkComponent } from './ui/components/clue-text-chunk/clue-text-chunk.component';
+import { GridComponent } from './ui/components/grid/grid.component';
 
 import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzle-management.service';
-import { AlertComponent } from './ui/alert/alert.component';
-import { TextStyleComponent } from './ui/text-style/text-style.component';
-import { BloggerComponent } from './ui/blogger/blogger.component';
-import { ClueTextControlComponent } from './ui/clue-text-control/clue-text-control.component';
-import { ClueTextComponent } from './ui/clue-text/clue-text.component';
-import { CluesPreviewComponent } from './ui/clues-preview/clues-preview.component';
-import { ContentPreviewComponent } from './ui/content-preview/content-preview.component';
-import { HtmlAsIsPipe } from './ui/html-as-is.pipe';
-import { ValidationMessageComponent } from './ui/validation-message/validation-message.component';
+import { AlertComponent } from './ui/components/alert/alert.component';
+import { TextStyleComponent } from './ui/components/text-style/text-style.component';
+import { BloggerComponent } from './ui/pages/blogger/blogger.component';
+import { ClueTextControlComponent } from './ui/components/clue-text-control/clue-text-control.component';
+import { ClueTextComponent } from './ui/components/clue-text/clue-text.component';
+import { CluesPreviewComponent } from './ui/components/clues-preview/clues-preview.component';
+import { ContentPreviewComponent } from './ui/components/content-preview/content-preview.component';
+import { HtmlAsIsPipe } from './ui/pipes/html-as-is.pipe';
+import { ValidationMessageComponent } from './ui/components/validation-message/validation-message.component';
 
 const quillGlobalConfig = {
     modules: {

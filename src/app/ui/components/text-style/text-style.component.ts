@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TextStyleName } from '../common';
+import { TextStyleName } from '../../common';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/services/app.service';
 import { Puzzle } from 'src/app/model/puzzle';

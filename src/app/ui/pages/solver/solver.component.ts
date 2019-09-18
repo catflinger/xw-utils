@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from '../clue-editor/clue-editor.component';
+import { ClueEditorComponent } from '../../components/clue-editor/clue-editor.component';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
@@ -8,6 +8,7 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
+import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
 
 @Component({
     selector: 'app-solver',
@@ -62,10 +63,12 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
+        this.activePuzzle.update(new ClearSelection());
         this.router.navigate(["/publish-options"]);
     }
 
     onBack() {
+        this.activePuzzle.update(new ClearSelection());
         this.router.navigate(["/home"]);
     }
 
