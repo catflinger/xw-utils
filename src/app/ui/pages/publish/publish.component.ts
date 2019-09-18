@@ -65,6 +65,11 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
         this.appService.clearAlerts();
 
+        // TO DO: link the media on WP to the post id
+        // 1. first create a post with placeholder content, get back the post id
+        // 2. upload media with post id, get back url of image
+        // 3. update post with actual content incluidng the image url
+
         this.getGridImage()
         .then((image) => {
             return this.publicationService.publishGrid(image, this.puzzle.info.title, this.form.value.username, this.form.value.password)

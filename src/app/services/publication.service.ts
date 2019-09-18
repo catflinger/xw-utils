@@ -36,8 +36,6 @@ export class PublicationService {
 
     public publishPost(puzzle: Puzzle, gridUrl: string, username: string, password: string): Promise<number> {
 
-        // TO DO: add link to grid image in the post content
-
         let generator = new PostContentGenerator();
         let content = generator.getContent(puzzle, gridUrl);
 
