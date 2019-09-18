@@ -12,15 +12,34 @@ export class PublicationService {
 
     constructor(private http: HttpClient) { }
 
-    public publish(puzzle: Puzzle, username: string, password: string): Promise<any> {
+    public publishGrid(image: string, title: string, username: string, password: string): Promise<string> {
+        if (image) {
+            return this.http.post("http://localhost:49323/api/PublishGrid", {
+                title: title,
+                content: image,
+                username,
+                password
+            })
+            .toPromise()
+            .then((data: any) => {
+                let url: string = null;
+                if (data.success) {
+                    url = data.url;
+                }
+                return url;
+            })
+            .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
+        } else {
+            return Promise.resolve(null);
+        }
+    }
 
-        // TO DO: 
-        // 4. Create am image of the grid
-        // 5. Upload the gid image
-        // 6. Update links to grid image in the post content
+    public publishPost(puzzle: Puzzle, gridUrl: string, username: string, password: string): Promise<number> {
 
-        let generator = new PostContentGenerator(puzzle);
-        let content = generator.getContent();
+        // TO DO: add link to grid image in the post content
+
+        let generator = new PostContentGenerator();
+        let content = generator.getContent(puzzle, gridUrl);
 
         return this.http.post("http://localhost:49323/api/PublishPost", {
             provider: puzzle.info.provider,
@@ -30,8 +49,9 @@ export class PublicationService {
             password
         })
         .toPromise()
-        .then((data) => {
+        .then((data: any) => {
             console.log(JSON.stringify(data));
+            return data.wordpressId;
         })
         .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
     }

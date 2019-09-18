@@ -11,14 +11,20 @@ export class PostContentGenerator {
     private buffer: string = "";
     private tdPadding = "5px"
 
-    constructor(private puzzle: Puzzle) {
+    constructor() {
     }
 
-    public getContent(): string {
+    public getContent(puzzle: Puzzle, gridUrl: string): string {
         this.addHtml("<div>");
-        this.addQuillDelta(this.puzzle.notes.header);
+        this.addQuillDelta(puzzle.notes.header);
         this.addHtml("<!-- MORE -->");
-        this.addQuillDelta(this.puzzle.notes.body);
+        this.addQuillDelta(puzzle.notes.body);
+
+        if (gridUrl) {
+            this.addHtml("<div>");
+            this.addHtml(`<img src="${gridUrl}" alt="image of grid">`);
+            this.addHtml("</div>");
+        }
 
         this.addHtml("<table>")
         this.addHtml("<tbody>")
@@ -29,7 +35,7 @@ export class PostContentGenerator {
         this.closeTD();
         this.addHtml("</tr>");
 
-        this.addClues(this.puzzle.clues.filter(c => c.group === "across"));
+        this.addClues(puzzle.clues.filter(c => c.group === "across"), puzzle.publishOptions);
 
         this.addHtml("<tr>");
         this.openTD(3);
@@ -37,12 +43,12 @@ export class PostContentGenerator {
         this.closeTD();
         this.addHtml("</tr>");
 
-        this.addClues(this.puzzle.clues.filter(c => c.group === "down"));
+        this.addClues(puzzle.clues.filter(c => c.group === "down"), puzzle.publishOptions);
 
         this.addHtml("</tbody>")
         this.addHtml("</table>")
 
-        this.addQuillDelta(this.puzzle.notes.footer);
+        this.addQuillDelta(puzzle.notes.footer);
         this.addHtml("</div>");
 
         return this.buffer;
@@ -75,25 +81,25 @@ export class PostContentGenerator {
         }
     }
 
-    private addClues(clues: Clue[]) {
-        clues.forEach(clue => this.addClue(clue));
+    private addClues(clues: Clue[], publishOptions: PublishOptions) {
+        clues.forEach(clue => this.addClue(clue, publishOptions));
     }
 
-    private addClue(clue: Clue) {
+    private addClue(clue: Clue, publishOptions: PublishOptions) {
 
         // add a row for the clue and answer
         this.addHtml("<tr>");
 
         this.openTD();
-        this.addText(clue.caption, this.puzzle.publishOptions.clueStyle);
+        this.addText(clue.caption, publishOptions.clueStyle);
         this.closeTD();
 
         this.openTD();
-        this.addText(clue.answer, this.puzzle.publishOptions.answerStyle);
+        this.addText(clue.answer, publishOptions.answerStyle);
         this.closeTD();
 
         this.openTD();
-        this.addClueText(clue.chunks, this.puzzle.publishOptions);
+        this.addClueText(clue.chunks, publishOptions);
         this.closeTD();
         
         this.addHtml("</tr>");

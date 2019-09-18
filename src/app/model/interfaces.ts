@@ -74,6 +74,7 @@ export abstract class IPuzzleInfo {
     abstract readonly puzzleDate: Date;
     abstract readonly provider: string;
     abstract readonly setter: string;
+    abstract readonly wordpressId: number;
 } 
 
 export abstract class IPublishOptions {

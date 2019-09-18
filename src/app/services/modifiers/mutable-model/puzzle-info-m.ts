@@ -6,4 +6,5 @@ export abstract class PuzzleInfoM implements IPuzzleInfo {
     public abstract puzzleDate: Date;
     public abstract provider: string;
     public abstract setter: string;
+    public abstract wordpressId: number;
 } 

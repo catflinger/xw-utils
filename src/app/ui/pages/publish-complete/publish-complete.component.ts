@@ -24,14 +24,6 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
-        } else {
-
-            this.subs.push(
-                this.activePuzzle.observe().subscribe(
-                    (puzzle) => {
-                        this.puzzle = puzzle;
-                    }
-                ));
         }
     }
     
@@ -40,10 +32,7 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.publiationService.publish(this.puzzle, this.username, this.password)
-            .then(() => {
-                this.router.navigate(["/home"]);
-            });
+        this.router.navigate(["/home"]);
     }
 
 }

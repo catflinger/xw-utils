@@ -6,6 +6,7 @@ export class PuzzleInfo implements IPuzzleInfo {
     public readonly puzzleDate: Date;
     public readonly provider: string;
     public readonly setter: string;
+    public readonly wordpressId: number;
 
     constructor(data: any) {
         this.id = data.id;
@@ -13,5 +14,6 @@ export class PuzzleInfo implements IPuzzleInfo {
         this.puzzleDate = new Date(data.puzzleDate);
         this.provider = data.provider;
         this.setter = data.setter;
+        this.wordpressId = data.wordpressId;
     }
 }

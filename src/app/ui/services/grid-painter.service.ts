@@ -13,6 +13,13 @@ export class GridPainterService {
     constructor() { }
 
     public drawGrid(context: CanvasRenderingContext2D, grid: Grid): void {
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.fillStyle = "white";
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+
+        context.translate(this.gridParams.gridPadding, this.gridParams.gridPadding);
+
         grid.cells.forEach((cell) => {
             this.drawCell(context, cell);
         });

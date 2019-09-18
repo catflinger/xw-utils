@@ -96,10 +96,6 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, canvasEl.width, canvasEl.height);
-
-            context.translate(this.gridParams.gridPadding, this.gridParams.gridPadding);
             this.gridPainter.drawGrid(context, this.puzzle.grid);
         }
     }

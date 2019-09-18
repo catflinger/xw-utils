@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.appService.setEditor(editor);
 
             this.appService.clearBusy();
+            this.appService.clearAlerts();
             this.router.navigate(["/", editor])
         })
         .catch((error) => {
