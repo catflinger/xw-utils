@@ -60,7 +60,24 @@ export class GridPainterService {
                     cell.content.trim());
             }
 
-            // TO DO: draw in bars and other decorations
+            // draw in bars
+            if (cell.rightBar) {
+                this.drawLine(
+                    context,
+                    [left + size - this.gridParams.barWidth + 1, top],
+                    [left + size - this.gridParams.barWidth + 1, top + size],
+                    this.gridParams.barWidth,
+                    this.gridParams.gridColor);
+            }
+
+            if (cell.bottomBar) {
+                this.drawLine(
+                    context,
+                    [left, top + size - this.gridParams.barWidth + 1],
+                    [left + size, top + size- this.gridParams.barWidth + 1],
+                    this.gridParams.barWidth,
+                    this.gridParams.gridColor);
+            }
         }
 
         // all cells get borders regardless of whether they hold content
