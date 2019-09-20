@@ -10,6 +10,10 @@ export class GridPainterService {
 
     private gridParams: GridParameters = new GridParameters();
 
+    // TO DO: IMPORTANT!
+    // review this component for XSS vunerabilities
+
+
     constructor() { }
 
     public drawGrid(context: CanvasRenderingContext2D, grid: Grid): void {
@@ -74,7 +78,7 @@ export class GridPainterService {
                 this.drawLine(
                     context,
                     [left, top + size - this.gridParams.barWidth + 1],
-                    [left + size, top + size- this.gridParams.barWidth + 1],
+                    [left + size, top + size - this.gridParams.barWidth + 1],
                     this.gridParams.barWidth,
                     this.gridParams.gridColor);
             }

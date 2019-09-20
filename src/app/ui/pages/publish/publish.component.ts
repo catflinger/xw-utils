@@ -22,6 +22,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public preview: string = "";
 
+    // TO DO: IMPORTANT!
+    // review this component for XSS vunerabilities
+    
     private subs: Subscription[] = [];
 
     private gridParams: GridParameters = new GridParameters();;

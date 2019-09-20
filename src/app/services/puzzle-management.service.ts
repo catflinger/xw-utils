@@ -115,9 +115,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 this.refreshPuzzleList();
 
                 return puzzle;
-            })
-            .catch((error) => {
-                throw new Error("Failed to load puzzle from " + providerName);
             });
     }
 

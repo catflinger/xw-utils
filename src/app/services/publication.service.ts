@@ -12,6 +12,10 @@ export class PublicationService {
 
     constructor(private http: HttpClient) { }
 
+    // TO DO: IMPORTANT!
+    // review this component for XSS vunerabilities
+
+
     public publishGrid(image: string, title: string, username: string, password: string): Promise<string> {
         if (image) {
             return this.http.post("http://localhost:49323/api/PublishGrid", {
@@ -46,12 +50,12 @@ export class PublicationService {
             username,
             password
         })
-        .toPromise()
-        .then((data: any) => {
-            console.log(JSON.stringify(data));
-            return data.wordpressId;
-        })
-        .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
+            .toPromise()
+            .then((data: any) => {
+                console.log(JSON.stringify(data));
+                return data.wordpressId;
+            })
+            .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
     }
 }
 

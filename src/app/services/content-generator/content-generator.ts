@@ -9,7 +9,11 @@ import { TextStyle } from 'src/app/model/text-style';
 
 export class PostContentGenerator {
     private buffer: string = "";
-    private tdPadding = "5px"
+    private tdPadding = "5px";
+
+    // TO DO: IMPORTANT!
+    // review this component for XSS vunerabilities
+
 
     constructor() {
     }
@@ -69,13 +73,13 @@ export class PostContentGenerator {
         }
         this.buffer = this.buffer.concat(formattedText);
     }
-    
+
     private addQuillDelta(delta: QuillDelta) {
 
         if (delta && delta.ops && delta.ops.length) {
-            const converter  = new QuillDeltaToHtmlConverter(
+            const converter = new QuillDeltaToHtmlConverter(
                 delta.ops,
-                { inlineStyles: true});
+                { inlineStyles: true });
 
             this.buffer = this.buffer.concat(converter.convert());
         }
@@ -101,7 +105,7 @@ export class PostContentGenerator {
         this.openTD();
         this.addClueText(clue.chunks, publishOptions);
         this.closeTD();
-        
+
         this.addHtml("</tr>");
 
         // add a row for the comments
@@ -119,13 +123,13 @@ export class PostContentGenerator {
 
     }
 
-    private addClueText(chunks: readonly TextChunk[], publishOptions: PublishOptions){
+    private addClueText(chunks: readonly TextChunk[], publishOptions: PublishOptions) {
 
         chunks.forEach(chunk => {
-            let textStyle = chunk.isDefinition ? 
-                publishOptions.definitionStyle : 
-                publishOptions.clueStyle; 
-                
+            let textStyle = chunk.isDefinition ?
+                publishOptions.definitionStyle :
+                publishOptions.clueStyle;
+
             this.addHtml(`<span style="${textStyle.toCssStyleString()}">${chunk.text}</span>`);
         });
     }

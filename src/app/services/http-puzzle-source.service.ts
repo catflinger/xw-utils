@@ -8,6 +8,12 @@ interface LatestPuzzleResult {
     puzzle: any;
 }
 
+interface LatestPuzzleRequest {
+    provider: string;
+    username: string;
+    password: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +22,13 @@ export class HttpPuzzleSourceService {
     constructor(private http: HttpClient) { }
 
     public getPuzzle(provider: string): Promise<Puzzle> {
-        return this.http.get("http://localhost:49323/api/latestpuzzle/" + provider)
+        const request: LatestPuzzleRequest = {
+            provider: provider,
+            username: "PeeDee",
+            password: "te&&ndt0&st",
+        };
+
+        return this.http.post("http://localhost:49323/api/latestpuzzle/", request)
         .toPromise()
         .then( (data: LatestPuzzleResult) => {
             if (data.success) {
@@ -24,9 +36,6 @@ export class HttpPuzzleSourceService {
             } else {
                 throw new Error(data.message);
             }
-         })
-         .catch((error) => {
-             throw new Error("Failed to get puzzle");
          });
     }
 

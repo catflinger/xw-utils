@@ -30,6 +30,7 @@ import { CluesPreviewComponent } from './ui/components/clues-preview/clues-previ
 import { ContentPreviewComponent } from './ui/components/content-preview/content-preview.component';
 import { HtmlAsIsPipe } from './ui/pipes/html-as-is.pipe';
 import { ValidationMessageComponent } from './ui/components/validation-message/validation-message.component';
+import { LoginComponent } from './ui/pages/login/login.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -65,6 +66,7 @@ const quillGlobalConfig = {
         CluesPreviewComponent,
         ContentPreviewComponent,
         ValidationMessageComponent,
+        LoginComponent,
     ],
     imports: [
         BrowserModule,
