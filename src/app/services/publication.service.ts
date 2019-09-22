@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../model/puzzle';
 import { HttpClient } from '@angular/common/http';
-import Quill, { DeltaOperation } from 'quill';
-import Delta from "quill-delta";
 import { PostContentGenerator } from './content-generator/content-generator';
+import { ApiResponse, ApiResponseStatus } from './common';
+
+abstract class PublishPostResponse implements ApiResponse {
+    public abstract success: ApiResponseStatus;
+    public abstract message: string;
+    public abstract wordpressId: number;
+}
+
+abstract class PublishGridResponse implements ApiResponse {
+    public abstract success: ApiResponseStatus;
+    public abstract message: string;
+    public abstract wordpressId: number;
+    public abstract url: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +28,7 @@ export class PublicationService {
     // review this component for XSS vunerabilities
 
 
-    public publishGrid(image: string, title: string, username: string, password: string): Promise<string> {
+    public publishGrid(image: string, title: string, username: string, password: string): Promise<PublishGridResponse> {
         if (image) {
             return this.http.post("http://localhost:49323/api/PublishGrid", {
                 title: title,
@@ -25,20 +37,13 @@ export class PublicationService {
                 password
             })
             .toPromise()
-            .then((data: any) => {
-                let url: string = null;
-                if (data.success) {
-                    url = data.url;
-                }
-                return url;
-            })
-            .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
+            .then(data => data as PublishGridResponse)
         } else {
             return Promise.resolve(null);
         }
     }
 
-    public publishPost(puzzle: Puzzle, gridUrl: string, username: string, password: string): Promise<number> {
+    public publishPost(puzzle: Puzzle, gridUrl: string, username: string, password: string): Promise<PublishPostResponse> {
 
         let generator = new PostContentGenerator();
         let content = generator.getContent(puzzle, gridUrl);
@@ -50,18 +55,7 @@ export class PublicationService {
             username,
             password
         })
-            .toPromise()
-            .then((data: any) => {
-                console.log(JSON.stringify(data));
-                return data.wordpressId;
-            })
-            .catch((error) => Promise.reject("failed to publish " + JSON.stringify(error)));
+        .toPromise()
+        .then(data => data as PublishPostResponse);
     }
-}
-
-function htmlFromQuillDelta(delta: Delta): string {
-    const tempCont = document.createElement('div');
-    const tempEditor: Quill = new Quill(tempCont);
-    tempEditor.setContents(delta);
-    return '' + tempEditor.root.innerHTML;
 }

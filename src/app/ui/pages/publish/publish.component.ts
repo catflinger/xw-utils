@@ -9,7 +9,7 @@ import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
 import { GridParameters } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { Puzzle } from 'src/app/model/puzzle';
-import { promise } from 'protractor';
+import { ApiResponse, ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
 
 @Component({
     selector: 'app-publish',
@@ -75,19 +75,32 @@ export class PublishComponent implements OnInit, OnDestroy {
 
         this.getGridImage()
         .then((image) => {
-            return this.publicationService.publishGrid(image, this.puzzle.info.title, this.form.value.username, this.form.value.password)
+            return this.publicationService.publishGrid(image, this.puzzle.info.title, this.form.value.username, this.form.value.password);
         })
-        .then((gridUrl) => {
-            return this.publicationService.publishPost(this.puzzle, gridUrl, this.form.value.username, this.form.value.password)
+        .then((result) => {
+            if (result.success === ApiResponseStatus.OK) {
+                return this.publicationService.publishPost(this.puzzle, result.url, this.form.value.username, this.form.value.password);
+            } else if (result.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw new Error(result.message);
+            }
         })
-        .then((postId) => {
-            this.activePuzzle.update(new PatchPuzzleInfo(postId));
-            this.appService.clearBusy();
-            this.router.navigate(["/publish-complete"]);
+        .then((result) => {
+            if (result.success === ApiResponseStatus.OK) {
+                this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
+                this.appService.clearBusy();
+                this.router.navigate(["/publish-complete"]);
+            }
         })
         .catch(error => {
-            this.appService.clearBusy();
-            this.appService.setAlert("danger", "ERROR: " + error.toString());
+            if (error === ApiSymbols.AuthorizationFailure) {
+                this.appService.clearBusy();
+                this.appService.setAlert("danger", "Username or password incorrect");
+            } else {
+                this.appService.clearBusy();
+                this.appService.setAlert("danger", "ERROR: " + error.toString());
+            }
         });
     }
 

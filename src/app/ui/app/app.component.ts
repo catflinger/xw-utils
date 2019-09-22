@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
 import { Subscription } from 'rxjs';
-import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
+import { ApiSymbols } from 'src/app/services/common';
 
 @Component({
     selector: 'app-root',
@@ -50,8 +51,13 @@ export class AppComponent implements OnInit, OnDestroy {
             this.router.navigate(["/", editor])
         })
         .catch((error) => {
-            this.appService.clearBusy();
-            this.appService.setAlert("danger", error.toString());
+            if (error === ApiSymbols.AuthorizationFailure) {
+                this.appService.clearBusy();
+                this.appService.setAlert("danger", "You need to be logged in to load a new puzzle");
+            } else {
+                this.appService.clearBusy();
+                this.appService.setAlert("danger", error.toString());
+            }
         });
     }
 }

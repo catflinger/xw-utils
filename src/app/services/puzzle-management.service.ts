@@ -9,6 +9,7 @@ import { Validate } from './modifiers/validate';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
+import { ApiResponseStatus, ApiSymbols } from './common';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -109,12 +110,18 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     public openNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
         return this.httpPuzzleService.getPuzzle(providerName)
-            .then((puzzle) => {
-                this.localStorageService.putPuzzle(puzzle);
-                this.usePuzzle(puzzle);
-                this.refreshPuzzleList();
-
-                return puzzle;
+            .then((response) => {
+                if (response.success === ApiResponseStatus.OK) {
+                    let puzzle = new Puzzle(response.puzzle);
+                    this.localStorageService.putPuzzle(puzzle);
+                    this.usePuzzle(puzzle);
+                    this.refreshPuzzleList();
+                    return puzzle;
+                } else if (response.success === ApiResponseStatus.authorizationFailure) {
+                    throw ApiSymbols.AuthorizationFailure;
+                } else {
+                    throw new Error(response.message);
+                }
             });
     }
 

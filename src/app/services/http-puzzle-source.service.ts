@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Puzzle } from '../model/puzzle';
+import { ApiResponse, ApiResponseStatus } from './common';
 
-interface LatestPuzzleResult {
-    success: boolean;
-    message: string;
-    puzzle: any;
+abstract class LatestPuzzleResponse implements ApiResponse {
+    public abstract success: ApiResponseStatus;
+    public abstract message: string;
+    public abstract puzzle: any;
 }
 
 interface LatestPuzzleRequest {
@@ -21,22 +22,16 @@ export class HttpPuzzleSourceService {
 
     constructor(private http: HttpClient) { }
 
-    public getPuzzle(provider: string): Promise<Puzzle> {
+    public getPuzzle(provider: string): Promise<LatestPuzzleResponse> {
         const request: LatestPuzzleRequest = {
             provider: provider,
-            username: "PeeDee",
-            password: "te&&ndt0&st",
+            username: "",
+            password: "",
         };
 
         return this.http.post("http://localhost:49323/api/latestpuzzle/", request)
         .toPromise()
-        .then( (data: LatestPuzzleResult) => {
-            if (data.success) {
-                return new Puzzle(data.puzzle);
-            } else {
-                throw new Error(data.message);
-            }
-         });
+        .then(data => data as LatestPuzzleResponse);
     }
 
     public putPuzzle(puzzle: Puzzle): Promise<any> {
