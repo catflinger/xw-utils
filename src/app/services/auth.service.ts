@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
+import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 
-interface AuthResponse {
-    success: boolean;
-    token: string;
+abstract class AuthResponse implements ApiResponse {
+    public abstract readonly success: ApiResponseStatus;
+    public abstract readonly message: string;
 }
 
-class Credentials {
+export class Credentials {
     constructor(
         public readonly username: string,
         public readonly password: string,
@@ -17,20 +19,33 @@ class Credentials {
     providedIn: 'root'
 })
 export class AuthService {
-    private credential: Credentials = null;
+    // private credential: Credentials = null;
+    private bs: BehaviorSubject<Credentials> = new BehaviorSubject<Credentials>(null);
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
 
-    public getCredentials(): Credentials {
-        return this.credential;
+    public observe(): Observable<Credentials> {
+        return this.bs.asObservable();
     }
 
-    public setCredentials(username: string, password: string): void {
-        this.credential = new Credentials(username,password);
+    public getCredentials(): Credentials {
+        return this.bs.value;
+    }
+
+    public authenticate(username: string, password: string): Promise<void> {
+        return this.http.post("http://localhost:49323/api/authenticate/", { username, password})
+        .toPromise()
+        .then((data: ApiResponse) => {
+            if (data.success) {
+                this.bs.next(new Credentials(username,password));
+            } else {
+                throw ApiSymbols.AuthorizationFailure;
+            }
+        });
     }
 
     public clearCredentials(): void {
-        this.credential = null;
+        this.bs.next(null);
     }
 
 }

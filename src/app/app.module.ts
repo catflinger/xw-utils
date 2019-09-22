@@ -8,7 +8,6 @@ import { QuillModule } from "ngx-quill";
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './ui/app/app.component';
-import { NavbarComponent } from './ui/components/navbar/navbar.component';
 import { HomeComponent } from './ui/pages/home/home.component';
 import { PublishOptionsComponent } from './ui/pages/publish-options/publish-options.component';
 import { PublishComponent } from './ui/pages/publish/publish.component';
@@ -53,7 +52,6 @@ const quillGlobalConfig = {
         ClueEditorComponent,
         ClueTextControlComponent,
         ClueTextChunkComponent,
-        NavbarComponent,
         HomeComponent,
         PublishOptionsComponent,
         PublishComponent,

@@ -2,6 +2,13 @@ export type AlertType = "info" | "danger";
 
 export type TextStyleName = "answerStyle" | "clueStyle" | "definitionStyle";
 
+export type NavAction = "solve" | "login";
+
+export interface NavResult {
+    action: NavAction;
+    paramter: string;
+}
+
 export class Alert {
     constructor(public readonly type: AlertType, public readonly message: string) {}
 }

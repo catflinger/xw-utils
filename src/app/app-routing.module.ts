@@ -7,10 +7,12 @@ import { PublishComponent } from './ui/pages/publish/publish.component';
 import { PublishCompleteComponent } from './ui/pages/publish-complete/publish-complete.component';
 import { PublishPreambleComponent } from './ui/pages/publish-preamble/publish-preamble.component';
 import { BloggerComponent } from './ui/pages/blogger/blogger.component';
+import { LoginComponent } from './ui/pages/login/login.component';
 
 
 const routes: Routes = [
     { path: "home", component: HomeComponent },
+    { path: "login", component: LoginComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
     { path: "publish-options", component: PublishOptionsComponent },
