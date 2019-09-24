@@ -41,6 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
+    public onArchive(provider: string) {
+    }
+
     public onSolve(provider: string) {
         this.appService.clearAlerts();
         this.appService.setBusy();
