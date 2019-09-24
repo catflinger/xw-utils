@@ -1,25 +1,41 @@
-<div *ngIf="appStatus" class="row">
+<div *ngIf="appStatus" class="row mt-5">
     <div class="col">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Setter</th>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr *ngFor="let info of puzzleList">
-                    <td>{{info.setter}}</td>
-                    <td>{{info.title}}</td>
-                    <td>{{info.puzzleDate | date : "fullDate"}}</td>
-                    <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(info.id)">Open</button></td>
-                    <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button></td>
-                </tr>
-            </tbody>
-        </table>
+        <p>
+            Welcome to the fifteensquared crossword utilities.
+            This application allows you to solve crosswords online and helps you create a blog for
+            <a href="http://fifteensquared.net/" target="fifteensquared">fifteensquared</a>.
+            To get started <span *ngIf="!credentials">first <a routerLink="/login">login</a> and then</span> chose a
+            puzle from the Solve menu above.
+        </p>
     </div>
-    
 </div>
+
+<ng-container *ngIf="appStatus && puzzleList && puzzleList.length">
+    <div class="row mt-3">
+        <div class="col">
+            <h4>Saved puzzles</h4>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th>Setter</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let info of puzzleList">
+                        <td>{{info.setter}}</td>
+                        <td>{{info.title}}</td>
+                        <td>{{info.puzzleDate | date : "fullDate"}}</td>
+                        <td><button type="button" class="btn btn-primary mr-3"
+                                (click)="onOpenSaved(info.id)">Open</button></td>
+                        <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-container>
