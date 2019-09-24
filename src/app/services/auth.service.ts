@@ -3,11 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 
-abstract class AuthResponse implements ApiResponse {
-    public abstract readonly success: ApiResponseStatus;
-    public abstract readonly message: string;
-}
-
 export class Credentials {
     constructor(
         public readonly username: string,
@@ -33,14 +28,19 @@ export class AuthService {
     }
 
     public authenticate(username: string, password: string): Promise<void> {
-        return this.http.post("http://localhost:49323/api/authenticate/", { username, password})
+        return this.http.post("http://localhost:49323/api/authorization/", { username, password})
         .toPromise()
         .then((data: ApiResponse) => {
-            if (data.success) {
+            if (data.success === ApiResponseStatus.OK) {
                 this.bs.next(new Credentials(username,password));
             } else {
+                this.clearCredentials();
                 throw ApiSymbols.AuthorizationFailure;
             }
+        })
+        .catch((error) => {
+            this.clearCredentials();
+            throw error;
         });
     }
 

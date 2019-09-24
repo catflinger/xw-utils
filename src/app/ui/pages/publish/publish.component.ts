@@ -10,6 +10,7 @@ import { GridParameters } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { Puzzle } from 'src/app/model/puzzle';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-publish',
@@ -22,9 +23,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public preview: string = "";
 
-    // TO DO: IMPORTANT!
-    // review this component for XSS vunerabilities
-    
     private subs: Subscription[] = [];
 
     private gridParams: GridParameters = new GridParameters();;
@@ -33,6 +31,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
+        private authService: AuthService,
         private router: Router,
         private activePuzzle: IActivePuzzle,
         private publicationService: PublicationService,
@@ -47,8 +46,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
 
             this.form = this.builder.group({
-                'username': ["", Validators.required],
-                'password': ["", Validators.required],
+                'publishAsDraft': ["draft", Validators.required],
             });
 
             this.subs.push(
@@ -75,11 +73,11 @@ export class PublishComponent implements OnInit, OnDestroy {
 
         this.getGridImage()
         .then((image) => {
-            return this.publicationService.publishGrid(image, this.puzzle.info.title, this.form.value.username, this.form.value.password);
+            return this.publicationService.publishGrid(image, this.puzzle.info.title);
         })
         .then((result) => {
             if (result.success === ApiResponseStatus.OK) {
-                return this.publicationService.publishPost(this.puzzle, result.url, this.form.value.username, this.form.value.password);
+                return this.publicationService.publishPost(this.puzzle, result.url);
             } else if (result.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {
@@ -91,6 +89,10 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
                 this.appService.clearBusy();
                 this.router.navigate(["/publish-complete"]);
+            } else if (result.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw new Error(result.message);
             }
         })
         .catch(error => {
@@ -107,6 +109,10 @@ export class PublishComponent implements OnInit, OnDestroy {
     public onBack() {
         this.appService.clearAlerts();
         this.router.navigate(["/publish-preamble"]);
+    }
+
+    public get hasCredentials(): boolean {
+        return this.authService.getCredentials() !== null;
     }
 
     private getGridImage(): Promise<string | null> {

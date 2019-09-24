@@ -1,33 +1,4 @@
 <h3>Login</h3>
 <p>Enter your fifteensquared username and password</p>
 
-<div class="row">
-    <div class="col">
-        <form [formGroup]="form">
-            <div class="form">
-                <div class="form-group">
-                    <label>
-                        Username:
-                        <app-validation-message [control]="this.form.get('username')"></app-validation-message>
-                        <input class="form-control" type="text" formControlName="username" required>
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label>
-                        Password:
-                        <app-validation-message [control]="this.form.get('password')"></app-validation-message>
-                        <input class="form-control" type="text" formControlName="password" required>
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        <button [disabled]="appStatus.busy || !form.valid" type="button" class="btn btn-primary mr-3" (click)="onLogin()">Login</button>
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
-    </div>
-</div>
+<app-login-control (close)="onLoginClose($event)"></app-login-control>

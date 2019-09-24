@@ -16,22 +16,22 @@
                 <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown" ngbDropdown>
-                            <a class="nav-link dropdown-toggle" id="id01" ngbDropdownToggle>Solve</a>
+                            <button class="btn btn-link nav-link dropdown-toggle"  [disabled]="!credentials" id="id01" ngbDropdownToggle>Solve</button>
                             <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
-                                <a class="dropdown-item" (click)="onSolve('azed')">Azed</a>
-                                <a class="dropdown-item" (click)="onSolve('ft')">FT</a>
-                                <a class="dropdown-item" (click)="onSolve('independent')">Independent</a>
-                                <a class="dropdown-item" (click)="onSolve('cryptic')">Guardian</a>
-                                <a class="dropdown-item" (click)="onSolve('prize')">Guardian Prize</a>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials" (click)="onSolve('azed')">Azed</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials" (click)="onSolve('ft')">FT</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials" (click)="onSolve('independent')">Independent</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials" (click)="onSolve('cryptic')">Guardian</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials" (click)="onSolve('prize')">Guardian Prize</button>
                             </div>
                         </li>
                         <li class="nav-item" *ngIf="!credentials">
-                            <a class="nav-link"  (click)="onLogin()">Login</a>
+                            <a class="nav-link" (click)="onLogin()">Login</a>
                         </li>
                         <li class="nav-item" *ngIf="credentials">
-                                <a class="nav-link"  (click)="onLogout()">Logout</a>
-                            </li>
-                        </ul>
+                            <a class="nav-link" (click)="onLogout()">Logout</a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
 

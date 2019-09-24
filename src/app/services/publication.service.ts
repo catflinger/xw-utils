@@ -3,6 +3,7 @@ import { Puzzle } from '../model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { PostContentGenerator } from './content-generator/content-generator';
 import { ApiResponse, ApiResponseStatus } from './common';
+import { AuthService, Credentials } from './auth.service';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -22,19 +23,24 @@ abstract class PublishGridResponse implements ApiResponse {
 })
 export class PublicationService {
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService,
+    ) { }
 
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
 
 
-    public publishGrid(image: string, title: string, username: string, password: string): Promise<PublishGridResponse> {
+    public publishGrid(image: string, title: string): Promise<PublishGridResponse> {
+        const credentials: Credentials = this.authService.getCredentials();
+
         if (image) {
             return this.http.post("http://localhost:49323/api/PublishGrid", {
                 title: title,
                 content: image,
-                username,
-                password
+                username: credentials.username,
+                password: credentials.password,
             })
             .toPromise()
             .then(data => data as PublishGridResponse)
@@ -43,7 +49,8 @@ export class PublicationService {
         }
     }
 
-    public publishPost(puzzle: Puzzle, gridUrl: string, username: string, password: string): Promise<PublishPostResponse> {
+    public publishPost(puzzle: Puzzle, gridUrl: string): Promise<PublishPostResponse> {
+        const credentials: Credentials = this.authService.getCredentials();
 
         let generator = new PostContentGenerator();
         let content = generator.getContent(puzzle, gridUrl);
@@ -52,9 +59,9 @@ export class PublicationService {
             provider: puzzle.info.provider,
             title: puzzle.info.title,
             content,
-            username,
-            password
-        })
+            username: credentials.username,
+            password: credentials.password,
+    })
         .toPromise()
         .then(data => data as PublishPostResponse);
     }
