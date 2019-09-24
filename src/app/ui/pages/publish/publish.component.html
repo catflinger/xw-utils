@@ -20,11 +20,6 @@
     </div>
 </div>
 
-<app-login-control 
-    *ngIf="appStatus && puzzle && !hasCredentials" 
-    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}"
-    (close)="onLoginClose($event)"></app-login-control>
-
 <div class="row" *ngIf="appStatus && puzzle && hasCredentials">
     <div class="col">
         <button [disabled]="appStatus.busy || !form.valid" type="button" class="btn btn-primary mr-3"
@@ -32,6 +27,11 @@
         <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
     </div>
 </div>
+
+<app-login-control 
+    *ngIf="appStatus && !hasCredentials" 
+    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}"
+    (close)="onLoginClose($event)"></app-login-control>
 
 <div style="visibility: hidden;">
     <canvas #canvas></canvas>
