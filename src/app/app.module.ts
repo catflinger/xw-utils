@@ -31,6 +31,8 @@ import { HtmlAsIsPipe } from './ui/pipes/html-as-is.pipe';
 import { ValidationMessageComponent } from './ui/components/validation-message/validation-message.component';
 import { LoginComponent } from './ui/pages/login/login.component';
 import { LoginControlComponent } from './ui/components/login-control/login-control.component';
+import { ArchiveComponent } from './ui/pages/archive/archive.component';
+import { ProviderPipe } from './ui/pipes/provider.pipe';
 
 const quillGlobalConfig = {
     modules: {
@@ -46,6 +48,7 @@ const quillGlobalConfig = {
 @NgModule({
     declarations: [
         HtmlAsIsPipe,
+        ProviderPipe,
         AppComponent,
         GridComponent,
         ClueListComponent,
@@ -67,6 +70,7 @@ const quillGlobalConfig = {
         ValidationMessageComponent,
         LoginComponent,
         LoginControlComponent,
+        ArchiveComponent,
     ],
     imports: [
         BrowserModule,

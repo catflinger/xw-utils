@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Puzzle } from '../model/puzzle';
-import { ApiResponse, ApiResponseStatus } from './common';
+import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 import { AuthService } from './auth.service';
+import { ArchiveItem } from '../model/archive-item';
 
-abstract class LatestPuzzleResponse implements ApiResponse {
+export abstract class PuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
     public abstract message: string;
     public abstract puzzle: any;
@@ -16,6 +17,15 @@ interface LatestPuzzleRequest {
     password: string;
 }
 
+interface ArchivePuzzleRequest {
+    username: string;
+    password: string;
+    provider: string;
+    url: string;
+    serialNumber: number;
+    date: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,8 +35,12 @@ export class HttpPuzzleSourceService {
         private http: HttpClient,
         private authService: AuthService) { }
 
-    public getPuzzle(provider: string): Promise<LatestPuzzleResponse> {
+    public getLatestPuzzle(provider: string): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
+
+        if (!credentials) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
 
         const request: LatestPuzzleRequest = {
             provider: provider,
@@ -36,7 +50,28 @@ export class HttpPuzzleSourceService {
 
         return this.http.post("http://localhost:49323/api/latestpuzzle/", request)
         .toPromise()
-        .then(data => data as LatestPuzzleResponse);
+        .then(data => data as PuzzleResponse);
+    }
+
+    public getArchivePuzzle(item: ArchiveItem): Promise<PuzzleResponse> {
+        const credentials = this.authService.getCredentials();
+
+        if (!credentials) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        const request: ArchivePuzzleRequest = {
+            provider: item.provider,
+            url: item.url,
+            serialNumber: item.serialNumber,
+            date: item.date.toISOString(),
+            username: credentials.username,
+            password: credentials.password,
+        };
+
+        return this.http.post("http://localhost:49323/api/archivepuzzle/", request)
+        .toPromise()
+        .then(data => data as PuzzleResponse);
     }
 
     public putPuzzle(puzzle: Puzzle): Promise<any> {

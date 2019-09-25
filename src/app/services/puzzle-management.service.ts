@@ -3,13 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PuzzleInfo } from '../model/puzzle-info';
 import { LocalStorageService } from './local-storage.service';
 import { Puzzle } from '../model/puzzle';
-import { HttpPuzzleSourceService } from './http-puzzle-source.service';
+import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
 import { ClearSelection } from './modifiers/clear-selection';
 import { Validate } from './modifiers/validate';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { ApiResponseStatus, ApiSymbols } from './common';
+import { ArchiveItem } from '../model/archive-item';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -24,7 +25,7 @@ export abstract class IActivePuzzle {
 export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
-    abstract openNewPuzzle(providerName: string, options?: any): Promise<Puzzle>;
+    abstract openLatestPuzzle(providerName: string, options?: any): Promise<Puzzle>;
     abstract deletePuzzle(id: string): Promise<void>;
 }
 
@@ -108,21 +109,12 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         });
     }
 
-    public openNewPuzzle(providerName: string, options?: any): Promise<Puzzle> {
-        return this.httpPuzzleService.getPuzzle(providerName)
-            .then((response) => {
-                if (response.success === ApiResponseStatus.OK) {
-                    let puzzle = new Puzzle(response.puzzle);
-                    this.localStorageService.putPuzzle(puzzle);
-                    this.usePuzzle(puzzle);
-                    this.refreshPuzzleList();
-                    return puzzle;
-                } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
-                } else {
-                    throw new Error(response.message);
-                }
-            });
+    public openLatestPuzzle(providerName: string, options?: any): Promise<Puzzle> {
+        return this.onPuzzleReponse(this.httpPuzzleService.getLatestPuzzle(providerName));
+    }
+
+    public openArchivePuzzle(item: ArchiveItem): Promise<Puzzle> {
+        return this.onPuzzleReponse(this.httpPuzzleService.getArchivePuzzle(item));
     }
 
     public deletePuzzle(id: string): Promise<void> {
@@ -176,6 +168,23 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     private savePuzzle(puzzle: IPuzzle): void {
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
+    }
+
+    private onPuzzleReponse(promise: Promise<PuzzleResponse>): Promise<Puzzle> {
+        return promise
+            .then((response) => {
+                if (response.success === ApiResponseStatus.OK) {
+                    let puzzle = new Puzzle(response.puzzle);
+                    this.localStorageService.putPuzzle(puzzle);
+                    this.usePuzzle(puzzle);
+                    this.refreshPuzzleList();
+                    return puzzle;
+                } else if (response.success === ApiResponseStatus.authorizationFailure) {
+                    throw ApiSymbols.AuthorizationFailure;
+                } else {
+                    throw new Error(response.message);
+                }
+            });
     }
 
     //#endregion

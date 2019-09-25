@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public onArchive(provider: string) {
+        this.router.navigate(["archive", provider]);
     }
 
     public onSolve(provider: string) {
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // TO DO: warn before clearing current puzzle
 
-        this.puzzleManagementService.openNewPuzzle(provider)
+        this.puzzleManagementService.openLatestPuzzle(provider)
         .then((puzzle) => {
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);

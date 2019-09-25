@@ -8,10 +8,12 @@ import { PublishCompleteComponent } from './ui/pages/publish-complete/publish-co
 import { PublishPreambleComponent } from './ui/pages/publish-preamble/publish-preamble.component';
 import { BloggerComponent } from './ui/pages/blogger/blogger.component';
 import { LoginComponent } from './ui/pages/login/login.component';
+import { ArchiveComponent } from './ui/pages/archive/archive.component';
 
 
 const routes: Routes = [
     { path: "home", component: HomeComponent },
+    { path: "archive/:provider", component: ArchiveComponent },
     { path: "login", component: LoginComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },

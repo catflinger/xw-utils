@@ -33,26 +33,31 @@
                                     (click)="onSolve('cryptic')">Guardian</button>
                                 <button class="dropdown-item btn btn-link" [disabled]="!credentials"
                                     (click)="onSolve('prize')">Guardian Prize</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials"
+                                    (click)="onSolve('quiptic')">Guardian Quiptic</button>
+                                <button class="dropdown-item btn btn-link" [disabled]="!credentials"
+                                    (click)="onSolve('everyman')">Everyman</button>
                             </div>
                         </li>
 
                         <li class="nav-item dropdown" ngbDropdown>
-                                <button class="btn btn-link nav-link dropdown-toggle" [disabled]="!credentials" id="id01"
-                                    ngbDropdownToggle>Archive</button>
-                                <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
-                                    <button class="dropdown-item btn btn-link" [disabled]="!credentials"
-                                        (click)="onArchive('azed')">Azed</button>
-                                    <button class="dropdown-item btn btn-link" [disabled]="!credentials"
-                                        (click)="onArchive('ft')">FT</button>
-                                    <button class="dropdown-item btn btn-link" [disabled]="!credentials"
-                                        (click)="onArchive('independent')">Independent</button>
-                                    <button class="dropdown-item btn btn-link" [disabled]="!credentials"
-                                        (click)="onArchive('cryptic')">Guardian</button>
-                                    <button class="dropdown-item btn btn-link" [disabled]="!credentials"
-                                        (click)="onArchive('prize')">Guardian Prize</button>
-                                </div>
-                            </li>
-    
+                            <button class="btn btn-link nav-link dropdown-toggle" id="id01"
+                                ngbDropdownToggle>Archive</button>
+                            <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('azed')">Azed</button>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('ft')">FT</button>
+                                <button class="dropdown-item btn btn-link"
+                                    (click)="onArchive('independent')">Independent</button>
+                                <button class="dropdown-item btn btn-link"
+                                    (click)="onArchive('cryptic')">Guardian</button>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('prize')">Guardian
+                                    Prize</button>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('quiptic')">Guardian
+                                    Quiptic</button>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('everyman')">Everyman</button>
+                            </div>
+                        </li>
+
                         <li class="nav-item" *ngIf="!credentials">
                             <a class="nav-link" (click)="onLogin()">Login</a>
                         </li>
