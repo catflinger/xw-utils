@@ -4,17 +4,42 @@
     </div>
 </div>
 
-<div class="row mt-3" *ngIf="archive">
+<div class="row mt-3" *ngIf="showList">
     <div class="col">
         <table class="table">
             <tbody>
                 <tr *ngFor="let item of getItems()">
-                        <td>{{item.serialNumber | number:"2."}}</td>
-                        <td>{{item.date | date:"EEE d LLLL yyyy"}}</td>
-                        <td>{{item.url}}</td>
-                        <td><button class="btn btn-primary" (click)="openPuzzle(item)">Open</button></td>
+                    <td>{{item.serialNumber | number:"2."}}</td>
+                    <td>{{item.date | date:"EEE d LLLL yyyy"}}</td>
+                    <td>{{item.url}}</td>
+                    <td><button class="btn btn-primary" (click)="openPuzzle(item)">Open</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<div class="row mt-5" *ngIf="showDate">
+    <div class="col">
+        <form [formGroup]="form">
+
+            <div class="form-group">
+                <label for="datePicker">Puzzle date</label>
+                <input 
+                    id="datePicker" 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="date"
+                    [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }"
+                    bsDatepicker>
+            </div>
+
+            <div class="form-group mt-5">
+                <button class="btn btn-primary mr-3" type="button" (click)="openPuzzleByDate()">Open</button>
+                <button class="btn btn-primary" type="button" (click)="onCancel()">Open</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+   

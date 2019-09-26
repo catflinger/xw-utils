@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService, EditorType } from 'src/app/services/app.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
+import moment from "moment";
+
+import { ArchiveItem } from 'src/app/model/archive-item';
+import { AppStatus, AppService, EditorType } from 'src/app/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
-import { ArchiveIndex } from 'src/app/model/archive-index';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';
+import { Puzzle } from 'src/app/model/puzzle';
 
 @Component({
     selector: 'app-archive',
@@ -18,6 +21,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public archive: Archive;
     public provider: string;
+    public form: FormGroup;
 
     private subs: Subscription[] = [];
 
@@ -26,11 +30,16 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         private archiveService: ArchiveService,
         private router: Router,
         private activeRoute: ActivatedRoute,
-        private puzzleManagement: PuzzleManagementService
+        private puzzleManagement: PuzzleManagementService,
+        private formBuilder: FormBuilder,
 
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
+
+        this.form = this.formBuilder.group({
+            date: ["", Validators.required], 
+        });
 
         this.appService.clearAlerts();
 
@@ -53,13 +62,43 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
+    public get showDate(): boolean {
+        return this.provider &&
+            (this.provider === 'independent' || this.provider === 'ios');
+    }
+
+    public get showList(): boolean {
+        return this.provider 
+            && this.archive 
+            && (this.provider !== 'independent' && this.provider !== 'ios');
+    }
+
+    public openPuzzleByDate() {
+        this.appService.setBusy();
+        this.appService.clearAlerts();
+
+        this.onPuzzleResponse(this.puzzleManagement.openArchivePuzzle({
+            provider: this.provider,
+            serialNumber: null,
+            date: moment(this.form.value.date).toDate(),
+            setter: null,
+            url: null,
+        }));
+    }
+
     public openPuzzle(item: ArchiveItem) {
-        this.puzzleManagement.openArchivePuzzle(item)
-        .then((puzzle) => {
+        this.appService.setBusy();
+        this.appService.clearAlerts();
+
+        this.onPuzzleResponse(this.puzzleManagement.openArchivePuzzle(item));
+    }
+
+    public onPuzzleResponse(promise: Promise<Puzzle> ) {
+        promise.then((puzzle) => {
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
             this.navigate(editor);
@@ -74,7 +113,8 @@ export class ArchiveComponent implements OnInit, OnDestroy {
                 this.appService.clearAlerts();
                 this.appService.setAlert("danger", error.toString());
             }
-        });    }
+        });    
+    }
 
     public getItems() {
         let items: ReadonlyArray<ArchiveItem> = [];

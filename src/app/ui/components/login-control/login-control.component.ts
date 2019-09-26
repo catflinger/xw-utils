@@ -54,9 +54,9 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         .catch((error) => {
             this.appService.clearBusy();
             if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.setAlert("danger", "Username or password incorrect");
+                this.appService.setAlert("danger", "Username or password is incorrect");
             } else {
-                this.appService.setAlert("danger", "Failed to login");
+                this.appService.setAlert("danger", "Failed to connect to fifteensquared to verify the username and password");
             }
         });
     }

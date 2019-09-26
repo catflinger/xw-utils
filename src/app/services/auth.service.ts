@@ -40,7 +40,7 @@ export class AuthService {
         })
         .catch((error) => {
             this.clearCredentials();
-            throw error;
+            throw error.toString();
         });
     }
 

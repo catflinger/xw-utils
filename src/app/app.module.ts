@@ -4,6 +4,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { QuillModule } from "ngx-quill";
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -74,12 +76,14 @@ const quillGlobalConfig = {
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
+        BrowserAnimationsModule,
         FormsModule,
-        NgbModule,
-        HttpClientModule,
         ReactiveFormsModule,
+        NgbModule,
+        BsDatepickerModule.forRoot(),
+        HttpClientModule,
         QuillModule.forRoot(quillGlobalConfig),
+        AppRoutingModule,
     ],
     providers: [
         PuzzleManagementService,
