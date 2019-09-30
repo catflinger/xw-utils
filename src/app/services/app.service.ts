@@ -2,6 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { Alert, AlertType } from '../ui/common';
 
+export type LoginCallback = () => void;
+
 export type EditorType = "blogger" | "solver";
 
 export class AppStatus {
@@ -10,6 +12,7 @@ export class AppStatus {
         public readonly late: boolean,
         public readonly alerts: readonly Alert[],
         public readonly editor: EditorType,
+        public readonly loginCallback: LoginCallback,
     )
     {}
 }
@@ -24,12 +27,13 @@ export class AppService implements OnDestroy {
     
     private alerts: Alert[] = [];
     private editor: EditorType = "blogger";
+    private onLogin: LoginCallback = null;
     private subs: Subscription[]= [];
 
     private bs: BehaviorSubject<AppStatus>;
 
     constructor() {
-        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, false, [], "blogger"));
+        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, false, [], "blogger", null));
 
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
@@ -51,6 +55,20 @@ export class AppService implements OnDestroy {
     
     public getObservable(): Observable<AppStatus> {
         return this.bs.asObservable();
+    }
+
+    public clear() {
+        this.clearLoginCallback();
+        this.clearAlerts();
+        this.clearBusy();
+    }
+
+    public setLoginCallback(fn: LoginCallback) {
+        this.onLogin = fn;
+    }
+
+    public clearLoginCallback() {
+        this.onLogin = null;
     }
 
     public setBusy() {
@@ -83,6 +101,6 @@ export class AppService implements OnDestroy {
 
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
-        this.bs.next(new AppStatus(this.busy, this.late, alerts, this.editor));
+        this.bs.next(new AppStatus(this.busy, this.late, alerts, this.editor, this.onLogin));
     }
 }

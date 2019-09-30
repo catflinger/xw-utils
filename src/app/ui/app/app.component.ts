@@ -33,8 +33,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
         }));
-
-        setInterval
     }
 
     public ngOnDestroy() {
@@ -46,47 +44,54 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public onSolve(provider: string) {
-        this.appService.clearAlerts();
-        this.appService.setBusy();
+        this.appService.clear();
 
-        // TO DO: warn before clearing current puzzle
+        if (!this.credentials) {
+            this.appService.setLoginCallback(() => {
+                this.openPuzzle(provider);
+            });
+            this.router.navigate(["login"])
 
+        } else {
+            this.appService.setBusy();
+            this.openPuzzle(provider);
+        }
+    }
+
+    private openPuzzle(provider: string) {
         this.puzzleManagementService.openLatestPuzzle(provider)
         .then((puzzle) => {
+            this.appService.clear();
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
-            this.navigate(editor);
+            this.router.navigate([editor])
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.clearBusy();
-                this.appService.clearAlerts();
-                this.appService.setAlert("danger", "You need to be logged in to load a new puzzle");
+                this.appService.clear();
+                this.authService.clearCredentials();
+                this.appService.setAlert("danger", "Username or password is incorrect.  Please try to login again.");
             } else {
-                this.appService.clearBusy();
-                this.appService.clearAlerts();
+                this.appService.clear();
                 this.appService.setAlert("danger", error.toString());
             }
         });
-    }
+}
 
     public onHome() {
-        this.navigate("home");
+        this.appService.clear();
+        this.router.navigate(["home"])
     }
 
     public onLogin() {
-        this.navigate("login");
+        this.appService.clear();
+        this.router.navigate(["login"])
     }
 
     public onLogout() {
         this.authService.clearCredentials();
-        this.navigate("login");
-    }
-
-    private navigate (destination: string) {
-        this.appService.clearBusy();
-        this.appService.clearAlerts();
-        this.router.navigate([destination])
+        this.appService.clear();
+        this.router.navigate(["login"])
     }
 }
 
