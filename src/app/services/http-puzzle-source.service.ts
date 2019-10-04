@@ -4,6 +4,7 @@ import { Puzzle } from '../model/puzzle';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 import { AuthService } from './auth.service';
 import { ArchiveItem } from '../model/archive-item';
+import { environment } from "../../environments/environment";
 
 export abstract class PuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -48,7 +49,7 @@ export class HttpPuzzleSourceService {
             password: credentials.password,
         };
 
-        return this.http.post("http://localhost:49323/api/latestpuzzle/", request)
+        return this.http.post(environment.apiRoot + "latestpuzzle/", request)
         .toPromise()
         .then(data => data as PuzzleResponse);
     }
@@ -69,7 +70,7 @@ export class HttpPuzzleSourceService {
             password: credentials.password,
         };
 
-        return this.http.post("http://localhost:49323/api/archivepuzzle/", request)
+        return this.http.post(environment.apiRoot + "archivepuzzle/", request)
         .toPromise()
         .then(data => data as PuzzleResponse);
     }

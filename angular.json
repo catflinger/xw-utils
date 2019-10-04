@@ -19,6 +19,8 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": false,
+                        "baseHref" : "/angular/",
+                        "deployUrl": "/angular/",
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"

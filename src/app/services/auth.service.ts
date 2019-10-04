@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
+import { environment } from 'src/environments/environment';
 
 export class Credentials {
     constructor(
@@ -28,7 +29,7 @@ export class AuthService {
     }
 
     public authenticate(username: string, password: string): Promise<void> {
-        return this.http.post("http://localhost:49323/api/authorization/", { username, password})
+        return this.http.post(environment.apiRoot + "authorization/", { username, password})
         .toPromise()
         .then((data: ApiResponse) => {
             if (data.success === ApiResponseStatus.OK) {

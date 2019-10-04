@@ -70,7 +70,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         this.drawGrid()
     }
 
-    onCanvasClick(params: any, cellId: string) {
+    onCanvasClick(params: any) {
 
         if (this.readonly) {
             return;

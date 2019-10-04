@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { PostContentGenerator } from './content-generator/content-generator';
 import { ApiResponse, ApiResponseStatus } from './common';
 import { AuthService, Credentials } from './auth.service';
+import { environment } from 'src/environments/environment';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -36,7 +37,7 @@ export class PublicationService {
         const credentials: Credentials = this.authService.getCredentials();
 
         if (image) {
-            return this.http.post("http://localhost:49323/api/PublishGrid", {
+            return this.http.post(environment.apiRoot + "PublishGrid", {
                 title: title,
                 content: image,
                 username: credentials.username,
@@ -55,7 +56,7 @@ export class PublicationService {
         let generator = new PostContentGenerator();
         let content = generator.getContent(puzzle, gridUrl);
 
-        return this.http.post("http://localhost:49323/api/PublishPost", {
+        return this.http.post(environment.apiRoot + "PublishPost", {
             provider: puzzle.info.provider,
             title: puzzle.info.title,
             content,

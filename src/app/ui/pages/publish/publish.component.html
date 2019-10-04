@@ -30,8 +30,8 @@
 
 <app-login-control 
     *ngIf="appStatus && !hasCredentials" 
-    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}"
-    (close)="onLoginClose($event)"></app-login-control>
+    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}">
+</app-login-control>
 
 <div style="visibility: hidden;">
     <canvas #canvas></canvas>

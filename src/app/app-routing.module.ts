@@ -9,6 +9,7 @@ import { PublishPreambleComponent } from './ui/pages/publish-preamble/publish-pr
 import { BloggerComponent } from './ui/pages/blogger/blogger.component';
 import { LoginComponent } from './ui/pages/login/login.component';
 import { ArchiveComponent } from './ui/pages/archive/archive.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 
 const routes: Routes = [
@@ -27,6 +28,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+  ]
 })
 export class AppRoutingModule { }

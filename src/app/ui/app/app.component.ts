@@ -14,6 +14,7 @@ import { AuthService, Credentials } from 'src/app/services/auth.service';
 export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public credentials: Credentials;
+    public isNavbarCollapsed: boolean;
 
     private subs: Subscription[] = [];
 
