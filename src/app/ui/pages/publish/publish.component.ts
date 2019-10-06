@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
-import { GridParameters } from '../../common';
+import { GridParameters, UIResult } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { Puzzle } from 'src/app/model/puzzle';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
@@ -101,14 +101,16 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.appService.setAlert("danger", "Username or password incorrect");
             } else {
                 this.appService.clearBusy();
-                this.appService.setAlert("danger", "ERROR: " + error.toString());
+                this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
             }
         });
     }
 
-    public onBack() {
-        this.appService.clearAlerts();
-        this.router.navigate(["/publish-preamble"]);
+    public onClose(result: UIResult) {
+        this.appService.clear();
+        if (result === "cancel" || result==="back") {
+            this.router.navigate(["/publish-preamble"]);
+        }
     }
 
     public get hasCredentials(): boolean {

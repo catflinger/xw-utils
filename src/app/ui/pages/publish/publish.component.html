@@ -24,13 +24,15 @@
     <div class="col">
         <button [disabled]="appStatus.busy || !form.valid" type="button" class="btn btn-primary mr-3"
             (click)="onContinue()">Publish</button>
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onClose('back')">Back</button>
     </div>
 </div>
 
-<app-login-control 
+<app-login-control
     *ngIf="appStatus && !hasCredentials" 
-    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}">
+    [options]="{ continueButtonText: 'Publish', cancelButtonText: 'Back'}"
+    (close)="onClose($event)"
+    >
 </app-login-control>
 
 <div style="visibility: hidden;">

@@ -5,6 +5,7 @@ import { AppService, AppStatus } from 'src/app/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiSymbols } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
+import { UIResult } from '../../common';
 
 export interface LoginControlOptions {
     continueButtonText: string;
@@ -22,7 +23,7 @@ export class LoginControlComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     @Input() public options: LoginControlOptions;
-    @Output() public close:EventEmitter<string> = new EventEmitter();
+    @Output() public close:EventEmitter<UIResult> = new EventEmitter();
 
     constructor(
         private appService: AppService,
@@ -49,7 +50,7 @@ export class LoginControlComponent implements OnInit, OnDestroy {
             this.form.value.password)
         .then(() => {
             this.appService.clearBusy();
-            this.close.emit("OK");
+            this.close.emit("ok");
         })
         .catch((error) => {
             this.appService.clearBusy();
@@ -66,7 +67,7 @@ export class LoginControlComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        this.close.emit("Cancel");
+        this.close.emit("cancel");
     }
 
     public get continueButtonText() {

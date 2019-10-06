@@ -28,6 +28,8 @@ export class PublishPreambleComponent implements OnInit {
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
+        window.scrollTo(0, 0);
+        
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
         if (!this.activePuzzle.hasPuzzle) {

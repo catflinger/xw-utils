@@ -4,6 +4,8 @@ export type TextStyleName = "answerStyle" | "clueStyle" | "definitionStyle";
 
 export type NavAction = "solve" | "login";
 
+export type UIResult = "ok" | "cancel" | "back";
+
 export interface NavResult {
     action: NavAction;
     paramter: string;

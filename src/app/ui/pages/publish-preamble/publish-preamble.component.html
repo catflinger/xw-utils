@@ -16,7 +16,8 @@
     </div>
     
     <div class="row justify-content-center mt-5" *ngIf="puzzle">
-        <div class="col bg-light p-5">
+        <div class="col-2"></div>
+        <div class="col-8 bg-light p-5 border">
             <div class="title">{{form.value.title}}</div>
             <div class="border-bottom">Posted by Somebody on {{today | date : "MMMM d, y"}}</div>
             <div class="clearfix mt-2">
@@ -33,6 +34,7 @@
             <div class="border-bottom">Posted in <span class="anchor-like">{{puzzle.info.providerName}}</span> | <span
                     class="anchor-like">0 Comments</span> >></div>
         </div>
+        <div class="col-2"></div>
     </div>
 
     <div class="row" *ngIf="puzzle">
@@ -45,7 +47,8 @@
     </div>
 
     <div class="row justify-content-center mt-5" *ngIf="puzzle">
-        <div class="col bg-light p-5">
+            <div class="col-2"></div>
+            <div class="col-8 bg-light p-5 border">
             <div class="body-top clearfix">
                 <div class="float-left anchor-like smaller m-0">&lt;&lt; Guardian cryptic 23,456 by Paul</div>
                 <div class="float-right anchor-like smaller m-0">&gt;&gt; Financial Times 12,345 by Julius</div>
@@ -70,6 +73,7 @@
                         </div>
             </div>
         </div>
+        <div class="col-2"></div>
     </div>
 
     <div class="row" *ngIf="puzzle">

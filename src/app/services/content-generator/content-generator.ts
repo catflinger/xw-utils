@@ -9,7 +9,7 @@ import { TextStyle } from 'src/app/model/text-style';
 
 export class PostContentGenerator {
     private buffer: string = "";
-    private tdPadding = "5px";
+    private tdPadding = "3px";
 
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
@@ -95,7 +95,7 @@ export class PostContentGenerator {
         this.addHtml("<tr>");
 
         this.openTD();
-        this.addText(clue.caption, publishOptions.clueStyle);
+        this.addText(clue.caption, publishOptions.answerStyle);
         this.closeTD();
 
         this.openTD();
