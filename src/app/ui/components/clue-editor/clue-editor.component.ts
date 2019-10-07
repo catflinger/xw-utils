@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 @Component({
     selector: 'app-clue-editor',
@@ -20,11 +21,13 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public clue: Clue;
     public form: FormGroup;
+    public appSettings: AppSettings;
 
     private subs: Subscription[] = [];
 
     constructor(
-        private activePuzzle: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle,
+        private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder) { }
 
     ngOnInit() {
@@ -50,7 +53,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 }
             )
         );
-    }
+
+        this.subs.push(
+            this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
+}
 
     ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
@@ -88,5 +94,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public showLatestAnswer(): boolean {
         return this.latestAnswer && /_+/.test(this.latestAnswer);
+    }
+
+    public onToggleComment() {
+        this.appSettingsService.toggleCommentEditor();
     }
 }

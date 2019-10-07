@@ -1,8 +1,9 @@
-<div *ngIf="clue">
+<div *ngIf="clue && appSettings">
     <form [formGroup]="form">
         <div class="modal-header">
-            <h4 class="modal-title">
-                <app-clue-text-control formControlName="chunks"></app-clue-text-control>
+            <h4 class="modal-title" >
+                <app-clue-text-control formControlName="chunks" [ngClass]="{ 'hidden': !appSettings.showCommentEditor }"></app-clue-text-control>
+                <span  [ngClass]="{ 'hidden': appSettings.showCommentEditor }">{{clue.text}}</span>
             </h4>
             <div>
                 <button type="button" class="btn btn-link" *ngIf="hasDefinition()"
@@ -20,9 +21,16 @@
                 <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer">
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-0" [ngClass]="{ 'hidden': !appSettings.showCommentEditor }">
                 <label for="comment">Comment</label>
                 <quill-editor id="comment" formControlName="comment" format="object"></quill-editor>
+            </div>
+
+            <div>
+                <button type=button class="btn btn-link m-0 p-0" (click)="onToggleComment()">
+                    <span *ngIf="!appSettings.showCommentEditor">show comment</span>
+                    <span *ngIf="appSettings.showCommentEditor">hide comment</span>
+                </button>
             </div>
         </div>
 

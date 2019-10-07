@@ -13,8 +13,7 @@ export class AppStatus {
         public readonly alerts: readonly Alert[],
         public readonly editor: EditorType,
         public readonly loginCallback: LoginCallback,
-    )
-    {}
+    ) { }
 }
 
 @Injectable({
@@ -24,16 +23,24 @@ export class AppService implements OnDestroy {
     private busy: boolean = false;
     private late: boolean = false;
     private busyCounter: number = 0;
-    
+
     private alerts: Alert[] = [];
     private editor: EditorType = "blogger";
     private onLogin: LoginCallback = null;
-    private subs: Subscription[]= [];
+    private subs: Subscription[] = [];
+
 
     private bs: BehaviorSubject<AppStatus>;
 
+
     constructor() {
-        this.bs = new BehaviorSubject<AppStatus>(new AppStatus(false, false, [], "blogger", null));
+        this.bs = new BehaviorSubject<AppStatus>(
+            new AppStatus(
+                false,
+                false,
+                [],
+                "blogger",
+                null));
 
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
@@ -52,7 +59,7 @@ export class AppService implements OnDestroy {
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
     }
-    
+
     public getObservable(): Observable<AppStatus> {
         return this.bs.asObservable();
     }
