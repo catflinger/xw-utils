@@ -10,6 +10,7 @@ import { BloggerComponent } from './ui/pages/blogger/blogger.component';
 import { LoginComponent } from './ui/pages/login/login.component';
 import { ArchiveComponent } from './ui/pages/archive/archive.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { PublishGridComponent } from './ui/pages/publish-grid/publish-grid.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
     { path: "publish-options", component: PublishOptionsComponent },
+    { path: "publish-grid", component: PublishGridComponent },
     { path: "publish-preamble", component: PublishPreambleComponent },
     { path: "user-password", component: PublishComponent },
     { path: "publish-complete", component: PublishCompleteComponent },

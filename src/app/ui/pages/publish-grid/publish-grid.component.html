@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col">
+        <h3>grid editor</h3>
+        <p>Click on cells in the grid to add shading, to highlight a theme for example</p>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <app-grid (cellClick)="onCellClick($event)" [options]="{ showShading: true }"></app-grid>
+    </div>
+    <div class="col">
+        <p>shading colour</p>
+        <form>
+            <app-color-control [(ngModel)]="color" name="color"></app-color-control>
+        </form>
+        <p class="mt-5"><button type="button" class="btn btn-link" (click)="onClearAll()">clear all shading</button></p>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+    </div>
+</div>

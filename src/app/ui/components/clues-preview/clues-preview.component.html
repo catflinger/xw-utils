@@ -1,5 +1,5 @@
 <div *ngIf="includeGrid">
-    <app-grid [readonly]="true"></app-grid>
+    <app-grid [options]="{ readonly: true, showShading: true }"></app-grid>
 </div>
 
 <table *ngIf="clues">

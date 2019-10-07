@@ -7,11 +7,6 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { UpdatePublsihOptionTextStyle } from 'src/app/services/modifiers/update-publish-option-text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 
-class ColorPickerOption {
-    public name: string;
-    public value: string;
-}
-
 @Component({
     selector: 'app-text-style',
     templateUrl: './text-style.component.html',
@@ -36,7 +31,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         this.form = this.formBuilder.group({
-            color: this.options[0],
+            color: null,
             bold: false,
             italic: false,
             underline: false
@@ -47,9 +42,9 @@ export class TextStyleComponent implements OnInit, OnDestroy {
 
                 this.activePuzzle.update(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
-                    val.color.value, 
-                    val.bold, 
-                    val.italic, 
+                    val.color,
+                    val.bold,
+                    val.italic,
                     val.underline));
             }
         }));
@@ -69,12 +64,10 @@ export class TextStyleComponent implements OnInit, OnDestroy {
 
                 let ts = this.puzzle.publishOptions[this.textStyleName];
 
-                let option = this.options.find(o => o.value === ts.color);
-
                 this.form.controls["bold"].patchValue(ts.bold, { emitEvent: false});
                 this.form.controls["italic"].patchValue(ts.italic, { emitEvent: false});
                 this.form.controls["underline"].patchValue(ts.underline, { emitEvent: false});
-                this.form.controls["color"].patchValue(option, { emitEvent: false});
+                this.form.controls["color"].patchValue(ts.color, { emitEvent: false});
             }
         }));
 
@@ -83,11 +76,4 @@ export class TextStyleComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
-
-    public options: ColorPickerOption[] = [
-        { name: "green", value: "green" },
-        { name: "black", value: "black" },
-        { name: "red", value: "red" },
-        { name: "blue", value: "blue" }
-    ];
 }

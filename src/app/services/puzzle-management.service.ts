@@ -89,7 +89,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             reducer.exec(puzzle);
             this.commit(puzzle);
         }
-
     }
 
     //#endregion

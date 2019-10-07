@@ -44,6 +44,7 @@ export abstract class IGridCell {
     abstract readonly rightBar: boolean;
     abstract readonly bottomBar: boolean;
     abstract readonly highlight: boolean;
+    abstract readonly shading: string;
 }
 
 export abstract class IGrid {

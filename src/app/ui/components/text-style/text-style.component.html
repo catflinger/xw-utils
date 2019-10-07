@@ -5,13 +5,14 @@
                 <div class="form-group">
                     <label labelFor="color">{{caption}} colour</label>
 
-                    <select id="color" class="form-control" [ngStyle]="{ 'background-color' : form.value.color.value }"
+                    <!-- <select id="color" class="form-control" [ngStyle]="{ 'background-color' : form.value.color.value }"
                         formControlName="color">
                         <option *ngFor="let option of options" [ngValue]="option"
                             [ngStyle]="{ 'background-color' : option.value }">
                             {{option.name}}
                         </option>
-                    </select>
+                    </select> -->
+                    <app-color-control id="color" formControlName="color"></app-color-control>
                 </div>
 
                 <div class="form-check">

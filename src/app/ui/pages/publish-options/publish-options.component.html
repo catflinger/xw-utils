@@ -48,9 +48,15 @@
     </div>
 </div>
 
+<div class="row mt-3 mb-5" *ngIf="puzzle && puzzle.grid && includeGrid">
+    <div class="col">
+        <button type="button" class="btn btn-primary" (click)="onGrid()">Colour the grid</button>
+    </div>
+</div>
+
 <div class="row mt-3" *ngIf="puzzle">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
-        <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
     </div>
 </div>

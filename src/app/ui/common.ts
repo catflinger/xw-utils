@@ -26,3 +26,8 @@ export class GridParameters {
     public readonly gridColor = "#000000";
     public readonly highlightColor = "BurlyWood";
 }
+
+export interface GridOptions {
+    readonly?: boolean;
+    showShading?: boolean;
+}

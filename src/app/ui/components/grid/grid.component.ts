@@ -3,8 +3,9 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { GridParameters } from '../../common';
+import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
+
 
 @Component({
     selector: 'app-grid',
@@ -12,7 +13,7 @@ import { GridPainterService } from '../../services/grid-painter.service';
     styleUrls: ['./grid.component.css']
 })
 export class GridComponent implements OnInit, AfterViewInit {
-    @Input() readonly: boolean;
+    @Input() options: GridOptions;
     @Output() cellClick = new EventEmitter<GridCell>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
@@ -72,7 +73,7 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     onCanvasClick(params: any) {
 
-        if (this.readonly) {
+        if (this.options && this.options.readonly) {
             return;
         }
 
@@ -96,7 +97,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
-            this.gridPainter.drawGrid(context, this.puzzle.grid);
+            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
         }
     }
 }

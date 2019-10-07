@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GridParameters } from '../common';
+import { GridParameters, GridOptions } from '../common';
 import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
 
@@ -16,7 +16,7 @@ export class GridPainterService {
 
     constructor() { }
 
-    public drawGrid(context: CanvasRenderingContext2D, grid: Grid): void {
+    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): void {
 
         context.setTransform(1, 0, 0, 1, 0, 0);
         context.fillStyle = "white";
@@ -25,12 +25,12 @@ export class GridPainterService {
         context.translate(this.gridParams.gridPadding, this.gridParams.gridPadding);
 
         grid.cells.forEach((cell) => {
-            this.drawCell(context, cell);
+            this.drawCell(context, cell, options);
         });
 
     }
 
-    private drawCell(context: CanvasRenderingContext2D, cell: GridCell) {
+    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridOptions) {
         const top = cell.y * this.gridParams.cellSize;
         const left = cell.x * this.gridParams.cellSize;
         const size = this.gridParams.cellSize;
@@ -44,6 +44,8 @@ export class GridPainterService {
             // highlight cells that are in focus
             if (cell.highlight) {
                 this.fillCell(context, left, top, this.gridParams.highlightColor);
+            } else if (options && options.showShading && cell.shading)  {
+                this.fillCell(context, left, top, cell.shading);
             }
 
             // draw the caption
