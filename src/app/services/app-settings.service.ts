@@ -21,7 +21,7 @@ export class AppSettingsService {
 
     constructor() {
         this.bs = new BehaviorSubject<AppSettings>(
-            new AppSettings(false));
+            new AppSettings(true));
     }
 
     public observe(): Observable<AppSettings> {
