@@ -1,0 +1,25 @@
+I had some time this evening and thought I'd give today's puzzle a go (solve, not blog).  The comments below are what occurred to me at the time: I've deleted some of them because they were questions to which I later found the answers.  No doubt many of them are silly but they are what occurred to me at the time.
+
+There were problems at the start.  I logged in OK and then it invited me to chose a puzle (two typos) from the Solve menu above, and there is no Solve menu above.  Just Home, Latest, Archive and Logout. (But I clicked on Latest and got today's Indy puzzle (evidently the one blogged today), so I imagine that by 'Solve' you mean 'Latest'.)
+
+It doesn't say who set the crossword (although it does much later on I see).
+
+Then I double-clicked on a clue and got a box with the clue repeated, similar but not exactly the same as the one in your old program.  The problem was that the box obscured some of the clues and couldn't be moved and dragged down below the grid.  And after giving up on the clue I couldn't click on the next space and get the contents of the box to change.  I had to click on Cancel and start again with the next clue, which was rather tiresome.  I don't suppose this really matters — just a matter of changing one's habits.
+
+Why, if you click in the empty box for the answer, does the small number 4 appear below it?
+
+And when you do answer a clue, you can't save time by pressing 'Cheat' — you have to type the answer in, again rather tiresome.  And if you get it wrong there's nothing to tell you this.  When blogging it's useful to have a cheat button because sometimes one isn't sure.  Or one might be in a hurry.
+
+After finishing the crossword I see that there is a succession of pages which I presume leads you on to the WordPress stage, all easy enough to understand.  Nice choice of colours.  There were two things I thought were a bit odd about the old program: you have to click on the word 'Publish' and yet it isn't actually published; if it were published it would be out there on the net for all the world to see.  And the underlining of clues: I can't remember how I learnt that if a clue is highlighted it is underlined in the final version — perhaps it just happened.
+
+At one of the later stages (which I can't now replicate as I seem to have gone too far) you get a picture and you seem to have to write in by hand who is doing the blog.  Not sure about this,
+
+I wanted to go all the way to Wordpress but when I got the page with Publish and the options Publish as draft and Publish immediately there was this error message at the top:
+
+ERROR: {"headers":{"normalizedNames":{},"lazyUpdate":null},"status":404,"statusText":"Not Found","url":"http://drurys2.org/api/PublishPost","ok":false,"name":"HttpErrorResponse","message":"Http failure response for http://drurys2.org/api/PublishPost: 404 Not Found","error":{"Message":"No HTTP resource was found that matches the request URI 'http://drurys2.org/api/PublishPost'.","MessageDetail":"No type was found that matches the controller named 'PublishPost'."}}
+
+and whenever I clicked on Publish (with Publish as draft checked) the page came back with this error message.
+
+It doesn't look as if there is the option to do a blog before the day; or is there one that I've missed?
+
+It seems very nice (despite my criticisms), and once I become familiar with it then it should be good to use.

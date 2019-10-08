@@ -6,6 +6,7 @@ import { AppStatus, AppService } from 'src/app/services/app.service';
 import { UpdatePreamble } from 'src/app/services/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -23,6 +24,7 @@ export class PublishPreambleComponent implements OnInit {
 
     constructor(
         private appService: AppService,
+        private authService: AuthService,
         private router: Router,
         private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder) { }
@@ -67,7 +69,8 @@ export class PublishPreambleComponent implements OnInit {
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
-        this.router.navigate(["/user-password"]);
+        const next = this.authService.getCredentials() ? "/publish" : "/publish-login";
+        this.router.navigate([next]);
     }
 
     onBack() {

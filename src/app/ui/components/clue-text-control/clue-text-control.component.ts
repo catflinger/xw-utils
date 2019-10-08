@@ -32,11 +32,7 @@ export class ClueTextControlComponent implements ControlValueAccessor, OnInit {
     private propagateChange = (_: any) => { };
 
     @ViewChildren(ClueTextChunkComponent) children: QueryList<ClueTextChunkComponent>;
-
-    // @HostListener('document:selectionchange')
-    // onSelectionChanged() {
-    //   console.log("selectionChanged");
-    // }
+    @Output() change = new EventEmitter<void>();
 
     constructor() {
     }
@@ -118,6 +114,7 @@ export class ClueTextControlComponent implements ControlValueAccessor, OnInit {
 
                     this.chunks = this.consolidateChunkArray();
                     this.propagateChange(this.chunks);
+                    this.change.emit();
                }
             }
             selection.removeAllRanges();

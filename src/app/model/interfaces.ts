@@ -22,6 +22,7 @@ export abstract class IClue {
     abstract readonly text: string;           // "How to train a dragon (5, 4)"
     abstract readonly letterCount: string;    // "(5, 4)"
     abstract readonly answer: string;
+    abstract readonly solution: string;
     abstract readonly format: string;
     abstract readonly comment: QuillDelta;
     abstract readonly highlight: boolean;

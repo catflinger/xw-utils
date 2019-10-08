@@ -37,6 +37,7 @@ import { ArchiveComponent } from './ui/pages/archive/archive.component';
 import { ProviderPipe } from './ui/pipes/provider.pipe';
 import { PublishGridComponent } from './ui/pages/publish-grid/publish-grid.component';
 import { ColorControlComponent } from './ui/components/color-control/color-control.component';
+import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -77,6 +78,7 @@ const quillGlobalConfig = {
         ArchiveComponent,
         PublishGridComponent,
         ColorControlComponent,
+        PublishLoginComponent,
     ],
     imports: [
         BrowserModule,

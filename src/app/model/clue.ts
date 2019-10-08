@@ -10,6 +10,7 @@ export class Clue implements IClue {
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
+    public readonly solution: string;
     public readonly format: string;
     public readonly comment: QuillDelta;
     public readonly highlight: boolean;
@@ -24,6 +25,7 @@ export class Clue implements IClue {
         this.text = data.text;
         this.letterCount = data.letterCount;
         this.answer = data.answer;
+        this.solution = data.solution;
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;

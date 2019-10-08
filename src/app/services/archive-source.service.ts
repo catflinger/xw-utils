@@ -43,8 +43,6 @@ export class ArchiveService {
       .toPromise()
       .then((data: ArchiveResponse) => {
 
-        // console.log("LIST: " + JSON.stringify(data));
-
         if (data) {
               if (data.success === ApiResponseStatus.OK) {
                 //let current = this.bs.value;

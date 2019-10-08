@@ -1,5 +1,11 @@
 <div class="row" *ngIf="puzzle">
     <div class="col">
+        <h5>{{puzzle.info.title}}</h5>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
         <app-grid (cellClick) = "onCellClick($event)"></app-grid>
     </div>
 

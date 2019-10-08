@@ -22,6 +22,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public clue: Clue;
     public form: FormGroup;
     public appSettings: AppSettings;
+    public showDefinitionWarning = false;
+    public definitionWarningShown = false;
 
     private subs: Subscription[] = [];
 
@@ -34,7 +36,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.form = this.formBuilder.group({
             answer: [""],
             comment: [""],
-            chunks: [[]]
+            chunks: [[]],
+            dontShowAgain: false,
         });
 
         this.subs.push(
@@ -55,7 +58,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         );
 
         this.subs.push(
-            this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
+            this.appSettingsService.observe().subscribe(settings => {
+                this.appSettings = settings;
+            }));
 }
 
     ngOnDestroy() {
@@ -79,14 +84,29 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
     
     public onSave() {
-        this.activePuzzle.update(new UpdateClue(
-            this.clueId,
-            this.form.value.answer,
-            this.form.value.comment,
-            this.form.value.chunks
-        ));
-        this.close.emit("save");
-    }
+
+        if (!this.showDefinitionWarning
+            && !this.definitionWarningShown
+            && this.appSettings.definitionWarning 
+            && this.form.value.chunks.length) {
+            
+            this.showDefinitionWarning = true;
+            this.definitionWarningShown = true;
+        } else {
+            this.activePuzzle.update(new UpdateClue(
+                this.clueId,
+                this.form.value.answer,
+                this.form.value.comment,
+                this.form.value.chunks
+            ));
+
+            if (this.form.value.dontShowAgain) {
+                this.appSettingsService.disableDefinitionWarning();
+            }
+
+            this.close.emit("save");
+        }
+}
 
     public onCancel() {
         this.close.emit("cancel");
@@ -98,5 +118,11 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onToggleComment() {
         this.appSettingsService.toggleCommentEditor();
+    }
+
+    public onCheat() {
+        this.form.patchValue({
+            answer: this.clue.solution,
+        });
     }
 }

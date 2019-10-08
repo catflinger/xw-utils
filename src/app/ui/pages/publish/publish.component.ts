@@ -39,10 +39,14 @@ export class PublishComponent implements OnInit, OnDestroy {
         private gridPainter: GridPainterService) { }
 
     public ngOnInit() {
+
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
-        } else {
 
+        } else if (!this.authService.getCredentials()) {
+            this.router.navigate(["/publish-login"]);
+
+        } else {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
 
             this.form = this.builder.group({
@@ -73,7 +77,17 @@ export class PublishComponent implements OnInit, OnDestroy {
 
         this.getGridImage()
         .then((image) => {
-            return this.publicationService.publishGrid(image, this.puzzle.info.title);
+            if (image) {
+                //publish the grid
+                return this.publicationService.publishGrid(image, this.puzzle.info.title);
+            } else {
+                // no grid to publish, return a dummy response
+                return Promise.resolve({ 
+                    success: ApiResponseStatus.OK,
+                    url: null,
+                    message: null,
+                })
+            }
         })
         .then((result) => {
             if (result.success === ApiResponseStatus.OK) {
@@ -97,48 +111,50 @@ export class PublishComponent implements OnInit, OnDestroy {
         })
         .catch(error => {
             if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.clearBusy();
+                this.appService.clear();
                 this.appService.setAlert("danger", "Username or password incorrect");
+                this.authService.clearCredentials();
+                this.router.navigate(["/publish-login"]);
             } else {
-                this.appService.clearBusy();
+                this.appService.clear();
                 this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
             }
         });
-    }
-
-    public onClose(result: UIResult) {
-        this.appService.clear();
-        if (result === "cancel" || result==="back") {
-            this.router.navigate(["/publish-preamble"]);
-        }
     }
 
     public get hasCredentials(): boolean {
         return this.authService.getCredentials() !== null;
     }
 
+    public onBack() {
+        this.router.navigate(["/publish-preamble"]);
+    }
+
     private getGridImage(): Promise<string | null> {
 
-        return new Promise<string | null>((resolve, reject) => {
-            if (this.puzzle.grid) {
-                const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
+        if (!this.puzzle.publishOptions.includeGrid) {
+            return Promise.resolve(null);
 
-                canvas.width = this.gridParams.cellSize * this.puzzle.grid.size.across + this.gridParams.gridPadding * 2;
-                canvas.height = this.gridParams.cellSize * this.puzzle.grid.size.down + this.gridParams.gridPadding * 2;
+        } else {
+            return new Promise<string | null>((resolve, reject) => {
+                if (this.puzzle.grid) {
+                    const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
 
-                const context = canvas.getContext('2d');
+                    canvas.width = this.gridParams.cellSize * this.puzzle.grid.size.across + this.gridParams.gridPadding * 2;
+                    canvas.height = this.gridParams.cellSize * this.puzzle.grid.size.down + this.gridParams.gridPadding * 2;
 
-                this.gridPainter.drawGrid(context, this.puzzle.grid, { readonly: true, showShading: true });
+                    const context = canvas.getContext('2d');
 
-                //canvas.toBlob((blob) => resolve(blob));
+                    this.gridPainter.drawGrid(context, this.puzzle.grid, { readonly: true, showShading: true });
 
-                const dataUrl = canvas.toDataURL();
+                    const dataUrl = canvas.toDataURL();
 
-                resolve(dataUrl.replace("data:image/png;base64,",""));
+                    resolve(dataUrl.replace("data:image/png;base64,",""));
 
-            } else {
-                resolve(null);
-            }
-        });
+                } else {
+                    resolve(null);
+                }
+            });
+        }
     }
 }

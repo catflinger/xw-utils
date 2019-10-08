@@ -174,6 +174,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return promise
             .then((response) => {
                 if (response.success === ApiResponseStatus.OK) {
+
                     let puzzle = new Puzzle(response.puzzle);
                     
                     // add some defaults

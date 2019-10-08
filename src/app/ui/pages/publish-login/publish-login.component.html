@@ -1,0 +1,9 @@
+<h3>Login</h3>
+<app-login-control
+    *ngIf="appStatus" 
+    [options]="{ continueButtonText: 'Continue', cancelButtonText: 'Back'}"
+    (close)="onClose($event)"
+    >
+</app-login-control>
+
+

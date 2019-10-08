@@ -33,7 +33,7 @@ export class AuthService {
         .toPromise()
         .then((data: ApiResponse) => {
             if (data.success === ApiResponseStatus.OK) {
-                this.bs.next(new Credentials(username,password));
+                this.bs.next(new Credentials(username, password));
             } else {
                 this.clearCredentials();
                 throw ApiSymbols.AuthorizationFailure;

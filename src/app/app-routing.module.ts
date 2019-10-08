@@ -11,6 +11,7 @@ import { LoginComponent } from './ui/pages/login/login.component';
 import { ArchiveComponent } from './ui/pages/archive/archive.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { PublishGridComponent } from './ui/pages/publish-grid/publish-grid.component';
+import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
     { path: "publish-options", component: PublishOptionsComponent },
     { path: "publish-grid", component: PublishGridComponent },
     { path: "publish-preamble", component: PublishPreambleComponent },
-    { path: "user-password", component: PublishComponent },
+    { path: "publish-login", component: PublishLoginComponent },
+    { path: "publish", component: PublishComponent },
     { path: "publish-complete", component: PublishCompleteComponent },
     { path: "", redirectTo: "/home", pathMatch: "full" },
     { path: "*", redirectTo: "/home", pathMatch: "full" }
