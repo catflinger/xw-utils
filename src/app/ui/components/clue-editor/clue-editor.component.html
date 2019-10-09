@@ -5,7 +5,8 @@
 
             <div class="row align-items-center">
                 <div class="col"><span class="">{{clue.caption}}</span></div>
-                <div class="coltext-right"> <button type="button" class="btn btn-link"
+                <div class="coltext-right">
+                    <button type="button" class="btn btn-link"
                         *ngIf="appSettings.showCommentEditor && hasDefinition()" (click)="onClearDefinition()">clear
                         definition</button></div>
             </div>
@@ -22,16 +23,10 @@
 
             <div class="row">
                 <div class="col">
-                    <ngb-alert *ngIf="showDefinitionWarning && appSettings.definitionWarning" type="warning"
-                        (close)="showDefinitionWarning = false">
-                        <div>
-                            You have not highlihghted the definition in the clue.
-                            Select the definition in the clue text using your mouse or pointer.
-                        </div>
-                        <div class="mt-3">
-                            <label>Don't show this again <input type="checkbox" formControlName="dontShowAgain"></label>
-                        </div>
-                    </ngb-alert>
+                    <app-tip (instance)="onTipInstance($event)">
+                        You have not highlighted the definition yet. 
+                        To highligt the definition part of the clue select some of the clue text using your mouse or other pointing device. 
+                    </app-tip>
                 </div>
             </div>
         </div>

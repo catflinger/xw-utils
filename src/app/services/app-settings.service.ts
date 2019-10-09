@@ -3,13 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface IAppSettings {
     showCommentEditor: boolean,
-    definitionWarning: boolean,
+    showTips: boolean,
 }
 
 export class AppSettings implements IAppSettings {
     constructor(
         public readonly showCommentEditor: boolean,
-        public readonly definitionWarning: boolean,
+        public readonly showTips: boolean,
     ) {
     }
 }
@@ -18,12 +18,15 @@ export class AppSettings implements IAppSettings {
     providedIn: 'root'
 })
 export class AppSettingsService {
-    //private appSettings: IAppSettings;
     private bs: BehaviorSubject<AppSettings>;
 
     constructor() {
         this.bs = new BehaviorSubject<AppSettings>(
             new AppSettings(true, true));
+    }
+
+    public get settings() {
+        return this.bs.value;
     }
 
     public observe(): Observable<AppSettings> {
@@ -44,10 +47,17 @@ export class AppSettingsService {
         this.bs.next(newSettings);
     }
 
-    public disableDefinitionWarning() {
+    public disableTips() {
         let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
 
-        newSettings.definitionWarning = false;
+        newSettings.showTips = false;
+        this.bs.next(newSettings);
+    }
+
+    public enableTips() {
+        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
+
+        newSettings.showTips = true;
         this.bs.next(newSettings);
     }
 

@@ -6,6 +6,7 @@ import { ClueTextChunk } from '../clue-text-control/clue-text-control.component'
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { TipInstance } from '../tip/tip.component';
 
 @Component({
     selector: 'app-clue-editor',
@@ -22,8 +23,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public clue: Clue;
     public form: FormGroup;
     public appSettings: AppSettings;
-    public showDefinitionWarning = false;
-    public definitionWarningShown = false;
+    public tip: TipInstance;
 
     private subs: Subscription[] = [];
 
@@ -37,7 +37,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             answer: [""],
             comment: [""],
             chunks: [[]],
-            dontShowAgain: false,
         });
 
         this.subs.push(
@@ -85,13 +84,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     
     public onSave() {
 
-        if (!this.showDefinitionWarning
-            && !this.definitionWarningShown
-            && this.appSettings.definitionWarning 
-            && this.form.value.chunks.length) {
-            
-            this.showDefinitionWarning = true;
-            this.definitionWarningShown = true;
+        if (!this.tip.hasBeenShown && this.form.value.chunks.length < 2) {
+            this.tip.open();
         } else {
             this.activePuzzle.update(new UpdateClue(
                 this.clueId,
@@ -100,13 +94,13 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 this.form.value.chunks
             ));
 
-            if (this.form.value.dontShowAgain) {
-                this.appSettingsService.disableDefinitionWarning();
-            }
-
             this.close.emit("save");
         }
-}
+    }
+
+    public onTipInstance(instance: TipInstance) {
+        this.tip = instance;
+    }
 
     public onCancel() {
         this.close.emit("cancel");
