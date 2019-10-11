@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col">
                     <h4>
-                        <app-clue-text-control formControlName="chunks" (change)="this.showDefinitionWarning = false"
+                        <app-clue-text-control formControlName="chunks"
                             [ngClass]="{ 'hidden': !appSettings.showCommentEditor }"></app-clue-text-control>
                         <span [ngClass]="{ 'hidden': appSettings.showCommentEditor }">{{clue.text}}</span>
                     </h4>
