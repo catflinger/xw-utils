@@ -58,7 +58,11 @@
                             </div>
                         </li>
 
-                        <li class="nav-item" *ngIf="!credentials">
+                        <li class="nav-item">
+                                <a class="nav-link" [routerLink]="['/readme']">Reamde</a>
+                            </li>
+    
+                            <li class="nav-item" *ngIf="!credentials">
                             <a class="nav-link" (click)="onLogin()">Login</a>
                         </li>
 

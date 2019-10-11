@@ -39,6 +39,7 @@ import { PublishGridComponent } from './ui/pages/publish-grid/publish-grid.compo
 import { ColorControlComponent } from './ui/components/color-control/color-control.component';
 import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.component';
 import { TipComponent } from './ui/components/tip/tip.component';
+import { ReadmeComponent } from './ui/pages/readme/readme.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -81,6 +82,7 @@ const quillGlobalConfig = {
         ColorControlComponent,
         PublishLoginComponent,
         TipComponent,
+        ReadmeComponent,
     ],
     imports: [
         BrowserModule,

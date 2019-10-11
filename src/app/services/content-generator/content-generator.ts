@@ -43,7 +43,7 @@ export class PostContentGenerator {
 
         this.addHtml("<tr>");
         this.openTD(3);
-        this.addText("ACROSS");
+        this.addText("DOWN");
         this.closeTD();
         this.addHtml("</tr>");
 

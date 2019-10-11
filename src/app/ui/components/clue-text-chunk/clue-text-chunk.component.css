@@ -1,6 +1,7 @@
 .definition {
-    color: red;
+    color: skyblue;
+    text-decoration: underline;
 }
 .plain {
-    color: blue;
+    color:blue;
 }
