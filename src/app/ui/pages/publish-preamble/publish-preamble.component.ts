@@ -7,6 +7,7 @@ import { UpdatePreamble } from 'src/app/services/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { AuthService } from 'src/app/services/auth.service';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -21,10 +22,12 @@ export class PublishPreambleComponent implements OnInit {
     public today = new Date();
 
     private subs: Subscription[] = [];
+    private appSettings: AppSettings;
 
     constructor(
         private appService: AppService,
         private authService: AuthService,
+        private appSettingsService: AppSettingsService,
         private router: Router,
         private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder) { }
@@ -33,6 +36,7 @@ export class PublishPreambleComponent implements OnInit {
         window.scrollTo(0, 0);
         
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
+        this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
 
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
@@ -81,4 +85,9 @@ export class PublishPreambleComponent implements OnInit {
         this.router.navigate(["/publish-options"]);
     }
 
+    public getUsername(): string {
+        return this.appSettings && this.appSettings.username ? 
+            this.appSettings.username : 
+            "Somebody"; 
+    }
 }
