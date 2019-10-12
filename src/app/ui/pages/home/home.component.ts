@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
-import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
+import { AppService, AppStatus, EditorType } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppService, AppStatus, EditorType } from 'src/app/services/app.service';
+import { Router, ActivatedRoute, ParamMap, NavigationEnd, Event } from '@angular/router';
+import { AppService, AppStatus, EditorType } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';
@@ -18,21 +18,35 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
+    // TO DO: think about making this a stack so that returns can be be nested
+    private currentRoute: string;
+
     constructor(
         private authService: AuthService,
         private puzzleManagementService: IPuzzleManager,
         private appService: AppService,
-        private router: Router) {
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        ) {
     }
 
     public ngOnInit() {
+        
         this.appService.clearBusy();
+        
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
 
         }));
+        
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
+        }));
+
+        this.subs.push(this.router.events.subscribe((x: Event) => {
+            if (x instanceof NavigationEnd) {
+                this.currentRoute = this.router.url;
+            }
         }));
     }
 
@@ -47,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public onSolve(provider: string) {
         this.appService.clear();
 
-        if (!this.credentials) {
+        if (!this.credentials.authenticated) {
             this.appService.setLoginCallback(() => {
                 this.openPuzzle(provider);
             });
@@ -65,7 +79,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.appService.clear();
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
-            this.router.navigate([editor])
+            this.router.navigate([editor]);
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {
@@ -93,6 +107,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authService.clearCredentials();
         this.appService.clear();
         this.router.navigate(["login"])
+    }
+
+    public onSettings() {
+        this.appService.setReturnAddress(this.currentRoute);
+        this.router.navigate(["/settings"]);
     }
 }
 

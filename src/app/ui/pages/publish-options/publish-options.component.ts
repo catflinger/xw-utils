@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AppService, AppStatus } from 'src/app/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { TextStyle } from 'src/app/model/text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService } from 'src/app/services/publication.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AppStatus, AppService } from 'src/app/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
 import { GridParameters, UIResult } from '../../common';

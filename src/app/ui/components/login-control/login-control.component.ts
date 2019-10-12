@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { AppService, AppStatus } from 'src/app/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiSymbols } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
 import { UIResult } from '../../common';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 export interface LoginControlOptions {
     continueButtonText: string;
@@ -20,6 +21,7 @@ export interface LoginControlOptions {
 export class LoginControlComponent implements OnInit, OnDestroy {
     public form: FormGroup;
     public appStatus: AppStatus;
+    public appSettings: AppSettings;
     private subs: Subscription[] = [];
 
     @Input() public options: LoginControlOptions;
@@ -29,16 +31,24 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         private appService: AppService,
         private authService: AuthService,
         private builder: FormBuilder,
+        private settingsService: AppSettingsService,
     ) { }
 
     public ngOnInit() {
-        this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
-        this.appService.clearAlerts();
 
         this.form = this.builder.group({
             'username': ["", Validators.required],
             'password': ["", Validators.required],
         });
+
+        this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
+        this.appService.clearAlerts();
+
+        this.subs.push(this.settingsService.observe().subscribe(settings => {
+            this.appSettings = settings;
+            this.form.patchValue({username: settings.username});
+        }));
+
     }
 
     public onLogin() {

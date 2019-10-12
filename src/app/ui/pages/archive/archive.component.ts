@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import moment from "moment";
 
 import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService, EditorType } from 'src/app/services/app.service';
+import { AppStatus, AppService, EditorType } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
@@ -93,7 +93,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
             url: null,
         };
 
-        if (!this.credentials) {
+        if (!this.credentials.authenticated) {
             this.appService.setLoginCallback(() => {
                 this._openPuzzle(item);
             });

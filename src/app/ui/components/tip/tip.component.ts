@@ -72,6 +72,6 @@ export class TipComponent implements OnInit, OnDestroy {
     }
 
     public onDontShowAgain(event: any) {
-         this.appSettingsService.disableTips();
+         this.appSettingsService.showTips = false;
     }
 }

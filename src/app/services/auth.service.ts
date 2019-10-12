@@ -3,22 +3,27 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 import { environment } from 'src/environments/environment';
+import { AppSettingsService } from './app-settings.service';
 
 export class Credentials {
     constructor(
         public readonly username: string,
         public readonly password: string,
+        public readonly authenticated: boolean,
     ) { }
 }
+
+const defaultCredentials: Credentials = new Credentials("", "", false);
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    // private credential: Credentials = null;
-    private bs: BehaviorSubject<Credentials> = new BehaviorSubject<Credentials>(null);
+    private bs: BehaviorSubject<Credentials> = new BehaviorSubject<Credentials>(defaultCredentials);
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private settingsService: AppSettingsService) { }
 
     public observe(): Observable<Credentials> {
         return this.bs.asObservable();
@@ -33,7 +38,8 @@ export class AuthService {
         .toPromise()
         .then((data: ApiResponse) => {
             if (data.success === ApiResponseStatus.OK) {
-                this.bs.next(new Credentials(username, password));
+                this.settingsService.username = username;
+                this.bs.next(new Credentials(username, password, true));
             } else {
                 this.clearCredentials();
                 throw ApiSymbols.AuthorizationFailure;
@@ -46,7 +52,7 @@ export class AuthService {
     }
 
     public clearCredentials(): void {
-        this.bs.next(null);
+        this.bs.next(new Credentials(this.settingsService.username, "", false));
     }
 
 }

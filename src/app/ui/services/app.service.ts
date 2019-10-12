@@ -1,6 +1,11 @@
+
+
+// TO DO: move this file to /app/ui/services as it contains all UI stuff
+
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
-import { Alert, AlertType } from '../ui/common';
+import { Router } from '@angular/router';
+import { Alert, AlertType } from '../common';
 
 export type LoginCallback = () => void;
 
@@ -28,12 +33,13 @@ export class AppService implements OnDestroy {
     private editor: EditorType = "blogger";
     private onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
-
+    private returnAddress: string;
 
     private bs: BehaviorSubject<AppStatus>;
 
-
-    constructor() {
+    constructor(
+        private router: Router,
+    ) {
         this.bs = new BehaviorSubject<AppStatus>(
             new AppStatus(
                 false,
@@ -102,12 +108,24 @@ export class AppService implements OnDestroy {
         this.emitNext();
     }
 
-    setEditor(editor: EditorType) {
+    public setEditor(editor: EditorType) {
         this.editor = editor;
+    }
+
+    public setReturnAddress(route: string) {
+        this.returnAddress = route;
+    }
+
+    public returnToSender() {
+        const address = this.returnAddress || "/home";
+
+        this.returnAddress = null;
+        this.router.navigate([address]);
     }
 
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
         this.bs.next(new AppStatus(this.busy, this.late, alerts, this.editor, this.onLogin));
     }
+
 }

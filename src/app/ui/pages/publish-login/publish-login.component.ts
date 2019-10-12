@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AppService, AppStatus } from 'src/app/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Router } from '@angular/router';
 import { UIResult } from '../../common';

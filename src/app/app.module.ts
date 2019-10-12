@@ -40,6 +40,7 @@ import { ColorControlComponent } from './ui/components/color-control/color-contr
 import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.component';
 import { TipComponent } from './ui/components/tip/tip.component';
 import { ReadmeComponent } from './ui/pages/readme/readme.component';
+import { SettingsComponent } from './ui/pages/settings/settings.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -83,6 +84,7 @@ const quillGlobalConfig = {
         PublishLoginComponent,
         TipComponent,
         ReadmeComponent,
+        SettingsComponent,
     ],
     imports: [
         BrowserModule,

@@ -39,7 +39,7 @@ export class HttpPuzzleSourceService {
     public getLatestPuzzle(provider: string): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
-        if (!credentials) {
+        if (!credentials.authenticated) {
             return Promise.reject(ApiSymbols.AuthorizationFailure);
         }
 

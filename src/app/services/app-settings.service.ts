@@ -1,18 +1,32 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LocalStorageService } from './local-storage.service';
 
-export interface IAppSettings {
+interface IAppSettings {
     showCommentEditor: boolean,
     showTips: boolean,
+    username: string,
 }
 
 export class AppSettings implements IAppSettings {
-    constructor(
-        public readonly showCommentEditor: boolean,
-        public readonly showTips: boolean,
-    ) {
+    public readonly showCommentEditor: boolean;
+    public readonly showTips: boolean;
+    public readonly username: string;
+
+    constructor(data: any) {
+        this.showTips = data.showTips;
+        this.showCommentEditor = data.showCommentEditor;
+        this.username = data.username;
     }
 }
+
+const defaultSettings: AppSettings = {
+    showTips: true,
+    showCommentEditor: true,
+    username: null,
+};
+
+type Modifier = (settings: IAppSettings) => void; 
 
 @Injectable({
     providedIn: 'root'
@@ -20,9 +34,16 @@ export class AppSettings implements IAppSettings {
 export class AppSettingsService {
     private bs: BehaviorSubject<AppSettings>;
 
-    constructor() {
-        this.bs = new BehaviorSubject<AppSettings>(
-            new AppSettings(true, true));
+    constructor(private storageService: LocalStorageService) {
+        let initialSettings: AppSettings = defaultSettings;
+
+        let data = storageService.getUserSettings();
+        if (data) {
+            try {
+                initialSettings = new AppSettings(JSON.parse(data));
+            } catch {}
+        }
+        this.bs = new BehaviorSubject<AppSettings>(initialSettings);
     }
 
     public get settings() {
@@ -33,32 +54,28 @@ export class AppSettingsService {
         return this.bs.asObservable();
     }
 
-    public hideCommentEditor() {
-        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
+    public set username(val: string) {
+        this.update((settings) => {
+            settings.username = val;
+        });
+    }
 
-        newSettings.showCommentEditor = false;
-        this.bs.next(newSettings);
+    public set showTips(val: boolean) {
+        this.update((settings) => {
+            settings.showTips = val;
+        });
+    }
+
+    public hideCommentEditor() {
+        this.update((settings) => {
+            settings.showCommentEditor = false;
+        });
     }
 
     public showCommentEditor() {
-        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
-
-        newSettings.showCommentEditor = true;
-        this.bs.next(newSettings);
-    }
-
-    public disableTips() {
-        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
-
-        newSettings.showTips = false;
-        this.bs.next(newSettings);
-    }
-
-    public enableTips() {
-        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
-
-        newSettings.showTips = true;
-        this.bs.next(newSettings);
+        this.update((settings) => {
+            settings.showCommentEditor = true;
+        });
     }
 
     public toggleCommentEditor() {
@@ -69,4 +86,16 @@ export class AppSettingsService {
         }
     }
 
+    public factoryReset() {
+        this.update((settings) => {
+            settings.showCommentEditor = true;
+        });
+    }
+
+    private update(modifier: Modifier) {
+        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
+        modifier(newSettings);
+        this.storageService.saveUserSettings(JSON.stringify(newSettings));
+        this.bs.next(newSettings);
+    }
 }

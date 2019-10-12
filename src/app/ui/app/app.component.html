@@ -59,15 +59,19 @@
                         </li>
 
                         <li class="nav-item">
-                                <a class="nav-link" [routerLink]="['/readme']">Reamde</a>
-                            </li>
-    
-                            <li class="nav-item" *ngIf="!credentials">
-                            <a class="nav-link" (click)="onLogin()">Login</a>
+                            <a class="nav-link" [routerLink]="['/readme']">Reamde</a>
                         </li>
 
-                        <li class="nav-item" *ngIf="credentials">
-                            <a class="nav-link" (click)="onLogout()">Logout</a>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link btn btn-link" (click)="onSettings()">Settings</button>
+                        </li>
+
+                            <li class="nav-item" *ngIf="!credentials.authenticated">
+                                    <button type="button" class="nav-link btn btn-link" (click)="onLogin()">Login</button>
+                        </li>
+
+                        <li class="nav-item" *ngIf="credentials.authenticated">
+                                <button type="button" class="nav-link btn btn-link" (click)="onLogout()">Logout</button>
                         </li>
                     </ul>
                 </div>

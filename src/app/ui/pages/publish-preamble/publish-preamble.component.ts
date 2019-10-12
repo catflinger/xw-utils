@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AppStatus, AppService } from 'src/app/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { UpdatePreamble } from 'src/app/services/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';

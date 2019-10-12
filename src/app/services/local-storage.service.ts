@@ -10,10 +10,27 @@ export class LocalStorageService {
 
     constructor() { }
 
-    public getLastest(): Promise<Puzzle> {
-        let id = localStorage.getItem("xw-latest");
-        return this.getPuzzle(id);
+    public getUserSettings(): string {
+        try {
+            console.log("getting  settings" + localStorage.getItem("xw-user-settings"));
+            return localStorage.getItem("xw-user-settings");
+        } catch(error) {
+            return null;
+        }
     }
+
+    public saveUserSettings(settings: string) {
+        try {
+            console.log("setting  settings");
+            localStorage.setItem("xw-user-settings", settings);
+        } catch(error) {
+        }
+    }
+
+    // public getLastest(): Promise<Puzzle> {
+    //     let id = localStorage.getItem("xw-latest");
+    //     return this.getPuzzle(id);
+    // }
 
     public deletePuzzle(id: string): Promise<void> {
         localStorage.removeItem("xw-puzzle-" + id);
@@ -49,7 +66,6 @@ export class LocalStorageService {
         if (puzzle) {
             const json = JSON.stringify(puzzle);
             localStorage.setItem("xw-puzzle-" + puzzle.info.id, json);
-            localStorage.setItem("xw-latest", puzzle.info.id);
         }
 
         return Promise.resolve();
