@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { TipKey, AppSettings } from 'src/app/services/common';
 
 export class TipInstance {
     private bsActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private shown: boolean;   // the tip has been shown already in this instance
+    public  key: TipKey;      // TO DO: how to keep setter only for TipComponent?
 
     constructor(private settings: AppSettings) {
     }
@@ -15,11 +17,11 @@ export class TipInstance {
     }
 
     public get hasBeenShown(): boolean {
-        return this.shown || !this.settings.showTips;
+        return this.shown || !this.settings.tips;
     }
 
     public open() {
-        if (this.settings.showTips && !this.shown) {
+        if (this.settings.tipIsEnabled(this.key) && !this.shown) {
             this.bsActive.next(true);
             this.shown = true;
         }
@@ -47,18 +49,18 @@ export const tipInstanceProvider = {
     providers: [tipInstanceProvider],
 })
 export class TipComponent implements OnInit, OnDestroy {
-
+    @Input() key: TipKey;
     @Output() instance = new EventEmitter<TipInstance>();
     public show: boolean;
  
     private subs: Subscription[] = [];
-    private dontShowAgain: boolean;
 
     constructor(
         private appSettingsService: AppSettingsService,
         private tipInstance: TipInstance) {}
 
     public ngOnInit() {
+        this.tipInstance.key = this.key;
         this.subs.push(this.tipInstance.observe().subscribe(show => this.show = show));
         this.instance.emit(this.tipInstance);
     }
@@ -72,6 +74,6 @@ export class TipComponent implements OnInit, OnDestroy {
     }
 
     public onDontShowAgain(event: any) {
-         this.appSettingsService.showTips = false;
+         this.appSettingsService.disableAllTips();
     }
 }

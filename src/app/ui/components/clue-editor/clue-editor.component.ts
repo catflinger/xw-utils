@@ -5,8 +5,9 @@ import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { TipInstance } from '../tip/tip.component';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-clue-editor',

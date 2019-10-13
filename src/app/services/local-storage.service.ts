@@ -12,7 +12,6 @@ export class LocalStorageService {
 
     public getUserSettings(): string {
         try {
-            console.log("getting  settings" + localStorage.getItem("xw-user-settings"));
             return localStorage.getItem("xw-user-settings");
         } catch(error) {
             return null;
@@ -21,7 +20,6 @@ export class LocalStorageService {
 
     public saveUserSettings(settings: string) {
         try {
-            console.log("setting  settings");
             localStorage.setItem("xw-user-settings", settings);
         } catch(error) {
         }

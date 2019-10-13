@@ -4,11 +4,14 @@
 
 <form [formGroup]="form" class="form">
 
-    <div class="formGroup form-check mt-3">
-        <label><input type="checkbox" class="form-check-input" formControlName="showTips"> Show tips</label>
-    </div>
-
-    <div class="formGroup mt-5">
-        <button class="btn btn-primary" type="button" (click)="onSave()">Save</button>
-    </div>
+    <div formGroupName="tips">
+        <div class="form-check" *ngFor="let key of tipKeys">
+            <input type="checkbox" class="form-check-input" [formControlName]="key">
+            <label class="form-check-label">{{key}}</label>
+        </div>
+    
+        <div class="formGroup mt-5">
+            <button class="btn btn-primary" type="button" (click)="onSave()">Save</button>
+        </div>
+        </div>
 </form>
