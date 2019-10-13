@@ -1,32 +1,65 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
+import { TipSetting, TipKey, AppSettings } from './common';
 
-interface IAppSettings {
-    showCommentEditor: boolean,
-    showTips: boolean,
-    username: string,
-}
+const tipKeys: TipKey[] = ["general", "definitionWarning"];
 
-export class AppSettings implements IAppSettings {
-    public readonly showCommentEditor: boolean;
-    public readonly showTips: boolean;
-    public readonly username: string;
+class _TipSetting implements TipSetting {
+    public key: TipKey;
+    public enabled: boolean;
 
-    constructor(data: any) {
-        this.showTips = data.showTips;
-        this.showCommentEditor = data.showCommentEditor;
-        this.username = data.username;
+    constructor(
+        key: TipKey,
+        enabled: boolean,
+            ) {
+        this.key = key;
+        this.enabled = enabled;
     }
 }
 
-const defaultSettings: AppSettings = {
-    showTips: true,
-    showCommentEditor: true,
-    username: null,
-};
+class _AppSettings implements AppSettings {
+    public showCommentEditor: boolean;
+    public username: string;
+    public tips: _TipSetting[];
 
-type Modifier = (settings: IAppSettings) => void; 
+    constructor(data: any) {
+        this.showCommentEditor = data.showCommentEditor;
+        this.username = data.username;
+
+        let tips: _TipSetting[] = [];
+
+        tipKeys.forEach(tk => {
+            let newTip = new _TipSetting(tk, true);
+            if (data.tips) {
+                let tipData = data.tips.find(td => td.key === tk);
+                if (tipData) {
+                    newTip = new _TipSetting(tk, tipData.enabled);
+                }
+            }
+            tips.push(newTip);
+        });
+
+        this.tips = tips;
+    }
+
+    public tipIsEnabled(key: TipKey) {
+        let tipSetting = this.tips.find(t => t.key === key);
+        return tipSetting ? tipSetting.enabled : true;
+    }
+
+}
+
+const defaultSettings: AppSettings = new _AppSettings({
+    username: null,
+    showCommentEditor: true,
+    tips: tipKeys.map(tk => {
+        return { key: tk, enabled: true };
+    })
+});
+
+
+type Modifier = (settings: _AppSettings) => void; 
 
 @Injectable({
     providedIn: 'root'
@@ -36,11 +69,11 @@ export class AppSettingsService {
 
     constructor(private storageService: LocalStorageService) {
         let initialSettings: AppSettings = defaultSettings;
-
         let data = storageService.getUserSettings();
+
         if (data) {
             try {
-                initialSettings = new AppSettings(JSON.parse(data));
+                initialSettings = new _AppSettings(JSON.parse(data));
             } catch {}
         }
         this.bs = new BehaviorSubject<AppSettings>(initialSettings);
@@ -60,9 +93,26 @@ export class AppSettingsService {
         });
     }
 
-    public set showTips(val: boolean) {
+    public enableAllTips() {
         this.update((settings) => {
-            settings.showTips = val;
+            settings.tips.forEach(ts => ts.enabled = true);
+        });
+    }
+
+    public disableAllTips() {
+        this.update((settings) => {
+            settings.tips.forEach(ts => ts.enabled = false);
+        });
+    }
+
+    public setTips(patches: TipSetting[]) {
+        this.update((settings) => {
+            settings.tips.forEach(ts => {
+                let patch = patches.find(patch => patch.key === ts.key);
+                if (patch) {
+                    ts.enabled = patch.enabled;
+                }
+            });
         });
     }
 
@@ -87,15 +137,15 @@ export class AppSettingsService {
     }
 
     public factoryReset() {
-        this.update((settings) => {
-            settings.showCommentEditor = true;
-        });
+        this.storageService.saveUserSettings(JSON.stringify(defaultSettings));
+        this.bs.next(new _AppSettings(defaultSettings));
     }
 
     private update(modifier: Modifier) {
-        let newSettings: IAppSettings = JSON.parse(JSON.stringify(this.bs.value));
+        let newSettings: _AppSettings = JSON.parse(JSON.stringify(this.bs.value));
         modifier(newSettings);
         this.storageService.saveUserSettings(JSON.stringify(newSettings));
-        this.bs.next(newSettings);
+        this.bs.next(new _AppSettings(newSettings));
     }
 }
+
