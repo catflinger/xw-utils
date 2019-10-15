@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 @Component({
     selector: 'app-clue-list',
@@ -16,10 +17,17 @@ export class ClueListComponent implements OnInit {
 
     private subs: Subscription[] = [];
     public clues: Clue[] = [];
+    public appSettings: AppSettings;
 
-    constructor(private activePuzzle: IActivePuzzle) { }
+    constructor(
+        private appSettingsService: AppSettingsService,
+        private activePuzzle: IActivePuzzle,
+        ) { }
 
     ngOnInit() {
+        this.appSettings = this.appSettingsService.settings;
+        this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
+
         this.subs.push(this.activePuzzle.observe().subscribe(
             (puzzle) => {
                 if (puzzle) {
@@ -35,5 +43,22 @@ export class ClueListComponent implements OnInit {
         } else {
             this.activePuzzle.update(new SelectClue(clue.id));
         }
+    }
+
+    public getClueTextClass(clue: Clue): string[] {
+        let result = [];
+
+        if (clue.highlight) {
+            result.push("highlight");
+        }
+
+        if (this.appSettings.general.showCommentValidation.enabled
+            && clue.warnings.length === 0
+            && !clue.highlight ) {
+            
+            result.push("solved");
+        }
+
+        return result;
     }
 }

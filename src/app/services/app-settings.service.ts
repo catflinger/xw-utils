@@ -16,6 +16,8 @@ class _BooleanSetting implements BooleanSetting {
 
 class _GeneralSettings implements GeneralSettings {
     public showCommentEditor: _BooleanSetting;
+    public showCommentValidation: _BooleanSetting;
+    public muteSolvedClues: _BooleanSetting;
     public showCheat: _BooleanSetting;
 }
 
@@ -30,25 +32,32 @@ class _AppSettings implements AppSettings {
     public tips: _TipSettings;
 }
 
+// before adding more settins read the comment on interfaces GeneralSettings and TipSettings
 const _defaultSettings: _AppSettings = {
     username: null,
     general: {
         showCommentEditor: { caption: "show comment editor", enabled: true },
+        showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
+        muteSolvedClues: { caption: "grey text for clues with answers", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
     },
     tips: {
         general: { caption: "show general tips", enabled: true },
-        definitionWarning: { caption: "show missing defintion warning", enabled: true },
+        definitionWarning: { caption: "show tips on highlighting definitions", enabled: true },
     }
 };
 
 type _Modifier = (settings: _AppSettings) => void;
 
+// add new general settings here first, this will ensure all other missing additions are caught by the compiler
 export interface GeneralSettings {
     readonly showCommentEditor: BooleanSetting;
+    readonly showCommentValidation: BooleanSetting;
+    readonly muteSolvedClues: BooleanSetting;
     readonly showCheat: BooleanSetting;
 }
 
+// add new tip settings here first, this will ensure all other missing additions are caught by the compiler
 export interface TipSettings {
     readonly general: BooleanSetting;
     readonly definitionWarning: BooleanSetting;
@@ -146,7 +155,7 @@ export class AppSettingsService {
         // setting in the changes object and if we find one then apply the new value
 
         if (changes && typeof changes[group] === "object") {
-            Object.keys(currentSettings[group]).forEach(key => {
+             Object.keys(currentSettings[group]).forEach(key => {
                 let newTip = changes[group][key];
                 if (newTip && typeof newTip === "object" && typeof newTip.enabled === "boolean") {
                     currentSettings[group][key].enabled = newTip.enabled;

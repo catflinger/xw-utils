@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService, AppSettings, BooleanSettingsGroupKey } from 'src/app/services/app-settings.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -28,12 +28,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.settings = this.settingsService.settings;
 
         this.form = this.formBuilder.group({
-            //username: [this.settings.username],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
         });
-
-        // TO DO: encapsulate general and tips into a common BooleanSettingsControlComponent
 
         Object.keys(this.settings.general).forEach(key => {
             (this.form.controls["general"] as FormGroup).addControl(key, new FormControl(this.settings.general[key].enabled));
@@ -45,8 +42,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
-
-            //this.form.controls["username"].patchValue(this.settings.username);
 
             Object.keys(this.settings.general).forEach(key => {
                 (this.form.controls["general"] as FormGroup).controls[key].patchValue(settings.general[key].enabled);
@@ -65,14 +60,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onSave() {
         let changes = {
-            general: {
-                showCommentEditor: { enabled: this.form.value.general.showCommentEditor },
-                showCheat: { enabled: this.form.value.general.showCheat },
-            },
-            tips: {
-                general: { enabled: this.form.value.tips.general },
-                definitionWarning: { enabled: this.form.value.tips.definitionWarning },
-            }
+            general: this.xxxxx("general"),
+            tips: this.xxxxx("tips"),
         }
         this.settingsService.update(changes);
         this.appService.returnToSender();
@@ -91,4 +80,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.appService.returnToSender();
     }
 
+    private xxxxx(groupKey: BooleanSettingsGroupKey): any {
+        let result = {};
+
+        Object.keys((this.form.controls[groupKey] as FormGroup).controls).forEach(key => {
+            result[key] = { enabled: this.form.value[groupKey][key] };
+        });
+        return result;
+        // {
+        //     showCommentEditor: { enabled: this.form.value.general.showCommentEditor },
+        //     showCheat: { enabled: this.form.value.general.showCheat },
+        // }
+    }
 }

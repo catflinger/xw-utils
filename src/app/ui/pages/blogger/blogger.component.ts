@@ -7,6 +7,7 @@ import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
 import { SelectNextClue } from 'src/app/services/modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 
 @Component({
   selector: 'app-blogger',
@@ -15,10 +16,12 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 })
 export class BloggerComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
+    public appSettings;
     private subs: Subscription[] = [];
 
     constructor(
-        private activePuzzle: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle,
+        private appSettinsgService: AppSettingsService, 
         private router: Router) { }
 
     ngOnInit() {
@@ -26,12 +29,9 @@ export class BloggerComponent implements OnInit, OnDestroy {
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
         } else {
-            this.subs.push(
-                this.activePuzzle.observe().subscribe(
-                    (puzzle) => {
-                        this.puzzle = puzzle;
-                    }
-            ));
+            this.appSettings = this.appSettinsgService.settings;
+            this.subs.push(this.activePuzzle.observe().subscribe(puzzle => this.puzzle = puzzle));
+            this.subs.push(this.appSettinsgService.observe().subscribe(settings => this.appSettings = settings));
         }
     }
 
@@ -43,8 +43,13 @@ export class BloggerComponent implements OnInit, OnDestroy {
         this.router.navigate(["/publish-options"]);
     }
 
-    onBack() {
+    onClose() {
+        this.activePuzzle.update(new ClearSelection());
         this.router.navigate(["/home"]);
+    }
+
+    onSolver() {
+        this.router.navigate(["/solver"]);
     }
 
     onRowClick(clue: Clue) {

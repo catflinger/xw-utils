@@ -67,9 +67,14 @@ export class SolverComponent implements OnInit, OnDestroy {
         this.router.navigate(["/publish-options"]);
     }
 
-    onBack() {
+    onClose() {
         this.activePuzzle.update(new ClearSelection());
         this.router.navigate(["/home"]);
+    }
+
+    onBlogger() {
+        this.activePuzzle.update(new ClearSelection());
+        this.router.navigate(["/blogger"]);
     }
 
     onClueClick(clue: Clue) {

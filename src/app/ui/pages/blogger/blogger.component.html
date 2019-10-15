@@ -11,11 +11,10 @@
             <div class="col-7">
                 <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
             </div>
-            <div class="col-2"  class="text-warning">
-                <ng-container *ngIf="clue.warnings.length">
-                        <span><i class="fas fa-asterisk"></i></span>
-                        <span> {{clue.warnings[0]}}</span>
-                        </ng-container>
+            <div class="col-2" class="text-warning">
+                <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length">
+                    <span> {{clue.warnings[0]}}</span>
+                </ng-container>
             </div>
         </div>
 
@@ -32,6 +31,7 @@
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
-        <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onSolver()" *ngIf="puzzle.solveable">Open in solver</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onClose()">Close</button>
     </div>
 </div>
