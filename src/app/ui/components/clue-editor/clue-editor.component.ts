@@ -6,8 +6,8 @@ import { ClueTextChunk } from '../clue-text-control/clue-text-control.component'
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { TipInstance } from '../tip/tip.component';
 import { AppSettings } from 'src/app/services/common';
+import { TipInstance, TipStatus } from '../tip/tip-instance';
 
 @Component({
     selector: 'app-clue-editor',
@@ -24,7 +24,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public clue: Clue;
     public form: FormGroup;
     public appSettings: AppSettings;
-    public tip: TipInstance;
+    public tipInstance: TipInstance;
+    public tipStatus: TipStatus = new TipStatus(false, false, false);
 
     private subs: Subscription[] = [];
 
@@ -65,6 +66,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+        if (this.tipInstance) {
+            this.tipInstance.destroy();
+        }
     }
 
     public onClearDefinition() {
@@ -85,8 +89,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     
     public onSave() {
 
-        if (!this.tip.hasBeenShown && this.form.value.chunks.length < 2) {
-            this.tip.open();
+        if (this.tipStatus.show || this.form.value.chunks.length < 2) {
+            this.tipInstance.activated = true;
         } else {
             this.activePuzzle.update(new UpdateClue(
                 this.clueId,
@@ -100,7 +104,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public onTipInstance(instance: TipInstance) {
-        this.tip = instance;
+        this.tipInstance = instance;
+        this.tipInstance.activated = false;
+        this.tipInstance.observe().subscribe(ts => this.tipStatus = ts);
     }
 
     public onCancel() {

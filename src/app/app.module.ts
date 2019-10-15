@@ -41,6 +41,7 @@ import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.co
 import { TipComponent } from './ui/components/tip/tip.component';
 import { ReadmeComponent } from './ui/pages/readme/readme.component';
 import { SettingsComponent } from './ui/pages/settings/settings.component';
+import { TipInstanceFactory } from './ui/components/tip/tip-instance';
 
 const quillGlobalConfig = {
     modules: {
@@ -101,7 +102,8 @@ const quillGlobalConfig = {
         PuzzleManagementService,
         {provide: IPuzzleManager, useExisting: PuzzleManagementService},
         {provide: IActivePuzzle, useExisting: PuzzleManagementService},
-        HttpClient
+        HttpClient,
+        TipInstanceFactory,
     ],
     entryComponents: [
         ClueEditorComponent

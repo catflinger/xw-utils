@@ -1,10 +1,10 @@
-<ngb-alert *ngIf="show" type="warning" (close)="onClose()">
+<ngb-alert *ngIf="status.show" type="warning" (close)="onClose()">
 
     <div>
         <ng-content></ng-content>
     </div>
 
     <div class="mt-3">
-        <label>Don't show any tips <input type="checkbox" (change)="onDontShowAgain($event)"></label>
+        <label>Don't show this again <input type="checkbox" (change)="onDontShowAgain($event)"></label>
     </div>
 </ngb-alert>

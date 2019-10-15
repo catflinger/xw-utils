@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<ng-container *ngIf="appStatus && puzzleList && puzzleList.length">
+<ng-container *ngIf="appStatus && puzzleList">
     <div class="row mt-3">
         <div class="col">
             <h4>Saved puzzles</h4>
@@ -34,8 +34,12 @@
                         <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
                         </td>
                     </tr>
+
                 </tbody>
             </table>
+
+            <app-tip *ngIf="puzzleList && puzzleList.length === 0" key="general">You have no saved puzzles. Open a puzzle from the <em>Latest</em> or <em>Archive</em> menu to get started.</app-tip>
+
         </div>
     </div>
 </ng-container>

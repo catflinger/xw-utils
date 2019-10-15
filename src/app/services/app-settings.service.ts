@@ -1,65 +1,38 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-import { TipSetting, TipKey, AppSettings } from './common';
-
-const tipKeys: TipKey[] = ["general", "definitionWarning"];
+import { TipSetting, AppSettings, TipSettings } from './common';
 
 class _TipSetting implements TipSetting {
-    public key: TipKey;
-    public enabled: boolean;
-
     constructor(
-        key: TipKey,
-        enabled: boolean,
-            ) {
-        this.key = key;
-        this.enabled = enabled;
-    }
+        public caption: string,
+        public enabled: boolean,
+    ) {}
+}
+
+class _TipSettings implements TipSettings {
+    public general: _TipSetting;
+    public definitionWarning: _TipSetting;
 }
 
 class _AppSettings implements AppSettings {
     public showCommentEditor: boolean;
     public username: string;
-    public tips: _TipSetting[];
-
-    constructor(data: any) {
-        this.showCommentEditor = data.showCommentEditor;
-        this.username = data.username;
-
-        let tips: _TipSetting[] = [];
-
-        tipKeys.forEach(tk => {
-            let newTip = new _TipSetting(tk, true);
-            if (data.tips) {
-                let tipData = data.tips.find(td => td.key === tk);
-                if (tipData) {
-                    newTip = new _TipSetting(tk, tipData.enabled);
-                }
-            }
-            tips.push(newTip);
-        });
-
-        this.tips = tips;
-    }
-
-    public tipIsEnabled(key: TipKey) {
-        let tipSetting = this.tips.find(t => t.key === key);
-        return tipSetting ? tipSetting.enabled : true;
-    }
-
+    public tips: _TipSettings;
 }
 
-const defaultSettings: AppSettings = new _AppSettings({
+const _defaultSettings: _AppSettings = {
     username: null,
     showCommentEditor: true,
-    tips: tipKeys.map(tk => {
-        return { key: tk, enabled: true };
-    })
-});
+    tips: {
+        general: { caption: "show general tips", enabled: true },
+        definitionWarning: { caption: "show missing defintion warning", enabled: true },
+    }
+};
 
+type _Modifier = (settings: _AppSettings) => void;
 
-type Modifier = (settings: _AppSettings) => void; 
+export type TipKey = keyof _TipSettings;
 
 @Injectable({
     providedIn: 'root'
@@ -68,15 +41,15 @@ export class AppSettingsService {
     private bs: BehaviorSubject<AppSettings>;
 
     constructor(private storageService: LocalStorageService) {
-        let initialSettings: AppSettings = defaultSettings;
-        let data = storageService.getUserSettings();
+        this.bs = new BehaviorSubject<AppSettings>(_defaultSettings);
 
+        let data = storageService.getUserSettings();
         if (data) {
             try {
-                initialSettings = new _AppSettings(JSON.parse(data));
-            } catch {}
+                let newSettings = JSON.parse(data);
+                this.update(newSettings);
+            } catch { }
         }
-        this.bs = new BehaviorSubject<AppSettings>(initialSettings);
     }
 
     public get settings() {
@@ -87,43 +60,40 @@ export class AppSettingsService {
         return this.bs.asObservable();
     }
 
+    public update(changes: any) {
+        // make a copy of the current settings then overwrite with values from any matching items in the changes object 
+        this._update((_settings: _AppSettings) => {
+            if (changes && changes.username && typeof changes.username === "string") {
+                _settings.username = changes.username;
+            }
+            if (changes && typeof changes.showCommentEditor === "boolean") {
+                _settings.showCommentEditor = changes.showCommentEditor;
+            }
+            if (changes && typeof changes.tips === "object") {
+                Object.keys(_settings.tips).forEach(key => {
+                    let newTip = changes.tips[key];
+                    if (newTip && typeof newTip === "object" && typeof newTip.enabled === "boolean") {
+                        _settings.tips[key].enabled = newTip.enabled;
+                    }
+                });
+            }
+        });
+    }
+
     public set username(val: string) {
-        this.update((settings) => {
+        this._update((settings) => {
             settings.username = val;
         });
     }
 
-    public enableAllTips() {
-        this.update((settings) => {
-            settings.tips.forEach(ts => ts.enabled = true);
-        });
-    }
-
-    public disableAllTips() {
-        this.update((settings) => {
-            settings.tips.forEach(ts => ts.enabled = false);
-        });
-    }
-
-    public setTips(patches: TipSetting[]) {
-        this.update((settings) => {
-            settings.tips.forEach(ts => {
-                let patch = patches.find(patch => patch.key === ts.key);
-                if (patch) {
-                    ts.enabled = patch.enabled;
-                }
-            });
-        });
-    }
-
     public hideCommentEditor() {
-        this.update((settings) => {
+        this._update((settings) => {
             settings.showCommentEditor = false;
         });
     }
 
     public showCommentEditor() {
-        this.update((settings) => {
+        this._update((settings) => {
             settings.showCommentEditor = true;
         });
     }
@@ -137,15 +107,15 @@ export class AppSettingsService {
     }
 
     public factoryReset() {
-        this.storageService.saveUserSettings(JSON.stringify(defaultSettings));
-        this.bs.next(new _AppSettings(defaultSettings));
+        this.storageService.saveUserSettings(JSON.stringify(_defaultSettings));
+        this.update(_defaultSettings);
     }
 
-    private update(modifier: Modifier) {
+    private _update(modifier: _Modifier) {
         let newSettings: _AppSettings = JSON.parse(JSON.stringify(this.bs.value));
         modifier(newSettings);
         this.storageService.saveUserSettings(JSON.stringify(newSettings));
-        this.bs.next(new _AppSettings(newSettings));
+        this.bs.next(newSettings);
     }
 }
 

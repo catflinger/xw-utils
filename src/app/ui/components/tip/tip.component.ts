@@ -1,79 +1,51 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { TipKey, AppSettings } from 'src/app/services/common';
+import { Subscription } from 'rxjs';
+import { AppSettingsService, TipKey } from 'src/app/services/app-settings.service';
+import { TipInstance, TipStatus, TipInstanceFactory } from './tip-instance';
 
-export class TipInstance {
-    private bsActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-    private shown: boolean;   // the tip has been shown already in this instance
-    public  key: TipKey;      // TO DO: how to keep setter only for TipComponent?
-
-    constructor(private settings: AppSettings) {
-    }
-
-    public observe(): Observable<boolean> {
-        return this.bsActive.asObservable();
-    }
-
-    public get hasBeenShown(): boolean {
-        return this.shown || !this.settings.tips;
-    }
-
-    public open() {
-        if (this.settings.tipIsEnabled(this.key) && !this.shown) {
-            this.bsActive.next(true);
-            this.shown = true;
-        }
-    };
-
-    public close() {
-        this.bsActive.next(false);
-    }
-}
-
-const tipInstanceFactory = (appSettingsService: AppSettingsService) => {
-    return new TipInstance(appSettingsService.settings);
-  };
-
-export const tipInstanceProvider = {
-    provide: TipInstance,
-    useFactory: tipInstanceFactory,
-    deps: [AppSettingsService]
-}
 
 @Component({
     selector: 'app-tip',
     templateUrl: './tip.component.html',
     styleUrls: ['./tip.component.css'],
-    providers: [tipInstanceProvider],
 })
 export class TipComponent implements OnInit, OnDestroy {
-    @Input() key: TipKey;
+    @Input() key: TipKey = "general";
+    @Input() maxShowings: number = NaN;
     @Output() instance = new EventEmitter<TipInstance>();
-    public show: boolean;
- 
+
+    public status: TipStatus;
+
     private subs: Subscription[] = [];
+    private tipInstance: TipInstance;
 
     constructor(
         private appSettingsService: AppSettingsService,
-        private tipInstance: TipInstance) {}
+        private tipInstanceFactory: TipInstanceFactory)
+    {}
 
     public ngOnInit() {
-        this.tipInstance.key = this.key;
-        this.subs.push(this.tipInstance.observe().subscribe(show => this.show = show));
+        this.tipInstance = this.tipInstanceFactory.newInstance(this.key, this.maxShowings)
+        this.subs.push(this.tipInstance.observe().subscribe((status) => {
+            this.status = status;
+        }));
         this.instance.emit(this.tipInstance);
     }
 
     public ngOnDestroy() {
-       this.subs.forEach(s => s.unsubscribe());
-    }
-
-    public onClose() {
-        this.tipInstance.close();
+        this.subs.forEach(s => s.unsubscribe());
+        if (this.tipInstance){
+            this.tipInstance.destroy();
+        }
     }
 
     public onDontShowAgain(event: any) {
-         this.appSettingsService.disableAllTips();
+        let tips = {};
+        tips[this.key] = { enabled: false };
+        this.appSettingsService.update({ tips });
+    }
+
+    public onClose() {
+        this.tipInstance.activated = false;
     }
 }

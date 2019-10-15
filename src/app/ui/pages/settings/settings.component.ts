@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/ui/services/app.service';
-import { AppSettings, TipKey } from 'src/app/services/common';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-settings',
@@ -13,7 +13,6 @@ import { AppSettings, TipKey } from 'src/app/services/common';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     public settings: AppSettings;
-    public tipKeys: TipKey[] = [];
 
     private subs: Subscription[] = [];
     private form: FormGroup;
@@ -26,38 +25,52 @@ export class SettingsComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+
+        this.settings = this.settingsService.settings;
+
         this.form = this.formBuilder.group({
-            showComments: [false],
+            showCommentEditor: [this.settings.showCommentEditor],
+            username: [this.settings.username],
             tips: this.formBuilder.group({}),
         });
 
-        const initialSettings = this.settingsService.settings;
-
-        initialSettings.tips.forEach(tip => {
-            this.tipKeys.push(tip.key);
-            (this.form.controls["tips"] as FormGroup).addControl(tip.key, new FormControl(tip.enabled));
+        Object.keys(this.settings.tips).forEach(key => {
+            (this.form.controls["tips"] as FormGroup).addControl(key, new FormControl(this.settings.tips[key].enabled));
         });
 
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
-            settings.tips.forEach(tip => (this.form.controls["tips"] as FormGroup).controls[tip.key].patchValue(tip.enabled));
+
+            Object.keys(this.settings.tips).forEach(key => {
+                (this.form.controls["tips"] as FormGroup).controls[key].patchValue(settings.tips[key].enabled);
+            });
         }));
 
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
     public onSave() {
-        let tips = [];
-        const tipsGroup = this.form.controls["tips"] as FormGroup;  
-
-        this.tipKeys.forEach(key => {
-            tips.push({ key: key, enabled: tipsGroup.controls[key].value })
-        });
-
-        this.settingsService.setTips(tips);
+        let changes = {
+            showCommentEditor: this.form.value.showCommentEditor,
+            tips: {
+                general: { enabled: this.form.value.tips.general },
+                definitionWarning: { enabled: this.form.value.tips.definitionWarning },
+            }
+        }
+        this.settingsService.update(changes);
         this.appService.returnToSender();
     }
+
+    public get tipKeys() {
+        return Object.keys(this.settings.tips);
+    }
+
+    public onReset() {
+        this.settingsService.factoryReset();
+        this.appService.returnToSender();
+    }
+
 }

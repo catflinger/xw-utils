@@ -14,16 +14,20 @@ export const ApiSymbols = {
     AuthorizationFailure: Symbol("AuthorizationFailure")
 }
 
-export type TipKey =  "general" | "definitionWarning";
 
 export interface TipSetting {
-    readonly key: TipKey;
+    //readonly key: TipKey;
+    readonly caption: string
     readonly enabled: boolean;
+}
+
+export interface TipSettings {
+    readonly general: TipSetting;
+    readonly definitionWarning: TipSetting;
 }
 
 export interface AppSettings {
     readonly showCommentEditor: boolean;
     readonly username: string;
-    readonly tips: ReadonlyArray<TipSetting>;
-    tipIsEnabled(key: TipKey)
+    readonly tips: TipSettings;
 }

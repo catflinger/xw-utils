@@ -1,17 +1,25 @@
 <h3 class="mt-3">Settings</h3>
 
-<h5 class="mt-5">Notifications</h5>
-
 <form [formGroup]="form" class="form">
+
+    <h5 class="mt-5">Solver</h5>
+
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="showCommentEditor">
+        <label class="form-check-label">show comment editor</label>
+    </div>
+
+    <h5 class="mt-5">Notifications and help tips</h5>
 
     <div formGroupName="tips">
         <div class="form-check" *ngFor="let key of tipKeys">
             <input type="checkbox" class="form-check-input" [formControlName]="key">
-            <label class="form-check-label">{{key}}</label>
+            <label class="form-check-label">{{settings.tips[key].caption}}</label>
         </div>
-    
+
         <div class="formGroup mt-5">
-            <button class="btn btn-primary" type="button" (click)="onSave()">Save</button>
+            <button class="btn btn-primary mr-3" type="button" (click)="onSave()">Save</button>
+            <button class="btn btn-primary" type="button" (click)="onReset()">Reset all</button>
         </div>
-        </div>
+    </div>
 </form>
