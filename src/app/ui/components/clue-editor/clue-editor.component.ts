@@ -5,8 +5,7 @@ import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { AppSettings } from 'src/app/services/common';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
 
 @Component({
@@ -89,7 +88,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     
     public onSave() {
 
-        if (this.tipStatus.show || this.form.value.chunks.length < 2) {
+        if (this.appSettings.tips.definitionWarning.enabled && !this.tipStatus.show && this.form.value.chunks.length < 2) {
             this.tipInstance.activated = true;
         } else {
             this.activePuzzle.update(new UpdateClue(

@@ -7,8 +7,7 @@ import { UpdatePreamble } from 'src/app/services/modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { AuthService } from 'src/app/services/auth.service';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { AppSettings } from 'src/app/services/common';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 @Component({
     selector: 'app-publish-preamble',

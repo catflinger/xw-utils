@@ -4,9 +4,11 @@
 
     <h5 class="mt-5">Solver</h5>
 
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" formControlName="showCommentEditor">
-        <label class="form-check-label">show comment editor</label>
+    <div formGroupName="general">
+        <div class="form-check" *ngFor="let key of generalKeys">
+            <input type="checkbox" class="form-check-input" [formControlName]="key">
+            <label class="form-check-label">{{settings.general[key].caption}}</label>
+        </div>
     </div>
 
     <h5 class="mt-5">Notifications and help tips</h5>
@@ -16,10 +18,11 @@
             <input type="checkbox" class="form-check-input" [formControlName]="key">
             <label class="form-check-label">{{settings.tips[key].caption}}</label>
         </div>
-
-        <div class="formGroup mt-5">
-            <button class="btn btn-primary mr-3" type="button" (click)="onSave()">Save</button>
-            <button class="btn btn-primary" type="button" (click)="onReset()">Reset all</button>
-        </div>
     </div>
+
+    <div class="formGroup mt-5">
+        <button class="btn btn-primary mr-3" type="button" (click)="onSave()">Save</button>
+        <button class="btn btn-primary" type="button" (click)="onReset()">Reset all</button>
+    </div>
+
 </form>

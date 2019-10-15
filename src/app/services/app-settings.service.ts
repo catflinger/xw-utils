@@ -1,29 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-import { TipSetting, AppSettings, TipSettings } from './common';
 
-class _TipSetting implements TipSetting {
+interface BooleanSetting {
+    readonly caption: string
+    readonly enabled: boolean;
+}
+
+class _BooleanSetting implements BooleanSetting {
     constructor(
         public caption: string,
         public enabled: boolean,
     ) {}
 }
 
+class _GeneralSettings implements GeneralSettings {
+    public showCommentEditor: _BooleanSetting;
+    public showCheat: _BooleanSetting;
+}
+
 class _TipSettings implements TipSettings {
-    public general: _TipSetting;
-    public definitionWarning: _TipSetting;
+    public general: _BooleanSetting;
+    public definitionWarning: _BooleanSetting;
 }
 
 class _AppSettings implements AppSettings {
-    public showCommentEditor: boolean;
     public username: string;
+    public general: _GeneralSettings;
     public tips: _TipSettings;
 }
 
 const _defaultSettings: _AppSettings = {
     username: null,
-    showCommentEditor: true,
+    general: {
+        showCommentEditor: { caption: "show comment editor", enabled: true },
+        showCheat: { caption: "show cheat buttons", enabled: true },
+    },
     tips: {
         general: { caption: "show general tips", enabled: true },
         definitionWarning: { caption: "show missing defintion warning", enabled: true },
@@ -32,7 +44,25 @@ const _defaultSettings: _AppSettings = {
 
 type _Modifier = (settings: _AppSettings) => void;
 
-export type TipKey = keyof _TipSettings;
+export interface GeneralSettings {
+    readonly showCommentEditor: BooleanSetting;
+    readonly showCheat: BooleanSetting;
+}
+
+export interface TipSettings {
+    readonly general: BooleanSetting;
+    readonly definitionWarning: BooleanSetting;
+}
+
+export interface AppSettings {
+    readonly username: string;
+    readonly general: GeneralSettings;
+    readonly tips: TipSettings;
+}
+
+export type TipKey = keyof TipSettings;
+export type GeneralKey = keyof GeneralSettings;
+export type BooleanSettingsGroupKey = "general" | "tips";
 
 @Injectable({
     providedIn: 'root'
@@ -66,17 +96,9 @@ export class AppSettingsService {
             if (changes && changes.username && typeof changes.username === "string") {
                 _settings.username = changes.username;
             }
-            if (changes && typeof changes.showCommentEditor === "boolean") {
-                _settings.showCommentEditor = changes.showCommentEditor;
-            }
-            if (changes && typeof changes.tips === "object") {
-                Object.keys(_settings.tips).forEach(key => {
-                    let newTip = changes.tips[key];
-                    if (newTip && typeof newTip === "object" && typeof newTip.enabled === "boolean") {
-                        _settings.tips[key].enabled = newTip.enabled;
-                    }
-                });
-            }
+
+            this._patchBooleanSettings(_settings, changes, "general");
+            this._patchBooleanSettings(_settings, changes, "tips");
         });
     }
 
@@ -88,18 +110,18 @@ export class AppSettingsService {
 
     public hideCommentEditor() {
         this._update((settings) => {
-            settings.showCommentEditor = false;
+            settings.general.showCommentEditor.enabled = false;
         });
     }
 
     public showCommentEditor() {
         this._update((settings) => {
-            settings.showCommentEditor = true;
+            settings.general.showCommentEditor.enabled = true;
         });
     }
 
     public toggleCommentEditor() {
-        if (this.bs.value.showCommentEditor) {
+        if (this.bs.value.general.showCommentEditor.enabled) {
             this.hideCommentEditor();
         } else {
             this.showCommentEditor();
@@ -116,6 +138,21 @@ export class AppSettingsService {
         modifier(newSettings);
         this.storageService.saveUserSettings(JSON.stringify(newSettings));
         this.bs.next(newSettings);
+    }
+
+    private _patchBooleanSettings(currentSettings: _AppSettings, changes: any, group: BooleanSettingsGroupKey) {
+
+        // For each of the settings in the given BooleanSettingsGroup it look for a matching
+        // setting in the changes object and if we find one then apply the new value
+
+        if (changes && typeof changes[group] === "object") {
+            Object.keys(currentSettings[group]).forEach(key => {
+                let newTip = changes[group][key];
+                if (newTip && typeof newTip === "object" && typeof newTip.enabled === "boolean") {
+                    currentSettings[group][key].enabled = newTip.enabled;
+                }
+            });
+        }
     }
 }
 

@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/ui/services/app.service';
-import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-settings',
@@ -29,9 +28,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.settings = this.settingsService.settings;
 
         this.form = this.formBuilder.group({
-            showCommentEditor: [this.settings.showCommentEditor],
-            username: [this.settings.username],
+            //username: [this.settings.username],
+            general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
+        });
+
+        // TO DO: encapsulate general and tips into a common BooleanSettingsControlComponent
+
+        Object.keys(this.settings.general).forEach(key => {
+            (this.form.controls["general"] as FormGroup).addControl(key, new FormControl(this.settings.general[key].enabled));
         });
 
         Object.keys(this.settings.tips).forEach(key => {
@@ -40,6 +45,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
+
+            //this.form.controls["username"].patchValue(this.settings.username);
+
+            Object.keys(this.settings.general).forEach(key => {
+                (this.form.controls["general"] as FormGroup).controls[key].patchValue(settings.general[key].enabled);
+            });
 
             Object.keys(this.settings.tips).forEach(key => {
                 (this.form.controls["tips"] as FormGroup).controls[key].patchValue(settings.tips[key].enabled);
@@ -54,7 +65,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onSave() {
         let changes = {
-            showCommentEditor: this.form.value.showCommentEditor,
+            general: {
+                showCommentEditor: { enabled: this.form.value.general.showCommentEditor },
+                showCheat: { enabled: this.form.value.general.showCheat },
+            },
             tips: {
                 general: { enabled: this.form.value.tips.general },
                 definitionWarning: { enabled: this.form.value.tips.definitionWarning },
@@ -66,6 +80,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public get tipKeys() {
         return Object.keys(this.settings.tips);
+    }
+
+    public get generalKeys() {
+        return Object.keys(this.settings.general);
     }
 
     public onReset() {

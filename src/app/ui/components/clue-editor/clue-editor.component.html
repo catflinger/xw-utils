@@ -7,7 +7,7 @@
                 <div class="col"><span class="">{{clue.caption}}</span></div>
                 <div class="coltext-right">
                     <button type="button" class="btn btn-link"
-                        *ngIf="appSettings.showCommentEditor && hasDefinition()" (click)="onClearDefinition()">clear
+                        *ngIf="appSettings.general.showCommentEditor.enabled && hasDefinition()" (click)="onClearDefinition()">clear
                         definition</button></div>
             </div>
 
@@ -15,8 +15,8 @@
                 <div class="col">
                     <h4>
                         <app-clue-text-control formControlName="chunks"
-                            [ngClass]="{ 'hidden': !appSettings.showCommentEditor }"></app-clue-text-control>
-                        <span [ngClass]="{ 'hidden': appSettings.showCommentEditor }">{{clue.text}}</span>
+                            [ngClass]="{ 'hidden': !appSettings.general.showCommentEditor.enabled }"></app-clue-text-control>
+                        <span [ngClass]="{ 'hidden': appSettings.general.showCommentEditor.enabled }">{{clue.text}}</span>
                     </h4>
                 </div>
             </div>
@@ -38,21 +38,21 @@
         <div class="modal-body">
             <div class="form-group">
                 <div class="float-left"><label for="answer">Answer</label></div>
-                <div class="float-right" *ngIf="clue.solution"><button type="button" class="btn btn-link"
+                <div class="float-right" *ngIf="clue.solution && appSettings.general.showCheat.enabled"><button type="button" class="btn btn-link"
                         (click)="onCheat()">cheat</button></div>
 
                 <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer">
             </div>
 
-            <div class="form-group mb-0" [ngClass]="{ 'hidden': !appSettings.showCommentEditor }">
+            <div class="form-group mb-0" [ngClass]="{ 'hidden': !appSettings.general.showCommentEditor.enabled }">
                 <label for="comment">Comment</label>
                 <quill-editor id="comment" formControlName="comment" format="object"></quill-editor>
             </div>
 
             <div>
                 <button type=button class="btn btn-link m-0 p-0" (click)="onToggleComment()">
-                    <span *ngIf="!appSettings.showCommentEditor">show comment</span>
-                    <span *ngIf="appSettings.showCommentEditor">hide comment</span>
+                    <span *ngIf="!appSettings.general.showCommentEditor.enabled">show comment</span>
+                    <span *ngIf="appSettings.general.showCommentEditor.enabled">hide comment</span>
                 </button>
             </div>
 
