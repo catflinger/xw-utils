@@ -4,6 +4,9 @@
 .solved {
     color: silver;
 }
+.highlight.solved {
+    color: inherit;
+}
 .caption {
     font-weight: bold;
 }

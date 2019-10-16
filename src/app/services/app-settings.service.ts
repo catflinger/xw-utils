@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 
+// TO DO: so far all the the settings have turned out to be related to the UI.
+// Consider if we need an app-wide settings service.  Perhaps move this to the
+// UI section of the project
+
 interface BooleanSetting {
     readonly caption: string
     readonly enabled: boolean;
@@ -17,7 +21,6 @@ class _BooleanSetting implements BooleanSetting {
 class _GeneralSettings implements GeneralSettings {
     public showCommentEditor: _BooleanSetting;
     public showCommentValidation: _BooleanSetting;
-    public muteSolvedClues: _BooleanSetting;
     public showCheat: _BooleanSetting;
 }
 
@@ -38,12 +41,11 @@ const _defaultSettings: _AppSettings = {
     general: {
         showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
-        muteSolvedClues: { caption: "grey text for clues with answers", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
     },
     tips: {
         general: { caption: "show general tips", enabled: true },
-        definitionWarning: { caption: "show tips on highlighting definitions", enabled: true },
+        definitionWarning: { caption: "show tip on highlighting definitions", enabled: true },
     }
 };
 
@@ -53,7 +55,6 @@ type _Modifier = (settings: _AppSettings) => void;
 export interface GeneralSettings {
     readonly showCommentEditor: BooleanSetting;
     readonly showCommentValidation: BooleanSetting;
-    readonly muteSolvedClues: BooleanSetting;
     readonly showCheat: BooleanSetting;
 }
 

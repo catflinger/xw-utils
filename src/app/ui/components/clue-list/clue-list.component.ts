@@ -46,17 +46,22 @@ export class ClueListComponent implements OnInit {
     }
 
     public getClueTextClass(clue: Clue): string[] {
+        const validationRequired: boolean = this.appSettings.general.showCommentValidation.enabled;
+        const detailsRequired: boolean = this.appSettings.general.showCommentEditor.enabled;
         let result = [];
 
         if (clue.highlight) {
             result.push("highlight");
         }
 
-        if (this.appSettings.general.showCommentValidation.enabled
-            && clue.warnings.length === 0
-            && !clue.highlight ) {
-            
-            result.push("solved");
+        if (validationRequired) {
+            let isSolved = detailsRequired ? 
+                clue.warnings.length === 0 :
+                clue.answer.length > 0;
+
+            if (isSolved) {
+                result.push("solved");
+            }
         }
 
         return result;
