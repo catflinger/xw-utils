@@ -88,10 +88,17 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     
     public onSave() {
 
-        if (this.appSettings.tips.definitionWarning.enabled && !this.tipStatus.show && this.form.value.chunks.length < 2) {
+        if (this.appSettings.general.showCommentEditor.enabled && 
+            this.appSettings.tips.definitionWarning.enabled && 
+            !this.tipStatus.show && 
+            this.form.value.chunks.length < 2) {
+
             this.tipInstance.activated = true;
+
         } else {
+
             this.activePuzzle.update(new UpdateClue(
+
                 this.clueId,
                 this.form.value.answer,
                 this.form.value.comment,

@@ -14,13 +14,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public settings: AppSettings;
 
     private subs: Subscription[] = [];
-    private form: FormGroup;
+    public form: FormGroup;
 
     constructor(
         private appService: AppService,
         private settingsService: AppSettingsService,
         private formBuilder: FormBuilder,
-        private router: Router,
     ) { }
 
     ngOnInit() {

@@ -35,7 +35,19 @@ class _AppSettings implements AppSettings {
     public tips: _TipSettings;
 }
 
-// before adding more settins read the comment on interfaces GeneralSettings and TipSettings
+/*
+*   Steps to add a new tip or general boolean setting:
+*
+*   1) Add the name of the setting to one of the exported interfaces, either TipSettings or General Settings
+*   2) Add an entry containing the caption and initial value to the _defaultSettings object below
+*
+*   The setting will automatically appear as a user configuration in the Settings page and will be available
+*   for the app to use as appSettings.general.mynewname.enabled or appSettings.tps.mynewname.enabled.
+*
+*   Tips can be shown using the tip control <app-tip key="mynewnamme"> Your text goes here... </app-tip>
+*/
+
+// before adding more settings read the comment on interfaces GeneralSettings and TipSettings
 const _defaultSettings: _AppSettings = {
     username: null,
     general: {
