@@ -25,7 +25,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    private gridParams: GridParameters = new GridParameters();;
+    private gridParams: GridParameters = new GridParameters();
 
     @ViewChild('canvas', { static: true }) canvasRef: ElementRef;
 
@@ -50,7 +50,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
 
             this.form = this.builder.group({
-                'publishAsDraft': ["draft", Validators.required],
+                'publishStatus': ["draft", Validators.required],
             });
 
             this.subs.push(
@@ -91,7 +91,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         })
         .then((result) => {
             if (result.success === ApiResponseStatus.OK) {
-                return this.publicationService.publishPost(this.puzzle, result.url);
+                return this.publicationService.publishPost(this.puzzle, result.url, this.form.value.publishStatus);
             } else if (result.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {

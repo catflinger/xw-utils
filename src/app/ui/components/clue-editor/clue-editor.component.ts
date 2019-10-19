@@ -7,6 +7,7 @@ import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
+import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
 
 @Component({
     selector: 'app-clue-editor',
@@ -104,6 +105,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 this.form.value.comment,
                 this.form.value.chunks
             ));
+
+            this.activePuzzle.update(new ClearSelection());
 
             this.close.emit("save");
         }

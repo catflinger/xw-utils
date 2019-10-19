@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from '../model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { PostContentGenerator } from './content-generator/content-generator';
-import { ApiResponse, ApiResponseStatus } from './common';
+import { ApiResponse, ApiResponseStatus, PublishStatus } from './common';
 import { AuthService, Credentials } from './auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -50,7 +50,7 @@ export class PublicationService {
         }
     }
 
-    public publishPost(puzzle: Puzzle, gridUrl: string): Promise<PublishPostResponse> {
+    public publishPost(puzzle: Puzzle, gridUrl: string, status: PublishStatus): Promise<PublishPostResponse> {
         const credentials: Credentials = this.authService.getCredentials();
 
         let generator = new PostContentGenerator();
@@ -62,6 +62,7 @@ export class PublicationService {
             content,
             username: credentials.username,
             password: credentials.password,
+            status: status,
     })
         .toPromise()
         .then(data => data as PublishPostResponse);

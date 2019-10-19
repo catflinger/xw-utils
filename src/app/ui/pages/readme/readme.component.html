@@ -40,7 +40,21 @@
 <div class="row justify-content-center">
     <div class="col">
         <pre>
+
+redirect clues (eg See 21) should not show validation messages
+
+when opening a new puzzle with a username and password the "Working" message shows (as it should) but is removed 
+as soon as the user has been authenticated, it should remain there until the crossword is loaded.  It looks like
+nothing is happening and the load has failed.
+
+in the solver pressing ESC should cancel any highlighting
+
 add status PUBLISHED to the puzzles on the home page
+
+if publish fails because of a missing password the sequence of screens and messages is confusing.
+perhaps the publish screen is incorrectly assuming the user is authenticated when they are not 
+
+add a back button to the Settings page
 
 add a feedback facility somewhere.This could be permenent or just for the remainder of the development.
 Perhaps just a link to an email address?  Perhaps a page in the app where users can see the feedback
@@ -52,8 +66,6 @@ Make them disappear as soon as the missing information is provided.
 Show a warning if an answer does not fit teh space available
 
 Show a warning if an answer does not matchthe published solution
-
-Puzzles always publish as draft even if "publish immediately" option is selected
 
 Add more help tips to pages to explain what to do (when it is not obvious)
 

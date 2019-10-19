@@ -13,3 +13,5 @@ export interface ApiResponse {
 export const ApiSymbols = {
     AuthorizationFailure: Symbol("AuthorizationFailure")
 }
+
+export type PublishStatus = "draft";
