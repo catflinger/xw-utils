@@ -61,18 +61,20 @@ export class SelectClueByCell implements IPuzzleModifier {
         let result: Clue = null;
 
         for (let clue of clues) {
-            if (clue.entries.length) {
-                let entry = clue.entries[0];
-                entry.cellIds.forEach(id => {
-                    if (id === cellId) {
-                        result = clue;
-                    }
-                });
+            if (!clue.redirect) {
+                if (clue.entries.length) {
+                    let entry = clue.entries[0];
+                    entry.cellIds.forEach(id => {
+                        if (id === cellId) {
+                            result = clue;
+                        }
+                    });
+                }
+                if (result) {
+                    break;
+                }
+                }
             }
-            if (result) {
-                break;
-            }
-        }
         return result;
     }
 
@@ -80,16 +82,18 @@ export class SelectClueByCell implements IPuzzleModifier {
         let result: Clue = null;
 
         for (let clue of clues) {
-            clue.entries.forEach((entry) => {
-                entry.cellIds.forEach(id => {
-                    if (id === cellId) {
-                        result = clue;
-                    }
+            if (!clue.redirect) {
+                clue.entries.forEach((entry) => {
+                    entry.cellIds.forEach(id => {
+                        if (id === cellId) {
+                            result = clue;
+                        }
+                    });
                 });
-            });
 
-            if (result) {
-                break;
+                if (result) {
+                    break;
+                }
             }
         }
         return result;

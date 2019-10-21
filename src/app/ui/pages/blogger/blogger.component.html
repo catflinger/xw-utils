@@ -12,7 +12,7 @@
                 <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
             </div>
             <div class="col-2" class="text-warning">
-                <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length">
+                <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length && !clue.redirect">
                     <span> {{clue.warnings[0]}}</span>
                 </ng-container>
             </div>

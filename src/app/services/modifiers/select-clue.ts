@@ -12,7 +12,7 @@ export class SelectClue implements IPuzzleModifier {
             red.exec(puzzle);
 
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
-            if (clue) {
+            if (clue && !clue.redirect) {
                 clue.highlight = true;
                 clue.entries.forEach((entry) => {
                     entry.cellIds.forEach((cellId) => {

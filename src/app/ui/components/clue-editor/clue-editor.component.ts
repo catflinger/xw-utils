@@ -135,4 +135,11 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             answer: this.clue.solution,
         });
     }
+
+    public get showTextWarning() {
+        return this.appSettings.general.showCommentEditor.enabled && 
+                this.appSettings.general.showCommentValidation.enabled && 
+                this.clue.warnings.length && 
+                !this.clue.redirect;
+    }
 }

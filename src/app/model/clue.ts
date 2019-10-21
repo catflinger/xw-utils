@@ -2,6 +2,7 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
+import { ɵConsole } from '@angular/core';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -11,6 +12,7 @@ export class Clue implements IClue {
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
     public readonly solution: string;
+    public readonly redirect: boolean;
     public readonly format: string;
     public readonly comment: QuillDelta;
     public readonly highlight: boolean;
@@ -29,7 +31,15 @@ export class Clue implements IClue {
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;
-        
+
+        if (typeof data.redirect === "boolean") {
+            this.redirect = data.redirect;
+        } else if (typeof data.text === "string" && data.text.length > 0) {
+            this.redirect = new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(data.text);
+        } else {
+            this.redirect = false;
+        }
+
         let entries: GridEntry[] = [];
         data.entries.forEach(entry => entries.push(new GridEntry(entry)));
         this.entries = entries;

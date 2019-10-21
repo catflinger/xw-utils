@@ -53,4 +53,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.deletePuzzle(id);
     }
 
+    // public result: boolean;
+
+    // public test() {
+    //     const regEx = new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i");
+    //     this.result = regEx.test("See 12across,22");
+    // }
 }

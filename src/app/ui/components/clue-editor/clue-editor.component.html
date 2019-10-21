@@ -63,7 +63,7 @@
         </div>
 
         <div class="modal-footer">
-            <div class="text-warning" *ngIf="appSettings.general.showCommentEditor.enabled && appSettings.general.showCommentValidation.enabled && clue.warnings.length">
+            <div class="text-warning" *ngIf="showTextWarning">
                 <span> {{clue.warnings[0]}}</span>
             </div>
 
