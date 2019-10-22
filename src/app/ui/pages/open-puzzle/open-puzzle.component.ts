@@ -58,6 +58,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.puzzleManagementService.openLatestPuzzle(params.provider)
         .then((puzzle) => {
             this.appService.clear();
+            this.appService.clearOpenPuzzleParams();
             let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
             this.appService.setEditor(editor);
             this.router.navigate([editor]);
