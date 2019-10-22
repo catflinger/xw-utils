@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public onLoginClose() {
-        if (this.appStatus.loginCallback) {
-            this.appStatus.loginCallback();
+        if (this.appService.loginCallback) {
+            this.appService.loginCallback();
         } else {
             this.appService.clear();
             this.router.navigate(["home"]);

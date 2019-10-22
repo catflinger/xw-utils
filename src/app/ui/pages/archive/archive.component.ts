@@ -5,12 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import moment from "moment";
 
 import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService, EditorType } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService, EditorType, OpenPuzzleParameters } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
-import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
-import { ApiSymbols } from 'src/app/services/common';
-import { AuthService, Credentials } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-archive',
@@ -22,17 +19,14 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     public archive: Archive;
     public provider: string;
     public form: FormGroup;
-    public credentials: Credentials;
 
     private subs: Subscription[] = [];
 
     constructor(
         private appService: AppService,
-        private authService: AuthService,
         private archiveService: ArchiveService,
         private router: Router,
         private activeRoute: ActivatedRoute,
-        private puzzleManagement: PuzzleManagementService,
         private formBuilder: FormBuilder,
 
     ) { }
@@ -62,11 +56,6 @@ export class ArchiveComponent implements OnInit, OnDestroy {
             })
             .finally(() => this.appService.clearBusy());
         }));
-
-        this.subs.push(this.authService.observe().subscribe(credentials => {
-            this.credentials = credentials;
-        }));
-
     }
 
     public ngOnDestroy() {
@@ -93,42 +82,15 @@ export class ArchiveComponent implements OnInit, OnDestroy {
             url: null,
         };
 
-        if (!this.credentials.authenticated) {
-            this.appService.setLoginCallback(() => {
-                this._openPuzzle(item);
-            });
-            this.router.navigate(["login"])
-
-        } else {
-            this._openPuzzle(item);
-        }
+        this.appService.clear();
+        this.appService.setOpenPuzzleParams(new OpenPuzzleParameters("openLatest", this.provider, item));
+        this.navigate("open-puzzle");
     }
 
     public openPuzzle(item: ArchiveItem) {
-        this._openPuzzle(item);
-    }
-
-    private _openPuzzle(item: ArchiveItem) {
         this.appService.clear();
-        this.appService.setBusy();
-
-
-        this.puzzleManagement.openArchivePuzzle(item)
-        .then((puzzle) => {
-            this.appService.clear();
-            let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
-            this.appService.setEditor(editor);
-            this.navigate(editor);
-        })
-        .catch((error) => {
-            if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.clear();
-                this.appService.setAlert("danger", "Could not authenticate you at 15squared. Please try to login again.");
-            } else {
-                this.appService.clear();
-                this.appService.setAlert("danger", error.toString());
-            }
-        });    
+        this.appService.setOpenPuzzleParams(new OpenPuzzleParameters("openLatest", this.provider, item));
+        this.navigate("open-puzzle");
     }
 
     public getItems() {

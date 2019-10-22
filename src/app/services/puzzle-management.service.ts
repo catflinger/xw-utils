@@ -50,21 +50,31 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     // This class is doing two things: providing management of the active puzzle
     // and providing management of the stored puzzles. Some refactoring seems necessary.
     //
-    // So far my attempts to split this into an ActivePuzzleMager and a 
+    // So far my attempts to split this into an ActivePuzzle and a 
     // PuzzleManager have resulted in cyclic dependencies.  Working around this
-    // has just resulted in moving the code-smell somewhere else.
+    // has just resulted in moving the code-smell somewhere else.  The two functions
+    // operate as a pair.
     //
     // For example: the PuzzleManager needs to reference the ActivePuzzleManager whenver a new puzzle
     // is loaded form storage; the ActivePuzzleManager needs to refernce the PuzzleManager to 
     // updated the stored puzzle when the active puzzle is modified (to permanently save changes).
     //
     // Note on behaviour subjects:
-    // The two behaviour subjects do not operate independently of each other.  Combining these
-    // into a single observable might make sense, but the individual application components only ever depend
+    // The two behaviour subjects tend to be used independently, but their behaviour is not independent. Some actions
+    // cause just one bs to emit a new value, some cause both to emit.  Combining these
+    // into a single observable might make sense, but the individual application components typically only depend
     // on one of these, not both. Observing a combined observable just result in unnecessary
     // updates of the component when nothing they are using has changed.
-
-    //#region Active Puzzle management
+    //
+    // I have not run out of ideas yet, just paused this until I have more time to look at it again.
+    //
+    //  Next idea is to have the puzzle manager obsserve the active puzzle for changes.  Whenever a new active
+    //  puzzle is emitted the manager saves it. I am not sure  yet if this a good idea.
+    //
+    //  Another idea is to have the on or both of the classes reference an interface rather than the concrete class.  Perhaps
+    //  this will avoid the cyclic dependency.
+    //
+    //#region Active Puzzle interface
 
     public observe(): Observable<Puzzle> {
         return this.bsActive.asObservable();

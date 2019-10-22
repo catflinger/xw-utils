@@ -14,22 +14,33 @@ import { PublishGridComponent } from './ui/pages/publish-grid/publish-grid.compo
 import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.component';
 import { ReadmeComponent } from './ui/pages/readme/readme.component';
 import { SettingsComponent } from './ui/pages/settings/settings.component';
+import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
 
 
 const routes: Routes = [
+    // landing pages
     { path: "home", component: HomeComponent },
-    { path: "archive/:provider", component: ArchiveComponent },
     { path: "login", component: LoginComponent },
+
+    // solving and blogging puzzles
+    { path: "archive/:provider", component: ArchiveComponent },
+    { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
+
+    // publishing puzzles
     { path: "publish-options", component: PublishOptionsComponent },
     { path: "publish-grid", component: PublishGridComponent },
     { path: "publish-preamble", component: PublishPreambleComponent },
     { path: "publish-login", component: PublishLoginComponent },
     { path: "publish", component: PublishComponent },
     { path: "publish-complete", component: PublishCompleteComponent },
+
+    // general
     { path: "readme", component: ReadmeComponent },
     { path: "settings", component: SettingsComponent },
+
+    // default routes
     { path: "", redirectTo: "/home", pathMatch: "full" },
     { path: "*", redirectTo: "/home", pathMatch: "full" }
 ];

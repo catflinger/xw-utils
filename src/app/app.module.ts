@@ -42,6 +42,7 @@ import { TipComponent } from './ui/components/tip/tip.component';
 import { ReadmeComponent } from './ui/pages/readme/readme.component';
 import { SettingsComponent } from './ui/pages/settings/settings.component';
 import { TipInstanceFactory } from './ui/components/tip/tip-instance';
+import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -86,6 +87,7 @@ const quillGlobalConfig = {
         TipComponent,
         ReadmeComponent,
         SettingsComponent,
+        OpenPuzzleComponent,
     ],
     imports: [
         BrowserModule,

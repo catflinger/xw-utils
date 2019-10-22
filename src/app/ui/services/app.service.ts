@@ -1,23 +1,28 @@
 
-
-// TO DO: move this file to /app/ui/services as it contains all UI stuff
-
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Alert, AlertType } from '../common';
+import { ArchiveItem } from 'src/app/model/archive-item';
 
 export type LoginCallback = () => void;
 
 export type EditorType = "blogger" | "solver";
+export type OpenPuzzleAction = "openByDate" | "openLatest";
+
+export class OpenPuzzleParameters {
+    constructor(
+        public readonly action: OpenPuzzleAction,
+        public readonly provider: string,
+        public readonly archiveItem: ArchiveItem,
+    ){}
+}
 
 export class AppStatus {
     constructor(
         public readonly busy: boolean,
         public readonly late: boolean,
         public readonly alerts: readonly Alert[],
-        public readonly editor: EditorType,
-        public readonly loginCallback: LoginCallback,
     ) { }
 }
 
@@ -30,10 +35,11 @@ export class AppService implements OnDestroy {
     private busyCounter: number = 0;
 
     private alerts: Alert[] = [];
-    private editor: EditorType = "blogger";
-    private onLogin: LoginCallback = null;
+    private _editor: EditorType = "blogger";
+    private _onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
     private returnAddress: string;
+    private _openPuzzleParameters: OpenPuzzleParameters;
 
     private bs: BehaviorSubject<AppStatus>;
 
@@ -44,9 +50,7 @@ export class AppService implements OnDestroy {
             new AppStatus(
                 false,
                 false,
-                [],
-                "blogger",
-                null));
+                []));
 
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
@@ -70,18 +74,38 @@ export class AppService implements OnDestroy {
         return this.bs.asObservable();
     }
 
+    public get openPuzzleParameters(): OpenPuzzleParameters {
+        return this._openPuzzleParameters;
+    }
+
+    public get loginCallback(): LoginCallback {
+        return this._onLogin;
+    }
+
+    public get editor(): EditorType {
+        return this._editor;
+    }
+
     public clear() {
         this.clearLoginCallback();
         this.clearAlerts();
         this.clearBusy();
     }
 
+    public setOpenPuzzleParams(params: OpenPuzzleParameters) {
+        this._openPuzzleParameters = params;
+    }
+
+    public clearOpenPuzzleParams() {
+        this._openPuzzleParameters = null;
+    }
+
     public setLoginCallback(fn: LoginCallback) {
-        this.onLogin = fn;
+        this._onLogin = fn;
     }
 
     public clearLoginCallback() {
-        this.onLogin = null;
+        this._onLogin = null;
     }
 
     public setBusy() {
@@ -109,7 +133,7 @@ export class AppService implements OnDestroy {
     }
 
     public setEditor(editor: EditorType) {
-        this.editor = editor;
+        this._editor = editor;
     }
 
     public setReturnAddress(route: string) {
@@ -125,7 +149,7 @@ export class AppService implements OnDestroy {
 
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
-        this.bs.next(new AppStatus(this.busy, this.late, alerts, this.editor, this.onLogin));
+        this.bs.next(new AppStatus(this.busy, this.late, alerts));
     }
 
 }
