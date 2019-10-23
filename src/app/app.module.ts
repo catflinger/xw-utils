@@ -43,6 +43,7 @@ import { ReadmeComponent } from './ui/pages/readme/readme.component';
 import { SettingsComponent } from './ui/pages/settings/settings.component';
 import { TipInstanceFactory } from './ui/components/tip/tip-instance';
 import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
+import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
 
 const quillGlobalConfig = {
     modules: {
@@ -88,6 +89,7 @@ const quillGlobalConfig = {
         ReadmeComponent,
         SettingsComponent,
         OpenPuzzleComponent,
+        WordpressIdPipe,
     ],
     imports: [
         BrowserModule,
