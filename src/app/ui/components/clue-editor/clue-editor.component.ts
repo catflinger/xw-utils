@@ -8,6 +8,8 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
+import { TextChunk } from 'src/app/model/clue-text-chunk';
 
 @Component({
     selector: 'app-clue-editor',
@@ -26,6 +28,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public appSettings: AppSettings;
     public tipInstance: TipInstance;
     public tipStatus: TipStatus = new TipStatus(false, false, false);
+    public warnings: ClueValidationWarning[] = [];
 
     private subs: Subscription[] = [];
 
@@ -53,6 +56,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                             answer: this.starterText ? this.starterText : clue.answer,
                             chunks: clue.chunks,
                         });
+                        this.warnings = [];
+                        clue.warnings.forEach(warning => this.warnings.push(warning));
                     }
                 }
             )
@@ -75,6 +80,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.form.patchValue({
             chunks: [new ClueTextChunk(0, this.clue.text, false)]
         });
+        this.warnings = this.validate();
     }
 
     public hasDefinition(): boolean {
@@ -103,7 +109,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 this.clueId,
                 this.form.value.answer,
                 this.form.value.comment,
-                this.form.value.chunks
+                this.form.value.chunks,
+                this.warnings,
             ));
 
             this.activePuzzle.update(new ClearSelection());
@@ -134,12 +141,61 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.form.patchValue({
             answer: this.clue.solution,
         });
+        this.warnings = this.validate();
+    }
+
+    public onChange(source: string) {
+        this.warnings = this.validate();
     }
 
     public get showTextWarning() {
         return this.appSettings.general.showCommentEditor.enabled && 
                 this.appSettings.general.showCommentValidation.enabled && 
-                this.clue.warnings.length && 
+                this.warnings.length && 
                 !this.clue.redirect;
     }
+
+    private validate(): ClueValidationWarning[] {
+        let warnings: ClueValidationWarning[] = [];
+
+        let answer: string = this.form.value.answer;
+        let comment: QuillDelta = this.form.value.comment;
+        let chunks: readonly TextChunk[] = this.form.value.chunks;
+
+        if (!answer || answer.trim().length === 0) {
+            warnings.push("missing answer");
+        }
+
+        let commentOK = false;
+
+        if (comment && comment.ops && Array.isArray(comment.ops)) {
+            let text = "";
+
+            comment.ops.forEach(op => {
+                if (op.insert) {
+                    text += op.insert;
+                }
+            });
+            commentOK = text.trim().length > 0;
+        }
+
+        if (!commentOK) {
+            warnings.push("missing comment");
+        }
+
+
+        let definitionCount = 0;
+        chunks.forEach(chunk => {
+            if (chunk.isDefinition) {
+                definitionCount++;
+            }
+        })
+
+        if (definitionCount === 0) {
+            warnings.push("missing definition");
+        }
+
+        return warnings;
+    }
+
 }

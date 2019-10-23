@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
+import { IPuzzle, IClue } from 'src/app/model/interfaces';
 import { ClearSelection } from './clear-selection';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';
@@ -23,7 +23,7 @@ export class SelectClueByCell implements IPuzzleModifier {
 
             const acrossClues = this.getAcrossClues(puzzle)
             const downClues = this.getDownClues(puzzle)
-            let result: Clue = null;
+            let result: IClue = null;
 
             // Look in across clues, first entry only
             result = this.findCellInFirstEntry(acrossClues, this.cell.id);
@@ -49,16 +49,16 @@ export class SelectClueByCell implements IPuzzleModifier {
         }
     }
 
-    private getAcrossClues(puzzle: IPuzzle): Clue[] {
+    private getAcrossClues(puzzle: IPuzzle): IClue[] {
         return puzzle.clues.filter((clue) => clue.group === "across");
     }
 
-    private getDownClues(puzzle: IPuzzle): Clue[] {
+    private getDownClues(puzzle: IPuzzle): IClue[] {
         return puzzle.clues.filter((clue) => clue.group === "down");
     }
 
-    private findCellInFirstEntry(clues: Clue[], cellId: string): Clue {
-        let result: Clue = null;
+    private findCellInFirstEntry(clues: IClue[], cellId: string): IClue {
+        let result: IClue = null;
 
         for (let clue of clues) {
             if (!clue.redirect) {
@@ -78,8 +78,8 @@ export class SelectClueByCell implements IPuzzleModifier {
         return result;
     }
 
-    private findCellInAnyEntry(clues: Clue[], cellId: string): Clue {
-        let result: Clue = null;
+    private findCellInAnyEntry(clues: IClue[], cellId: string): IClue {
+        let result: IClue = null;
 
         for (let clue of clues) {
             if (!clue.redirect) {

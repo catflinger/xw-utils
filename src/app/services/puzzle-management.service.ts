@@ -5,7 +5,6 @@ import { LocalStorageService } from './local-storage.service';
 import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
 import { ClearSelection } from './modifiers/clear-selection';
-import { Validate } from './modifiers/validate';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
@@ -150,7 +149,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         // modify it
         new ClearSelection().exec(puzzleM);
-        new Validate().exec(puzzleM);
 
         // push a read-only version
         this.bsActive.next(new Puzzle(puzzleM));

@@ -2,7 +2,6 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
-import { ɵConsole } from '@angular/core';
 
 export class Clue implements IClue {
     public readonly id: string;
