@@ -57,7 +57,7 @@ export class HttpPuzzleSourceService {
     public getArchivePuzzle(item: ArchiveItem): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
-        if (!credentials) {
+        if (!credentials.authenticated) {
             return Promise.reject(ApiSymbols.AuthorizationFailure);
         }
 

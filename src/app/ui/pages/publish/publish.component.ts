@@ -43,7 +43,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
 
-        } else if (!this.authService.getCredentials()) {
+        } else if (!this.authService.getCredentials().authenticated) {
             this.router.navigate(["/publish-login"]);
 
         } else {
