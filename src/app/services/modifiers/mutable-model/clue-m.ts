@@ -10,6 +10,7 @@ export abstract class ClueM implements IClue {
     public abstract letterCount: string;
     public abstract answer: string;
     public abstract solution: string;
+    public abstract annotation: string;
     public abstract redirect: boolean;
     public abstract format: string;
     public abstract comment: QuillDelta;

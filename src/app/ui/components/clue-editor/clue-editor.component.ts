@@ -29,6 +29,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public tipInstance: TipInstance;
     public tipStatus: TipStatus = new TipStatus(false, false, false);
     public warnings: ClueValidationWarning[] = [];
+    public showAnnotation: boolean = false;
 
     private subs: Subscription[] = [];
 
@@ -142,6 +143,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             answer: this.clue.solution,
         });
         this.warnings = this.validate();
+    }
+
+    public onAnnotation() {
+        this.showAnnotation = !this.showAnnotation;
     }
 
     public onChange(source: string) {

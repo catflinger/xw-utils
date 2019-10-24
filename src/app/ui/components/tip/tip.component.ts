@@ -51,6 +51,7 @@ import { TipInstance, TipStatus, TipInstanceFactory } from './tip-instance';
 export class TipComponent implements OnInit, OnDestroy {
     @Input() key: TipKey = "general";
     @Input() maxShowings: number = NaN;
+    @Input() suppressable: boolean = true;
     @Output() instance = new EventEmitter<TipInstance>();
 
     public status: TipStatus;

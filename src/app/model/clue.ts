@@ -11,6 +11,7 @@ export class Clue implements IClue {
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answer: string;
     public readonly solution: string;
+    public readonly annotation: string;
     public readonly redirect: boolean;
     public readonly format: string;
     public readonly comment: QuillDelta;
@@ -27,6 +28,7 @@ export class Clue implements IClue {
         this.letterCount = data.letterCount;
         this.answer = data.answer;
         this.solution = data.solution;
+        this.annotation = data.annotation;
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;

@@ -23,6 +23,7 @@ export abstract class IClue {
     abstract readonly letterCount: string;    // "(5, 4)"
     abstract readonly answer: string;
     abstract readonly solution: string;
+    abstract readonly annotation: string;
     abstract readonly redirect: boolean;
     abstract readonly format: string;
     abstract readonly comment: QuillDelta;
