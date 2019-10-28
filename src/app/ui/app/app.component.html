@@ -20,31 +20,7 @@
                     <ul class="navbar-nav mr-auto">
 
                         <li class="nav-item dropdown" ngbDropdown>
-                            <button class="btn btn-link nav-link dropdown-toggle" id="id01"
-                                ngbDropdownToggle>Latest</button>
-                            <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('azed')">Azed</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('ft')">FT</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('independent')">Independent</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('ios')">Independent on Sunday</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('cryptic')">Guardian</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('prize')">Guardian Prize</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('quiptic')">Guardian Quiptic</button>
-                                <button class="dropdown-item btn btn-link"
-                                    (click)="onSolve('everyman')">Everyman</button>
-                            </div>
-                        </li>
-
-                        <li class="nav-item dropdown" ngbDropdown>
-                            <button class="btn btn-link nav-link dropdown-toggle" id="id01"
-                                ngbDropdownToggle>Archive</button>
+                            <button class="btn btn-link nav-link dropdown-toggle" id="id01" ngbDropdownToggle>Puzzles</button>
                             <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
                                 <button class="dropdown-item btn btn-link" (click)="onArchive('azed')">Azed</button>
                                 <button class="dropdown-item btn btn-link" (click)="onArchive('ft')">FT</button>
@@ -57,19 +33,19 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" [routerLink]="['/readme']">Readme</a>
-                        </li>
-
-                        <li class="nav-item">
                             <button type="button" class="nav-link btn btn-link" (click)="onSettings()">Settings</button>
                         </li>
 
+                        <li class="nav-item">
+                                <a class="nav-link" [routerLink]="['/readme']">Readme</a>
+                            </li>
+    
                             <li class="nav-item" *ngIf="!credentials.authenticated">
-                                    <button type="button" class="nav-link btn btn-link" (click)="onLogin()">Login</button>
+                            <button type="button" class="nav-link btn btn-link" (click)="onLogin()">Login</button>
                         </li>
 
                         <li class="nav-item" *ngIf="credentials.authenticated">
-                                <button type="button" class="nav-link btn btn-link" (click)="onLogout()">Logout</button>
+                            <button type="button" class="nav-link btn btn-link" (click)="onLogout()">Logout</button>
                         </li>
                     </ul>
                 </div>

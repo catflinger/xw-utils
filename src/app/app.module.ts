@@ -44,6 +44,7 @@ import { SettingsComponent } from './ui/pages/settings/settings.component';
 import { TipInstanceFactory } from './ui/components/tip/tip-instance';
 import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
 import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
+import { IndyComponent } from './ui/pages/indy/indy.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -90,6 +91,7 @@ const quillGlobalConfig = {
         SettingsComponent,
         OpenPuzzleComponent,
         WordpressIdPipe,
+        IndyComponent,
     ],
     imports: [
         BrowserModule,

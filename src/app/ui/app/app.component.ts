@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { AppService, AppStatus, OpenPuzzleParameters } from 'src/app/ui/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
+import { ArchiveItem } from 'src/app/model/archive-item';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-root',
@@ -52,15 +54,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onArchive(provider: string) {
-        this.router.navigate(["archive", provider]);
-    }
-
-    public onSolve(provider: string) {
+    public onArchive(provider: PuzzleProvider) {
         this.appService.clear();
         this.activePuzzle.clear();
-        this.appService.setOpenPuzzleParams(new OpenPuzzleParameters("openLatest", provider, null));
-        this.router.navigate(["open-puzzle"]);
+        
+        if (provider === "independent" || provider === "ios") {
+            this.router.navigate(["indy"]);
+        } else {
+            this.router.navigate(["archive", provider]);
+        }
     }
 
     public onHome() {

@@ -1,0 +1,35 @@
+<div class="row my-5">
+    <div class="col">
+        <div class="card w-50  mx-auto text-center">
+            <h5 class="card-header">Latest</h5>
+            <div class="card-body">
+                    <p class="card-text">{{provider | provider }}</p>
+                    <p class="card-text">{{today | date:"EEEE - d LLLL yyyy"}}</p>
+                <button class="btn btn-primary" (click)="openLatest()">Open</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col">
+        <h5>Open puzzle by date</h5>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <form [formGroup]="form">
+
+            <div class="form-group">
+                <label for="datePicker">Puzzle date</label>
+                <input id="datePicker" type="text" class="form-control" formControlName="date"
+                    [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }" bsDatepicker>
+            </div>
+
+            <div class="form-group mt-5">
+                <button class="btn btn-primary mr-3" type="button" (click)="openPuzzleByDate()">Open</button>
+            </div>
+        </form>
+    </div>
+</div>

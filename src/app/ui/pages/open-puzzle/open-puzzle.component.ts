@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AppService, AppStatus, EditorType, OpenPuzzleParameters } from '../../services/app.service';
+import { AppService, EditorType } from '../../services/app.service';
 import { Router } from '@angular/router';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
+import { ArchiveItem } from 'src/app/model/archive-item';
 
 @Component({
   selector: 'app-open-puzzle',
@@ -53,9 +54,9 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    private openPuzzle(params: OpenPuzzleParameters) {
+    private openPuzzle(params: ArchiveItem) {
         this.appService.setBusy();
-        this.puzzleManagementService.openLatestPuzzle(params.provider)
+        this.puzzleManagementService.openArchivePuzzle(params)
         .then((puzzle) => {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();

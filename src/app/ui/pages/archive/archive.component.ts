@@ -5,9 +5,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import moment from "moment";
 
 import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService, EditorType, OpenPuzzleParameters } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-archive',
@@ -17,7 +18,7 @@ import { Archive } from 'src/app/model/archive';
 export class ArchiveComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public archive: Archive;
-    public provider: string;
+    public provider: PuzzleProvider;
     public form: FormGroup;
 
     private subs: Subscription[] = [];
@@ -67,29 +68,9 @@ export class ArchiveComponent implements OnInit, OnDestroy {
             (this.provider === 'independent' || this.provider === 'ios');
     }
 
-    public get showList(): boolean {
-        return this.provider 
-            && this.archive 
-            && (this.provider !== 'independent' && this.provider !== 'ios');
-    }
-
-    public openPuzzleByDate() {
-        let item: ArchiveItem = {
-            provider: this.provider,
-            serialNumber: null,
-            date: moment(this.form.value.date).toDate(),
-            setter: null,
-            url: null,
-        };
-
-        this.appService.clear();
-        this.appService.setOpenPuzzleParams(new OpenPuzzleParameters("openLatest", this.provider, item));
-        this.navigate("open-puzzle");
-    }
-
     public openPuzzle(item: ArchiveItem) {
         this.appService.clear();
-        this.appService.setOpenPuzzleParams(new OpenPuzzleParameters("openLatest", this.provider, item));
+        this.appService.setOpenPuzzleParams(item);
         this.navigate("open-puzzle");
     }
 

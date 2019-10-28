@@ -1,6 +1,6 @@
-<div class="row my-5" *ngIf="showList">
+<div class="row my-5">
     <div class="col">
-        <div class="card w-50  mx-auto text-center" *ngIf="provider">
+        <div class="card w-50  mx-auto text-center" *ngIf="provider && latest">
             <h5 class="card-header">Latest {{provider | provider}} puzzle</h5>
             <div class="card-body">
                 <p *ngIf="latest" class="card-text">{{latest.date | date:"EEEE - d LLLL yyyy"}}</p>
@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="row mt-3" *ngIf="showList">
+<div class="row mt-3" *ngIf="archiveItems.length">
     <div class="col">
         <table class="table">
             <tbody>
@@ -27,22 +27,5 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-</div>
-
-<div class="row mt-5" *ngIf="showDate">
-    <div class="col">
-        <form [formGroup]="form">
-
-            <div class="form-group">
-                <label for="datePicker">Puzzle date</label>
-                <input id="datePicker" type="text" class="form-control" formControlName="date"
-                    [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }" bsDatepicker>
-            </div>
-
-            <div class="form-group mt-5">
-                <button class="btn btn-primary mr-3" type="button" (click)="openPuzzleByDate()">Open</button>
-            </div>
-        </form>
     </div>
 </div>

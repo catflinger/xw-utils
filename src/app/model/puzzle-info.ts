@@ -1,10 +1,10 @@
-import { IPuzzleInfo } from './interfaces';
+import { IPuzzleInfo, PuzzleProvider } from './interfaces';
 
 export class PuzzleInfo implements IPuzzleInfo {
     public readonly id: string;
     public readonly title: string;
     public readonly puzzleDate: Date;
-    public readonly provider: string;
+    public readonly provider: PuzzleProvider;
     public readonly setter: string;
     public readonly wordpressId: number;
 

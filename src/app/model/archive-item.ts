@@ -1,7 +1,8 @@
 import moment from "moment";
+import { PuzzleProvider } from './interfaces';
 
 export class ArchiveItem {
-    public readonly provider: string;
+    public readonly provider: PuzzleProvider;
     public readonly serialNumber: number;
     public readonly date: Date;
     public readonly setter: string;

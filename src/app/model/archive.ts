@@ -1,4 +1,5 @@
 import { ArchiveIndex } from './archive-index';
+import { PuzzleProvider } from './interfaces';
 
 export class Archive {
     public readonly indexes: ReadonlyArray<ArchiveIndex>;
@@ -11,7 +12,7 @@ export class Archive {
         this.indexes = indexes;
     }
 
-    getIndex(provider: string): ArchiveIndex {
+    getIndex(provider: PuzzleProvider): ArchiveIndex {
         return this.indexes.find(index => index.provider === provider);
     }
 }

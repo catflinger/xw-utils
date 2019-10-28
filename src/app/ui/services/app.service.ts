@@ -10,14 +10,6 @@ export type LoginCallback = () => void;
 export type EditorType = "blogger" | "solver";
 export type OpenPuzzleAction = "openByDate" | "openLatest";
 
-export class OpenPuzzleParameters {
-    constructor(
-        public readonly action: OpenPuzzleAction,
-        public readonly provider: string,
-        public readonly archiveItem: ArchiveItem,
-    ){}
-}
-
 export class AppStatus {
     constructor(
         public readonly busy: boolean,
@@ -39,7 +31,7 @@ export class AppService implements OnDestroy {
     private _onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
     private returnAddress: string;
-    private _openPuzzleParameters: OpenPuzzleParameters;
+    private _openPuzzleParameters: ArchiveItem;
 
     private bs: BehaviorSubject<AppStatus>;
 
@@ -74,7 +66,7 @@ export class AppService implements OnDestroy {
         return this.bs.asObservable();
     }
 
-    public get openPuzzleParameters(): OpenPuzzleParameters {
+    public get openPuzzleParameters(): ArchiveItem {
         return this._openPuzzleParameters;
     }
 
@@ -92,7 +84,7 @@ export class AppService implements OnDestroy {
         this.clearBusy();
     }
 
-    public setOpenPuzzleParams(params: OpenPuzzleParameters) {
+    public setOpenPuzzleParams(params: ArchiveItem) {
         this._openPuzzleParameters = params;
     }
 

@@ -15,6 +15,7 @@ import { PublishLoginComponent } from './ui/pages/publish-login/publish-login.co
 import { ReadmeComponent } from './ui/pages/readme/readme.component';
 import { SettingsComponent } from './ui/pages/settings/settings.component';
 import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
+import { IndyComponent } from './ui/pages/indy/indy.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
 
     // solving and blogging puzzles
     { path: "archive/:provider", component: ArchiveComponent },
+    { path: "indy", component: IndyComponent },
     { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },

@@ -5,6 +5,7 @@ import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 import { AuthService } from './auth.service';
 import { ArchiveItem } from '../model/archive-item';
 import { environment } from "../../environments/environment";
+import { PuzzleProvider } from '../model/interfaces';
 
 export abstract class PuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -13,7 +14,7 @@ export abstract class PuzzleResponse implements ApiResponse {
 }
 
 interface LatestPuzzleRequest {
-    provider: string;
+    provider: PuzzleProvider;
     username: string;
     password: string;
 }
@@ -21,7 +22,7 @@ interface LatestPuzzleRequest {
 interface ArchivePuzzleRequest {
     username: string;
     password: string;
-    provider: string;
+    provider: PuzzleProvider;
     url: string;
     serialNumber: number;
     date: string;
@@ -36,7 +37,7 @@ export class HttpPuzzleSourceService {
         private http: HttpClient,
         private authService: AuthService) { }
 
-    public getLatestPuzzle(provider: string): Promise<PuzzleResponse> {
+    public getLatestPuzzle(provider: PuzzleProvider): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {

@@ -1,7 +1,8 @@
 import { ArchiveItem } from './archive-item';
+import { PuzzleProvider } from './interfaces';
 
 export class ArchiveIndex {
-    public readonly provider: string;
+    public readonly provider: PuzzleProvider;
     public readonly items: ReadonlyArray<ArchiveItem>;
 
     constructor(data: any) {

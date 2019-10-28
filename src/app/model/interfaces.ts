@@ -4,6 +4,7 @@ export type Direction = "across" | "down";
 export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
+export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios";
 
 export type QuillDelta = { ops: DeltaOperation[] }
 
@@ -76,7 +77,7 @@ export abstract class IPuzzleInfo {
     abstract readonly id: string;
     abstract readonly title: string;
     abstract readonly puzzleDate: Date;
-    abstract readonly provider: string;
+    abstract readonly provider: PuzzleProvider;
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
 } 

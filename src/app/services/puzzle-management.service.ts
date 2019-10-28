@@ -25,7 +25,6 @@ export abstract class IActivePuzzle {
 export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
-    abstract openLatestPuzzle(providerName: string, options?: any): Promise<Puzzle>;
     abstract deletePuzzle(id: string): Promise<void>;
 }
 
@@ -73,6 +72,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     //  Another idea is to have the on or both of the classes reference an interface rather than the concrete class.  Perhaps
     //  this will avoid the cyclic dependency.
     //
+
     //#region Active Puzzle interface
 
     public observe(): Observable<Puzzle> {
@@ -116,10 +116,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             }
             return puzzle;
         });
-    }
-
-    public openLatestPuzzle(providerName: string, options?: any): Promise<Puzzle> {
-        return this.onPuzzleReponse(this.httpPuzzleService.getLatestPuzzle(providerName));
     }
 
     public openArchivePuzzle(item: ArchiveItem): Promise<Puzzle> {
