@@ -93,13 +93,26 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         this.navigate("open-puzzle");
     }
 
-    public getItems() {
+    public get latest(): ArchiveItem {
+        let result = null;
+
+        if (this.archive && this.provider) {
+            const index = this.archive.getIndex(this.provider);
+            if (index && index.items.length > 0) {
+                result = index.items[0]; 
+            }
+        }
+
+        return result;
+    }
+
+    public get archiveItems(): ReadonlyArray<ArchiveItem> {
         let items: ReadonlyArray<ArchiveItem> = [];
 
         if (this.archive && this.provider) {
             const index = this.archive.getIndex(this.provider);
-            if (index) {
-                items = index.items; 
+            if (index && index.items.length > 1) {
+                items = index.items.slice(1) as ReadonlyArray<ArchiveItem>; 
             }
         }
 

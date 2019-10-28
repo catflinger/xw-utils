@@ -149,7 +149,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.showAnnotation = !this.showAnnotation;
     }
 
-    public onChange(source: string) {
+    public onChange() {
         this.warnings = this.validate();
     }
 

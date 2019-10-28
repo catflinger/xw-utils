@@ -1,6 +1,13 @@
-<div class="row mt-3" *ngIf="provider">
+<div class="row my-5" *ngIf="showList">
     <div class="col">
-        <h3>{{provider | provider }} archive</h3>
+        <div class="card w-50  mx-auto text-center" *ngIf="provider">
+            <h5 class="card-header">Latest {{provider | provider}} puzzle</h5>
+            <div class="card-body">
+                <p *ngIf="latest" class="card-text">{{latest.date | date:"EEEE - d LLLL yyyy"}}</p>
+                <p *ngIf="latest" class="card-text">{{latest.serialNumber | number:"2."}}</p>
+                <button class="btn btn-primary" (click)="openPuzzle(latest)">Open</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -8,10 +15,14 @@
     <div class="col">
         <table class="table">
             <tbody>
-                <tr *ngFor="let item of getItems()">
+                <tr>
+                    <td colspan="4">
+                        <h5>Puzles from the archive</h5>
+                    </td>
+                </tr>
+                <tr *ngFor="let item of archiveItems">
                     <td>{{item.serialNumber | number:"2."}}</td>
                     <td>{{item.date | date:"EEE d LLLL yyyy"}}</td>
-                    <td>{{item.url}}</td>
                     <td><button class="btn btn-primary" (click)="openPuzzle(item)">Open</button></td>
                 </tr>
             </tbody>
@@ -25,13 +36,8 @@
 
             <div class="form-group">
                 <label for="datePicker">Puzzle date</label>
-                <input 
-                    id="datePicker" 
-                    type="text" 
-                    class="form-control" 
-                    formControlName="date"
-                    [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }"
-                    bsDatepicker>
+                <input id="datePicker" type="text" class="form-control" formControlName="date"
+                    [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }" bsDatepicker>
             </div>
 
             <div class="form-group mt-5">
@@ -40,5 +46,3 @@
         </form>
     </div>
 </div>
-
-   
