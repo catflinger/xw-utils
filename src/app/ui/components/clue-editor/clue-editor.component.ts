@@ -112,10 +112,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         } else {
             let answer = this.form.value.answer;
 
-            if (answer && answer.length !== this.clue.lengthAvailable) {
+            if (this.clean(answer).length !== this.clue.lengthAvailable) {
                 this.showSaveWarning("Warning: the answer does not fit the space available");
 
-            } else if (answer && this.clue.solution && answer !== this.clue.solution) {
+            } else if (this.clue.solution && this.clean(answer) !== this.clean(this.clue.solution)) {
                 this.showSaveWarning("Warning: the answer does match the publsihed solution");
 
             } else {
@@ -233,4 +233,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         return warnings;
     }
 
+    private clean(answer: string): string {
+        return answer ?
+            answer.toUpperCase().replace(/[^A-Z]/, "") :
+            "";
+    }
 }
