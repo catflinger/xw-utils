@@ -5,6 +5,7 @@ import { ContentGeneratorTableLayout } from './content-generator/content-generat
 import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus } from './common';
 import { AuthService, Credentials } from './auth.service';
 import { environment } from 'src/environments/environment';
+import { ContentGeneratorListLayout } from './content-generator/content-generator-list-layout';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -54,7 +55,7 @@ export class PublicationService {
         const credentials: Credentials = this.authService.getCredentials();
 
         let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
-            new ContentGeneratorTableLayout():
+            new ContentGeneratorListLayout():
             new ContentGeneratorTableLayout();
         
             let content = generator.getContent(puzzle, gridUrl);
