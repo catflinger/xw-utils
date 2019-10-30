@@ -6,7 +6,8 @@ import { TextStyle } from 'src/app/model/text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { UpdatePublsihOptionIncludeGrid } from 'src/app/services/modifiers/update-publish-option-include-grid';
+import { UpdatePublsihOptions } from 'src/app/services/modifiers/update-publish-options';
+import { PublishOptionsM } from 'src/app/services/modifiers/mutable-model/publish-options-m';
 
 @Component({
     selector: 'app-publish-options',
@@ -16,8 +17,8 @@ import { UpdatePublsihOptionIncludeGrid } from 'src/app/services/modifiers/updat
 export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
-    public includeGrid: boolean;
     public sample: Clue[];
+    public publishOptions: PublishOptionsM = null;
     
     private subs: Subscription[] = [];
 
@@ -41,9 +42,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                         if (puzzle) {
                             this.puzzle = puzzle;
                             this.sample = this.puzzle.clues.filter((c, i) => i < 3);
-                            if (this.includeGrid === undefined) {
-                                this.includeGrid = puzzle.publishOptions.includeGrid;
-                            }
+                            this.publishOptions = this.puzzle.publishOptions;
                         }
                     }
                 ));
@@ -55,17 +54,17 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.activePuzzle.update(new UpdatePublsihOptionIncludeGrid(this.includeGrid));
+        this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
         this.router.navigate(["/publish-preamble"]);
     }
 
     onBack() {
-        this.activePuzzle.update(new UpdatePublsihOptionIncludeGrid(this.includeGrid));
+        this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
         this.router.navigate(["/", this.appService.editor]);
     }
 
     onGrid() {
-        this.activePuzzle.update(new UpdatePublsihOptionIncludeGrid(this.includeGrid));
+        this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
         this.router.navigate(["/publish-grid"]);
     }
 }

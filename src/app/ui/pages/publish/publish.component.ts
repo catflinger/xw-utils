@@ -6,10 +6,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
-import { GridParameters, UIResult } from '../../common';
+import { GridParameters } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { Puzzle } from 'src/app/model/puzzle';
-import { ApiResponse, ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
+import { ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public appStatus: AppStatus;
-    public preview: string = "";
+    //public preview: string = "";
 
     private subs: Subscription[] = [];
 

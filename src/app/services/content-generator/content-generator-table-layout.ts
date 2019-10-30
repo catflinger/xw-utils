@@ -6,8 +6,9 @@ import escape from "escape-html";
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { TextStyle } from 'src/app/model/text-style';
+import { ContentGenerator } from '../common';
 
-export class PostContentGenerator {
+export class ContentGeneratorTableLayout implements ContentGenerator {
     private buffer: string = "";
     private tdPadding = "3px";
 

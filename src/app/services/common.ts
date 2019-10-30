@@ -1,3 +1,5 @@
+import { Puzzle } from '../model/puzzle';
+
 export enum ApiResponseStatus {
     OK = 0,
     other = 1,
@@ -15,3 +17,7 @@ export const ApiSymbols = {
 }
 
 export type PublishStatus = "draft";
+
+export interface ContentGenerator {
+    getContent(puzzle: Puzzle, gridUrl: string): string;
+}

@@ -5,6 +5,7 @@ export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios";
+export type Layouts = "table" | "list";
 
 export type QuillDelta = { ops: DeltaOperation[] }
 
@@ -83,6 +84,7 @@ export abstract class IPuzzleInfo {
 } 
 
 export abstract class IPublishOptions {
+    abstract readonly layout: Layouts;
     abstract readonly answerStyle: ITextStyle;
     abstract readonly clueStyle: ITextStyle;
     abstract readonly definitionStyle: ITextStyle;

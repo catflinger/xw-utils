@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../model/puzzle';
 import { HttpClient } from '@angular/common/http';
-import { PostContentGenerator } from './content-generator/content-generator';
-import { ApiResponse, ApiResponseStatus, PublishStatus } from './common';
+import { ContentGeneratorTableLayout } from './content-generator/content-generator-table-layout';
+import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus } from './common';
 import { AuthService, Credentials } from './auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -53,8 +53,11 @@ export class PublicationService {
     public publishPost(puzzle: Puzzle, gridUrl: string, status: PublishStatus): Promise<PublishPostResponse> {
         const credentials: Credentials = this.authService.getCredentials();
 
-        let generator = new PostContentGenerator();
-        let content = generator.getContent(puzzle, gridUrl);
+        let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
+            new ContentGeneratorTableLayout():
+            new ContentGeneratorTableLayout();
+        
+            let content = generator.getContent(puzzle, gridUrl);
 
         return this.http.post(environment.apiRoot + "PublishPost", {
             provider: puzzle.info.provider,

@@ -2,14 +2,14 @@
     <app-grid [options]="{ readonly: true, showShading: true }"></app-grid>
 </div>
 
-<table *ngIf="clues">
+<table *ngIf="clues && publishOptions.layout === 'table'">
     <ng-container *ngFor="let clue of clues">
         <tr>
             <td>
-                <span [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
+                <span class="text-nowrap" [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
             </td>
             <td>
-                <span [ngStyle]="makeAnswerStyle()">{{clue.answer}} </span>
+                <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answer}} </span>
             </td>
             <td class="col">
                 <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
@@ -24,3 +24,15 @@
         </tr>
     </ng-container>
 </table>
+
+<div *ngIf="clues && publishOptions.layout === 'list'">
+    <ng-container *ngFor="let clue of clues">
+        <div [ngStyle]="makeClueStyle()">
+            <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
+        </div>
+        <div class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answer}}</div>
+        <div>
+            <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
+        </div>
+    </ng-container>
+</div>
