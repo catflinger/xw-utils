@@ -10,6 +10,9 @@ import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { relativeTimeRounding } from 'moment';
 
 @Component({
     selector: 'app-clue-editor',
@@ -36,7 +39,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     constructor(
         private activePuzzle: IActivePuzzle,
         private appSettingsService: AppSettingsService,
-        private formBuilder: FormBuilder) { }
+        private formBuilder: FormBuilder,
+        private modalService: NgbModal,
+        public activeModal: NgbActiveModal,
+    ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
@@ -68,7 +74,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.appSettingsService.observe().subscribe(settings => {
                 this.appSettings = settings;
             }));
-}
+    }
 
     ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
@@ -89,34 +95,32 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.form.value.chunks.forEach((chunk: ClueTextChunk) => {
             if (chunk.isDefinition) {
                 definitionCount++;
-            } 
-         });
-         return definitionCount > 0;
+            }
+        });
+        return definitionCount > 0;
     }
-    
+
     public onSave() {
 
-        if (this.appSettings.general.showCommentEditor.enabled && 
-            this.appSettings.tips.definitionWarning.enabled && 
-            !this.tipStatus.show && 
+        if (this.appSettings.general.showCommentEditor.enabled &&
+            this.appSettings.tips.definitionWarning.enabled &&
+            !this.tipStatus.show &&
             this.form.value.chunks.length < 2) {
 
             this.tipInstance.activated = true;
 
         } else {
+            let answer = this.form.value.answer;
 
-            this.activePuzzle.update(new UpdateClue(
+            if (answer && answer.length !== this.clue.lengthAvailable) {
+                this.showSaveWarning("Warning: the answer does not fit the space available");
 
-                this.clueId,
-                this.form.value.answer,
-                this.form.value.comment,
-                this.form.value.chunks,
-                this.warnings,
-            ));
+            } else if (answer && this.clue.solution && answer !== this.clue.solution) {
+                this.showSaveWarning("Warning: the answer does match the publsihed solution");
 
-            this.activePuzzle.update(new ClearSelection());
-
-            this.close.emit("save");
+            } else {
+                this.closeEditor(true);
+            }
         }
     }
 
@@ -127,7 +131,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        this.close.emit("cancel");
+        this.closeEditor(false);
     }
 
     public showLatestAnswer(): boolean {
@@ -154,10 +158,36 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public get showTextWarning() {
-        return this.appSettings.general.showCommentEditor.enabled && 
-                this.appSettings.general.showCommentValidation.enabled && 
-                this.warnings.length && 
-                !this.clue.redirect;
+        return this.appSettings.general.showCommentEditor.enabled &&
+            this.appSettings.general.showCommentValidation.enabled &&
+            this.warnings.length &&
+            !this.clue.redirect;
+    }
+
+    private showSaveWarning(message: string) {
+        let lengthDialog = this.modalService.open(ConfirmModalComponent);
+        lengthDialog.componentInstance.message = message;
+        
+        lengthDialog.result.then((result) => { 
+            if (result) {
+                this.closeEditor(true);
+            }
+        })
+        .catch();
+    }
+
+    private closeEditor(save: boolean) {
+        if (save) {
+            this.activePuzzle.update(new UpdateClue(
+                this.clueId,
+                this.form.value.answer,
+                this.form.value.comment,
+                this.form.value.chunks,
+                this.warnings,
+            ));
+        }
+        this.activePuzzle.update(new ClearSelection());
+        this.close.emit(save? "save" : "cancel");
     }
 
     private validate(): ClueValidationWarning[] {

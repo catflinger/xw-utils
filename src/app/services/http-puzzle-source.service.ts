@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { ArchiveItem } from '../model/archive-item';
 import { environment } from "../../environments/environment";
 import { PuzzleProvider } from '../model/interfaces';
+import moment from 'moment';
 
 export abstract class PuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -66,7 +67,7 @@ export class HttpPuzzleSourceService {
             provider: item.provider,
             url: item.url,
             serialNumber: item.serialNumber,
-            date: item.date.toISOString(),
+            date: moment(item.date).toISOString(),
             username: credentials.username,
             password: credentials.password,
         };

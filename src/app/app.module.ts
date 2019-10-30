@@ -45,6 +45,7 @@ import { TipInstanceFactory } from './ui/components/tip/tip-instance';
 import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.component';
 import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
 import { IndyComponent } from './ui/pages/indy/indy.component';
+import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-modal.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -92,6 +93,7 @@ const quillGlobalConfig = {
         OpenPuzzleComponent,
         WordpressIdPipe,
         IndyComponent,
+        ConfirmModalComponent,
     ],
     imports: [
         BrowserModule,
@@ -112,7 +114,8 @@ const quillGlobalConfig = {
         TipInstanceFactory,
     ],
     entryComponents: [
-        ClueEditorComponent
+        ClueEditorComponent,
+        ConfirmModalComponent,
     ],
     bootstrap: [AppComponent]
 })

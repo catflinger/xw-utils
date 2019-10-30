@@ -55,4 +55,12 @@ export class Clue implements IClue {
         }
         this.warnings = warnings;
     }
+
+    public get lengthAvailable(): number {
+        let result = 0;
+
+        this.entries.forEach(entry => entry.cellIds.forEach(c => result++ ));
+
+        return result;
+    }
 }

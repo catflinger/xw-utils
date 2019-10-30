@@ -20,7 +20,7 @@ export class ProviderPipe implements PipeTransform {
                 result = "Guardian Prize";
                 break;
             case "quiptic":
-                result = "Guardian Prize";
+                result = "Quiptic";
                 break;
             case "independent":
                 result = "Independent";
