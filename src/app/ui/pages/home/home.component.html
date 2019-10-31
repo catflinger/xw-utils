@@ -21,7 +21,7 @@
                         <th>Title</th>
                         <th>Date</th>
                         <th></th>
-                        <th colspan="2">&nbsp;</th>
+                        <th colspan="2">Actions</th>
                     </tr>
                 </thead>
 
@@ -31,10 +31,8 @@
                         <td>{{info.title}}</td>
                         <td>{{info.puzzleDate | date : "fullDate"}}</td>
                         <td>{{info.wordpressId | wordpressId}}</td>
-                        <td><button type="button" class="btn btn-primary mr-3"
-                                (click)="onOpenSaved(info.id)">Open</button></td>
+                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(info.id)">Open</button></td>
                         <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
-                        </td>
                     </tr>
 
                 </tbody>

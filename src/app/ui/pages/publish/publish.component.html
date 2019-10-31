@@ -1,19 +1,50 @@
-<h3>Publish</h3>
+<h3>Update Published Post</h3>
 
-<div class="row" *ngIf="appStatus && puzzle">
+<div class="row" *ngIf="appStatus && puzzle && alreadyPublished">
     <div class="col">
-        <form [formGroup]="form">
+        <p>This puzzle has already been uploaded to fifteensquared.net. What would you like to do?</p>
+        <form>
             <div class="form">
                 <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="draft" formControlName="publishStatus">
-                        <label class=form-check-label>publish as draft</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" value="publish" formControlName="publishStatus">
-                        <label class=form-check-label>publish immediately</label>
+
+                    <div class="form-check" *ngIf="alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="nothing" [(ngModel)]="action">
+                        <label class=form-check-label>do nothing</label>
                     </div>
 
+                    <div class="form-check" *ngIf="!alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="upload"
+                            [(ngModel)]="action">
+                        <label class=form-check-label>upload as draft</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="!alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="publish" [(ngModel)]="action">
+                        <label class=form-check-label>publish immediately</label>
+                    </div>
+    
+                    <div class="form-check" *ngIf="alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="copy-post"
+                            [(ngModel)]="action">
+                        <label class=form-check-label>upload again</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="alreadyPublished && puzzle.publishOptions.includeGrid">
+                        <input name="action" class="form-check-input" type="radio" value="copy-grid"
+                            [(ngModel)]="action">
+                        <label class=form-check-label>upload grid to the Media Library</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="replace-post"
+                            [(ngModel)]="action">
+                        <label class=form-check-label>replace the existing post</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="alreadyPublished && puzzle.publishOptions.includeGrid">
+                        <input name="action" class="form-check-input" type="radio" value="replace-grid" [(ngModel)]="action">
+                        <label class=form-check-label>replace the grid only</label>
+                    </div>
                 </div>
             </div>
         </form>
@@ -22,7 +53,50 @@
 
 <div class="row" *ngIf="appStatus && puzzle">
     <div class="col">
-        <button [disabled]="appStatus.busy || !form.valid" type="button" class="btn btn-primary mr-3"
+        <ngb-alert [dismissible]="false" *ngIf="action === 'nothing'">
+            No changes will be made
+        </ngb-alert>
+
+        <ngb-alert [dismissible]="false" *ngIf="action === 'publish'">
+                The post will be published to fifteensquared.net immediately.
+            </ngb-alert>
+    
+        <ngb-alert [dismissible]="false" *ngIf="action === 'upload'">
+            The post will be uploaded to fifteensquared.net as a draft.
+            Log in to fifteensquared and use the Admin section to schedule or publish the post
+        </ngb-alert>
+
+        <ngb-alert [dismissible]="false" *ngIf="action === 'copy-post'">
+            A copy of the post will be uploaded to fifteensquared.net as a draft.
+            Any existing posts will remain unchanged.
+            If the existing post has received any comments then these will not be visible on the new post.
+            Log in to fifteensquared and use the Admin section to remove the existing post and publsih the new one.
+        </ngb-alert>
+    
+        <ngb-alert [dismissible]="false" *ngIf="action === 'copy-grid'">
+            A copy of the grid will be uploaded to the Media Library on fifteensquared.net.
+            To include this grid in an existing post log in to fifteensquared and use the Admin section edit the desired post.
+            Include the grid using the "Insert Media" button on the editor page.
+        </ngb-alert>
+
+        <ngb-alert [dismissible]="false" *ngIf="action === 'replace-post'">
+            <strong>NOT IMPLEMENTED</strong> The content of the existing post will be replaced fifteensquared.net.
+            Be aware that the content of the existing post will be lost.
+            If the existing post has received any comments then these will still be visible.
+        </ngb-alert>
+
+        <ngb-alert [dismissible]="false" *ngIf="action === 'replace-grid'">
+            <strong>NOT IMPLEMENTED</strong> If the existing post contained a grid then the grid will be replaced.
+            The post content and comments will remain unchanged.
+        </ngb-alert>
+
+    </div>
+</div>
+
+
+<div class="row" *ngIf="appStatus && puzzle">
+    <div class="col">
+        <button [disabled]="appStatus.busy || action === 'nothing'" type="button" class="btn btn-primary mr-3"
             (click)="onContinue()">Publish</button>
         <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
     </div>

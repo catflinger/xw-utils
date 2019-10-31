@@ -46,6 +46,7 @@ import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.componen
 import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
 import { IndyComponent } from './ui/pages/indy/indy.component';
 import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-modal.component';
+import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -94,6 +95,7 @@ const quillGlobalConfig = {
         WordpressIdPipe,
         IndyComponent,
         ConfirmModalComponent,
+        GridEditorComponent,
     ],
     imports: [
         BrowserModule,

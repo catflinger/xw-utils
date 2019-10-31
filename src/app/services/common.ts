@@ -16,7 +16,7 @@ export const ApiSymbols = {
     AuthorizationFailure: Symbol("AuthorizationFailure")
 }
 
-export type PublishStatus = "draft";
+export type PublishStatus = "publish" | "draft";
 
 export interface ContentGenerator {
     getContent(puzzle: Puzzle, gridUrl: string): string;
