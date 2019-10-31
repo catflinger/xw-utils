@@ -21,13 +21,10 @@ type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-gri
 export class PublishComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
-    //public preview: string = "";
-    public alreadyPublished = true;
-
+    public alreadyPublished = false;
     public action: PublishActions = "nothing";
 
     private subs: Subscription[] = [];
-
     private gridParams: GridParameters = new GridParameters();
 
     @ViewChild('canvas', { static: true }) canvasRef: ElementRef;
@@ -45,8 +42,8 @@ export class PublishComponent implements OnInit, OnDestroy {
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
 
-            // } else if (!this.authService.getCredentials().authenticated) {
-            //     this.router.navigate(["/publish-login"]);
+        } else if (!this.authService.getCredentials().authenticated) {
+            this.router.navigate(["/publish-login"]);
 
         } else {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
@@ -55,6 +52,10 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
+                        this.alreadyPublished = !!puzzle.info.wordpressId;
+                        if (!this.alreadyPublished) {
+                            this.action = "upload";
+                        }
                     }
                 ));
         }
@@ -139,50 +140,50 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     private publishPost(status: PublishStatus) {
         this.getGridImage()
-            .then((image) => {
-                if (image) {
-                    //publish the grid
-                    return this.publicationService.publishGrid(image, this.puzzle.info.title);
-                } else {
-                    // no grid to publish, return a dummy response
-                    return Promise.resolve({
-                        success: ApiResponseStatus.OK,
-                        url: null,
-                        message: null,
-                    })
-                }
-            })
-            .then((result) => {
-                if (result.success === ApiResponseStatus.OK) {
-                    return this.publicationService.publishPost(this.puzzle, result.url, status);
-                } else if (result.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
-                } else {
-                    throw new Error(result.message);
-                }
-            })
-            .then((result) => {
-                if (result.success === ApiResponseStatus.OK) {
-                    this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
-                    this.appService.clearBusy();
-                    this.router.navigate(["/publish-complete"]);
-                } else if (result.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
-                } else {
-                    throw new Error(result.message);
-                }
-            })
-            .catch(error => {
-                if (error === ApiSymbols.AuthorizationFailure) {
-                    this.appService.clear();
-                    this.appService.setAlert("danger", "Username or password incorrect");
-                    this.authService.clearCredentials();
-                    this.router.navigate(["/publish-login"]);
-                } else {
-                    this.appService.clear();
-                    this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
-                }
-            });
+        .then((image) => {
+            if (image) {
+                //publish the grid
+                return this.publicationService.publishGrid(image, this.puzzle.info.title);
+            } else {
+                // no grid to publish, return a dummy response
+                return Promise.resolve({
+                    success: ApiResponseStatus.OK,
+                    url: null,
+                    message: null,
+                })
+            }
+        })
+        .then((result) => {
+            if (result.success === ApiResponseStatus.OK) {
+                return this.publicationService.publishPost(this.puzzle, result.url, status);
+            } else if (result.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw new Error(result.message);
+            }
+        })
+        .then((result) => {
+            if (result.success === ApiResponseStatus.OK) {
+                this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
+                this.appService.clearBusy();
+                this.router.navigate(["/publish-complete"]);
+            } else if (result.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw new Error(result.message);
+            }
+        })
+        .catch(error => {
+            if (error === ApiSymbols.AuthorizationFailure) {
+                this.appService.clear();
+                this.appService.setAlert("danger", "Username or password incorrect");
+                this.authService.clearCredentials();
+                this.router.navigate(["/publish-login"]);
+            } else {
+                this.appService.clear();
+                this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
+            }
+        });
     }
 
     private publishGrid() {
