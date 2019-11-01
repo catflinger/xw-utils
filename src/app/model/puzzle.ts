@@ -17,7 +17,7 @@ export class Puzzle implements IPuzzle {
     public readonly clues: readonly Clue[];
 
     public readonly linked: boolean;
-    public readonly solveable;
+    //public readonly solveable;
     public readonly version: string;
     public readonly createdWithVersion: string;
 
@@ -33,9 +33,20 @@ export class Puzzle implements IPuzzle {
             this.grid = null;
         }
         
-        let clues: Clue[] = [];
-        data.clues.forEach(clue => clues.push(new Clue(clue)));
-        this.clues = clues;
+        if (data.clues) {
+            let clues: Clue[] = [];
+            data.clues.forEach(clue => clues.push(new Clue(clue)));
+            this.clues = clues;
+        } else {
+            this.clues = null;
+        }
+
+        // backwards compatibility
+        if (data.info.solveable === undefined) {
+            data.info.solveable = data.solveable;
+            data.info.blogable  = true;
+            data.info.gridable  = false;
+        }
 
         this.info = new PuzzleInfo(data.info);
 
@@ -44,7 +55,6 @@ export class Puzzle implements IPuzzle {
         this.publishOptions = new PublishOptions(data.publishOptions);
 
         this.linked = data.linked;
-        this.solveable = data.solveable;
         this.version = data.version;
         this.createdWithVersion = data.createdWithVersion;
     }

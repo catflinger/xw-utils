@@ -8,6 +8,19 @@
     <div class="col">
         <app-grid (cellClick)="onCellClick($event)"></app-grid>
     </div>
+    <div class="col">
+        <ngb-tabset [justify]="currentJustify">
+            <ngb-tab title="Grid">
+                <ng-template ngbTabContent>this is the first tab</ng-template>
+            </ngb-tab>
+            <ngb-tab title="Text">
+                <ng-template ngbTabContent>this is the first tab</ng-template>
+            </ngb-tab>
+            <ngb-tab title="Colours">
+                <ng-template ngbTabContent>this is the first tab</ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
 </div>
 
 <div class="row" *ngIf="puzzle">

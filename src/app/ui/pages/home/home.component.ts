@@ -13,6 +13,7 @@ import { AuthService, Credentials } from 'src/app/services/auth.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public puzzleList: PuzzleInfo[] = [];
+    public gridList: PuzzleInfo[] = [];
     private subs: Subscription[] = [];
     public appStatus: AppStatus;
     public credentials: Credentials;
@@ -29,7 +30,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.subs.push(this.authService.observe().subscribe(credentials => this.credentials = credentials));
 
         this.subs.push(this.puzzleManagement.getPuzzleList().subscribe(
-            (list) => this.puzzleList = list,
+            (list) => {
+                this.puzzleList = list.filter(p => (p.solveable || p.blogable));
+                this.gridList = list.filter(p => p.gridable && !(p.solveable || p.blogable));
+            },
             (error) => this.appService.setAlert("danger", error.toString())
         ));
     }
@@ -42,9 +46,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                let editor: EditorType = puzzle.solveable ? "solver" : "blogger";
-                this.appService.setEditor(editor);
-                this.router.navigate(["/" + editor]);
+                if (puzzle.info.gridable && !(puzzle.info.solveable || puzzle.info.blogable)) {
+                    this.router.navigate(["/grid-editor"]);
+                } else {
+                    let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
+                    this.appService.setEditor(editor);
+                    this.router.navigate(["/" + editor]);
+                }
             }
         });
     }

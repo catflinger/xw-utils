@@ -25,6 +25,7 @@ export abstract class IActivePuzzle {
 export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
+    abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
 }
 
@@ -116,6 +117,11 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             }
             return puzzle;
         });
+    }
+
+    public addPuzzle(puzzle: Puzzle) {
+        this.localStorageService.putPuzzle(puzzle);
+        this.usePuzzle(puzzle);
     }
 
     public openArchivePuzzle(item: ArchiveItem): Promise<Puzzle> {

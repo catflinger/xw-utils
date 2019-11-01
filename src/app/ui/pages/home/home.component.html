@@ -44,4 +44,35 @@
     </div>
 </ng-container>
 
+<ng-container *ngIf="appStatus && gridList &&  gridList.length > 0">
+    <div class="row mt-3">
+        <div class="col">
+            <h4>Saved grids</h4>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th></th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let info of gridList">
+                        <td>{{info.title}}</td>
+                        <td>{{info.puzzleDate | date : "fullDate"}}</td>
+                        <td>{{info.wordpressId | wordpressId}}</td>
+                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(info.id)">Open</button></td>
+                        <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-container>
+
+
+
 <!-- <button class="btn btn-primary" (click)="test()">TEST</button> result = {{result}} -->

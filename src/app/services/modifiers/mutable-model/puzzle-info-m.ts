@@ -7,4 +7,7 @@ export abstract class PuzzleInfoM implements IPuzzleInfo {
     public abstract provider: PuzzleProvider;
     public abstract setter: string;
     public abstract wordpressId: number;
+    public abstract blogable: boolean;
+    public abstract solveable: boolean;
+    public abstract gridable: boolean;
 } 

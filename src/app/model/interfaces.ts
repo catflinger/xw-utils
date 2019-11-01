@@ -1,13 +1,18 @@
 import { DeltaOperation } from 'quill';
 
 export type Direction = "across" | "down";
-export type GridStyle = "standard" | "barred";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios";
 export type Layouts = "table" | "list";
 
 export type QuillDelta = { ops: DeltaOperation[] }
+
+export type GridStyle = "standard" | "barred";
+export const GridStyles: {standard: GridStyle, barred: GridStyle} = {
+    standard: "standard",
+    barred: "barred",
+}
 
 // NOTE: using abtract classe rather than interface so that the members can be 
 // marked as read-only
@@ -67,7 +72,7 @@ export abstract class IPuzzle {
     abstract readonly clues: readonly IClue[];
 
     abstract readonly linked: boolean;
-    abstract readonly solveable: boolean;
+    //abstract readonly solveable: boolean;
     abstract readonly version: string;
     abstract readonly createdWithVersion: string;
 
@@ -81,6 +86,10 @@ export abstract class IPuzzleInfo {
     abstract readonly provider: PuzzleProvider;
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
+
+    abstract readonly blogable: boolean;
+    abstract readonly solveable: boolean;
+    abstract readonly gridable: boolean;
 } 
 
 export abstract class IPublishOptions {

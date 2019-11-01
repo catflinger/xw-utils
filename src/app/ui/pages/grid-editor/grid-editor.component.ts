@@ -30,6 +30,10 @@ export class GridEditorComponent implements OnInit {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
+                        if (!puzzle.info.gridable) {
+                            this.router.navigate(["home"]);
+                        }
+        
                         this.puzzle = puzzle;
                     }
                 ));

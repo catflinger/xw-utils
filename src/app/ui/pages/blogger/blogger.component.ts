@@ -30,7 +30,14 @@ export class BloggerComponent implements OnInit, OnDestroy {
             this.router.navigate(["/home"]);
         } else {
             this.appSettings = this.appSettinsgService.settings;
-            this.subs.push(this.activePuzzle.observe().subscribe(puzzle => this.puzzle = puzzle));
+
+            this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+                if (!puzzle.info.blogable) {
+                    this.router.navigate(["home"]);
+                }
+                this.puzzle = puzzle;
+            }));
+
             this.subs.push(this.appSettinsgService.observe().subscribe(settings => this.appSettings = settings));
         }
     }

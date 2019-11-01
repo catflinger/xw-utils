@@ -6,9 +6,11 @@ export class ClearSelection implements IPuzzleModifier {
     constructor() { }
 
     exec(puzzle: PuzzleM) {
-        puzzle.clues.forEach((clue) => {
-            clue.highlight = false;
-        });
+        if (puzzle.clues) {
+            puzzle.clues.forEach((clue) => {
+                clue.highlight = false;
+            });
+        }
 
         if (puzzle.grid) {
             puzzle.grid.cells.forEach((cell) => {

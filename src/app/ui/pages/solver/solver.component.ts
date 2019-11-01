@@ -33,6 +33,9 @@ export class SolverComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
+                        if (!puzzle.info.solveable) {
+                            this.router.navigate(["home"]);
+                        }
                         this.puzzle = puzzle;
                     }
             ));
