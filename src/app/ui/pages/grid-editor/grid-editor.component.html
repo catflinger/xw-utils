@@ -6,18 +6,21 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)"></app-grid>
+        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)"></app-grid>
     </div>
     <div class="col">
         <ngb-tabset [justify]="currentJustify">
-            <ngb-tab title="Grid">
-                <ng-template ngbTabContent>this is the first tab</ng-template>
+            <ngb-tab [title]="barred ? 'Bars' : 'Lights and Darks'">
+                <ng-template ngbTabContent><p>this is the bars tab</p></ng-template>
             </ngb-tab>
             <ngb-tab title="Text">
-                <ng-template ngbTabContent>this is the first tab</ng-template>
+                <ng-template ngbTabContent><p>this is the text tab</p></ng-template>
             </ngb-tab>
             <ngb-tab title="Colours">
-                <ng-template ngbTabContent>this is the first tab</ng-template>
+                <ng-template ngbTabContent><p>this is the colours tab</p></ng-template>
+            </ngb-tab>
+            <ngb-tab title="Grid properties">
+                <ng-template ngbTabContent><p>this is the properties tab</p></ng-template>
             </ngb-tab>
         </ngb-tabset>
     </div>

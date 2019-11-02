@@ -121,6 +121,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     public addPuzzle(puzzle: Puzzle) {
         this.localStorageService.putPuzzle(puzzle);
+        this.refreshPuzzleList();
         this.usePuzzle(puzzle);
     }
 

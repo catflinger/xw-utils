@@ -6,6 +6,7 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 
+export type BarClickEventParameter = {cell: GridCell, bar: "rightBar" | "bottomBar" };
 
 @Component({
     selector: 'app-grid',
@@ -15,6 +16,7 @@ import { GridPainterService } from '../../services/grid-painter.service';
 export class GridComponent implements OnInit, AfterViewInit {
     @Input() options: GridOptions;
     @Output() cellClick = new EventEmitter<GridCell>();
+    @Output() barClick = new EventEmitter<BarClickEventParameter>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
 
@@ -72,6 +74,8 @@ export class GridComponent implements OnInit, AfterViewInit {
     }
 
     onCanvasClick(params: any) {
+        const cellSize = this.gridParams.cellSize;
+        const tolerance = cellSize / 5;
 
         if (this.options && this.options.readonly) {
             return;
@@ -80,15 +84,46 @@ export class GridComponent implements OnInit, AfterViewInit {
         // TO DO: ignore mouse click on grid padding
 
         const bounds = this.canvas.nativeElement.getBoundingClientRect();
-        let left = params.clientX - bounds.left - this.gridParams.gridPadding;
-        let x = Math.floor(left / this.gridParams.cellSize);
+        let xOffsetInGrid = params.clientX - bounds.left - this.gridParams.gridPadding;
+        let yOffsetInGrid = params.clientY - bounds.top - this.gridParams.gridPadding;
 
-        let top = params.clientY - bounds.top - this.gridParams.gridPadding;
-        let y = Math.floor(top / this.gridParams.cellSize);
+        // i,j represent the cell number in the model eg 3 cells across and two cells down
+        const i = Math.floor(xOffsetInGrid / cellSize);
+        const j = Math.floor(yOffsetInGrid / cellSize);
 
-        let cell: GridCell = this.puzzle.cellAt(x, y);
+        // x,y represent the offset (in pixels) of the mouse click from the top-left corner of cell i,j
+        let x = xOffsetInGrid % cellSize;
+        let y = yOffsetInGrid % cellSize;
+
+        let cell: GridCell = this.puzzle.cellAt(i, j);
         if (cell) {
+            // for all grids emit an event to say a cell has been clicked
             this.cellClick.emit(cell);
+
+            // For barred grids emit the barClick event only if the click is on a bar area, these are areas
+            // near to an edge of the cell but not in a corner. Edges that form the outside of the grid
+            // cannot have bars and in these cases the barClick is not fired.
+            if (x < tolerance && y < tolerance) {
+                // in a corner, do nothing
+            } else if (x < tolerance && cellSize - y < tolerance) {
+                // in a corner, do nothing
+            } else if (cellSize - x < tolerance && y < tolerance) {
+                // in a corner, do nothing
+            } else if (cellSize - x < tolerance && cellSize - y < tolerance) {
+                // in a corner, do nothing
+            } else if (i < this.puzzle.grid.size.across - 1 && cellSize - x <= tolerance) {
+                // click is near right edge
+                this.barClick.emit({ cell, bar: "rightBar"});
+            } else if (j < this.puzzle.grid.size.down - 1 && cellSize - y <= tolerance) {
+                // click is near bottom edge
+                this.barClick.emit({ cell, bar: "bottomBar"});
+            } else if (i > 0 && x < tolerance) {
+                // click is near left edge of this cell, so right edge of previous cell
+                this.barClick.emit({ cell: this.puzzle.cellAt(i - 1, j), bar: "rightBar"});
+            } else if (j > 0 && y < tolerance) {
+                // click is near top edge of this cell, so bottom edge of previous cell
+                this.barClick.emit({ cell: this.puzzle.cellAt(i, j - 1), bar: "bottomBar"});
+            }
         }
 
     }

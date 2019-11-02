@@ -13,7 +13,9 @@ export class AddPlaceholders implements IPuzzleModifier {
             puzzle.notes.body = {
                 ops: [ { "insert": "enter your further comments here"} ]
             };
-            puzzle.clues.forEach(clue => clue.warnings = [ "missing answer", "missing comment", "missing definition"]);
+            if (puzzle.clues) {
+                puzzle.clues.forEach(clue => clue.warnings = [ "missing answer", "missing comment", "missing definition"]);
+            }
         }
     }
 }

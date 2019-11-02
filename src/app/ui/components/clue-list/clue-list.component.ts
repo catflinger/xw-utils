@@ -30,7 +30,7 @@ export class ClueListComponent implements OnInit {
 
         this.subs.push(this.activePuzzle.observe().subscribe(
             (puzzle) => {
-                if (puzzle) {
+                if (puzzle && puzzle.clues) {
                     this.clues = puzzle.clues.filter((clue) => clue.group === this.direction)
                 }
             }

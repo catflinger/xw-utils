@@ -1,11 +1,12 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
-// import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { UpdateCell } from 'src/app/services/modifiers/update-cell';
+import { BarClickEventParameter } from '../../components/grid/grid.component';
 
 @Component({
     selector: 'app-grid-editor',
@@ -13,13 +14,11 @@ import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
     styleUrls: ['./grid-editor.component.css']
 })
 export class GridEditorComponent implements OnInit {
-    // private modalRef: NgbModalRef = null;
     public puzzle: Puzzle = null;
     private subs: Subscription[] = [];
 
     constructor(
         private activePuzzle: IActivePuzzle,
-        // private modalService: NgbModal,
         private router: Router) { }
 
     ngOnInit() {
@@ -42,6 +41,15 @@ export class GridEditorComponent implements OnInit {
 
     ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
+    }
+
+    public get barred(): boolean {
+        let result = false;
+
+        if (this.puzzle && this.puzzle.grid.style === "barred") {
+            result = true;
+        }
+        return result;
     }
 
     // @HostListener('document:keypress', ['$event'])
@@ -74,14 +82,18 @@ export class GridEditorComponent implements OnInit {
     }
 
     onCellClick(cell: GridCell) {
-        // if (!cell.highlight) {
-        //     this.activePuzzle.update(new SelectClueByCell(cell));
-        // } else {
-        //     let clue = this.puzzle.getSelectedClue();
+        if (this.puzzle.grid.style === "standard") {
+            this.activePuzzle.update(new UpdateCell(cell.id, { light: !cell.light }));
+        }
+    }
 
-        //     if (clue) {
-        //         this.openEditor(clue, null);
-        //     }
-        // }
+    onBarClick(event: BarClickEventParameter) {
+        if (this.puzzle.grid.style === "barred") {
+            if (event.bar === "rightBar") {
+                this.activePuzzle.update(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));
+            } else {
+                this.activePuzzle.update(new UpdateCell(event.cell.id, { bottomBar: !event.cell.bottomBar }));
+            }
+        }
     }
 }

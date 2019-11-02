@@ -45,7 +45,7 @@ export class PublishGridComponent implements OnInit {
         
         // overwrite if a new color, clear if the same color
         let color: string = cell.shading && cell.shading === this.color ? null : this.color;
-        this.activePuzzle.update(new UpdateCell(cell.id, color));
+        this.activePuzzle.update(new UpdateCell(cell.id, { shading: color }));
     }
 
     public onContinue() {
