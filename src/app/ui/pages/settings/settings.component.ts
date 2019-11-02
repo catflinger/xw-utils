@@ -59,8 +59,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onSave() {
         let changes = {
-            general: this.xxxxx("general"),
-            tips: this.xxxxx("tips"),
+            general: this.getChanges("general"),
+            tips: this.getChanges("tips"),
         }
         this.settingsService.update(changes);
         this.appService.returnToSender();
@@ -79,16 +79,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.appService.returnToSender();
     }
 
-    private xxxxx(groupKey: BooleanSettingsGroupKey): any {
+    private getChanges(groupKey: BooleanSettingsGroupKey): any {
         let result = {};
 
         Object.keys((this.form.controls[groupKey] as FormGroup).controls).forEach(key => {
             result[key] = { enabled: this.form.value[groupKey][key] };
         });
         return result;
-        // {
-        //     showCommentEditor: { enabled: this.form.value.general.showCommentEditor },
-        //     showCheat: { enabled: this.form.value.general.showCheat },
-        // }
     }
 }
