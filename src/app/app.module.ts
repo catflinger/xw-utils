@@ -48,6 +48,7 @@ import { IndyComponent } from './ui/pages/indy/indy.component';
 import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-modal.component';
 import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
+import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -98,6 +99,7 @@ const quillGlobalConfig = {
         ConfirmModalComponent,
         GridEditorComponent,
         GridStartComponent,
+        GridPropertiesEditorComponent,
     ],
     imports: [
         BrowserModule,

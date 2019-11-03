@@ -48,9 +48,8 @@ export class GridComponent implements OnInit, AfterViewInit {
 
                         if (puzzle) {
                             this.puzzle = puzzle;
-
-                            this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.size.across + this.gridParams.gridPadding * 2;
-                            this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.size.down + this.gridParams.gridPadding * 2;
+                            this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
+                            this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
 
                             setTimeout(() => this.drawGrid(), 0);
 
@@ -111,10 +110,10 @@ export class GridComponent implements OnInit, AfterViewInit {
                 // in a corner, do nothing
             } else if (cellSize - x < tolerance && cellSize - y < tolerance) {
                 // in a corner, do nothing
-            } else if (i < this.puzzle.grid.size.across - 1 && cellSize - x <= tolerance) {
+            } else if (i < this.puzzle.grid.properties.size.across - 1 && cellSize - x <= tolerance) {
                 // click is near right edge
                 this.barClick.emit({ cell, bar: "rightBar"});
-            } else if (j < this.puzzle.grid.size.down - 1 && cellSize - y <= tolerance) {
+            } else if (j < this.puzzle.grid.properties.size.down - 1 && cellSize - y <= tolerance) {
                 // click is near bottom edge
                 this.barClick.emit({ cell, bar: "bottomBar"});
             } else if (i > 0 && x < tolerance) {

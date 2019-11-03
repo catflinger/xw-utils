@@ -120,8 +120,8 @@ export class PublishComponent implements OnInit, OnDestroy {
                 if (this.puzzle.grid) {
                     const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
 
-                    canvas.width = this.gridParams.cellSize * this.puzzle.grid.size.across + this.gridParams.gridPadding * 2;
-                    canvas.height = this.gridParams.cellSize * this.puzzle.grid.size.down + this.gridParams.gridPadding * 2;
+                    canvas.width = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
+                    canvas.height = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
 
                     const context = canvas.getContext('2d');
 

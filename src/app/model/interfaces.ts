@@ -57,9 +57,14 @@ export abstract class IGridCell {
     abstract readonly shading: string;
 }
 
-export abstract class IGrid {
+export abstract class IGridProperties {
     abstract readonly style: GridStyle;
     abstract readonly size: IGridSize;
+    abstract readonly symmetrical: boolean;
+}
+
+export abstract class IGrid {
+    abstract readonly properties: IGridProperties;
     abstract readonly cells: readonly IGridCell[];
 }
 
