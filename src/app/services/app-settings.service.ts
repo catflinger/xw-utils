@@ -34,6 +34,7 @@ class _AppSettings implements AppSettings {
     public username: string;
     public general: _GeneralSettings;
     public tips: _TipSettings;
+    public sandbox: boolean;
 }
 
 /*
@@ -51,6 +52,7 @@ class _AppSettings implements AppSettings {
 // before adding more settings read the comment on interfaces GeneralSettings and TipSettings
 const _defaultSettings: _AppSettings = {
     username: null,
+    sandbox: false,
     general: {
         showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
@@ -83,6 +85,7 @@ export interface AppSettings {
     readonly username: string;
     readonly general: GeneralSettings;
     readonly tips: TipSettings;
+    readonly sandbox: boolean;
 }
 
 export type TipKey = keyof TipSettings;
@@ -118,12 +121,19 @@ export class AppSettingsService {
     public update(changes: any) {
         // make a copy of the current settings then overwrite with values from any matching items in the changes object 
         this._update((_settings: _AppSettings) => {
-            if (changes && changes.username && typeof changes.username === "string") {
-                _settings.username = changes.username;
-            }
+            if (changes) {
+                if (changes.username !== undefined && 
+                    (typeof changes.username === "string" || changes.username === null)) {
+                    _settings.username = changes.username;
+                }
 
-            this._patchBooleanSettings(_settings, changes, "general");
-            this._patchBooleanSettings(_settings, changes, "tips");
+                if (changes.sandbox !== undefined && typeof changes.sandbox === "boolean") {
+                    _settings.sandbox = changes.sandbox;
+                }
+
+                this._patchBooleanSettings(_settings, changes, "general");
+                this._patchBooleanSettings(_settings, changes, "tips");
+            }
         });
     }
 

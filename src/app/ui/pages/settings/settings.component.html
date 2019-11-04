@@ -20,6 +20,16 @@
         </div>
     </div>
 
+    <h5 class="mt-5">Publication options</h5>
+    <ngb-alert type="warning" *ngIf="form.value.sandbox" [dismissible]="false">
+        <p>WARNING: posts will be published to the sandbox only.</p>
+        <p>Your post will <i>not</i> appear on fifteensquared.net.</p>
+    </ngb-alert>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="sandbox">
+        <label class="form-check-label">post to sandbox (for testing)</label>
+    </div>
+
     <div class="formGroup mt-5">
         <button class="btn btn-primary mr-3" type="button" (click)="onSave()">Save</button>
         <button class="btn btn-primary" type="button" (click)="onReset()">Reset all</button>

@@ -34,7 +34,7 @@ export class AuthService {
     }
 
     public authenticate(username: string, password: string): Promise<void> {
-        return this.http.post(environment.apiRoot + "authorization/", { username, password})
+        return this.http.post(environment.apiRoot + "authorization/", { username, password, sandbox: this.settingsService.settings.sandbox})
         .toPromise()
         .then((data: ApiResponse) => {
             if (data.success === ApiResponseStatus.OK) {

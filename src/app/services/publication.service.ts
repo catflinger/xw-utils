@@ -6,6 +6,7 @@ import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus } from 
 import { AuthService, Credentials } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { ContentGeneratorListLayout } from './content-generator/content-generator-list-layout';
+import { AppSettingsService } from './app-settings.service';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -28,6 +29,7 @@ export class PublicationService {
     constructor(
         private http: HttpClient,
         private authService: AuthService,
+        private settingsService: AppSettingsService,
     ) { }
 
     // TO DO: IMPORTANT!
@@ -43,6 +45,7 @@ export class PublicationService {
                 content: image,
                 username: credentials.username,
                 password: credentials.password,
+                sandbox: this.settingsService.settings.sandbox,
             })
             .toPromise()
             .then(data => data as PublishGridResponse)
@@ -67,6 +70,7 @@ export class PublicationService {
             username: credentials.username,
             password: credentials.password,
             status: status,
+            sandbox: this.settingsService.settings.sandbox,
     })
         .toPromise()
         .then(data => data as PublishPostResponse);

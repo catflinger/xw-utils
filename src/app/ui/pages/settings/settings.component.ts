@@ -27,6 +27,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.settings = this.settingsService.settings;
 
         this.form = this.formBuilder.group({
+            sandbox: [false],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
         });
@@ -41,6 +42,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
+
+            this.form.patchValue({ sandbox: settings.sandbox });
 
             Object.keys(this.settings.general).forEach(key => {
                 (this.form.controls["general"] as FormGroup).controls[key].patchValue(settings.general[key].enabled);
@@ -59,6 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onSave() {
         let changes = {
+            sandbox: this.form.value.sandbox,
             general: this.getChanges("general"),
             tips: this.getChanges("tips"),
         }

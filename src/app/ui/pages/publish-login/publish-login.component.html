@@ -1,4 +1,5 @@
-<h3>Login</h3>
+<h3>Login <span *ngIf="settings.sandbox">(Using Sandbox)</span></h3>
+
 <app-login-control
     *ngIf="appStatus" 
     [options]="{ continueButtonText: 'Continue', cancelButtonText: 'Back'}"

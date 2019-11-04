@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
+import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +12,17 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 export class LoginComponent implements OnInit, OnDestroy {
     public preview: string = "";
     public appStatus: AppStatus;
+    public setings: AppSettings;
 
     private subs: Subscription[] = [];
 
     constructor(
         private appService: AppService,
         private router: Router,
-        ) { }
+        public settingsService: AppSettingsService,
+        ) { 
+            this.setings = this.settingsService.settings;
+        }
 
     public ngOnInit() {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
