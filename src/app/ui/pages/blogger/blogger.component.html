@@ -1,32 +1,40 @@
+<div class="row">
+    <div class="col">
+        <table class="table w-100" *ngIf="puzzle">
+            <tbody>
+                <ng-container *ngFor="let clue of puzzle.clues">
+                    <tr class="border-top bg-light" (click)="onRowClick(clue)" *ngIf="!clue.highlight">
+                        <td>
+                            {{clue.caption}}
+                        </td>
+                        <td class="font-weight-bold">
+                            {{clue.answer}}
+                        </td>
+                        <td>
+                            <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
+                        </td>
+                        <td>
+                            <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length && !clue.redirect">
+                                <span class="text-warning"> {{clue.warnings[0]}}</span>
+                            </ng-container>
+                        </td>
+                    </tr>
 
-<ng-container *ngIf="puzzle">
-    <ng-container *ngFor="let clue of puzzle.clues">
-        <div class="row border-top bg-light" (click)="onRowClick(clue)" *ngIf="!clue.highlight">
-            <div class="col-1">
-                    {{clue.caption}}.
-            </div>
-            <div class="col-2 font-weight-bold">
-                {{clue.answer}}
-            </div>
-            <div class="col-7">
-                <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
-            </div>
-            <div class="col-2" class="text-warning">
-                <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length && !clue.redirect">
-                    <span> {{clue.warnings[0]}}</span>
+                    <tr *ngIf="clue.highlight">
+                        <td colspan="5">
+                            <div class="border rounded">
+                                <app-clue-editor [clueId]="clue.id" (close)="onEditorClose(clue, $event)"></app-clue-editor>
+                            </div>
+                        </td>
+                    </tr>
                 </ng-container>
-            </div>
-        </div>
-
-        <div class="row" *ngIf="clue.highlight">
-            <div class="col">
-                <div class="border rounded">
-                    <app-clue-editor [clueId]="clue.id" (close)="onEditorClose(clue, $event)"></app-clue-editor>
-                </div>
-            </div>
-        </div>
-    </ng-container>
-</ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">

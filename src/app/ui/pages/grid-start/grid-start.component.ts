@@ -87,6 +87,7 @@ export class GridStartComponent implements OnInit {
                 definitionStyle: null,
                 layout: null,
                 includeGrid: true,
+                spacing: null,
             },
         }
 

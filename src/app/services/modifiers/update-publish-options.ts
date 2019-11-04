@@ -1,8 +1,8 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { PuzzleM } from './mutable-model/puzzle-m';
-import { Layouts } from 'src/app/model/interfaces';
+import { Layouts, Spacings } from 'src/app/model/interfaces';
 
-export type PublishOptionsUpdate = { includeGrid?: boolean; layout?: Layouts};
+export type PublishOptionsUpdate = { includeGrid?: boolean; layout?: Layouts; spacing?: Spacings };
 
 export class UpdatePublsihOptions implements IPuzzleModifier {
     constructor(private options: PublishOptionsUpdate) { }
@@ -18,6 +18,10 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
 
         if (typeof this.options.layout !== "undefined" && this.options.layout !== null) {
             puzzle.publishOptions.layout = this.options.layout;
+        }
+
+        if (typeof this.options.spacing !== "undefined" && this.options.spacing !== null) {
+            puzzle.publishOptions.spacing = this.options.spacing;
         }
 
     }

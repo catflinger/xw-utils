@@ -57,8 +57,8 @@ export class Clue implements IClue {
     }
 
     public get lengthAvailable(): number {
-        let result = 0;
-        this.entries.forEach(entry => entry.cellIds.forEach(c => result++ ));
-        return result;
+        let count = 0;
+        this.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
+        return count;
     }
 }

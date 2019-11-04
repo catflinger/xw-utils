@@ -8,6 +8,12 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { TextStyle } from 'src/app/model/text-style';
 import { ContentGenerator } from '../common';
 
+const paddingSizes = {
+    small: "1px",
+    medium: "3px",
+    large: "5px",
+}
+
 export class ContentGeneratorTableLayout implements ContentGenerator {
     private buffer: string = "";
     private tdPadding = "3px";
@@ -21,6 +27,8 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
     }
 
     public getContent(puzzle: Puzzle, gridUrl: string): string {
+        this.tdPadding = paddingSizes[puzzle.publishOptions.spacing];
+
         this.addHtml("<div>");
         this.addQuillDelta(puzzle.notes.header);
         this.addHtml("<!-- MORE -->");

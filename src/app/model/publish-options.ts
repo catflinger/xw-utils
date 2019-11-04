@@ -1,5 +1,5 @@
 import { TextStyle } from './text-style';
-import { IPublishOptions, Layouts } from './interfaces';
+import { IPublishOptions, Layouts, Spacings } from './interfaces';
 
 
 export class PublishOptions implements IPublishOptions {
@@ -9,6 +9,8 @@ export class PublishOptions implements IPublishOptions {
     public readonly definitionStyle: TextStyle;
     public readonly includeGrid: boolean;
     public readonly layout: Layouts;
+    public readonly spacing: Spacings;
+
 
     constructor(data) {
         this.answerStyle = data.answerStyle ? new TextStyle(data.answerStyle) : null;
@@ -16,5 +18,6 @@ export class PublishOptions implements IPublishOptions {
         this.definitionStyle = data.definitionStyle ? new TextStyle(data.definitionStyle) : null;
         this.includeGrid = !!(data.includeGrid);
         this.layout = data.layout ? data.layout : "table";
+        this.spacing = data.spacing ? data.spacing : "medium";
      }
 }

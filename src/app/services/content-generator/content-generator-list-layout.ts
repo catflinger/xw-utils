@@ -8,9 +8,14 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { TextStyle } from 'src/app/model/text-style';
 import { ContentGenerator } from '../common';
 
-const marginSize = "3px";
+const marginSizes = {
+    small: "2px",
+    medium: "5px",
+    large: "8px",
+}
 
 export class ContentGeneratorListLayout implements ContentGenerator {
+    private marginSize: string = "3px";
 
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
@@ -19,6 +24,8 @@ export class ContentGeneratorListLayout implements ContentGenerator {
     }
 
     public getContent(puzzle: Puzzle, gridUrl: string): string {
+        this.marginSize = marginSizes[puzzle.publishOptions.spacing];
+
         const markup =  `
         <div>
             <div>
@@ -58,13 +65,13 @@ export class ContentGeneratorListLayout implements ContentGenerator {
 
     private writeClue(clue: Clue, publishOptions: PublishOptions) {
         const markup = `
-        <div style="margin-top:${marginSize}">
+        <div style="margin-top:${this.marginSize}">
             ${this.writeText(clue.caption, publishOptions.clueStyle)} ${this.writeClueText(clue.chunks, publishOptions)}
         </div>
-        <div>
+        <div style="margin-top:${this.marginSize}">
             ${this.writeText(clue.answer, publishOptions.answerStyle)}
         </div>
-        <div>
+        <div style="margin-top:${this.marginSize}">
             ${this.writeQuillDelta(clue.comment)}
         </div>`;
 

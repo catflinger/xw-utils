@@ -5,21 +5,21 @@
 <table *ngIf="clues && publishOptions.layout === 'table'">
     <ng-container *ngFor="let clue of clues">
         <tr>
-            <td>
+            <td [ngClass]="tdClass">
                 <span class="text-nowrap" [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
             </td>
-            <td>
+            <td [ngClass]="tdClass">
                 <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answer}} </span>
             </td>
-            <td class="col">
+            <td [ngClass]="tdClass">
                 <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
-            <td>
-                <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
+            <td [ngClass]="tdClass"></td>
+            <td [ngClass]="tdClass"></td>
+            <td [ngClass]="tdClass">
+                    <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
             </td>
         </tr>
     </ng-container>
@@ -27,11 +27,11 @@
 
 <div *ngIf="clues && publishOptions.layout === 'list'">
     <ng-container *ngFor="let clue of clues">
-        <div [ngStyle]="makeClueStyle()">
+        <div [ngStyle]="makeClueStyle()" [ngClass]="tdClass">
             <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
         </div>
-        <div class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answer}}</div>
-        <div>
+        <div class="text-nowrap" [ngClass]="tdClass" [ngStyle]="makeAnswerStyle()">{{clue.answer}}</div>
+        <div [ngClass]="tdClass">
             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
         </div>
     </ng-container>

@@ -5,6 +5,7 @@ export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios";
 export type Layouts = "table" | "list";
+export type Spacings = "small" | "medium" | "large";
 
 export type QuillDelta = { ops: DeltaOperation[] }
 
@@ -103,6 +104,7 @@ export abstract class IPublishOptions {
     abstract readonly clueStyle: ITextStyle;
     abstract readonly definitionStyle: ITextStyle;
     abstract readonly includeGrid: boolean;
+    abstract readonly spacing: Spacings;
 }
 
 export abstract class ITextStyle {

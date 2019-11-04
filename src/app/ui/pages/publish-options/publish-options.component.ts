@@ -67,4 +67,5 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
         this.router.navigate(["/publish-grid"]);
     }
+
 }

@@ -10,9 +10,8 @@ import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
-import { relativeTimeRounding } from 'moment';
 
 @Component({
     selector: 'app-clue-editor',
@@ -41,7 +40,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
-        public activeModal: NgbActiveModal,
+        //public activeModal: NgbActiveModal,
     ) { }
 
     ngOnInit() {
@@ -235,7 +234,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     private clean(answer: string): string {
         return answer ?
-            answer.toUpperCase().replace(/[^A-Z]/, "") :
+            answer.toUpperCase().replace(/[^A-Z]/g, "") :
             "";
     }
 }

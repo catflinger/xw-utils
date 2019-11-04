@@ -36,6 +36,29 @@ export class CluesPreviewComponent implements OnInit {
         return {};
     }
 
+    public get tdClass(): string[] {
+        let result: any = ["nopad"];
+
+        switch (this.publishOptions.spacing) {
+            case "small":
+                result.push("pt-0");
+                result.push("pb-0");
+                break;
+            case "medium":
+                result.push("pt-1");
+                result.push("pb-1");
+                break;
+            case "large":
+                result.push("pt-2");
+                result.push("pb-2");
+                break;
+            default:
+                result.push("py-1");
+                break;
+        }
+        return result;
+    }
+
     private makeStyle(textStyle: TextStyle): any {
         return {
             "color": textStyle.color,
@@ -43,5 +66,6 @@ export class CluesPreviewComponent implements OnInit {
             "font-style": textStyle.italic ? "italic" : "normal",
             "text-decoration": textStyle.underline ? "underline" : "unset",
         }
-}
+    }
+
 }
