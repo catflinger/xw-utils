@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { Clear } from 'src/app/services/modifiers/clear';
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
 import { SelectNextClue } from 'src/app/services/modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
@@ -51,7 +51,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onClose() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/home"]);
     }
 
@@ -65,7 +65,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
     onEditorClose(clue: Clue, reason: string) {
         if (reason === "cancel") {
-            this.activePuzzle.update(new ClearSelection());
+            this.activePuzzle.update(new Clear());
         } else {
             this.activePuzzle.update(new SelectNextClue(clue.id));
         }

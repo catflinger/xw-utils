@@ -1,4 +1,4 @@
-import { OnInit, Output, EventEmitter, Component, Input } from '@angular/core';
+import { OnInit, Output, EventEmitter, Component, Input, OnDestroy } from '@angular/core';
 import { AppStatus, AppService } from '../../services/app.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ export class GridPropertiesArgs {
   templateUrl: './grid-properties-editor.component.html',
   styleUrls: ['./grid-properties-editor.component.css']
 })
-export class GridPropertiesEditorComponent implements OnInit {
+export class GridPropertiesEditorComponent implements OnInit, OnDestroy {
     public readonly minCellsAcross = 1;
     public readonly minCellsDown = 1;
     public readonly maxCellsAcross = 25;
@@ -62,6 +62,10 @@ export class GridPropertiesEditorComponent implements OnInit {
 
         this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
         this.appService.clearAlerts();
+    }
+
+    ngOnDestroy() {
+        this.subs.forEach(s => s.unsubscribe());
     }
 
     public onContinue(result: any) {

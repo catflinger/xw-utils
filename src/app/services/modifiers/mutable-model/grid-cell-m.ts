@@ -11,4 +11,5 @@ export abstract class GridCellM implements IGridCell {
     public abstract bottomBar: boolean;
     public abstract highlight: boolean;
     public abstract shading: string;
+    public abstract edit: boolean;
 }

@@ -28,6 +28,6 @@ export class GridParameters {
 }
 
 export interface GridOptions {
-    readonly?: boolean;
     showShading?: boolean;
+    enableTextEdit?: boolean;
 }

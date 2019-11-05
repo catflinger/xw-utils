@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle, IClue } from 'src/app/model/interfaces';
-import { ClearSelection } from './clear-selection';
+import { Clear } from './clear';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';
 import { PuzzleM } from './mutable-model/puzzle-m';
@@ -12,7 +12,7 @@ export class SelectClueByCell implements IPuzzleModifier {
         ) { }
 
     exec(puzzle: PuzzleM) {
-        new ClearSelection().exec(puzzle);
+        new Clear().exec(puzzle);
 
         if (this.cell) {
 

@@ -3,6 +3,14 @@ import { GridParameters, GridOptions } from '../common';
 import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
 
+export class GridDisplayInfo {
+    public top: string;
+    public left: string;
+    public height: number;
+    public width: number;
+    public unit: "px";
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -16,6 +24,32 @@ export class GridPainterService {
 
     constructor() { }
 
+    public getGridInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): GridDisplayInfo {
+        return {
+            top: context.canvas.style.top,
+            left: context.canvas.style.left,
+            height: context.canvas.height,
+            width: context.canvas.width,
+            unit: "px",
+        }
+    }
+
+    public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions, cellId: string): GridDisplayInfo {
+        let cell = grid.cells.find(c => c.id === cellId);
+
+        if (!cell) {
+            return null;
+        } else {
+            return {
+                top: "100px",
+                left: "100px",
+                height: 30,
+                width: 30,
+                unit: "px",
+            };
+        }
+    }
+
     public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): void {
 
         context.setTransform(1, 0, 0, 1, 0, 0);
@@ -27,7 +61,6 @@ export class GridPainterService {
         grid.cells.forEach((cell) => {
             this.drawCell(context, cell, options);
         });
-
     }
 
     private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridOptions) {

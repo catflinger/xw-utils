@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
-import { ClearSelection } from './clear-selection';
+import { Clear } from './clear';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class SelectClue implements IPuzzleModifier {
@@ -8,7 +8,7 @@ export class SelectClue implements IPuzzleModifier {
 
     exec(puzzle: PuzzleM) {
         if (puzzle) {
-            let red = new ClearSelection();
+            let red = new Clear();
             red.exec(puzzle);
 
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);

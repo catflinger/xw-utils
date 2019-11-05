@@ -8,7 +8,7 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
-import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { Clear } from 'src/app/services/modifiers/clear';
 
 @Component({
     selector: 'app-solver',
@@ -66,17 +66,17 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/publish-options"]);
     }
 
     onClose() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/home"]);
     }
 
     onBlogger() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/blogger"]);
     }
 

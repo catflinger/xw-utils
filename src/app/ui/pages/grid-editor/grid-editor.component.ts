@@ -4,14 +4,16 @@ import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { Clear } from 'src/app/services/modifiers/clear';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { BarClickEventParameter } from '../../components/grid/grid.component';
+import { BarClickEvent, TextInputEvent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { GridPainterService } from '../../services/grid-painter.service';
+import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -24,6 +26,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
+    public selectSingle: boolean = true;
 
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
@@ -31,7 +34,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     constructor(
         private activePuzzle: IActivePuzzle,
         private router: Router,
-        private formBuilder: FormBuilder) { }
+        private formBuilder: FormBuilder,
+    ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
@@ -92,12 +96,12 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/home"]);
     }
 
     onClose() {
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.router.navigate(["/home"]);
     }
 
@@ -111,6 +115,18 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.activePuzzle.update(new UpdateGridProperties({
             symmetrical: val,
         }));
+    }
+
+    onTextInput(event: TextInputEvent) {
+        console.log("KEY PRESSED " + event.text);
+        if (event && event.text) {
+            this.puzzle.grid.cells.forEach((cell) => {
+                if (cell.edit) {
+                    this.activePuzzle.update(new UpdateCell(cell.id, { content: event.text }));
+                }
+            });
+            }
+        this.activePuzzle.update(new Clear());
     }
 
     onCellClick(cell: GridCell) {
@@ -128,12 +144,13 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
             case "text":
                 // TO DO: show some sort of input
-                console.log("setting text on cell");
+                if (cell.light) {
+                    this.activePuzzle.update(new SelectCellForEdit(cell.id));
+                }
                 break;
                 
             case "color":
                 // TO DO: set a highlight colour on this cell
-                console.log("setting highlight on cell");
                 break;
                         
             default:
@@ -142,7 +159,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }
     }
 
-    onBarClick(event: BarClickEventParameter) {
+    onBarClick(event: BarClickEvent) {
         if (this.tool === "grid" && this.puzzle.grid.properties.style === "barred") {
             if (event.bar === "rightBar") {
                 this.activePuzzle.update(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));

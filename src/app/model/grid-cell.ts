@@ -11,6 +11,7 @@ export class GridCell implements IGridCell {
     public readonly bottomBar: boolean;
     public readonly highlight: boolean;
     public readonly shading: string;
+    public readonly edit: boolean;
 
     constructor(data: any) {
         this.id = data.id;
@@ -23,5 +24,6 @@ export class GridCell implements IGridCell {
         this.bottomBar = data.bottomBar;
         this.highlight = data.highlight;
         this.shading = data.shading;
+        this.edit = data.edit;
     }
 }

@@ -2,7 +2,7 @@ import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
-export class ClearSelection implements IPuzzleModifier {
+export class Clear implements IPuzzleModifier {
     constructor() { }
 
     exec(puzzle: PuzzleM) {
@@ -15,6 +15,7 @@ export class ClearSelection implements IPuzzleModifier {
         if (puzzle.grid) {
             puzzle.grid.cells.forEach((cell) => {
                 cell.highlight = false;
+                cell.edit = false;
             });
         }
 

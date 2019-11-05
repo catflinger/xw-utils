@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { IPuzzle } from 'src/app/model/interfaces';
-import { ClearSelection } from './clear-selection';
+import { Clear } from './clear';
 import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class UpdateCell implements IPuzzleModifier {

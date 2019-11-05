@@ -6,7 +6,7 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)"></app-grid>
+        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)" (textInput)="onTextInput($event)"></app-grid>
     </div>
     <div class="col border border-secondary rounded p-3">
         <app-tip key="gridEditor">TO DO: ...</app-tip>
@@ -29,7 +29,19 @@
 
             <ngb-tab id="text" title="Text">
                 <ng-template ngbTabContent>
-                    Text Tool
+                    <div class="mt-5">
+                        <div class="mb-5">
+                            Click on a cell to enter text
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">Select single cell </label>
+                            <input type="radio" name="selectSingle" class="form-check-radio" [value]="true" [(ngModel)]="selectSingle">
+                        </div>
+                        <div class="form-check">
+                                <label class="form-check-label">Select whole words </label>
+                                <input type="radio" name="selectSingle" class="form-check-radio" [value]="false" [(ngModel)]="selectSingle">
+                            </div>
+                        </div>
                 </ng-template>
             </ngb-tab>
 

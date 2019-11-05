@@ -6,7 +6,34 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 
-export type BarClickEventParameter = {cell: GridCell, bar: "rightBar" | "bottomBar" };
+export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
+export type TextInputEvent = { text: string };
+
+type GridInput = { 
+    text: string,
+    style: { 
+        display: string,
+        position: string, 
+        top: string,
+        left: string,
+        height: string,
+        width: string,
+        border: string,
+    }, 
+}
+
+const gridInputDefaults: GridInput = { 
+    text: "", 
+    style: {
+        display: "none",
+        position: "relative",
+        top: "0px",
+        left: "0px",
+        height: "50px",
+        width: "50px",
+        border: "10px yellow solid",
+    }
+};
 
 @Component({
     selector: 'app-grid',
@@ -14,28 +41,45 @@ export type BarClickEventParameter = {cell: GridCell, bar: "rightBar" | "bottomB
     styleUrls: ['./grid.component.css']
 })
 export class GridComponent implements OnInit, AfterViewInit {
+
     @Input() options: GridOptions;
     @Output() cellClick = new EventEmitter<GridCell>();
-    @Output() barClick = new EventEmitter<BarClickEventParameter>();
+    @Output() barClick = new EventEmitter<BarClickEvent>();
+    @Output() textInput = new EventEmitter<TextInputEvent>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
 
-    private gridParams: GridParameters;
-
     public canvasHeight: number = 0;
     public canvasWidth: number = 0;
-
     public puzzle: Puzzle;
     public source: string = "";
     public err: any;
+    
+    public input: GridInput = gridInputDefaults;
 
+    private gridParams: GridParameters;
     private viewInitiated = false;
-
     private subs: Subscription[] = [];
 
     constructor(
         private activePuzzle: IActivePuzzle,
         private gridPainter: GridPainterService) {
+    }
+
+    private xxxxxxxxxxxxxx(cell: GridCell) {
+        const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
+        const context = canvasEl.getContext('2d');
+
+        let gridInfo = this.gridPainter.getGridInfo(context, this.puzzle.grid, this.options);
+        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, this.options, cell.id);
+
+        this.input.text = cell.content;
+        this.input.style.top = cellInfo.top.toString() + cellInfo.unit;
+        this.input.style.left = cellInfo.left.toString() + cellInfo.unit;
+        this.input.style.height = cellInfo.height.toString() + cellInfo.unit;
+        this.input.style.width = cellInfo.width.toString() + cellInfo.unit;
+        this.input.style.display = "block";
+
     }
 
     public ngOnInit() {
@@ -51,7 +95,15 @@ export class GridComponent implements OnInit, AfterViewInit {
                             this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
                             this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
 
-                            setTimeout(() => this.drawGrid(), 0);
+                            this.input.style.display = "none";
+                            let cell = this.puzzle.grid.cells.find(c => c.edit);
+
+                            if (cell) {
+                                this.xxxxxxxxxxxxxx(cell);
+                            }
+
+                            // don't draw the grid until the native canvas has had a chance to resize
+                            setTimeout(() => this.drawGrid() , 0);
 
                         } else {
                         }
@@ -75,12 +127,6 @@ export class GridComponent implements OnInit, AfterViewInit {
     onCanvasClick(params: any) {
         const cellSize = this.gridParams.cellSize;
         const tolerance = cellSize / 5;
-
-        if (this.options && this.options.readonly) {
-            return;
-        }
-
-        // TO DO: ignore mouse click on grid padding
 
         const bounds = this.canvas.nativeElement.getBoundingClientRect();
         let xOffsetInGrid = params.clientX - bounds.left - this.gridParams.gridPadding;
@@ -124,7 +170,18 @@ export class GridComponent implements OnInit, AfterViewInit {
                 this.barClick.emit({ cell: this.puzzle.cellAt(i, j - 1), bar: "bottomBar"});
             }
         }
+    }
 
+    public onInput(event: KeyboardEvent) {
+        if (event && 
+            event.key && 
+            typeof event.key === "string" &&
+            event.key.length === 1 && 
+            RegExp("[A-Z]", "i").test(event.key)) {
+
+            this.textInput.emit({ text: event.key });
+        }
+        event.preventDefault();
     }
 
     private drawGrid(): void {

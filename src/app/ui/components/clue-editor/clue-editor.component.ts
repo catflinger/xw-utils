@@ -7,7 +7,7 @@ import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
-import { ClearSelection } from 'src/app/services/modifiers/clear-selection';
+import { Clear } from 'src/app/services/modifiers/clear';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -185,7 +185,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 this.warnings,
             ));
         }
-        this.activePuzzle.update(new ClearSelection());
+        this.activePuzzle.update(new Clear());
         this.close.emit(save? "save" : "cancel");
     }
 

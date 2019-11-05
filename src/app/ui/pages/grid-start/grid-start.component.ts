@@ -49,6 +49,7 @@ export class GridStartComponent implements OnInit {
                     bottomBar: false,
                     highlight: false,
                     shading: null,
+                    edit: false,
                 };
                 cells.push(cell);
             }

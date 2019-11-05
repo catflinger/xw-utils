@@ -125,7 +125,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
                     const context = canvas.getContext('2d');
 
-                    this.gridPainter.drawGrid(context, this.puzzle.grid, { readonly: true, showShading: true });
+                    this.gridPainter.drawGrid(context, this.puzzle.grid, { showShading: true });
 
                     const dataUrl = canvas.toDataURL();
 

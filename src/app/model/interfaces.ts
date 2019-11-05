@@ -56,6 +56,7 @@ export abstract class IGridCell {
     abstract readonly bottomBar: boolean;
     abstract readonly highlight: boolean;
     abstract readonly shading: string;
+    abstract readonly edit: boolean;
 }
 
 export abstract class IGridProperties {
