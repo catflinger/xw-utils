@@ -4,8 +4,8 @@ import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
 
 export class GridDisplayInfo {
-    public top: string;
-    public left: string;
+    public top: number;
+    public left: number;
     public height: number;
     public width: number;
     public unit: "px";
@@ -24,15 +24,17 @@ export class GridPainterService {
 
     constructor() { }
 
-    public getGridInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): GridDisplayInfo {
-        return {
-            top: context.canvas.style.top,
-            left: context.canvas.style.left,
-            height: context.canvas.height,
-            width: context.canvas.width,
-            unit: "px",
-        }
-    }
+    // public getGridInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): GridDisplayInfo {
+    //     let rect = context.canvas.getBoundingClientRect();
+
+    //     return {
+    //         top: rect.top + window.scrollX,
+    //         left: rect.bottom + window.scrollY,
+    //         height:rect.height,
+    //         width: rect.width,
+    //         unit: "px",
+    //     }
+    // }
 
     public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions, cellId: string): GridDisplayInfo {
         let cell = grid.cells.find(c => c.id === cellId);
@@ -40,11 +42,17 @@ export class GridPainterService {
         if (!cell) {
             return null;
         } else {
+            // TO DO: this calculation is duplicated when drawing the grid
+            // make this a common function
+            const top = this.gridParams.gridPadding - this.gridParams.borderWidth + cell.y * this.gridParams.cellSize;
+            const left = this.gridParams.gridPadding - this.gridParams.borderWidth + cell.x * this.gridParams.cellSize;
+            const size = this.gridParams.cellSize + 2 * this.gridParams.borderWidth;
+
             return {
-                top: "100px",
-                left: "100px",
-                height: 30,
-                width: 30,
+                top,
+                left,
+                height: size,
+                width: size,
                 unit: "px",
             };
         }

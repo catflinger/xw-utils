@@ -5,15 +5,16 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
+import { UpdateCell } from 'src/app/services/modifiers/update-cell';
+import { Clear } from 'src/app/services/modifiers/clear';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
-export type TextInputEvent = { text: string };
+//export type TextInputEvent = { text: string };
 
 type GridInput = { 
     text: string,
     style: { 
         display: string,
-        position: string, 
         top: string,
         left: string,
         height: string,
@@ -21,17 +22,17 @@ type GridInput = {
         border: string,
     }, 
 }
+const editBorderWidth = 2;
 
 const gridInputDefaults: GridInput = { 
     text: "", 
     style: {
         display: "none",
-        position: "relative",
         top: "0px",
         left: "0px",
         height: "50px",
         width: "50px",
-        border: "10px yellow solid",
+        border: `${editBorderWidth}px orange solid`,
     }
 };
 
@@ -45,17 +46,16 @@ export class GridComponent implements OnInit, AfterViewInit {
     @Input() options: GridOptions;
     @Output() cellClick = new EventEmitter<GridCell>();
     @Output() barClick = new EventEmitter<BarClickEvent>();
-    @Output() textInput = new EventEmitter<TextInputEvent>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
+    @ViewChild('editor', { static: false }) editor: ElementRef;
 
     public canvasHeight: number = 0;
     public canvasWidth: number = 0;
     public puzzle: Puzzle;
     public source: string = "";
     public err: any;
-    
-    public input: GridInput = gridInputDefaults;
+    public model: GridInput = gridInputDefaults;
 
     private gridParams: GridParameters;
     private viewInitiated = false;
@@ -64,22 +64,6 @@ export class GridComponent implements OnInit, AfterViewInit {
     constructor(
         private activePuzzle: IActivePuzzle,
         private gridPainter: GridPainterService) {
-    }
-
-    private xxxxxxxxxxxxxx(cell: GridCell) {
-        const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
-        const context = canvasEl.getContext('2d');
-
-        let gridInfo = this.gridPainter.getGridInfo(context, this.puzzle.grid, this.options);
-        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, this.options, cell.id);
-
-        this.input.text = cell.content;
-        this.input.style.top = cellInfo.top.toString() + cellInfo.unit;
-        this.input.style.left = cellInfo.left.toString() + cellInfo.unit;
-        this.input.style.height = cellInfo.height.toString() + cellInfo.unit;
-        this.input.style.width = cellInfo.width.toString() + cellInfo.unit;
-        this.input.style.display = "block";
-
     }
 
     public ngOnInit() {
@@ -94,12 +78,12 @@ export class GridComponent implements OnInit, AfterViewInit {
                             this.puzzle = puzzle;
                             this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
                             this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
+                            this.model.style.display = "none";
 
-                            this.input.style.display = "none";
                             let cell = this.puzzle.grid.cells.find(c => c.edit);
 
                             if (cell) {
-                                this.xxxxxxxxxxxxxx(cell);
+                                this.openEditor(cell);
                             }
 
                             // don't draw the grid until the native canvas has had a chance to resize
@@ -173,22 +157,64 @@ export class GridComponent implements OnInit, AfterViewInit {
     }
 
     public onInput(event: KeyboardEvent) {
-        if (event && 
-            event.key && 
-            typeof event.key === "string" &&
-            event.key.length === 1 && 
-            RegExp("[A-Z]", "i").test(event.key)) {
 
-            this.textInput.emit({ text: event.key });
+        if (RegExp("^[A-Z]$", "i").test(event.key)) {
+            //enter a text character
+            this.setEditCellText(event.key.toUpperCase());
+            this.activePuzzle.update(new Clear());
+
+        } else if (event.key === "Backspace" || event.key === "Delete" || event.key === " ") {
+            //clear the contents
+            this.setEditCellText("");
+            this.activePuzzle.update(new Clear());
+
+        } else if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
+            //cancel the edit
+            this.activePuzzle.update(new Clear());
         }
         event.preventDefault();
     }
-
+ 
     private drawGrid(): void {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
             this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
+        }
+    }
+
+    private setEditCellText(text: string) {
+        this.puzzle.grid.cells.forEach((cell) => {
+            if (cell.edit) {
+                this.activePuzzle.update(new UpdateCell(cell.id, { content: text }));
+            }
+        });
+    }
+
+    private openEditor(cell: GridCell) {
+        const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
+        const context = canvasEl.getContext('2d');
+
+        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, this.options, cell.id);
+
+        let top = cellInfo.top - editBorderWidth;
+        let left = cellInfo.left - editBorderWidth;
+        let height = cellInfo.height + 2 * editBorderWidth;
+        let width = cellInfo.width + 2 * editBorderWidth;
+
+        if (cellInfo) {
+            this.model.text = cell.content;
+            this.model.style.top = top.toString() + cellInfo.unit;
+            this.model.style.left = left.toString() + cellInfo.unit;
+            this.model.style.height = height.toString() + cellInfo.unit;
+            this.model.style.width = width.toString() + cellInfo.unit;
+            this.model.style.display = "block";
+
+            setTimeout(() => {
+                this.editor.nativeElement.focus();
+            }, 0); 
+        } else {
+            this.model.style.display = "none";
         }
     }
 }

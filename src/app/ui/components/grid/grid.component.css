@@ -1,4 +1,16 @@
+.canvasContainer {
+    border: 0;
+    padding: 0;
+    position: relative;
+    top: 0;
+    left: 0;
+}
 .gridCanvas {
     border: 0;
     padding: 0;
+}
+input {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

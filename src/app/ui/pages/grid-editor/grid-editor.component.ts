@@ -6,13 +6,12 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { BarClickEvent, TextInputEvent } from '../../components/grid/grid.component';
+import { BarClickEvent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { GridPainterService } from '../../services/grid-painter.service';
 import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
 
 type ToolType = "grid" | "text" | "color" | "properties";
@@ -93,6 +92,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     onTabChange(event: NgbTabChangeEvent) {
         this.tool = event.nextId as ToolType;
+        this.activePuzzle.update(new Clear());
     }
 
     onContinue() {
@@ -117,18 +117,6 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }));
     }
 
-    onTextInput(event: TextInputEvent) {
-        console.log("KEY PRESSED " + event.text);
-        if (event && event.text) {
-            this.puzzle.grid.cells.forEach((cell) => {
-                if (cell.edit) {
-                    this.activePuzzle.update(new UpdateCell(cell.id, { content: event.text }));
-                }
-            });
-            }
-        this.activePuzzle.update(new Clear());
-    }
-
     onCellClick(cell: GridCell) {
         switch(this.tool) {
             case "grid":
@@ -146,6 +134,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 // TO DO: show some sort of input
                 if (cell.light) {
                     this.activePuzzle.update(new SelectCellForEdit(cell.id));
+                } else {
+                    this.activePuzzle.update(new Clear());
                 }
                 break;
                 
