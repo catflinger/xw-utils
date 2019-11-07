@@ -29,5 +29,6 @@ export class GridParameters {
 
 export interface GridOptions {
     showShading?: boolean;
-    enableTextEdit?: boolean;
+    //enableTextEdit?: boolean;
+    selectSingle?: boolean;
 }

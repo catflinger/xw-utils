@@ -59,10 +59,6 @@ export class Puzzle implements IPuzzle {
         this.createdWithVersion = data.createdWithVersion;
     }
 
-    public cellAt(x: number, y: number): GridCell {
-        return this.grid.cells.find((cell) => cell.x === x && cell.y === y);
-    }
-
     public getSelectedClue(): Clue {
         return this.clues.find((clue) => clue.highlight);
     }

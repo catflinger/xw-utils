@@ -13,6 +13,7 @@ import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-pro
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
+import { GridOptions } from '../../common';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -25,7 +26,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
-    public selectSingle: boolean = true;
+    //public selectSingle: boolean = true;
+    public options: GridOptions = { selectSingle: false };
 
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
@@ -160,12 +162,16 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onOptionChange() {
+        this.activePuzzle.update(new Clear());
+    }
+
     private getSymCell(cell: GridCell): GridCell {
         let result: GridCell = null;
 
         if (this.puzzle.grid.properties.symmetrical) {
             // rotational symmetry
-            result = this.puzzle.cellAt(
+            result = this.puzzle.grid.cellAt(
                 this.puzzle.grid.properties.size.across - 1 - cell.x, 
                 this.puzzle.grid.properties.size.down -  1- cell.y, 
             );

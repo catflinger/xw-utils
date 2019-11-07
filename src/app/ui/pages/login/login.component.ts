@@ -12,7 +12,7 @@ import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.s
 export class LoginComponent implements OnInit, OnDestroy {
     public preview: string = "";
     public appStatus: AppStatus;
-    public setings: AppSettings;
+    public settings: AppSettings;
 
     private subs: Subscription[] = [];
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private router: Router,
         public settingsService: AppSettingsService,
         ) { 
-            this.setings = this.settingsService.settings;
+            this.settings = this.settingsService.settings;
         }
 
     public ngOnInit() {

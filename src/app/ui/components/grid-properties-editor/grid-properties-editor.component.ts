@@ -68,7 +68,7 @@ export class GridPropertiesEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onContinue(result: any) {
+    public onContinue() {
         this.close.emit({
             title: this.form.value.title,
             properties: {

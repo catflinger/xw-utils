@@ -7,6 +7,8 @@ export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quipti
 export type Layouts = "table" | "list";
 export type Spacings = "small" | "medium" | "large";
 
+export type GridNavigation = "L" | "R" | "U" | "D";
+
 export type QuillDelta = { ops: DeltaOperation[] }
 
 export type GridStyle = "standard" | "barred";

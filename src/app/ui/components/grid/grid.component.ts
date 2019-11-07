@@ -7,6 +7,8 @@ import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
+import { GridNavigation } from 'src/app/model/interfaces';
+import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
 //export type TextInputEvent = { text: string };
@@ -32,7 +34,7 @@ const gridInputDefaults: GridInput = {
         left: "0px",
         height: "50px",
         width: "50px",
-        border: `${editBorderWidth}px orange solid`,
+        border: `${editBorderWidth}px blue solid`,
     }
 };
 
@@ -44,6 +46,7 @@ const gridInputDefaults: GridInput = {
 export class GridComponent implements OnInit, AfterViewInit {
 
     @Input() options: GridOptions;
+
     @Output() cellClick = new EventEmitter<GridCell>();
     @Output() barClick = new EventEmitter<BarClickEvent>();
 
@@ -70,32 +73,29 @@ export class GridComponent implements OnInit, AfterViewInit {
         this.gridParams = new GridParameters();
 
         this.subs.push(
-            this.activePuzzle.observe()
-                .subscribe(
-                    (puzzle) => {
+            this.activePuzzle.observe().subscribe(
+                (puzzle) => {
 
-                        if (puzzle) {
-                            this.puzzle = puzzle;
-                            this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
-                            this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
-                            this.model.style.display = "none";
+                    if (puzzle) {
+                        this.puzzle = puzzle;
+                        this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
+                        this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
+                        this.model.style.display = "none";
 
-                            let cell = this.puzzle.grid.cells.find(c => c.edit);
+                        let cell = this.puzzle.grid.cells.find(c => c.edit);
 
-                            if (cell) {
-                                this.openEditor(cell);
-                            }
-
-                            // don't draw the grid until the native canvas has had a chance to resize
-                            setTimeout(() => this.drawGrid() , 0);
-
-                        } else {
+                        if (cell) {
+                            this.openEditor(cell);
                         }
-                    },
-                    (err) => {
-                        this.err = err;
+
+                        // don't draw the grid until the native canvas has had a chance to resize
+                        setTimeout(() => this.drawGrid() , 0);
                     }
-                )
+                },
+                (err) => {
+                    this.err = err;
+                }
+            )
         );
     }
 
@@ -124,7 +124,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         let x = xOffsetInGrid % cellSize;
         let y = yOffsetInGrid % cellSize;
 
-        let cell: GridCell = this.puzzle.cellAt(i, j);
+        let cell: GridCell = this.puzzle.grid.cellAt(i, j);
         if (cell) {
             // for all grids emit an event to say a cell has been clicked
             this.cellClick.emit(cell);
@@ -148,25 +148,42 @@ export class GridComponent implements OnInit, AfterViewInit {
                 this.barClick.emit({ cell, bar: "bottomBar"});
             } else if (i > 0 && x < tolerance) {
                 // click is near left edge of this cell, so right edge of previous cell
-                this.barClick.emit({ cell: this.puzzle.cellAt(i - 1, j), bar: "rightBar"});
+                this.barClick.emit({ cell: this.puzzle.grid.cellAt(i - 1, j), bar: "rightBar"});
             } else if (j > 0 && y < tolerance) {
                 // click is near top edge of this cell, so bottom edge of previous cell
-                this.barClick.emit({ cell: this.puzzle.cellAt(i, j - 1), bar: "bottomBar"});
+                this.barClick.emit({ cell: this.puzzle.grid.cellAt(i, j - 1), bar: "bottomBar"});
             }
         }
     }
 
     public onInput(event: KeyboardEvent) {
 
-        if (RegExp("^[A-Z]$", "i").test(event.key)) {
+        if (RegExp("^[A-Z ]$", "i").test(event.key)) {
             //enter a text character
             this.setEditCellText(event.key.toUpperCase());
-            this.activePuzzle.update(new Clear());
+            
+            if (this.options && this.options.selectSingle) {
+                this.activePuzzle.update(new Clear());
+            } else {
+                this.selectNextCellForEdit("R");
+            }
 
-        } else if (event.key === "Backspace" || event.key === "Delete" || event.key === " ") {
+        } else if (event.key === "Backspace" || event.key === "Delete") {
             //clear the contents
             this.setEditCellText("");
             this.activePuzzle.update(new Clear());
+
+        } else if (event.key === "ArrowRight") {
+            this.selectNextCellForEdit("R");
+
+        } else if (event.key === "ArrowLeft") {
+            this.selectNextCellForEdit("L");
+
+        } else if (event.key === "ArrowUp") {
+            this.selectNextCellForEdit("U");
+
+        } else if (event.key === "ArrowDown") {
+            this.selectNextCellForEdit("D");
 
         } else if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
             //cancel the edit
@@ -174,7 +191,41 @@ export class GridComponent implements OnInit, AfterViewInit {
         }
         event.preventDefault();
     }
- 
+
+    private selectNextCellForEdit(orientation: GridNavigation) {
+
+        const next = this.getNextCellForEdit(orientation);
+
+        if (next) {
+            this.activePuzzle.update(new SelectCellForEdit(next.id));
+        } else {
+            this.activePuzzle.update(new Clear());
+        }
+    }
+
+    private getNextCellForEdit(orientation: GridNavigation): GridCell {
+        let result: GridCell = null;
+
+        const startCell = this.puzzle.grid.cells.find(c => c.edit);
+        if (startCell) {
+            let navigator = this.puzzle.grid.getNavigator(startCell.id, orientation);
+            
+            let next: IteratorResult<GridCell> = navigator.next();
+
+            while (!next.done) {
+
+                // TO DO: change behaviour according to the selected options
+                // eg skip cells not part of words
+                if (next.value.light) {
+                    result = next.value;
+                    break;
+                }
+                next = navigator.next();
+            }
+        }
+        return result;
+    }
+
     private drawGrid(): void {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
@@ -217,4 +268,5 @@ export class GridComponent implements OnInit, AfterViewInit {
             this.model.style.display = "none";
         }
     }
+
 }

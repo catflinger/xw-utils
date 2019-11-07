@@ -6,12 +6,12 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)"></app-grid>
+        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)" [options]="options"></app-grid>
     </div>
     <div class="col border border-secondary rounded p-3">
         <app-tip key="gridEditor">TO DO: ...</app-tip>
         
-        <ngb-tabset [justify]="currentJustify" [activeId]="grid" (tabChange)="onTabChange($event)">
+        <ngb-tabset activeId="grid" (tabChange)="onTabChange($event)">
 
             <ngb-tab id="grid" title="Grid">
                 <ng-template ngbTabContent>
@@ -35,11 +35,11 @@
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">Select single cell </label>
-                            <input type="radio" name="selectSingle" class="form-check-radio" [value]="true" [(ngModel)]="selectSingle">
+                            <input type="radio" name="selectSingle" class="form-check-radio" [value]="true" [(ngModel)]="options.selectSingle" (change)="onOptionChange()">
                         </div>
                         <div class="form-check">
                                 <label class="form-check-label">Select whole words </label>
-                                <input type="radio" name="selectSingle" class="form-check-radio" [value]="false" [(ngModel)]="selectSingle">
+                                <input type="radio" name="selectSingle" class="form-check-radio" [value]="false" [(ngModel)]="options.selectSingle" (change)="onOptionChange()">
                             </div>
                         </div>
                 </ng-template>
