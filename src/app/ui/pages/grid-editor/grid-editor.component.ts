@@ -12,9 +12,10 @@ import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
+import { SelectCellsForEdit } from 'src/app/services/modifiers/select-cells-for-edit';
 import { GridOptions } from '../../common';
 import { GridNavigation } from 'src/app/model/interfaces';
+import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -27,7 +28,6 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
-    //public selectSingle: boolean = true;
     public options: GridOptions = { selectSingle: false };
 
     private subs: Subscription[] = [];
@@ -134,9 +134,20 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 break;
 
             case "text":
-                // TO DO: show some sort of input
                 if (cell.light) {
-                    this.activePuzzle.update(new SelectCellForEdit(cell.id));
+                    if (this.options.selectSingle) {
+                        this.activePuzzle.update(new Clear());
+                        this.activePuzzle.update(new MakeCellEditable(cell.id));
+
+                    } else {
+                        this.activePuzzle.update(new Clear());
+                        let entry = this.puzzle.grid.getGridEntry(cell.id);
+
+                        if (entry.length > 0) {
+                            this.activePuzzle.update(new SelectCellsForEdit(entry));
+                            this.activePuzzle.update(new MakeCellEditable(entry[0].id));
+                        }
+                    }
                 } else {
                     this.activePuzzle.update(new Clear());
                 }
@@ -174,12 +185,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             case "write" :
                 //enter a text character
                 this.setEditCellText(event.text.toUpperCase());
-                
-                if (this.options && this.options.selectSingle) {
-                    this.activePuzzle.update(new Clear());
-                } else {
-                    this.selectNextCellForEdit("right");
-                }
+                this.selectNextCellForEdit(this.guessEditOrientation());
                 break;
 
             case "clear":
@@ -212,14 +218,54 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         });
     }
 
-    private selectNextCellForEdit(orientation: GridNavigation) {
+    private guessEditOrientation(): GridNavigation {
+        let result: GridNavigation;
+        let cells = this.puzzle.grid.cells.filter(c => c.highlight);
 
-        const next = this.getNextCellForEdit(orientation);
-
-        if (next) {
-            this.activePuzzle.update(new SelectCellForEdit(next.id));
+        if (cells.length  < 1) {
+            result = "right";
+        
         } else {
+            let xCount = 0;
+            let yCount = 0;
+
+            cells.forEach(c => {
+                if (c.x === cells[0].x) {
+                    xCount++;
+                }
+                if (c.y === cells[0].y) {
+                    yCount++;
+                }
+            })
+            result = xCount > yCount ? "down" : "right";
+        }
+
+        return result;
+    }
+
+    private selectNextCellForEdit(orientation: GridNavigation) {
+        let next = this.getNextCellForEdit(orientation);
+
+        if (!next) {
             this.activePuzzle.update(new Clear());
+
+        } else {
+            if (this.options.selectSingle) {
+                // start a new selection
+                this.activePuzzle.update(new Clear());
+
+                //  this might also make sense if the user wants to continue adding letters...
+                // this.activePuzzle.update(new SelectCellsForEdit([next]));
+                // this.activePuzzle.update(new MakeCellEditable(next.id));
+
+            } else {
+                // continue with existing selection
+                if (next.highlight) {
+                    this.activePuzzle.update(new MakeCellEditable(next.id));
+                } else {
+                    this.activePuzzle.update(new Clear());
+                }
+            }
         }
     }
 

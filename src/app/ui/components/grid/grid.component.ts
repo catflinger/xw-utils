@@ -38,7 +38,7 @@ const gridInputDefaults: GridInput = {
         left: "0px",
         height: "50px",
         width: "50px",
-        border: `${editBorderWidth}px blue solid`,
+        border: `${editBorderWidth}px gold solid`,
     }
 };
 
