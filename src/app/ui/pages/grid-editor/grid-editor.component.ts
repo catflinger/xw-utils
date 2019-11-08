@@ -6,7 +6,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { BarClickEvent } from '../../components/grid/grid.component';
+import { BarClickEvent, GridTextEvent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
@@ -14,6 +14,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
 import { GridOptions } from '../../common';
+import { GridNavigation } from 'src/app/model/interfaces';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -164,6 +165,85 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     public onOptionChange() {
         this.activePuzzle.update(new Clear());
+    }
+
+    public onGridText(event: GridTextEvent) {
+
+        switch (event.eventType) {
+
+            case "write" :
+                //enter a text character
+                this.setEditCellText(event.text.toUpperCase());
+                
+                if (this.options && this.options.selectSingle) {
+                    this.activePuzzle.update(new Clear());
+                } else {
+                    this.selectNextCellForEdit("right");
+                }
+                break;
+
+            case "clear":
+                //clear the contents
+                this.setEditCellText("");
+
+                if (event.navigation) {
+                    this.selectNextCellForEdit(event.navigation);
+                } else {
+                    this.activePuzzle.update(new Clear());
+                }
+                break;
+
+            case "navigate":
+                this.selectNextCellForEdit(event.navigation);
+                break;
+
+            case "cancel":
+                //cancel the edit
+                this.activePuzzle.update(new Clear());
+                break;
+        }
+    }
+
+    private setEditCellText(text: string) {
+        this.puzzle.grid.cells.forEach((cell) => {
+            if (cell.edit) {
+                this.activePuzzle.update(new UpdateCell(cell.id, { content: text }));
+            }
+        });
+    }
+
+    private selectNextCellForEdit(orientation: GridNavigation) {
+
+        const next = this.getNextCellForEdit(orientation);
+
+        if (next) {
+            this.activePuzzle.update(new SelectCellForEdit(next.id));
+        } else {
+            this.activePuzzle.update(new Clear());
+        }
+    }
+
+    private getNextCellForEdit(orientation: GridNavigation): GridCell {
+        let result: GridCell = null;
+
+        const startCell = this.puzzle.grid.cells.find(c => c.edit);
+        if (startCell) {
+            let navigator = this.puzzle.grid.getNavigator(startCell.id, orientation);
+            
+            let next: IteratorResult<GridCell> = navigator.next();
+
+            while (!next.done) {
+
+                // TO DO: change behaviour according to the selected options
+                // eg skip cells not part of words
+                if (next.value.light) {
+                    result = next.value;
+                    break;
+                }
+                next = navigator.next();
+            }
+        }
+        return result;
     }
 
     private getSymCell(cell: GridCell): GridCell {

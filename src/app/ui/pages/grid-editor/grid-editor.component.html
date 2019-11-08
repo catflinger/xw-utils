@@ -6,7 +6,7 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)" [options]="options"></app-grid>
+        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)" (gridText)="onGridText($event)" [options]="options"></app-grid>
     </div>
     <div class="col border border-secondary rounded p-3">
         <app-tip key="gridEditor">TO DO: ...</app-tip>

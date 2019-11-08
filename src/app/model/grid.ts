@@ -37,7 +37,7 @@ export class Grid implements IGrid {
         while (current !== null) {
 
             switch(orientation) {
-                case "R":
+                case "right":
                     if (current.x + 1 < cellsAcross) {
                         current = this.cellAt(current.x + 1, current.y);
                     } else if (current.y + 1 < cellsDown) {
@@ -46,7 +46,7 @@ export class Grid implements IGrid {
                         current = this.cellAt(0, 0);
                     }
                     break;
-                case "L":
+                case "left":
                     if (current.x - 1 >= 0) {
                         current = this.cellAt(current.x - 1, current.y);
                     } else if (current.y - 1 >= 0) {
@@ -55,7 +55,7 @@ export class Grid implements IGrid {
                         current = this.cellAt(cellsAcross - 1, cellsDown - 1);
                     }
                     break;
-                case "U":
+                case "up":
                     if (current.y - 1 >= 0) {
                         current = this.cellAt(current.x, current.y - 1);
                     } else if (current.x - 1 >= 0) {
@@ -64,7 +64,7 @@ export class Grid implements IGrid {
                         current = this.cellAt(cellsAcross - 1, cellsDown - 1);
                     }
                     break;
-                case "D":
+                case "down":
                     if (current.y + 1 < cellsDown) {
                         current = this.cellAt(current.x, current.y + 1);
                     } else if (current.x + 1 < cellsDown) {

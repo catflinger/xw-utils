@@ -5,13 +5,17 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { GridParameters, GridOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
-import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { Clear } from 'src/app/services/modifiers/clear';
 import { GridNavigation } from 'src/app/model/interfaces';
-import { SelectCellForEdit } from 'src/app/services/modifiers/select-cell-for-edit';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
-//export type TextInputEvent = { text: string };
+
+export type GridTextEventTypes = "write" | "clear" | "navigate" | "cancel";
+
+export type GridTextEvent = { 
+    eventType: GridTextEventTypes, 
+    text?: string,
+    navigation?: GridNavigation
+}
 
 type GridInput = { 
     text: string,
@@ -49,6 +53,7 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     @Output() cellClick = new EventEmitter<GridCell>();
     @Output() barClick = new EventEmitter<BarClickEvent>();
+    @Output() gridText = new EventEmitter<GridTextEvent>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
     @ViewChild('editor', { static: false }) editor: ElementRef;
@@ -159,71 +164,30 @@ export class GridComponent implements OnInit, AfterViewInit {
     public onInput(event: KeyboardEvent) {
 
         if (RegExp("^[A-Z ]$", "i").test(event.key)) {
-            //enter a text character
-            this.setEditCellText(event.key.toUpperCase());
-            
-            if (this.options && this.options.selectSingle) {
-                this.activePuzzle.update(new Clear());
-            } else {
-                this.selectNextCellForEdit("R");
-            }
+            this.gridText.emit({ eventType: "write", text: event.key.toUpperCase(), navigation: "right" });
 
-        } else if (event.key === "Backspace" || event.key === "Delete") {
-            //clear the contents
-            this.setEditCellText("");
-            this.activePuzzle.update(new Clear());
+        } else if (event.key === "Backspace") {
+            this.gridText.emit({ eventType: "clear", navigation: "left" });
+
+        } else if (event.key === "Delete") {
+            this.gridText.emit({ eventType: "clear" });
 
         } else if (event.key === "ArrowRight") {
-            this.selectNextCellForEdit("R");
+            this.gridText.emit({ eventType: "navigate", navigation: "right"});
 
         } else if (event.key === "ArrowLeft") {
-            this.selectNextCellForEdit("L");
+            this.gridText.emit({ eventType: "navigate", navigation: "left" });
 
         } else if (event.key === "ArrowUp") {
-            this.selectNextCellForEdit("U");
+            this.gridText.emit({ eventType: "navigate", navigation: "up" });
 
         } else if (event.key === "ArrowDown") {
-            this.selectNextCellForEdit("D");
+            this.gridText.emit({ eventType: "navigate", navigation: "down" });
 
         } else if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
-            //cancel the edit
-            this.activePuzzle.update(new Clear());
+            this.gridText.emit({ eventType: "cancel", });
         }
         event.preventDefault();
-    }
-
-    private selectNextCellForEdit(orientation: GridNavigation) {
-
-        const next = this.getNextCellForEdit(orientation);
-
-        if (next) {
-            this.activePuzzle.update(new SelectCellForEdit(next.id));
-        } else {
-            this.activePuzzle.update(new Clear());
-        }
-    }
-
-    private getNextCellForEdit(orientation: GridNavigation): GridCell {
-        let result: GridCell = null;
-
-        const startCell = this.puzzle.grid.cells.find(c => c.edit);
-        if (startCell) {
-            let navigator = this.puzzle.grid.getNavigator(startCell.id, orientation);
-            
-            let next: IteratorResult<GridCell> = navigator.next();
-
-            while (!next.done) {
-
-                // TO DO: change behaviour according to the selected options
-                // eg skip cells not part of words
-                if (next.value.light) {
-                    result = next.value;
-                    break;
-                }
-                next = navigator.next();
-            }
-        }
-        return result;
     }
 
     private drawGrid(): void {
@@ -232,14 +196,6 @@ export class GridComponent implements OnInit, AfterViewInit {
             const context = canvasEl.getContext('2d');
             this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
         }
-    }
-
-    private setEditCellText(text: string) {
-        this.puzzle.grid.cells.forEach((cell) => {
-            if (cell.edit) {
-                this.activePuzzle.update(new UpdateCell(cell.id, { content: text }));
-            }
-        });
     }
 
     private openEditor(cell: GridCell) {
