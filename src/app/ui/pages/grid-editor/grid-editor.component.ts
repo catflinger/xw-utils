@@ -140,12 +140,15 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
             case "text":
                 if (cell.light) {
-                    let updates = this.gridEditor.startEdit(this.puzzle, cell);
-                    updates.forEach(update => this.activePuzzle.update(update));
-
-                    // TO DO: think about what happens if the entry is already being edited
-                    // don't start a new edit, treatthis as an absolute navigation event
-                    // invoke the grid-editor.onNavigation method with parameter="absolute" and x,y values
+                    if (cell.highlight) {
+                        // cell is already part of a text edit
+                        let updates = this.gridEditor.onGridNavigation(this.puzzle, "absolute", { x: cell.x, y: cell.y});
+                        updates.forEach(update => this.activePuzzle.update(update));
+                    } else {
+                        // this is a new edit
+                        let updates = this.gridEditor.startEdit(this.puzzle, cell);
+                        updates.forEach(update => this.activePuzzle.update(update));
+                    }
 
                 } else {
                     this.activePuzzle.update(new Clear());
@@ -193,6 +196,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
         if (this.puzzle.grid.properties.symmetrical) {
             // rotational symmetry
+
+            // TO DO: allow for other types of symmetry
+            // use matricies and transformations?
+
             result = this.puzzle.grid.cellAt(
                 this.puzzle.grid.properties.size.across - 1 - cell.x, 
                 this.puzzle.grid.properties.size.down -  1- cell.y, 

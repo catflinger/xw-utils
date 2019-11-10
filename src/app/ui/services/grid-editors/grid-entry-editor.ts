@@ -3,7 +3,10 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IPuzzleModifier } from 'src/app/services/modifiers/puzzle-modifier';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
 import { GridCell } from 'src/app/model/grid-cell';
-import { GridEditor } from './grid-editor';
+import { GridEditor, EditContext } from './grid-editor';
+import { Clear } from 'src/app/services/modifiers/clear';
+import { SelectCellsForEdit } from 'src/app/services/modifiers/select-cells-for-edit';
+import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable';
 
 export class GridEntryEditor extends GridEditor {
 
@@ -13,6 +16,20 @@ export class GridEntryEditor extends GridEditor {
 
     public startEdit(puzzle: Puzzle, entryCell: GridCell): IPuzzleModifier[] {
         let result: IPuzzleModifier[] = [];
+
+        result.push(new Clear());
+        let entry = puzzle.grid.getGridEntry(entryCell.id);
+
+        if (entry.length > 0) {
+            result.push(new SelectCellsForEdit(entry));
+
+            if (entry[0].content && entry[0].content.trim().length > 0) {
+                result.push(new MakeCellEditable(entryCell.id));
+            } else {
+                result.push(new MakeCellEditable(entry[0].id));
+            }
+        }
+
         return result;
     }
 
@@ -23,13 +40,60 @@ export class GridEntryEditor extends GridEditor {
         // update the text
         result.push(new UpdateCell(context.editCell.id, { content: text.toUpperCase() }));
 
-        // decide what to do next
+        this.makeNextCellEditable(context, writingDirection, result);
 
         return result;
     };
 
     public onGridNavigation(puzzle: Puzzle, navigation: GridNavigation, position?: { x: number, y: number }): IPuzzleModifier[] {
         let result: IPuzzleModifier[] = [];
+        let context = this.getEditContext(puzzle);
+        let writingDirection: WritingDirection;
+        let ctx: EditContext;
+
+        if ( this.isParallelMotion(context.entryDirection, navigation) || navigation ==="absolute") {
+
+            switch (navigation) {
+                case "right":
+                case "down":
+                    ctx = context;
+                    writingDirection = "forward";
+                    break;
+                
+                case "left":
+                case "up":
+                    ctx = context;
+                    writingDirection = "backward";
+                    break;
+                
+                case "absolute":
+                    if (position) {
+                        let cell = puzzle.grid.cellAt(position.x, position.y);
+
+                        if (cell.highlight) {
+                            let idx = context.cells.findIndex(c => c.id == cell.id);
+
+                            ctx = new EditContext(context.cells, idx, context.entryDirection);
+                            writingDirection = "static";
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (writingDirection) {
+                this.makeNextCellEditable(ctx, writingDirection, result);
+            } else {
+                result.push(new Clear());
+            }
+
+        } else {
+            result.push(new Clear());
+        }
+
+
         return result;
     }
 
@@ -38,6 +102,32 @@ export class GridEntryEditor extends GridEditor {
             return navigation === "left" || navigation == "right";
         } else {
             return navigation === "up" || navigation == "down";
+        }
+    }
+
+    private makeNextCellEditable(context: EditContext, writingDirection: WritingDirection, result: IPuzzleModifier[]) {
+        // decide what to do next
+        let nextIndex: number;
+
+        switch (writingDirection) {
+            case "forward":
+                nextIndex = context.editIndex + 1;
+                break;
+            
+            case "backward":
+                nextIndex = context.editIndex - 1;
+                break;
+            
+            case "static":
+            default:
+                nextIndex = context.editIndex;
+                break;
+        }
+
+        if (nextIndex >= 0 && nextIndex < context.cells.length) {
+            result.push(new MakeCellEditable(context.cells[nextIndex].id));
+        } else {
+            result.push(new Clear());
         }
     }
 
