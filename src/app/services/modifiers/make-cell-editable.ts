@@ -7,7 +7,8 @@ export class MakeCellEditable implements IPuzzleModifier {
     exec(puzzle: PuzzleM) {
         if (puzzle && puzzle.grid) {
             puzzle.grid.cells.forEach(cell => {
-                cell.edit = cell.id === this.cellId;
+                let isMatch = cell.id === this.cellId;
+                cell.edit = isMatch;
             });
         }
     }

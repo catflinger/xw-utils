@@ -81,7 +81,6 @@ export class Grid implements IGrid {
             } else {
                 return null as GridCell;
             }
-
         }
     }
 

@@ -27,8 +27,15 @@ export class GridParameters {
     public readonly highlightColor = "BurlyWood";
 }
 
-export interface GridOptions {
+export interface GridControlOptions {
     showShading?: boolean;
     //enableTextEdit?: boolean;
-    selectSingle?: boolean;
+    editor?: Symbol;
+}
+
+export const GridEditors = {
+    cellEditor: Symbol("CellEditor"),
+    cellEditorFluid: Symbol("CellEditorFluid"),
+    entryEditor: Symbol("EntryEditor"),
+    entryEditorFluid: Symbol("EntryEditorFluid"),
 }

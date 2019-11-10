@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GridParameters, GridOptions } from '../common';
+import { GridParameters, GridControlOptions } from '../common';
 import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
 
@@ -36,7 +36,7 @@ export class GridPainterService {
     //     }
     // }
 
-    public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions, cellId: string): GridDisplayInfo {
+    public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, cellId: string): GridDisplayInfo {
         let cell = grid.cells.find(c => c.id === cellId);
 
         if (!cell) {
@@ -58,7 +58,7 @@ export class GridPainterService {
         }
     }
 
-    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridOptions): void {
+    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridControlOptions): void {
 
         context.setTransform(1, 0, 0, 1, 0, 0);
         context.fillStyle = "white";
@@ -71,7 +71,7 @@ export class GridPainterService {
         });
     }
 
-    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridOptions) {
+    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions) {
         const top = cell.y * this.gridParams.cellSize;
         const left = cell.x * this.gridParams.cellSize;
         const size = this.gridParams.cellSize;

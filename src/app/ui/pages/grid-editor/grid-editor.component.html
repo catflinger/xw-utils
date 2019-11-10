@@ -6,7 +6,13 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)" (gridText)="onGridText($event)" [options]="options"></app-grid>
+        <app-grid 
+            (cellClick)="onCellClick($event)" 
+            (barClick)="onBarClick($event)" 
+            (gridText)="onGridText($event)" 
+            (gridNavigation)="onGridNavigation($event)" 
+            [options]="options">
+        </app-grid>
     </div>
     <div class="col border border-secondary rounded p-3">
         <app-tip key="gridEditor">TO DO: ...</app-tip>
@@ -34,14 +40,18 @@
                             Click on a cell to enter text
                         </div>
                         <div class="form-check">
+                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
                             <label class="form-check-label">Select single cell </label>
-                            <input type="radio" name="selectSingle" class="form-check-radio" [value]="true" [(ngModel)]="options.selectSingle" (change)="onOptionChange()">
                         </div>
                         <div class="form-check">
-                                <label class="form-check-label">Select whole words </label>
-                                <input type="radio" name="selectSingle" class="form-check-radio" [value]="false" [(ngModel)]="options.selectSingle" (change)="onOptionChange()">
-                            </div>
+                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <label class="form-check-label">Select single cell and continue</label>
                         </div>
+                        <div class="form-check">
+                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.entryEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <label class="form-check-label">Select grid entry</label>
+                        </div>
+                    </div>
                 </ng-template>
             </ngb-tab>
 

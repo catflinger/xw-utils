@@ -6,16 +6,15 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { BarClickEvent, GridTextEvent } from '../../components/grid/grid.component';
+import { BarClickEvent, GridTextEvent, GridNavigationEvent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { SelectCellsForEdit } from 'src/app/services/modifiers/select-cells-for-edit';
-import { GridOptions } from '../../common';
-import { GridNavigation } from 'src/app/model/interfaces';
-import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable';
+import { GridControlOptions, GridEditors } from '../../common';
+import { GridEditor } from '../../services/grid-editors/grid-editor';
+import { GridEditorService } from '../../services/grid-editor.service';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -28,21 +27,27 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
-    public options: GridOptions = { selectSingle: false };
+    public options: GridControlOptions = { editor: GridEditors.cellEditor };
+    public gridEditors = GridEditors;
 
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
+
+    private gridEditor: GridEditor;
 
     constructor(
         private activePuzzle: IActivePuzzle,
         private router: Router,
         private formBuilder: FormBuilder,
+        private gridEditorService: GridEditorService,
     ) { }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
             title: ["", Validators.required],
         });
+
+        this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
         if (!this.activePuzzle.hasPuzzle) {
             this.router.navigate(["/home"]);
@@ -135,19 +140,13 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
             case "text":
                 if (cell.light) {
-                    if (this.options.selectSingle) {
-                        this.activePuzzle.update(new Clear());
-                        this.activePuzzle.update(new MakeCellEditable(cell.id));
+                    let updates = this.gridEditor.startEdit(this.puzzle, cell);
+                    updates.forEach(update => this.activePuzzle.update(update));
 
-                    } else {
-                        this.activePuzzle.update(new Clear());
-                        let entry = this.puzzle.grid.getGridEntry(cell.id);
+                    // TO DO: think about what happens if the entry is already being edited
+                    // don't start a new edit, treatthis as an absolute navigation event
+                    // invoke the grid-editor.onNavigation method with parameter="absolute" and x,y values
 
-                        if (entry.length > 0) {
-                            this.activePuzzle.update(new SelectCellsForEdit(entry));
-                            this.activePuzzle.update(new MakeCellEditable(entry[0].id));
-                        }
-                    }
                 } else {
                     this.activePuzzle.update(new Clear());
                 }
@@ -176,120 +175,17 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     public onOptionChange() {
         this.activePuzzle.update(new Clear());
+        this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
     }
 
     public onGridText(event: GridTextEvent) {
-
-        switch (event.eventType) {
-
-            case "write" :
-                //enter a text character
-                this.setEditCellText(event.text.toUpperCase());
-                this.selectNextCellForEdit(this.guessEditOrientation());
-                break;
-
-            case "clear":
-                //clear the contents
-                this.setEditCellText("");
-
-                if (event.navigation) {
-                    this.selectNextCellForEdit(event.navigation);
-                } else {
-                    this.activePuzzle.update(new Clear());
-                }
-                break;
-
-            case "navigate":
-                this.selectNextCellForEdit(event.navigation);
-                break;
-
-            case "cancel":
-                //cancel the edit
-                this.activePuzzle.update(new Clear());
-                break;
-        }
+        let updates = this.gridEditor.onGridText(this.puzzle, event.text, event.writingDirection);
+        updates.forEach(update => this.activePuzzle.update(update));
     }
 
-    private setEditCellText(text: string) {
-        this.puzzle.grid.cells.forEach((cell) => {
-            if (cell.edit) {
-                this.activePuzzle.update(new UpdateCell(cell.id, { content: text }));
-            }
-        });
-    }
-
-    private guessEditOrientation(): GridNavigation {
-        let result: GridNavigation;
-        let cells = this.puzzle.grid.cells.filter(c => c.highlight);
-
-        if (cells.length  < 1) {
-            result = "right";
-        
-        } else {
-            let xCount = 0;
-            let yCount = 0;
-
-            cells.forEach(c => {
-                if (c.x === cells[0].x) {
-                    xCount++;
-                }
-                if (c.y === cells[0].y) {
-                    yCount++;
-                }
-            })
-            result = xCount > yCount ? "down" : "right";
-        }
-
-        return result;
-    }
-
-    private selectNextCellForEdit(orientation: GridNavigation) {
-        let next = this.getNextCellForEdit(orientation);
-
-        if (!next) {
-            this.activePuzzle.update(new Clear());
-
-        } else {
-            if (this.options.selectSingle) {
-                // start a new selection
-                this.activePuzzle.update(new Clear());
-
-                //  this might also make sense if the user wants to continue adding letters...
-                // this.activePuzzle.update(new SelectCellsForEdit([next]));
-                // this.activePuzzle.update(new MakeCellEditable(next.id));
-
-            } else {
-                // continue with existing selection
-                if (next.highlight) {
-                    this.activePuzzle.update(new MakeCellEditable(next.id));
-                } else {
-                    this.activePuzzle.update(new Clear());
-                }
-            }
-        }
-    }
-
-    private getNextCellForEdit(orientation: GridNavigation): GridCell {
-        let result: GridCell = null;
-
-        const startCell = this.puzzle.grid.cells.find(c => c.edit);
-        if (startCell) {
-            let navigator = this.puzzle.grid.getNavigator(startCell.id, orientation);
-            
-            let next: IteratorResult<GridCell> = navigator.next();
-
-            while (!next.done) {
-
-                // TO DO: change behaviour according to the selected options
-                // eg skip cells not part of words
-                if (next.value.light) {
-                    result = next.value;
-                    break;
-                }
-                next = navigator.next();
-            }
-        }
-        return result;
+    public onGridNavigation(event: GridNavigationEvent) {
+        let updates = this.gridEditor.onGridNavigation(this.puzzle, event.navigation);
+        updates.forEach(update => this.activePuzzle.update(update));
     }
 
     private getSymCell(cell: GridCell): GridCell {

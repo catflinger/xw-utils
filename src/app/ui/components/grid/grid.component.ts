@@ -3,18 +3,20 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { GridParameters, GridOptions } from '../../common';
+import { GridParameters, GridControlOptions } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
-import { GridNavigation } from 'src/app/model/interfaces';
+import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
 
-export type GridTextEventTypes = "write" | "clear" | "navigate" | "cancel";
 
 export type GridTextEvent = { 
-    eventType: GridTextEventTypes, 
-    text?: string,
-    navigation?: GridNavigation
+    text: string,
+    writingDirection: WritingDirection,
+}
+
+export type GridNavigationEvent = { 
+    navigation: GridNavigation,
 }
 
 type GridInput = { 
@@ -49,11 +51,12 @@ const gridInputDefaults: GridInput = {
 })
 export class GridComponent implements OnInit, AfterViewInit {
 
-    @Input() options: GridOptions;
+    @Input() options: GridControlOptions;
 
     @Output() cellClick = new EventEmitter<GridCell>();
     @Output() barClick = new EventEmitter<BarClickEvent>();
     @Output() gridText = new EventEmitter<GridTextEvent>();
+    @Output() gridNavigation = new EventEmitter<GridNavigationEvent>();
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
     @ViewChild('editor', { static: false }) editor: ElementRef;
@@ -164,28 +167,28 @@ export class GridComponent implements OnInit, AfterViewInit {
     public onInput(event: KeyboardEvent) {
 
         if (RegExp("^[A-Z ]$", "i").test(event.key)) {
-            this.gridText.emit({ eventType: "write", text: event.key.toUpperCase(), navigation: "right" });
+            this.gridText.emit({ text: event.key.toUpperCase(), writingDirection: "forward" });
 
         } else if (event.key === "Backspace") {
-            this.gridText.emit({ eventType: "clear", navigation: "left" });
+            this.gridText.emit({ text: "", writingDirection: "backward" });
 
         } else if (event.key === "Delete") {
-            this.gridText.emit({ eventType: "clear" });
+            this.gridText.emit({ text: "", writingDirection: "static"});
 
         } else if (event.key === "ArrowRight") {
-            this.gridText.emit({ eventType: "navigate", navigation: "right"});
+            this.gridNavigation.emit({ navigation: "right"});
 
         } else if (event.key === "ArrowLeft") {
-            this.gridText.emit({ eventType: "navigate", navigation: "left" });
+            this.gridNavigation.emit({ navigation: "left" });
 
         } else if (event.key === "ArrowUp") {
-            this.gridText.emit({ eventType: "navigate", navigation: "up" });
+            this.gridNavigation.emit({ navigation: "up" });
 
         } else if (event.key === "ArrowDown") {
-            this.gridText.emit({ eventType: "navigate", navigation: "down" });
+            this.gridNavigation.emit({ navigation: "down" });
 
         } else if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
-            this.gridText.emit({ eventType: "cancel", });
+            this.gridNavigation.emit({ navigation: null });
         }
         event.preventDefault();
     }
@@ -202,7 +205,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
         const context = canvasEl.getContext('2d');
 
-        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, this.options, cell.id);
+        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, cell.id);
 
         let top = cellInfo.top - editBorderWidth;
         let left = cellInfo.left - editBorderWidth;
