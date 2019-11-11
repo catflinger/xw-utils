@@ -47,19 +47,19 @@
                 <ng-template ngbTabContent>
                     <div class="mt-5">
                         <div class="mb-5">
-                            Click on a cell to enter text
+                            Click on a cell in the grid to enter text
                         </div>
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select single cell </label>
+                            <label class="form-check-label">Select one cell</label>
                         </div>
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select single cell and continue</label>
+                            <label class="form-check-label">Select cells in sequence</label>
                         </div>
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.entryEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select grid entry</label>
+                            <label class="form-check-label">Select entire entries</label>
                         </div>
                     </div>
                 </ng-template>
@@ -67,8 +67,16 @@
 
             <ngb-tab id="color" title="Colours">
                 <ng-template ngbTabContent>
-                    Highlight tool
-                </ng-template>
+                    <div class="mt-5">
+                        Choose a colour then click a cell to apply highlighting
+                    </div>
+                    <div class="mt-5">
+                        <app-color-control [(ngModel)]="shadingColor"></app-color-control>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-link pl-1" (click)="onClearAll()">clear all shading</button>
+                    </div>
+                    </ng-template>
             </ngb-tab>
 
             <ngb-tab id="properties" title="Title">

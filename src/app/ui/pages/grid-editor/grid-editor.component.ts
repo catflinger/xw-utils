@@ -15,6 +15,7 @@ import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 import { GridControlOptions, GridEditors } from '../../common';
 import { GridEditor } from '../../services/grid-editors/grid-editor';
 import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
+import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -27,8 +28,9 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
-    public options: GridControlOptions = { editor: GridEditors.cellEditor };
+    public options: GridControlOptions = { editor: GridEditors.cellEditor, showShading: true };
     public gridEditors = GridEditors;
+    public shadingColor: string;
 
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
@@ -46,6 +48,9 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.form = this.formBuilder.group({
             title: ["", Validators.required],
         });
+
+        // TO DO: record preferences for next time
+        this.shadingColor = "#ffebcd";
 
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
@@ -156,7 +161,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 break;
                 
             case "color":
-                // TO DO: set a highlight colour on this cell
+                let color: string = cell.shading && cell.shading === this.shadingColor ? null : this.shadingColor;
+                this.activePuzzle.update(new UpdateCell(cell.id, { shading: color }));
                 break;
                         
             default:
@@ -189,6 +195,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onGridNavigation(event: GridNavigationEvent) {
         let updates = this.gridEditor.onGridNavigation(this.puzzle, event.navigation);
         updates.forEach(update => this.activePuzzle.update(update));
+    }
+
+    public onClearAll() {
+        this.activePuzzle.update(new ClearShading());
     }
 
     private getSymCell(cell: GridCell): GridCell {

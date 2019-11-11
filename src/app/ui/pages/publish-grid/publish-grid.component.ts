@@ -21,8 +21,8 @@ export class PublishGridComponent implements OnInit {
         private activePuzzle: IActivePuzzle, 
         private router: Router) { }
 
-        public ngOnInit() {
-            // TO DO: record preferences for next time
+    public ngOnInit() {
+        // TO DO: record preferences for next time
         this.color = "#ffebcd";
 
         if (!this.activePuzzle.hasPuzzle) {
