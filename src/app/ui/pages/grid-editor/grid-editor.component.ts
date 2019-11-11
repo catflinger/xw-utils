@@ -110,7 +110,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new Clear());
-        this.router.navigate(["/home"]);
+        this.router.navigate(["publish"]);
     }
 
     onClose() {

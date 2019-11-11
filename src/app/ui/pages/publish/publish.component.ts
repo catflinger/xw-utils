@@ -11,7 +11,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { ApiResponseStatus, ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 
-type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
+export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
 @Component({
     selector: 'app-publish',
@@ -22,6 +22,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public alreadyPublished = false;
+    public gridOnly = false;
     public action: PublishActions = "nothing";
 
     private subs: Subscription[] = [];
@@ -53,8 +54,14 @@ export class PublishComponent implements OnInit, OnDestroy {
                     (puzzle) => {
                         this.puzzle = puzzle;
                         this.alreadyPublished = !!puzzle.info.wordpressId;
+                        
                         if (!this.alreadyPublished) {
                             this.action = "upload";
+                        }
+
+                        this.gridOnly = puzzle.grid && puzzle.clues === null;
+                        if (this.gridOnly) {
+                            this.action = "copy-grid";
                         }
                     }
                 ));
@@ -219,7 +226,8 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/publish-login"]);
             } else {
                 this.appService.clear();
-                this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
+                this.appService.setAlert("danger", "An error occurred whilst tyring to publish the grid.");
+                console.log("ERROR publishing grid: " + JSON.stringify(error));
             }
         });
     }
