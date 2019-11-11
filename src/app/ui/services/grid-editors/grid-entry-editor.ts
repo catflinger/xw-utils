@@ -40,7 +40,7 @@ export class GridEntryEditor extends GridEditor {
         // update the text
         result.push(new UpdateCell(context.editCell.id, { content: text.toUpperCase() }));
 
-        this.makeNextCellEditable(context, writingDirection, result);
+        this.makeNextCellEditable(puzzle, context, writingDirection, result);
 
         return result;
     };
@@ -84,7 +84,7 @@ export class GridEntryEditor extends GridEditor {
             }
 
             if (writingDirection) {
-                this.makeNextCellEditable(ctx, writingDirection, result);
+                this.makeNextCellEditable(puzzle, ctx, writingDirection, result);
             } else {
                 result.push(new Clear());
             }
@@ -105,8 +105,7 @@ export class GridEntryEditor extends GridEditor {
         }
     }
 
-    private makeNextCellEditable(context: EditContext, writingDirection: WritingDirection, result: IPuzzleModifier[]) {
-        // decide what to do next
+    private makeNextCellEditable(puzzle: Puzzle, context: EditContext, writingDirection: WritingDirection, result: IPuzzleModifier[]) {
         let nextIndex: number;
 
         switch (writingDirection) {
@@ -124,11 +123,21 @@ export class GridEntryEditor extends GridEditor {
                 break;
         }
 
-        if (nextIndex >= 0 && nextIndex < context.cells.length) {
-            result.push(new MakeCellEditable(context.cells[nextIndex].id));
+        if (nextIndex < 0) {
+            this.onUnderflow(puzzle, context, result);
+        } else if (nextIndex >= context.cells.length) {
+            this.onOverflow(puzzle, context, result);
         } else {
-            result.push(new Clear());
+            result.push(new MakeCellEditable(context.cells[nextIndex].id));
         }
+    }
+
+    protected onUnderflow(puzzle: Puzzle, context: EditContext, result: IPuzzleModifier[]) {
+        result.push(new Clear());
+    }
+
+    protected onOverflow(puzzle: Puzzle, context: EditContext, result: IPuzzleModifier[]) {
+        result.push(new Clear());
     }
 
 }

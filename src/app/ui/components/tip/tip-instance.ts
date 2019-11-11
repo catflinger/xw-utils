@@ -28,8 +28,10 @@ export class TipInstance {
 
         this.subs.push(settingsService.observe().subscribe((settings) => {
             const current = this.bs.value;
+            let tipSetting = settings.tips[this.key]; 
+            
             this.bs.next(new TipStatus(
-                settings.tips[this.key].enabled, 
+                tipSetting ? tipSetting.enabled : true, 
                 current.active, 
                 this.activationCounter > this.maxActivations));
         }));

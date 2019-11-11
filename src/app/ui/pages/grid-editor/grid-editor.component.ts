@@ -14,7 +14,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 import { GridControlOptions, GridEditors } from '../../common';
 import { GridEditor } from '../../services/grid-editors/grid-editor';
-import { GridEditorService } from '../../services/grid-editor.service';
+import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 

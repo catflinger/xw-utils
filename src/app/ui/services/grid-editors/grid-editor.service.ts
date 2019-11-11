@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { GridEditor } from './grid-editors/grid-editor';
-import { GridEditors } from '../common';
-import { Puzzle } from 'src/app/model/puzzle';
-import { GridCellEditor } from './grid-editors/grid-cell-editor';
-import { GridCellEditorFluid } from './grid-editors/grid-cell-editor-fluid';
-import { GridEntryEditor } from './grid-editors/grid-entry-editor';
-import { GridEntryEditorFluid } from './grid-editors/grid-entry-editor-fluid';
+import { GridEditor } from './grid-editor';
+import { GridEditors } from '../../common';
+import { GridCellEditor } from './grid-cell-editor';
+import { GridCellEditorFluid } from './grid-cell-editor-fluid';
+import { GridEntryEditor } from './grid-entry-editor';
+import { GridEntryEditorFluid } from './grid-entry-editor-fluid';
 
 @Injectable({
     providedIn: 'root'

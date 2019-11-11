@@ -15,7 +15,17 @@
         </app-grid>
     </div>
     <div class="col border border-secondary rounded p-3">
-        <app-tip key="gridEditor">TO DO: ...</app-tip>
+        <app-tip key="gridEditor">
+            <p>
+                These tools allow you to configure your grid. Select one of the tab headings below:
+            </p>
+            <ul>
+                <li>Grid - for setting the light and dark cells/bars</li>
+                <li>Text - for writing letters into the lights</li>
+                <li>Colours - for highlighting a theme</li>
+                <li>Title - change grid title</li>
+            </ul>
+        </app-tip>
         
         <ngb-tabset activeId="grid" (tabChange)="onTabChange($event)">
 
@@ -61,7 +71,7 @@
                 </ng-template>
             </ngb-tab>
 
-            <ngb-tab id="properties" title="Grid properties">
+            <ngb-tab id="properties" title="Title">
                 <ng-template ngbTabContent>
                     <form [formGroup]="form">
                         <div class="form-group mt-5">

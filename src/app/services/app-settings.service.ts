@@ -28,6 +28,7 @@ class _TipSettings implements TipSettings {
     public general: _BooleanSetting;
     public definitionWarning: _BooleanSetting;
     public gridEditor: _BooleanSetting;
+    public gridStart: _BooleanSetting;
 }
 
 class _AppSettings implements AppSettings {
@@ -62,6 +63,7 @@ const _defaultSettings: _AppSettings = {
         general: { caption: "show general tips", enabled: true },
         definitionWarning: { caption: "show tip on highlighting definitions", enabled: true },
         gridEditor: { caption: "show tips on using the Grid Editor", enabled: true },
+        gridStart: { caption: "show tips on using the Grid Tool start page", enabled: true },
     }
 };
 
@@ -79,6 +81,7 @@ export interface TipSettings {
     readonly general: BooleanSetting;
     readonly definitionWarning: BooleanSetting;
     readonly gridEditor: BooleanSetting;
+    readonly gridStart: BooleanSetting;
 }
 
 export interface AppSettings {
