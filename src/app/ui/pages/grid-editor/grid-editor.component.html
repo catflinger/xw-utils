@@ -45,21 +45,42 @@
 
             <ngb-tab id="text" title="Text">
                 <ng-template ngbTabContent>
+                    
                     <div class="mt-5">
                         <div class="mb-5">
                             Click on a cell in the grid to enter text
                         </div>
+
+                        <app-tip key="gridEditorText">
+                            <p>
+                                You can control how the cursor will move after entering a letter into the grid:
+                            </p>
+                            <ul>
+                                <li>Select cell - enter a letter then stop</li>
+                                <li>Select in sequence - move to the next cell in the grid</li>
+                                <li>Select empty cells - move to the next empty cell in the grid</li>
+                                <li>Select entries - select the entire grid entry and move to the next cell in that entry</li>
+                            </ul>
+                        </app-tip>
+
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select one cell</label>
+                            <label class="form-check-label">Select cell</label>
                         </div>
+
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select cells in sequence</label>
+                            <label class="form-check-label">Select in sequence</label>
                         </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorEmptyFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <label class="form-check-label">Select empty cells</label>
+                        </div>
+
                         <div class="form-check">
                             <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.entryEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
-                            <label class="form-check-label">Select entire entries</label>
+                            <label class="form-check-label">Select entries</label>
                         </div>
                     </div>
                 </ng-template>

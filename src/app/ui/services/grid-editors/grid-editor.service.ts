@@ -5,6 +5,7 @@ import { GridCellEditor } from './grid-cell-editor';
 import { GridCellEditorFluid } from './grid-cell-editor-fluid';
 import { GridEntryEditor } from './grid-entry-editor';
 import { GridEntryEditorFluid } from './grid-entry-editor-fluid';
+import { GridCellEditorEmptyFluid } from './grid-cell-editor-empty-fluid';
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,9 @@ export class GridEditorService {
                 break;
             case GridEditors.cellEditorFluid:
                 editor = new GridCellEditorFluid();
+                break;
+            case GridEditors.cellEditorEmptyFluid:
+                editor = new GridCellEditorEmptyFluid();
                 break;
             case GridEditors.entryEditor:
                 editor = new GridEntryEditor();

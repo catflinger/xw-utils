@@ -114,7 +114,14 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        this.router.navigate(["/publish-preamble"]);
+        let route: string;
+
+        if (this.gridOnly) {
+            route = "/grid-editor"
+        } else {
+            route = "/publish-preamble";
+        }
+        this.router.navigate([route]);
     }
 
     private getGridImage(): Promise<string | null> {

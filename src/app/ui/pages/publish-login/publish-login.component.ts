@@ -33,11 +33,20 @@ export class PublishLoginComponent implements OnInit {
     }
 
     public onClose(result: UIResult) {
+        let route: string;
+        const puzzle = this.activePuzzle.puzzle;
+        const gridOnly = puzzle && puzzle.grid && !puzzle.clues;
+
         this.appService.clear();
         if (result === "cancel" || result==="back") {
-            this.router.navigate(["/publish-preamble"]);
+            if (gridOnly) {
+                route = "/grid-editor"
+            } else {
+                route = "/publish-preamble";
+            }
         } else {
-            this.router.navigate(["/publish"]);
+            route = "/publish";
         }
+        this.router.navigate([route]);
     }
 }

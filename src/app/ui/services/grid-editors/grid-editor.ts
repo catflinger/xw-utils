@@ -2,10 +2,7 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { Direction, WritingDirection, GridNavigation } from 'src/app/model/interfaces';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IPuzzleModifier } from 'src/app/services/modifiers/puzzle-modifier';
-import { Clear } from 'src/app/services/modifiers/clear';
-import { SelectCellsForEdit } from 'src/app/services/modifiers/select-cells-for-edit';
-import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable';
-import { UpdateCell } from 'src/app/services/modifiers/update-cell';
+import { JsonPipe } from '@angular/common';
 
 export class EditContext { 
     constructor (
@@ -57,7 +54,13 @@ export abstract class GridEditor {
         if (start) {
             let navigator = puzzle.grid.getNavigator(start.id, orientation);
             
+            //skip the start cell
+            navigator.next();
+            
             for (let next = navigator.next(); !next.done; next = navigator.next()) {
+                if (next.value.id === start.id) {
+                    break;
+                }
                 if (next.value.light) {
                     result = next.value;
                     break;

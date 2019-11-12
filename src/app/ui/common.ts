@@ -36,6 +36,7 @@ export interface GridControlOptions {
 export const GridEditors = {
     cellEditor: Symbol("CellEditor"),
     cellEditorFluid: Symbol("CellEditorFluid"),
+    cellEditorEmptyFluid: Symbol("CellEditorEmptyFluid"),
     entryEditor: Symbol("EntryEditor"),
     entryEditorFluid: Symbol("EntryEditorFluid"),
 }

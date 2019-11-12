@@ -167,6 +167,7 @@ export class GridComponent implements OnInit, AfterViewInit {
     public onInput(event: KeyboardEvent) {
 
         if (RegExp("^[A-Z ]$", "i").test(event.key)) {
+            let key = event.key.trim().toUpperCase()
             this.gridText.emit({ text: event.key.toUpperCase(), writingDirection: "forward" });
 
         } else if (event.key === "Backspace") {

@@ -34,6 +34,14 @@ export class Grid implements IGrid {
         const cellsDown = this.properties.size.down;
 
         let current: GridCell = this.cells.find(c => c.id === startCellId);
+        
+        // yield the "start" as the first "next" value
+        // the naming seems confusing but is the way that one would expect the iterator to work
+        if (current) {
+            yield current;
+        } else {
+            return null as GridCell;
+        }
 
         while (current !== null) {
 
@@ -82,6 +90,8 @@ export class Grid implements IGrid {
                 return null as GridCell;
             }
         }
+
+        return null as GridCell;
     }
 
     public getGridEntry(cellId: string): GridCell[] {
@@ -110,7 +120,8 @@ export class Grid implements IGrid {
 
         // first backtrack looking for the start of the entry
         let nav = this.getNavigator(entryCell.id, backwards);
-        let cell = entryCell;
+
+        let cell = nav.next().value;
         let next = nav.next().value;
 
         while(cell) {
@@ -130,7 +141,7 @@ export class Grid implements IGrid {
 
         // now go forward again looking for the end of the entry
         nav = this.getNavigator(startCell.id, forwards);
-        cell = startCell;
+        cell = nav.next().value;
         next = nav.next().value;
 
         while(cell) {

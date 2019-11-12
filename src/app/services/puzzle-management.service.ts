@@ -18,6 +18,7 @@ import { AddPlaceholders } from './modifiers/add-placeholders';
 
 export abstract class IActivePuzzle {
     abstract observe(): Observable<Puzzle>;
+    abstract get puzzle(): Puzzle;
     abstract hasPuzzle: boolean;
     abstract clear(id?: string);
     abstract update(reducer: IPuzzleModifier);
@@ -78,6 +79,10 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     public observe(): Observable<Puzzle> {
         return this.bsActive.asObservable();
+    }
+
+    public get puzzle(): Puzzle {
+        return this.bsActive.value;
     }
 
     public get hasPuzzle(): boolean {

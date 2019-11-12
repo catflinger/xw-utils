@@ -8,8 +8,8 @@ import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable'
 import { GridCellEditor } from './grid-cell-editor';
 import { GridCell } from 'src/app/model/grid-cell';
 
-// After text entry the editor alwyas moves on to the next cell: left-right then top-bottom
-export class GridCellEditorFluid extends GridCellEditor {
+// After text entry the editor alwyas moves on to the next empty cell: left-right then top-bottom
+export class GridCellEditorEmptyFluid extends GridCellEditor {
 
     constructor() {
         super();
@@ -51,7 +51,7 @@ export class GridCellEditorFluid extends GridCellEditor {
                 if (next.value.id === start.id) {
                     break;
                 }
-                if (next.value.light) {
+                if (next.value.light && !next.value.content && next.value.content.trim().length === 0) {
                     result = next.value as GridCell;
                     break;
                 }
