@@ -62,21 +62,6 @@ export class Puzzle implements IPuzzle {
     public getSelectedClue(): Clue {
         return this.clues.find((clue) => clue.highlight);
     }
-
-    public getLatestAnswer(clueId: string): string {
-        let result: string = "";
-        let clue = this.clues.find((clue) => clue.id === clueId);
-        clue.entries.forEach((entry) => {
-            entry.cellIds.forEach((id) => {
-                let cell = this.grid.cells.find((cell) => cell.id === id);
-                let letter = cell.content.length > 0 ? cell.content.charAt(0) : "_"
-                result += letter + " ";
-            })
-        });
-
-        return result.trim();
-    }
-
 }
 
 
