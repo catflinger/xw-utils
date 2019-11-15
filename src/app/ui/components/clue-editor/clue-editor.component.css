@@ -1,3 +1,19 @@
 .hidden {
     display:none;
 }
+.spacey {
+    letter-spacing: 2px;
+}
+
+.placeholder {
+    color: black;
+}
+.editorEntry {
+    color: slategrey;
+}
+.gridEntry {
+    color: black;
+}
+.clash {
+    color: orangered;
+}

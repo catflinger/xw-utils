@@ -12,6 +12,18 @@ import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { Puzzle } from 'src/app/model/puzzle';
+
+class AnswerTextChunk {
+    constructor(
+        public readonly text: string,
+        public readonly klass: string,
+    ) {}
+
+    public toString(): string {
+        return this.text;
+    }
+}
 
 @Component({
     selector: 'app-clue-editor',
@@ -21,7 +33,6 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 export class ClueEditorComponent implements OnInit, OnDestroy {
     @Input() clueId: string;
     @Input() starterText: string;
-    @Input() latestAnswer: string;
 
     @Output() close = new EventEmitter<string>();
 
@@ -32,7 +43,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public tipStatus: TipStatus = new TipStatus(false, false, false);
     public warnings: ClueValidationWarning[] = [];
     public showAnnotation: boolean = false;
+    public latestAnswer: AnswerTextChunk[] = [];
 
+    private puzzle: Puzzle;
     private subs: Subscription[] = [];
 
     constructor(
@@ -54,16 +67,18 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
-                        let clue = puzzle.clues.find((c) => c.id === this.clueId);
-                        this.clue = clue;
+                        this.puzzle = puzzle;
+                        this.clue = puzzle.clues.find((c) => c.id === this.clueId);
 
                         this.form.patchValue({
-                            comment: clue.comment,
-                            answer: this.starterText ? this.starterText : clue.answer,
-                            chunks: clue.chunks,
+                            comment: this.clue.comment,
+                            answer: this.starterText ? this.starterText : this.clue.answer,
+                            chunks: this.clue.chunks,
                         });
                         this.warnings = [];
-                        clue.warnings.forEach(warning => this.warnings.push(warning));
+                        this.clue.warnings.forEach(warning => this.warnings.push(warning));
+
+                        this.setLatestAnswer();
                     }
                 }
             )
@@ -109,12 +124,12 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.tipInstance.activated = true;
 
         } else {
-            let answer = this.form.value.answer;
+            let answer = this.clean(this.form.value.answer);
 
-            if (this.clean(answer).length !== this.clue.lengthAvailable) {
+            if (answer && answer.length !== this.clue.lengthAvailable) {
                 this.showSaveWarning("Warning: the answer does not fit the space available");
 
-            } else if (this.clue.solution && this.clean(answer) !== this.clean(this.clue.solution)) {
+            } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
                 this.showSaveWarning("Warning: the answer does match the publsihed solution");
 
             } else {
@@ -134,7 +149,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public showLatestAnswer(): boolean {
-        return this.latestAnswer && /_+/.test(this.latestAnswer);
+        let clash = this.latestAnswer.find(item => item.klass === "clash");
+        return clash !== null || (this.latestAnswer && /_+/.test(this.latestAnswer.join("")));
     }
 
     public onToggleComment() {
@@ -146,6 +162,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             answer: this.clue.solution,
         });
         this.warnings = this.validate();
+        this.setLatestAnswer();
     }
 
     public onAnnotation() {
@@ -154,6 +171,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onChange() {
         this.warnings = this.validate();
+        this.setLatestAnswer();
     }
 
     public get showTextWarning() {
@@ -236,5 +254,47 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         return answer ?
             answer.toUpperCase().replace(/[^A-Z]/g, "") :
             "";
+    }
+
+    public setLatestAnswer(): void {
+        let answer = this.clean(this.form.value.answer);
+        let index = 0;
+
+        this.latestAnswer = [];
+
+        this.clue.entries.forEach((entry) => {
+            entry.cellIds.forEach((id) => {
+                let cell = this.puzzle.grid.cells.find((cell) => cell.id === id);
+
+                // choose in order of preference:
+                //     - a letter from the answer
+                //     - a letter from the grid
+                //     - a placeholder
+
+                let letter = "_";
+                let klass = "placeholder";
+
+                let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
+                let editorEntry = answer.length > index ? answer.charAt(index) : null;
+
+                if (!gridEntry) {
+                    if (editorEntry) {
+                        letter = editorEntry;
+                        klass = "editorEntry";
+                    }
+                } else {
+                    if (editorEntry && gridEntry !== editorEntry) {
+                        letter = editorEntry;
+                        klass = "clash";
+                    } else {
+                        letter = gridEntry;
+                        klass = "gridEntry";
+                    }
+                }
+
+                this.latestAnswer.push(new AnswerTextChunk(letter, klass));
+                index++;
+            })
+        });
     }
 }
