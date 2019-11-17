@@ -2,6 +2,7 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
+import { stringify } from 'querystring';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -61,4 +62,40 @@ export class Clue implements IClue {
         this.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
         return count;
     }
+
+    public get answerFormat(): string {
+        let result = "";
+        let groups = this.letterCount.split(",");
+
+        groups.forEach((group, index ) => {
+            result += this.parseGroup(group);
+
+            if (index < groups.length - 1) {
+                result += "/";
+            }
+        });
+
+        return result;
+    }
+
+    private parseGroup(group): string {
+        let result = "";
+        let match = null;
+
+        let exp = /\d+|\D/g;
+
+        while(match = exp.exec(group.trim())) {
+            let text: string = match[0];
+
+            if (/\d/.test(text)) {
+                let len = parseInt(text);
+                result += ",".repeat(len);
+            } else if (text.trim()) {
+                result += text.trim();
+            }
+        }
+
+    return result;
+}
+
 }

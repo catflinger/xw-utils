@@ -13,11 +13,14 @@ import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
+import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
+
+type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
 class AnswerTextChunk {
     constructor(
         public readonly text: string,
-        public readonly klass: string,
+        public readonly klass: AnswerTextKlass,
     ) {}
 
     public toString(): string {
@@ -44,8 +47,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public warnings: ClueValidationWarning[] = [];
     public showAnnotation: boolean = false;
     public latestAnswer: AnswerTextChunk[] = [];
+    public showLatestAnswer: boolean = true;
 
     private puzzle: Puzzle;
+    private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
 
     constructor(
@@ -68,6 +73,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 (puzzle) => {
                     if (puzzle) {
                         this.puzzle = puzzle;
+                        this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clueId);
+
                         this.clue = puzzle.clues.find((c) => c.id === this.clueId);
 
                         this.form.patchValue({
@@ -146,11 +153,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onCancel() {
         this.closeEditor(false);
-    }
-
-    public showLatestAnswer(): boolean {
-        let clash = this.latestAnswer.find(item => item.klass === "clash");
-        return clash !== null || (this.latestAnswer && /_+/.test(this.latestAnswer.join("")));
     }
 
     public onToggleComment() {
@@ -256,15 +258,45 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             "";
     }
 
-    public setLatestAnswer(): void {
+    private setLatestAnswer(): void {
+        let result: AnswerTextChunk[] = [];
+        let answer = this.getLatestAnswer();
+        let format = this.clue.answerFormat;
+        let index = 0;
+
+        answer.forEach((chunk) => {
+            while(index < format.length && format[index] != ",") {
+                result.push(new AnswerTextChunk("/", "separator"));
+                index++;
+            }
+            result.push(chunk);
+            index++;
+        });
+
+        while(index < format.length) {
+            if (format[index] === ",") {
+                result.push(new AnswerTextChunk("_", "placeholder"));
+            } else {
+                result.push(new AnswerTextChunk("/", "separator"));
+            }
+            index++;
+        }
+
+        this.latestAnswer = result;
+        // let clash = !!result.find(item => item.klass === "clash");
+        // let placeholder = !!result.find(item => item.klass === "placeholder");
+
+        // this.showLatestAnswer = clash || placeholder;
+    }
+
+    private getLatestAnswer(): AnswerTextChunk[] {
+        let result: AnswerTextChunk[] = [];
         let answer = this.clean(this.form.value.answer);
         let index = 0;
 
-        this.latestAnswer = [];
-
         this.clue.entries.forEach((entry) => {
             entry.cellIds.forEach((id) => {
-                let cell = this.puzzle.grid.cells.find((cell) => cell.id === id);
+                let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
                 // choose in order of preference:
                 //     - a letter from the answer
@@ -272,7 +304,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 //     - a placeholder
 
                 let letter = "_";
-                let klass = "placeholder";
+                let klass: AnswerTextKlass = "placeholder";
 
                 let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
                 let editorEntry = answer.length > index ? answer.charAt(index) : null;
@@ -292,9 +324,46 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                this.latestAnswer.push(new AnswerTextChunk(letter, klass));
+                result.push(new AnswerTextChunk(letter, klass));
                 index++;
             })
         });
+
+        return result;
+    }
+
+    // this function takes the model and creates a copy set to the state the original would have been
+    // if the current clue had not yet been attempted
+    private makeShadowPuzzle(original: Puzzle, clueId: string): Puzzle {
+        let puzzle = JSON.parse(JSON.stringify(original)) as PuzzleM;
+
+        if (puzzle.grid) {
+
+            // clear the grid
+            puzzle.grid.cells.forEach(cell => cell.content = "");
+
+            puzzle.clues.forEach((clue) => {
+                let answer = null;
+                let index = 0;
+
+                if (clue.id !== clueId) {
+                    answer = clue.answer.toUpperCase().replace(/[^A-Z]/g, "");
+                }
+
+                if (answer) {
+                    clue.entries.forEach((entry) => {
+                        entry.cellIds.forEach((id) => {
+                            let cell = puzzle.grid.cells.find(c => c.id === id);
+                            if (index < answer.length) {
+                                cell.content = answer.charAt(index);
+                            }
+                            index++;
+                        });
+                    });
+                }
+            });
+        }
+
+        return new Puzzle(puzzle);
     }
 }
