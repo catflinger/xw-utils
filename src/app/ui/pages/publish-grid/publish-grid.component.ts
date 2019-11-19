@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
@@ -6,6 +6,9 @@ import { Router, ChildActivationStart } from '@angular/router';
 import { GridCell } from 'src/app/model/grid-cell';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
 import { ClearShading } from 'src/app/services/modifiers/clear-shading';
+import { DownloadInstance } from '../../components/download-button/download-button.component';
+import { AppService } from '../../services/app.service';
+import { GridComponent } from '../../components/grid/grid.component';
 
 @Component({
   selector: 'app-publish-grid',
@@ -17,7 +20,11 @@ export class PublishGridComponent implements OnInit {
     private subs: Subscription[] = [];
     public color: string;
 
+    @ViewChild(GridComponent, { static: false }) 
+    public gridControl: GridComponent;
+
     constructor(
+        private appService: AppService,
         private activePuzzle: IActivePuzzle, 
         private router: Router) { }
 
@@ -42,21 +49,30 @@ export class PublishGridComponent implements OnInit {
     }
 
     public onCellClick(cell: GridCell) {
-        
+        this.appService.clear();
         // overwrite if a new color, clear if the same color
         let color: string = cell.shading && cell.shading === this.color ? null : this.color;
         this.activePuzzle.update(new UpdateCell(cell.id, { shading: color }));
     }
 
     public onContinue() {
+        this.appService.clear();
         this.router.navigate(["/publish-preamble"]);
     }
 
     public onBack() {
+        this.appService.clear();
         this.router.navigate(["/publish-options"]);
     }
 
     public onClearAll() {
+        this.appService.clear();
         this.activePuzzle.update(new ClearShading());
     }
+
+    public onDownload(instance: DownloadInstance) {
+        this.appService.clear();
+        instance.download("grid-image.png", this.gridControl.getDataUrl());
+    }
+
 }

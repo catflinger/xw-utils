@@ -7,6 +7,7 @@
 <div class="row" *ngIf="puzzle">
     <div class="col">
         <app-grid 
+            #gridControl
             (cellClick)="onCellClick($event)" 
             (barClick)="onBarClick($event)" 
             (gridText)="onGridText($event)" 
@@ -120,7 +121,9 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Publish</button>
+        <app-download-button (download)="onDownload($event)"></app-download-button>
         <button type="button" class="btn btn-primary mr-3" (click)="onClose()">Close</button>
     </div>
 </div>
+

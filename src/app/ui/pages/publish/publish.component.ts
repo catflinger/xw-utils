@@ -5,11 +5,10 @@ import { PublicationService } from 'src/app/services/publication.service';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
-import { GridParameters } from '../../common';
-import { GridPainterService } from '../../services/grid-painter.service';
 import { Puzzle } from 'src/app/model/puzzle';
 import { ApiResponseStatus, ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
+import { GridComponent } from '../../components/grid/grid.component';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -26,17 +25,18 @@ export class PublishComponent implements OnInit, OnDestroy {
     public action: PublishActions = "nothing";
 
     private subs: Subscription[] = [];
-    private gridParams: GridParameters = new GridParameters();
+    //private gridParams: GridParameters = new GridParameters();
 
-    @ViewChild('canvas', { static: true }) canvasRef: ElementRef;
+    @ViewChild('app-grid', { static: true }) 
+    private gridControl: GridComponent;
 
     constructor(
         private appService: AppService,
         private authService: AuthService,
         private router: Router,
         private activePuzzle: IActivePuzzle,
-        private publicationService: PublicationService,
-        private gridPainter: GridPainterService) { }
+        private publicationService: PublicationService
+        ) { }
 
     public ngOnInit() {
 
@@ -132,19 +132,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         } else {
             return new Promise<string | null>((resolve, reject) => {
                 if (this.puzzle.grid) {
-                    const canvas: HTMLCanvasElement = this.canvasRef.nativeElement;
-
-                    canvas.width = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
-                    canvas.height = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
-
-                    const context = canvas.getContext('2d');
-
-                    this.gridPainter.drawGrid(context, this.puzzle.grid, { showShading: true });
-
-                    const dataUrl = canvas.toDataURL();
-
-                    resolve(dataUrl.replace("data:image/png;base64,", ""));
-
+                    resolve(this.gridControl.getDataUrl().replace("data:image/png;base64,", ""));
                 } else {
                     resolve(null);
                 }

@@ -49,6 +49,7 @@ import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-mod
 import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
 import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
+import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -100,6 +101,7 @@ const quillGlobalConfig = {
         GridEditorComponent,
         GridStartComponent,
         GridPropertiesEditorComponent,
+        DownloadButtonComponent,
     ],
     imports: [
         BrowserModule,

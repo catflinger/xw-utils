@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
@@ -6,7 +6,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { UpdateCell } from 'src/app/services/modifiers/update-cell';
-import { BarClickEvent, GridTextEvent, GridNavigationEvent } from '../../components/grid/grid.component';
+import { BarClickEvent, GridTextEvent, GridNavigationEvent, GridComponent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app/services/modifiers/updare-grid-properties';
@@ -16,6 +16,8 @@ import { GridControlOptions, GridEditors } from '../../common';
 import { GridEditor } from '../../services/grid-editors/grid-editor';
 import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
 import { ClearShading } from 'src/app/services/modifiers/clear-shading';
+import { AppService } from '../../services/app.service';
+import { DownloadInstance } from '../../components/download-button/download-button.component';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -32,19 +34,24 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public gridEditors = GridEditors;
     public shadingColor: string;
 
+    @ViewChild(GridComponent, { static: false }) 
+    public gridControl: GridComponent;
+
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
 
     private gridEditor: GridEditor;
 
     constructor(
+        private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private router: Router,
         private formBuilder: FormBuilder,
         private gridEditorService: GridEditorService,
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
+
         this.form = this.formBuilder.group({
             title: ["", Validators.required],
         });
@@ -71,7 +78,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
@@ -103,35 +110,41 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     //     }
     // }
 
-    onTabChange(event: NgbTabChangeEvent) {
+    public onTabChange(event: NgbTabChangeEvent) {
+        this.appService.clear();
         this.tool = event.nextId as ToolType;
         this.options.showShading = event.nextId === "color";
         this.activePuzzle.update(new Clear());
     }
 
-    onContinue() {
+    public onContinue() {
+        this.appService.clear();
         this.activePuzzle.update(new Clear());
         this.router.navigate(["publish"]);
     }
 
-    onClose() {
+    public onClose() {
+        this.appService.clear();
         this.activePuzzle.update(new Clear());
         this.router.navigate(["/home"]);
     }
 
-    onSubmit() {
+    public onSubmit() {
+        this.appService.clear();
         this.activePuzzle.update(new UpdateInfo({
             title: this.form.value.title
         }));
     }
 
-    onSymmetrical(val: boolean) {
+    public onSymmetrical(val: boolean) {
+        this.appService.clear();
         this.activePuzzle.update(new UpdateGridProperties({
             symmetrical: val,
         }));
     }
 
-    onCellClick(cell: GridCell) {
+    public onCellClick(cell: GridCell) {
+        this.appService.clear();
         switch(this.tool) {
             case "grid":
                 const symCell = this.getSymCell(cell);
@@ -172,7 +185,9 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }
     }
 
-    onBarClick(event: BarClickEvent) {
+    public onBarClick(event: BarClickEvent) {
+        this.appService.clear();
+
         if (this.tool === "grid" && this.puzzle.grid.properties.style === "barred") {
             if (event.bar === "rightBar") {
                 this.activePuzzle.update(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));
@@ -184,22 +199,35 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     }
 
     public onOptionChange() {
+        this.appService.clear();
+
         this.activePuzzle.update(new Clear());
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
     }
 
     public onGridText(event: GridTextEvent) {
+        this.appService.clear();
+
         let updates = this.gridEditor.onGridText(this.puzzle, event.text, event.writingDirection);
         updates.forEach(update => this.activePuzzle.update(update));
     }
 
     public onGridNavigation(event: GridNavigationEvent) {
+        this.appService.clear();
+
         let updates = this.gridEditor.onGridNavigation(this.puzzle, event.navigation);
         updates.forEach(update => this.activePuzzle.update(update));
     }
 
     public onClearAll() {
+        this.appService.clear();
+
         this.activePuzzle.update(new ClearShading());
+    }
+
+    public onDownload(instance: DownloadInstance) {
+        this.appService.clear();
+        instance.download("grid-image.png", this.gridControl.getDataUrl());
     }
 
     private getSymCell(cell: GridCell): GridCell {

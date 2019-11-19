@@ -111,12 +111,12 @@ export class GridComponent implements OnInit, AfterViewInit {
         this.subs.forEach((s) => s.unsubscribe());
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit() {
         this.viewInitiated = true;
         this.drawGrid()
     }
 
-    onCanvasClick(params: any) {
+    public onCanvasClick(params: any) {
         const cellSize = this.gridParams.cellSize;
         const tolerance = cellSize / 5;
 
@@ -193,6 +193,15 @@ export class GridComponent implements OnInit, AfterViewInit {
         }
         event.preventDefault();
     }
+
+    public getDataUrl(): string {
+        const canvas: HTMLCanvasElement = this.canvas.nativeElement;
+        const context = canvas.getContext('2d');
+        this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
+
+        return canvas.toDataURL();
+    }
+
 
     private drawGrid(): void {
         if (this.viewInitiated && this.canvas) {

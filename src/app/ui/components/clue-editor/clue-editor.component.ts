@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, ControlValueAccessor } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
@@ -10,7 +10,7 @@ import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
@@ -49,7 +49,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public latestAnswer: AnswerTextChunk[] = [];
     public showLatestAnswer: boolean = true;
 
-    private puzzle: Puzzle;
+    //private puzzle: Puzzle;
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
 
@@ -72,7 +72,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
-                        this.puzzle = puzzle;
+                        //this.puzzle = puzzle;
                         this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clueId);
 
                         this.clue = puzzle.clues.find((c) => c.id === this.clueId);

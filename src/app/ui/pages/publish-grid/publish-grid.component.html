@@ -21,6 +21,7 @@
 <div class="row" *ngIf="puzzle">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <app-download-button (download)="onDownload($event)"></app-download-button>
         <button type="button" class="btn btn-primary" (click)="onBack()">Back</button>
     </div>
 </div>

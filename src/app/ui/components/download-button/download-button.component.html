@@ -1,0 +1,2 @@
+<button type="button" class="btn btn-primary mr-3" (click)="onClick($event)" *ngIf="enabled">Download</button>
+<a #downloadLink class="invisible" [download]="filename" [href]="dataUrl"></a>

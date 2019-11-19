@@ -9,21 +9,21 @@
 }
 
 .separator {
-    color: black;
+    color: slategrey;
     margin-left: 5px;
     margin-right: 4px;
 }
 .placeholder {
-    color: black;
-}
-.pointing {
-    color: black;
-}
-.editorEntry {
     color: slategrey;
 }
-.gridEntry {
+.pointing {
+    color: slategrey;
+}
+.editorEntry {
     color: black;
+}
+.gridEntry {
+    color: slategrey;
 }
 .clash {
     color: orangered;
