@@ -20,9 +20,9 @@ export class PublishPreambleComponent implements OnInit {
     public appStatus: AppStatus;
     public sample: Clue[];
     public today = new Date();
+    public appSettings: AppSettings;
 
     private subs: Subscription[] = [];
-    private appSettings: AppSettings;
 
     constructor(
         private appService: AppService,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
+import { QuillDelta } from '../model/interfaces';
 
 // TO DO: so far all the the settings have turned out to be related to the UI.
 // Consider if we need an app-wide settings service.  Perhaps move this to the
@@ -37,6 +38,7 @@ class _AppSettings implements AppSettings {
     public general: _GeneralSettings;
     public tips: _TipSettings;
     public sandbox: boolean;
+    public footer: QuillDelta;
 }
 
 /*
@@ -55,6 +57,7 @@ class _AppSettings implements AppSettings {
 const _defaultSettings: _AppSettings = {
     username: null,
     sandbox: false,
+    footer: { ops: []},
     general: {
         showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
@@ -92,6 +95,7 @@ export interface AppSettings {
     readonly general: GeneralSettings;
     readonly tips: TipSettings;
     readonly sandbox: boolean;
+    readonly footer: QuillDelta;
 }
 
 export type TipKey = keyof TipSettings;
@@ -131,6 +135,10 @@ export class AppSettingsService {
                 if (changes.username !== undefined && 
                     (typeof changes.username === "string" || changes.username === null)) {
                     _settings.username = changes.username;
+                }
+
+                if (changes.footer !== undefined && changes.footer.ops !== "undefined") {
+                    _settings.footer = changes.footer;
                 }
 
                 if (changes.sandbox !== undefined && typeof changes.sandbox === "boolean") {

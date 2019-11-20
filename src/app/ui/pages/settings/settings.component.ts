@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppSettingsService, AppSettings, BooleanSettingsGroupKey } from 'src/app/services/app-settings.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 import { AppService } from 'src/app/ui/services/app.service';
 
 @Component({
@@ -28,6 +27,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.form = this.formBuilder.group({
             sandbox: [false],
+            footer: [""],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
         });
@@ -43,7 +43,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
 
-            this.form.patchValue({ sandbox: settings.sandbox });
+            this.form.patchValue({ 
+                sandbox: settings.sandbox,
+                footer: settings.footer,
+             });
 
             Object.keys(this.settings.general).forEach(key => {
                 (this.form.controls["general"] as FormGroup).controls[key].patchValue(settings.general[key].enabled);
@@ -64,6 +67,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         let changes = {
             sandbox: this.form.value.sandbox,
             general: this.getChanges("general"),
+            footer: this.form.value.footer,
             tips: this.getChanges("tips"),
         }
         this.settingsService.update(changes);

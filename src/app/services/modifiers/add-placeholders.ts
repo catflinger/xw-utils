@@ -7,12 +7,12 @@ export class AddPlaceholders implements IPuzzleModifier {
 
     exec(puzzle: PuzzleM) {
         if (puzzle) {
-            puzzle.notes.header = {
-                ops: [ { "insert": "enter your introduction here" } ]
-            };
-            puzzle.notes.body = {
-                ops: [ { "insert": "enter your further comments here"} ]
-            };
+            // puzzle.notes.header = {
+            //     ops: [ { "insert": "enter your introduction here" } ]
+            // };
+            // puzzle.notes.body = {
+            //     ops: [ { "insert": "enter your further comments here"} ]
+            // };
             if (puzzle.clues) {
                 puzzle.clues.forEach(clue => clue.warnings = [ "missing answer", "missing comment", "missing definition"]);
             }

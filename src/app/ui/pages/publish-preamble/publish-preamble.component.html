@@ -68,9 +68,15 @@
                     <div>
                         <app-content-preview [content]="form.value.body"></app-content-preview>
                     </div>
-                    <app-clues-preview [includeGrid]="puzzle.publishOptions.includeGrid" [clues]="sample"
-                        [publishOptions]="puzzle.publishOptions"></app-clues-preview>
-                        </div>
+                    <app-clues-preview 
+                        [includeGrid]="puzzle.publishOptions.includeGrid" 
+                        [clues]="sample"
+                        [publishOptions]="puzzle.publishOptions">
+                    </app-clues-preview>
+                    <div>
+                        <app-content-preview [content]="appSettings.footer"></app-content-preview>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-2"></div>
