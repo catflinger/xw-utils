@@ -40,8 +40,9 @@
 
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AppSettingsService, TipKey } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus, TipInstanceFactory } from './tip-instance';
+import { TipKey } from 'src/app/services/common';
 
 @Component({
     selector: 'app-tip',

@@ -1,4 +1,5 @@
 import { DeltaOperation } from 'quill';
+import { DateTime } from 'luxon';
 
 export type Direction = "across" | "down";
 export type ClueGroup = "across" | "down";
@@ -11,7 +12,13 @@ export type GridNavigation = "left" | "right" | "up" | "down" | "absolute" | nul
 
 export type WritingDirection = "static" | "forward" | "backward";
 
-export type QuillDelta = { ops: DeltaOperation[] }
+export class QuillDelta implements ReadonlyQuillDelta{ 
+    ops: DeltaOperation[]
+}
+
+export class ReadonlyQuillDelta {
+    readonly ops: ReadonlyArray<DeltaOperation>;
+}
 
 export type GridStyle = "standard" | "barred";
 export const GridStyles: {standard: GridStyle, barred: GridStyle} = {
@@ -83,7 +90,6 @@ export abstract class IPuzzle {
     abstract readonly clues: readonly IClue[];
 
     abstract readonly linked: boolean;
-    //abstract readonly solveable: boolean;
     abstract readonly version: string;
     abstract readonly createdWithVersion: string;
 
@@ -120,12 +126,24 @@ export abstract class ITextStyle {
 }
 
 export abstract class IPuzzleAnnotation {
-    abstract readonly header: QuillDelta;
-    abstract readonly body:  QuillDelta;
-    abstract readonly footer:  QuillDelta;
+    abstract readonly header: ReadonlyQuillDelta;
+    abstract readonly body:  ReadonlyQuillDelta;
+    abstract readonly footer:  ReadonlyQuillDelta;
 }
 
 export abstract class IGridSize {
     abstract readonly across: number;
     abstract readonly down: number;
+}
+
+export abstract class IDiary {
+    abstract readonly entries: readonly IDiaryEntry[]
+}
+
+export abstract class IDiaryEntry {
+    abstract readonly solver: string;
+    abstract readonly provider: string;
+    abstract readonly solveDate: DateTime;
+    abstract readonly postDate: DateTime;
+    abstract readonly solve: boolean;
 }

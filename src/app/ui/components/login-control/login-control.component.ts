@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { ApiSymbols } from 'src/app/services/common';
+import { ApiSymbols, AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
 import { UIResult } from '../../common';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 
 export interface LoginControlOptions {
     continueButtonText: string;

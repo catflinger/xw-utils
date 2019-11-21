@@ -18,6 +18,7 @@ import { OpenPuzzleComponent } from './ui/pages/open-puzzle/open-puzzle.componen
 import { IndyComponent } from './ui/pages/indy/indy.component';
 import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
+import { DiaryComponent } from './ui/pages/diary/diary.component';
 
 
 const routes: Routes = [
@@ -45,6 +46,7 @@ const routes: Routes = [
     { path: "grid-editor", component: GridEditorComponent },
 
     // general
+    { path: "diary", component: DiaryComponent },
     { path: "readme", component: ReadmeComponent },
     { path: "settings", component: SettingsComponent },
 

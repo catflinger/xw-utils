@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
+import { AppSettings } from 'src/app/services/common';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 

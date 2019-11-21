@@ -1,6 +1,7 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { AppSettingsService, TipKey } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { Injectable } from '@angular/core';
+import { TipKey } from 'src/app/services/common';
 
 export class TipStatus {
     constructor(

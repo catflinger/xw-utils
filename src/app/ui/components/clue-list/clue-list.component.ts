@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService, AppSettings } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-clue-list',

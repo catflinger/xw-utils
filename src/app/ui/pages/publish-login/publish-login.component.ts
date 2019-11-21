@@ -4,7 +4,8 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Router } from '@angular/router';
 import { UIResult } from '../../common';
-import { AppSettings, AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-publish-login',

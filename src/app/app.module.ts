@@ -50,6 +50,7 @@ import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.componen
 import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
 import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
 import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
+import { DiaryComponent } from './ui/pages/diary/diary.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -102,6 +103,7 @@ const quillGlobalConfig = {
         GridStartComponent,
         GridPropertiesEditorComponent,
         DownloadButtonComponent,
+        DiaryComponent,
     ],
     imports: [
         BrowserModule,

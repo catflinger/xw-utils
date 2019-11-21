@@ -2,15 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { QuillDelta } from '../model/interfaces';
+import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey } from './common';
 
 // TO DO: so far all the the settings have turned out to be related to the UI.
 // Consider if we need an app-wide settings service.  Perhaps move this to the
 // UI section of the project
-
-interface BooleanSetting {
-    readonly caption: string
-    readonly enabled: boolean;
-}
 
 class _BooleanSetting implements BooleanSetting {
     constructor(
@@ -33,12 +29,19 @@ class _TipSettings implements TipSettings {
     public gridStart: _BooleanSetting;
 }
 
+class _DiarySettings implements DiarySettings {
+    public showEverybody: BooleanSetting;
+    public aliases: string[];
+}
+
+
 class _AppSettings implements AppSettings {
     public username: string;
     public general: _GeneralSettings;
     public tips: _TipSettings;
     public sandbox: boolean;
     public footer: QuillDelta;
+    public diary: _DiarySettings;
 }
 
 /*
@@ -69,38 +72,15 @@ const _defaultSettings: _AppSettings = {
         gridEditor: { caption: "show tips on using the Grid Editor", enabled: true },
         gridEditorText: { caption: "show tips on entering text in grids", enabled: true },
         gridStart: { caption: "show tips on using the Grid Tool start page", enabled: true },
+    },
+    diary: {
+        showEverybody: { caption: "show diary entries for all users", enabled: false },
+        aliases: []
     }
 };
 
 type _Modifier = (settings: _AppSettings) => void;
 
-// add new general settings here first, this will ensure all other missing additions are caught by the compiler
-export interface GeneralSettings {
-    readonly showCommentEditor: BooleanSetting;
-    readonly showCommentValidation: BooleanSetting;
-    readonly showCheat: BooleanSetting;
-}
-
-// add new tip settings here first, this will ensure all other missing additions are caught by the compiler
-export interface TipSettings {
-    readonly general: BooleanSetting;
-    readonly definitionWarning: BooleanSetting;
-    readonly gridEditor: BooleanSetting;
-    readonly gridEditorText: BooleanSetting;
-    readonly gridStart: BooleanSetting;
-}
-
-export interface AppSettings {
-    readonly username: string;
-    readonly general: GeneralSettings;
-    readonly tips: TipSettings;
-    readonly sandbox: boolean;
-    readonly footer: QuillDelta;
-}
-
-export type TipKey = keyof TipSettings;
-export type GeneralKey = keyof GeneralSettings;
-export type BooleanSettingsGroupKey = "general" | "tips";
 
 @Injectable({
     providedIn: 'root'
