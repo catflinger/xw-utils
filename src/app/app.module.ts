@@ -1,4 +1,4 @@
-import { NgModule, InjectionToken } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -51,6 +51,7 @@ import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
 import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
 import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
 import { DiaryComponent } from './ui/pages/diary/diary.component';
+import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -104,6 +105,7 @@ const quillGlobalConfig = {
         GridPropertiesEditorComponent,
         DownloadButtonComponent,
         DiaryComponent,
+        DiaryAliasControlComponent,
     ],
     imports: [
         BrowserModule,

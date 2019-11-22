@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings, BooleanSettingsGroupKey } from 'src/app/services/common';
@@ -31,6 +31,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
             footer: [""],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
+            diary: this.formBuilder.group({
+                showEverybody: [false],
+                aliases: this.formBuilder.array([]),
+            }),
         });
 
         Object.keys(this.settings.general).forEach(key => {
@@ -44,10 +48,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.subs.push(this.settingsService.observe().subscribe(settings => {
             this.settings = settings;
 
-            this.form.patchValue({ 
+            this.form.patchValue({
                 sandbox: settings.sandbox,
                 footer: settings.footer,
-             });
+            });
+
+            let diaryControl = this.form.controls["diary"] as FormGroup
+            let aliasesControl = diaryControl.controls["aliases"] as FormArray;
+            aliasesControl.clear();
+            settings.diary.aliases.forEach(alias => aliasesControl.push(this.formBuilder.control([alias])));
 
             Object.keys(this.settings.general).forEach(key => {
                 (this.form.controls["general"] as FormGroup).controls[key].patchValue(settings.general[key].enabled);
@@ -70,6 +79,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             general: this.getChanges("general"),
             footer: this.form.value.footer,
             tips: this.getChanges("tips"),
+            diary: { showEverybody: this.form.value.diaryShowEverybody },
         }
         this.settingsService.update(changes);
         this.appService.returnToSender();
@@ -81,6 +91,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public get generalKeys() {
         return Object.keys(this.settings.general);
+    }
+
+    public onAddAlias() {
+    }
+
+    public onRemoveAlias(alias: string) {
     }
 
     public onReset() {
@@ -95,5 +111,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
             result[key] = { enabled: this.form.value[groupKey][key] };
         });
         return result;
+    }
+
+    private buildAliasControlArray(aliases: readonly string[]) {
+        const controls = aliases.map(alias => this.formBuilder.control(alias));
+        return this.formBuilder.array(controls);
     }
 }

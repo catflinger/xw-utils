@@ -34,7 +34,6 @@ class _DiarySettings implements DiarySettings {
     public aliases: string[];
 }
 
-
 class _AppSettings implements AppSettings {
     public username: string;
     public general: _GeneralSettings;
@@ -75,7 +74,7 @@ const _defaultSettings: _AppSettings = {
     },
     diary: {
         showEverybody: { caption: "show diary entries for all users", enabled: false },
-        aliases: []
+        aliases: ["PeeDee"]
     }
 };
 
@@ -123,6 +122,10 @@ export class AppSettingsService {
 
                 if (changes.sandbox !== undefined && typeof changes.sandbox === "boolean") {
                     _settings.sandbox = changes.sandbox;
+                }
+
+                if (changes.diary && typeof changes.diary.showEverybody === "boolean") {
+                    _settings.diary.showEverybody = changes.diary.showEverybody;
                 }
 
                 this._patchBooleanSettings(_settings, changes, "general");
