@@ -1,5 +1,8 @@
-<div class="border border-seconday rounded d-inline-block p-0 mr-3">
-    <div class="d-inline-block px-3">{{text}}</div>
+<div class="border border-secondary rounded d-inline-block p-0 mr-3">
+    <div class="d-inline-block px-3">
+        <span *ngIf="!editable">{{text}}</span>
+        <input type="text"[(ngModel)]="text" ngModelOptions="standalone" (change)="onChange()" *ngIf="editable">
+    </div>
     <button type="button" class="btn btn-secondary" (click)="onXClick()">X</button>
 </div>
 

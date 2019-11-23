@@ -128,6 +128,15 @@ export class AppSettingsService {
                     _settings.diary.showEverybody = changes.diary.showEverybody;
                 }
 
+                if (changes.diary && Array.isArray(changes.diary.aliases)) {
+                    _settings.diary.aliases = [];
+                    changes.diary.aliases.forEach(alias => {
+                        if (alias.trim().length) {
+                            _settings.diary.aliases.push(alias);
+                        }
+                    });
+                }
+
                 this._patchBooleanSettings(_settings, changes, "general");
                 this._patchBooleanSettings(_settings, changes, "tips");
             }

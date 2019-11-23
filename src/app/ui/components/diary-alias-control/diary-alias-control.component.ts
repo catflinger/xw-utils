@@ -14,6 +14,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 export class DiaryAliasControlComponent implements ControlValueAccessor, OnInit {
 
     @Input() public text: string;
+    @Input() public tag: string;
+    @Input() public editable: boolean;
     @Output() public remove = new EventEmitter<string>();
 
     private propagateChange = (_: any) => { };
@@ -35,6 +37,10 @@ export class DiaryAliasControlComponent implements ControlValueAccessor, OnInit 
     }
 
     public onXClick() {
-        this.remove.emit(this.text);
+        this.remove.emit(this.tag);
+    }
+
+    public onChange() {
+        this.propagateChange(this.text);
     }
 }

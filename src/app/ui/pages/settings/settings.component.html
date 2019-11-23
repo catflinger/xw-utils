@@ -32,17 +32,19 @@
     <div formGroupName="diary">
         <div class="form-group">
             <p>Diary aliases - the name(s) by which you are known in the Googe diary</p>
-            <div>
+            <div formArrayName="aliases">
                 <app-diary-alias-control 
-                    *ngFor="let alias of form.controls.diary.controls.aliases.controls" 
-                    [formControl]="alias" 
-                    (remove)="onRemoveAlias($event)">
+                    *ngFor="let alias of form.get('diary').get('aliases').controls; let i = index;" 
+                    [formControlName]="i" 
+                    (remove)="onRemoveAlias($event)"
+                    [editable]="!alias.value.length"
+                    [tag]="i">
                 </app-diary-alias-control>
-                
-                <button class="btn btn-secondary" (click)="onAddAlias()">Add alias</button>
+
+                <button class="btn btn-primary" (click)="onAddAlias()">Add alias</button>
             </div>
         </div>
-    
+
         <div class="form-check">
             <input type="checkbox" class="form-check-input" formControlName="showEverybody">
             <label class="form-check-label">Show diary entries for all bloggers</label>
@@ -61,6 +63,7 @@
 
     <div class="formGroup mt-5">
         <button class="btn btn-primary mr-3" type="button" (click)="onSave()">Save</button>
+        <button class="btn btn-primary mr-3" type="button" (click)="onCancel()">Cancel</button>
         <button class="btn btn-primary" type="button" (click)="onReset()">Reset all</button>
     </div>
 
