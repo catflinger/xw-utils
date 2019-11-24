@@ -4,7 +4,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { AppService } from '../../services/app.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { DiaryEntry } from 'src/app/model/diary-entry';
-import { ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
+import { ApiSymbols } from 'src/app/services/common';
 
 @Component({
     selector: 'app-diary',
@@ -37,7 +37,6 @@ export class DiaryComponent implements OnInit, OnDestroy {
                     diary.entries.forEach(entry => {
                         if (settings.diary.showEverybody || 
                             aliases.find(alias => alias.replace(/[^a-z]/gi, "") === entry.solver.replace(/[^a-z]/gi, ""))) {
-                            
                                 this.entries.push(entry);
                         }
                     });

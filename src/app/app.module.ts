@@ -53,6 +53,7 @@ import { DownloadButtonComponent } from './ui/components/download-button/downloa
 import { DiaryComponent } from './ui/pages/diary/diary.component';
 import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
 import { DiarySettingsEditorComponent } from './ui/components/diary-settings-editor/diary-settings-editor.component';
+import { SpecialComponent } from './ui/pages/special/special.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -108,6 +109,7 @@ const quillGlobalConfig = {
         DiaryComponent,
         DiaryAliasControlComponent,
         DiarySettingsEditorComponent,
+        SpecialComponent,
     ],
     imports: [
         BrowserModule,
