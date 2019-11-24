@@ -47,7 +47,7 @@ export interface TipSettings {
 }
 
 export interface DiarySettings {
-    readonly showEverybody: BooleanSetting;
+    readonly showEverybody: boolean;
     readonly aliases: ReadonlyArray<string>;
 }
 

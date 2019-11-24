@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DiaryService } from 'src/app/services/diary.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { AppService } from '../../services/app.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { DiaryEntry } from 'src/app/model/diary-entry';
+import { ApiResponseStatus, ApiSymbols } from 'src/app/services/common';
 
 @Component({
     selector: 'app-diary',
@@ -21,15 +22,20 @@ export class DiaryComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
-        this.subs.push(this.diaryService.observe().subscribe(
-            diary => {
-                if (diary) {
+        let observable = combineLatest(this.diaryService.observe(), this.settingsService.observe());
+
+        this.subs.push(observable.subscribe(
+            result => {
+                let diary = result[0];
+                let settings = result[1];
+
+                if (diary && settings) {
                     this.appService.clear();
-                    let aliases = this.settingsService.settings.diary.aliases;
+                    let aliases = settings.diary.aliases;
                     
                     this.entries = [];
                     diary.entries.forEach(entry => {
-                        if (this.settingsService.settings.diary.showEverybody || 
+                        if (settings.diary.showEverybody || 
                             aliases.find(alias => alias.replace(/[^a-z]/gi, "") === entry.solver.replace(/[^a-z]/gi, ""))) {
                             
                                 this.entries.push(entry);
@@ -47,8 +53,8 @@ export class DiaryComponent implements OnInit, OnDestroy {
                 }
             },
             error => {
+                this.appService.clear();
                 this.appService.setAlert("danger", "Failed to get Google diary.");
-                this.appService.clearBusy();
             }
         ));
         
@@ -62,7 +68,17 @@ export class DiaryComponent implements OnInit, OnDestroy {
     public onRefresh() {
         this.appService.clear();
         this.appService.setBusy();
-        this.diaryService.refresh();
+        this.diaryService.refresh()
+        .then((result: Symbol) => {
+            if (result != ApiSymbols.OK) {
+                this.appService.clear();
+                this.appService.setAlert("danger", "Failed to get Google diary.");
+            }
+        })
+        .catch(() => {
+            this.appService.clear();
+            this.appService.setAlert("danger", "Failed to get Google diary.");
+        });
     }
 
 }

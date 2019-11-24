@@ -52,6 +52,7 @@ import { GridPropertiesEditorComponent } from './ui/components/grid-properties-e
 import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
 import { DiaryComponent } from './ui/pages/diary/diary.component';
 import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
+import { DiarySettingsEditorComponent } from './ui/components/diary-settings-editor/diary-settings-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -106,6 +107,7 @@ const quillGlobalConfig = {
         DownloadButtonComponent,
         DiaryComponent,
         DiaryAliasControlComponent,
+        DiarySettingsEditorComponent,
     ],
     imports: [
         BrowserModule,

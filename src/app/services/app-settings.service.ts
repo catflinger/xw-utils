@@ -30,7 +30,7 @@ class _TipSettings implements TipSettings {
 }
 
 class _DiarySettings implements DiarySettings {
-    public showEverybody: BooleanSetting;
+    public showEverybody: boolean;
     public aliases: string[];
 }
 
@@ -73,7 +73,7 @@ const _defaultSettings: _AppSettings = {
         gridStart: { caption: "show tips on using the Grid Tool start page", enabled: true },
     },
     diary: {
-        showEverybody: { caption: "show diary entries for all users", enabled: false },
+        showEverybody: false,
         aliases: ["PeeDee"]
     }
 };

@@ -1,46 +1,41 @@
 import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
+export interface DiaryAliasEvent {
+    id: number,
+    text: string,
+}
+
 @Component({
   selector: 'app-diary-alias-control',
   templateUrl: './diary-alias-control.component.html',
   styleUrls: ['./diary-alias-control.component.css'],
-  providers: [    { 
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DiaryAliasControlComponent),
-    multi: true
-}],
 })
-export class DiaryAliasControlComponent implements ControlValueAccessor, OnInit {
+export class DiaryAliasControlComponent implements OnInit {
 
     @Input() public text: string;
-    @Input() public tag: string;
+    @Input() public id: number;
     @Input() public editable: boolean;
-    @Output() public remove = new EventEmitter<string>();
 
-    private propagateChange = (_: any) => { };
+    @Output() public remove = new EventEmitter<DiaryAliasEvent>();
+    @Output() public save = new EventEmitter<DiaryAliasEvent>();
 
     constructor() { }
 
     public ngOnInit() {
     }
 
-    public writeValue(text: string) {
-        this.text = text;
+    public onRemove() {
+        this.remove.emit({ 
+            id: this.id,
+            text: this.text,
+        });
     }
 
-    public registerOnChange(fn) {
-        this.propagateChange = fn;
-    }
-
-    public registerOnTouched() {
-    }
-
-    public onXClick() {
-        this.remove.emit(this.tag);
-    }
-
-    public onChange() {
-        this.propagateChange(this.text);
+    public onSave() {
+        this.save.emit({ 
+            id: this.id,
+            text: this.text,
+        });
     }
 }

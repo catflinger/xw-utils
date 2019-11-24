@@ -21,6 +21,12 @@
     </div>
 </div>
 
+<div class="row mt-5" *ngIf="entries">
+    <div class="col">
+        <app-diary-settings-editor></app-diary-settings-editor>
+    </div>
+</div>
+
 <div class="row mt-5">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onRefresh()">Refresh</button>

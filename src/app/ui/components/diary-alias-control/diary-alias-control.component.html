@@ -1,8 +1,9 @@
 <div class="border border-secondary rounded d-inline-block p-0 mr-3">
     <div class="d-inline-block px-3">
         <span *ngIf="!editable">{{text}}</span>
-        <input type="text"[(ngModel)]="text" ngModelOptions="standalone" (change)="onChange()" *ngIf="editable">
+        <input type="text"[(ngModel)]="text" [ngModelOptions]="{ standalone: true }" *ngIf="editable">
     </div>
-    <button type="button" class="btn btn-secondary" (click)="onXClick()">X</button>
+    <button type="button" class="btn btn-primary"   (click)="onSave()" *ngIf="editable">Save</button>
+    <button type="button" class="btn btn-secondary" (click)="onRemove()" *ngIf="!editable">X</button>
 </div>
 

@@ -27,30 +27,6 @@
         </div>
     </div>
 
-    <h5 class="mt-5">Google diary settings</h5>
-
-    <div formGroupName="diary">
-        <div class="form-group">
-            <p>Diary aliases - the name(s) by which you are known in the Googe diary</p>
-            <div formArrayName="aliases">
-                <app-diary-alias-control 
-                    *ngFor="let alias of form.get('diary').get('aliases').controls; let i = index;" 
-                    [formControlName]="i" 
-                    (remove)="onRemoveAlias($event)"
-                    [editable]="!alias.value.length"
-                    [tag]="i">
-                </app-diary-alias-control>
-
-                <button class="btn btn-primary" (click)="onAddAlias()">Add alias</button>
-            </div>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" formControlName="showEverybody">
-            <label class="form-check-label">Show diary entries for all bloggers</label>
-        </div>
-        </div>
-
     <h5 class="mt-5">Publication options</h5>
     <ngb-alert type="warning" *ngIf="form.value.sandbox" [dismissible]="false">
         <p>WARNING: posts will be published to the sandbox only.</p>
