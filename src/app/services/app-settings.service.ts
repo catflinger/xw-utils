@@ -27,6 +27,7 @@ class _TipSettings implements TipSettings {
     public gridEditor: _BooleanSetting;
     public gridEditorText: _BooleanSetting;
     public gridStart: _BooleanSetting;
+    public specialText: _BooleanSetting;
 }
 
 class _DiarySettings implements DiarySettings {
@@ -71,6 +72,7 @@ const _defaultSettings: _AppSettings = {
         gridEditor: { caption: "show tips on using the Grid Editor", enabled: true },
         gridEditorText: { caption: "show tips on entering text in grids", enabled: true },
         gridStart: { caption: "show tips on using the Grid Tool start page", enabled: true },
+        specialText: { caption: "show tips on manually entering clue text", enabled: true },
     },
     diary: {
         showEverybody: false,

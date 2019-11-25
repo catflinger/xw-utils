@@ -20,6 +20,12 @@ interface LatestPuzzleRequest {
     password: string;
 }
 
+interface PdfPuzzleRequest {
+    content: string;
+    username: string;
+    password: string;
+}
+
 interface ArchivePuzzleRequest {
     username: string;
     password: string;
@@ -73,6 +79,24 @@ export class HttpPuzzleSourceService {
         };
 
         return this.http.post(environment.apiRoot + "archivepuzzle/", request)
+        .toPromise()
+        .then(data => data as PuzzleResponse);
+    }
+
+    public getPdfPuzzle(pdf: string): Promise<PuzzleResponse> {
+        const credentials = this.authService.getCredentials();
+
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        const request: PdfPuzzleRequest = {
+            content: pdf,
+            username: credentials.username,
+            password: credentials.password,
+        };
+
+        return this.http.post(environment.apiRoot + "pdfpuzzle/", request)
         .toPromise()
         .then(data => data as PuzzleResponse);
     }

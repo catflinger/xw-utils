@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AppService, EditorType } from '../../services/app.service';
+import { AppService, EditorType, OpenPuzzleParamters } from '../../services/app.service';
 import { Router } from '@angular/router';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
@@ -14,7 +14,6 @@ import { ArchiveItem } from 'src/app/model/archive-item';
   styleUrls: ['./open-puzzle.component.css']
 })
 export class OpenPuzzleComponent implements OnInit, OnDestroy {
-    //public appStatus: AppStatus;
     public credentials: Credentials;
 
     private subs: Subscription[] = [];
@@ -30,7 +29,6 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.appService.clear();
 
         let params = this.appService.openPuzzleParameters;
-        //this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
         if (!params) {
             this.router.navigate(["/home"]);
@@ -54,10 +52,14 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    private openPuzzle(params: ArchiveItem) {
+    private openPuzzle(params: OpenPuzzleParamters) {
+        let promise = params.archiveItem ? 
+            this.puzzleManagementService.openArchivePuzzle(params.archiveItem) :
+            this.puzzleManagementService.openPdfPuzzle(params.pdf);
+
         this.appService.setBusy();
-        this.puzzleManagementService.openArchivePuzzle(params)
-        .then((puzzle) => {
+        
+        promise.then((puzzle) => {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
             let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";

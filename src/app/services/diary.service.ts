@@ -37,9 +37,9 @@ export class DiaryService {
     public refresh(): Promise<Symbol> {
         const credentials = this.authService.getCredentials();
 
-        // if (!credentials.authenticated) {
-        //     return Promise.reject(ApiSymbols.AuthorizationFailure);
-        // }
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
 
         const request: DiaryRequest = {
             username: credentials.username,

@@ -29,35 +29,42 @@ export class DiaryComponent implements OnInit, OnDestroy {
                 let diary = result[0];
                 let settings = result[1];
 
-                if (diary && settings) {
-                    this.appService.clear();
-                    let aliases = settings.diary.aliases;
-                    
-                    this.entries = [];
-                    diary.entries.forEach(entry => {
-                        if (settings.diary.showEverybody || 
-                            aliases.find(alias => alias.replace(/[^a-z]/gi, "") === entry.solver.replace(/[^a-z]/gi, ""))) {
-                                this.entries.push(entry);
-                        }
-                    });
+                if (settings) {
+                    if (diary) {
+                        this.appService.clear();
+                        let aliases = settings.diary.aliases;
+                        
+                        this.entries = [];
+                        diary.entries.forEach(entry => {
+                            if (settings.diary.showEverybody || 
+                                aliases.find(alias => alias.replace(/[^a-z]/gi, "") === entry.solver.replace(/[^a-z]/gi, ""))) {
+                                    this.entries.push(entry);
+                            }
+                        });
+    
+                        this.entries.sort((a, b) => {
+                            if (a.solveDate > b.solveDate) {
+                                return 1;
+                            } else if (a.solveDate < b.solveDate) {
+                                return -1;
+                            }
+                            return 0;
+                        });
 
-                    this.entries.sort((a, b) => {
-                        if (a.solveDate > b.solveDate) {
-                            return 1;
-                        } else if (a.solveDate < b.solveDate) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    } else {
+                        this.onRefresh();
+                    }
                 }
             },
             error => {
                 this.appService.clear();
-                this.appService.setAlert("danger", "Failed to get Google diary.");
+                if (error === ApiSymbols.AuthorizationFailure) {
+                    this.appService.setAlert("danger", "User not logged in.  Please login and try again.");
+                } else {
+                    this.appService.setAlert("danger", "Failed to get Google diary.");
+                }
             }
         ));
-        
-        this.onRefresh();
     }
 
     public ngOnDestroy() {
@@ -69,14 +76,20 @@ export class DiaryComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
         this.diaryService.refresh()
         .then((result: Symbol) => {
-            if (result != ApiSymbols.OK) {
-                this.appService.clear();
+            this.appService.clear();
+            if (result === ApiSymbols.AuthorizationFailure) {
+                this.appService.setAlert("danger", "Not logged-in.  Please log in and try again.");
+            } else if (result != ApiSymbols.OK) {
                 this.appService.setAlert("danger", "Failed to get Google diary.");
             }
         })
-        .catch(() => {
+        .catch((error) => {
             this.appService.clear();
-            this.appService.setAlert("danger", "Failed to get Google diary.");
+            if (error === ApiSymbols.AuthorizationFailure) {
+                this.appService.setAlert("danger", "Not logged-in.  Please log in and try again.");
+            } else {
+                this.appService.setAlert("danger", "Failed to get Google diary.");
+            }
         });
     }
 

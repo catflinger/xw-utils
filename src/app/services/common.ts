@@ -44,6 +44,7 @@ export interface TipSettings {
     readonly gridEditor: BooleanSetting;
     readonly gridEditorText: BooleanSetting;
     readonly gridStart: BooleanSetting;
+    readonly specialText: BooleanSetting;
 }
 
 export interface DiarySettings {

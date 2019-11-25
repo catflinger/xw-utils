@@ -60,6 +60,10 @@ export class AppComponent implements OnInit, OnDestroy {
         
         if (provider === "independent" || provider === "ios") {
             this.router.navigate(["indy"]);
+        
+        } else if (provider === "special") {
+            this.router.navigate(["special"]);
+        
         } else {
             this.router.navigate(["archive", provider]);
         }

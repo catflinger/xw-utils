@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import moment from "moment";
 
 import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
@@ -70,7 +70,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
     public openPuzzle(item: ArchiveItem) {
         this.appService.clear();
-        this.appService.setOpenPuzzleParams(item);
+        this.appService.setOpenPuzzleParams(new OpenPuzzleParamters(item, null));
         this.navigate("open-puzzle");
     }
 

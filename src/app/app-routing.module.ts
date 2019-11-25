@@ -19,6 +19,9 @@ import { IndyComponent } from './ui/pages/indy/indy.component';
 import { GridEditorComponent } from './ui/pages/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/pages/grid-start/grid-start.component';
 import { DiaryComponent } from './ui/pages/diary/diary.component';
+import { SpecialPdfComponent } from './ui/pages/special-pdf/special-pdf.component';
+import { SpecialComponent } from './ui/pages/special/special.component';
+import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
 
 
 const routes: Routes = [
@@ -29,6 +32,9 @@ const routes: Routes = [
     // solving and blogging puzzles
     { path: "archive/:provider", component: ArchiveComponent },
     { path: "indy", component: IndyComponent },
+    { path: "special", component: SpecialComponent },
+    { path: "special-pdf", component: SpecialPdfComponent },
+    { path: "special-text", component: SpecialTextComponent },
     { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },

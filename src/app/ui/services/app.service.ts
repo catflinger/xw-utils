@@ -18,6 +18,13 @@ export class AppStatus {
     ) { }
 }
 
+export class OpenPuzzleParamters {
+    constructor(
+        public readonly archiveItem: ArchiveItem,
+        public readonly pdf: string,
+    ) {}
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -31,7 +38,7 @@ export class AppService implements OnDestroy {
     private _onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
     private returnAddress: string;
-    private _openPuzzleParameters: ArchiveItem;
+    private _openPuzzleParameters: OpenPuzzleParamters;
 
     private bs: BehaviorSubject<AppStatus>;
 
@@ -66,7 +73,7 @@ export class AppService implements OnDestroy {
         return this.bs.asObservable();
     }
 
-    public get openPuzzleParameters(): ArchiveItem {
+    public get openPuzzleParameters(): OpenPuzzleParamters {
         return this._openPuzzleParameters;
     }
 
@@ -84,7 +91,7 @@ export class AppService implements OnDestroy {
         this.clearBusy();
     }
 
-    public setOpenPuzzleParams(params: ArchiveItem) {
+    public setOpenPuzzleParams(params: OpenPuzzleParamters) {
         this._openPuzzleParameters = params;
     }
 
