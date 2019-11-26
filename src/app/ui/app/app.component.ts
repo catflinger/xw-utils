@@ -54,14 +54,14 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onArchive(provider: PuzzleProvider) {
+    public onArchive(provider: string) {
         this.appService.clear();
         this.activePuzzle.clear();
         
         if (provider === "independent" || provider === "ios") {
             this.router.navigate(["indy"]);
         
-        } else if (provider === "special") {
+        } else if (provider === "special" ) {
             this.router.navigate(["special"]);
         
         } else {

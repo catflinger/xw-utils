@@ -11,6 +11,7 @@ import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { ApiResponseStatus, ApiSymbols } from './common';
 import { ArchiveItem } from '../model/archive-item';
 import { AddPlaceholders } from './modifiers/add-placeholders';
+import { OpenPuzzleParamters } from '../ui/services/app.service';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -26,8 +27,7 @@ export abstract class IActivePuzzle {
 export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
-    abstract openArchivePuzzle(item: ArchiveItem): Promise<Puzzle>;
-    abstract openPdfPuzzle(pdf: string): Promise<Puzzle>;
+    abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
 }
@@ -132,12 +132,31 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.usePuzzle(puzzle);
     }
 
-    public openArchivePuzzle(item: ArchiveItem): Promise<Puzzle> {
-        return this.onPuzzleReponse(this.httpPuzzleService.getArchivePuzzle(item));
-    }
+    public openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle> {
+        return this.httpPuzzleService.getArchivePuzzle(params)
+        .then((response) => {
+            if (response.success === ApiResponseStatus.OK) {
 
-    public openPdfPuzzle(pdf: string): Promise<Puzzle> {
-        return this.onPuzzleReponse(this.httpPuzzleService.getPdfPuzzle(pdf));
+                let puzzle = new Puzzle(response.puzzle);
+                
+                // add some defaults
+                let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
+                new AddPlaceholders().exec(puzzleM);
+
+                this.localStorageService.putPuzzle(puzzleM);
+                this.usePuzzle(puzzleM);
+                this.refreshPuzzleList();
+
+                return this.bsActive.value;
+            } else if (response.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw response.message;
+            }
+        })
+        .catch((error) => {
+            throw error;
+        });
     }
 
     public deletePuzzle(id: string): Promise<void> {
@@ -190,30 +209,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     private savePuzzle(puzzle: IPuzzle): void {
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
-    }
-
-    private onPuzzleReponse(promise: Promise<PuzzleResponse>): Promise<Puzzle> {
-        return promise
-            .then((response) => {
-                if (response.success === ApiResponseStatus.OK) {
-
-                    let puzzle = new Puzzle(response.puzzle);
-                    
-                    // add some defaults
-                    let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
-                    new AddPlaceholders().exec(puzzleM);
-
-                    this.localStorageService.putPuzzle(puzzleM);
-                    this.usePuzzle(puzzleM);
-                    this.refreshPuzzleList();
-
-                    return this.bsActive.value;
-                } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
-                } else {
-                    throw new Error(response.message);
-                }
-            });
     }
 
     //#endregion

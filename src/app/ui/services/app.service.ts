@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Alert, AlertType } from '../common';
-import { ArchiveItem } from 'src/app/model/archive-item';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 export type LoginCallback = () => void;
 
@@ -18,11 +18,17 @@ export class AppStatus {
     ) { }
 }
 
-export class OpenPuzzleParamters {
-    constructor(
-        public readonly archiveItem: ArchiveItem,
-        public readonly pdf: string,
-    ) {}
+export interface OpenPuzzleParamters {
+    provider: PuzzleProvider,
+    username?: string;
+    password?: string;
+    title?: string,
+    sourceUrl?: string,
+    sourceText?: string,
+    sourceDataB64?: string,
+    serialNumber?: number,
+    date?: Date,
+    setter?: string,
 }
 
 @Injectable({

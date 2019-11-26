@@ -58,23 +58,9 @@ const Sunday = 0;
     }
 
     private openPuzzle(provider: PuzzleProvider, date: Date) {
-        let item: ArchiveItem = {
-            provider,
-            serialNumber: null,
-            date,
-            setter: null,
-            url: null,
-        };
-
         this.appService.clear();
-        this.appService.setOpenPuzzleParams(new OpenPuzzleParamters(item, null));
-        this.navigate("open-puzzle");
-    }
-
-    private navigate (destination: string) {
-        this.appService.clearBusy();
-        this.appService.clearAlerts();
-        this.router.navigate([destination])
+        this.appService.setOpenPuzzleParams({ provider, date});
+        this.router.navigate(["open-puzzle"])
     }
 }
 

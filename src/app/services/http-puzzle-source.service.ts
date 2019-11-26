@@ -7,6 +7,7 @@ import { ArchiveItem } from '../model/archive-item';
 import { environment } from "../../environments/environment";
 import { PuzzleProvider } from '../model/interfaces';
 import moment from 'moment';
+import { OpenPuzzleParamters } from '../ui/services/app.service';
 
 export abstract class PuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -44,43 +45,20 @@ export class HttpPuzzleSourceService {
         private http: HttpClient,
         private authService: AuthService) { }
 
-    public getLatestPuzzle(provider: PuzzleProvider): Promise<PuzzleResponse> {
+    public getArchivePuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
             return Promise.reject(ApiSymbols.AuthorizationFailure);
         }
 
-        const request: LatestPuzzleRequest = {
-            provider: provider,
-            username: credentials.username,
-            password: credentials.password,
-        };
+        params.username = credentials.username;
+        params.password = credentials.password;
 
-        return this.http.post(environment.apiRoot + "latestpuzzle/", request)
+        return this.http.post(environment.apiRoot + "puzzle/", params)
         .toPromise()
-        .then(data => data as PuzzleResponse);
-    }
-
-    public getArchivePuzzle(item: ArchiveItem): Promise<PuzzleResponse> {
-        const credentials = this.authService.getCredentials();
-
-        if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
-        }
-
-        const request: ArchivePuzzleRequest = {
-            provider: item.provider,
-            url: item.url,
-            serialNumber: item.serialNumber,
-            date: moment(item.date).toISOString(),
-            username: credentials.username,
-            password: credentials.password,
-        };
-
-        return this.http.post(environment.apiRoot + "archivepuzzle/", request)
-        .toPromise()
-        .then(data => data as PuzzleResponse);
+        .then(data => data as PuzzleResponse)
+        .catch(error => { throw error.message });
     }
 
     public getPdfPuzzle(pdf: string): Promise<PuzzleResponse> {

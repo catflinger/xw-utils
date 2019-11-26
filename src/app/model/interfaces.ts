@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 export type Direction = "across" | "down";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
-export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "special";
+export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text";
 export type Layouts = "table" | "list";
 export type Spacings = "small" | "medium" | "large";
 

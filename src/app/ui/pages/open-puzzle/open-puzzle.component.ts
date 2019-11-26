@@ -7,6 +7,7 @@ import { PuzzleManagementService } from 'src/app/services/puzzle-management.serv
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
 import { ArchiveItem } from 'src/app/model/archive-item';
+import { Puzzle } from 'src/app/model/puzzle';
 
 @Component({
   selector: 'app-open-puzzle',
@@ -53,13 +54,9 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
     }
 
     private openPuzzle(params: OpenPuzzleParamters) {
-        let promise = params.archiveItem ? 
-            this.puzzleManagementService.openArchivePuzzle(params.archiveItem) :
-            this.puzzleManagementService.openPdfPuzzle(params.pdf);
-
         this.appService.setBusy();
-        
-        promise.then((puzzle) => {
+
+        this.puzzleManagementService.openArchivePuzzle(params).then((puzzle) => {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
             let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
@@ -73,7 +70,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
                 this.appService.setAlert("danger", "Username or password is incorrect.  Please try to login again.");
             } else {
                 this.appService.clear();
-                this.appService.setAlert("danger", error.toString());
+                this.appService.setAlert("danger", error);
             }
         });
     }
