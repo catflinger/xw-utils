@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { PublicationService } from 'src/app/services/publication.service';
+import { PublicationService, PublishGridResult } from 'src/app/services/publication.service';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
@@ -25,7 +25,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     public action: PublishActions = "nothing";
 
     private subs: Subscription[] = [];
-    //private gridParams: GridParameters = new GridParameters();
 
     @ViewChild('app-grid', { static: true }) 
     private gridControl: GridComponent;
@@ -124,56 +123,26 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.router.navigate([route]);
     }
 
-    private getGridImage(): Promise<string | null> {
-
-        if (!this.puzzle.publishOptions.includeGrid) {
-            return Promise.resolve(null);
-
-        } else {
-            return new Promise<string | null>((resolve, reject) => {
-                if (this.puzzle.grid) {
-                    resolve(this.gridControl.getDataUrl().replace("data:image/png;base64,", ""));
-                } else {
-                    resolve(null);
-                }
-            });
-        }
+    private getGridImage(): string {
+        return !this.puzzle.publishOptions.includeGrid && this.puzzle.grid ?
+            this.gridControl.getDataUrl().replace("data:image/png;base64,", "") :
+            null;
     }
 
     private publishPost(status: PublishStatus) {
-        this.getGridImage()
-        .then((image) => {
-            if (image) {
-                //publish the grid
-                return this.publicationService.publishGrid(image, this.puzzle.info.title);
-            } else {
-                // no grid to publish, return a dummy response
-                return Promise.resolve({
-                    success: ApiResponseStatus.OK,
-                    url: null,
-                    message: null,
-                })
-            }
+        let image = this.getGridImage();
+
+        let promise: Promise<PublishGridResult> = image ?
+            this.publicationService.publishGrid(image, this.puzzle.info.title) :
+            Promise.resolve({ wordpressId: null, url: null }); 
+        
+        promise.then((result) => {
+            return this.publicationService.publishPost(this.puzzle, result.url, status);
         })
         .then((result) => {
-            if (result.success === ApiResponseStatus.OK) {
-                return this.publicationService.publishPost(this.puzzle, result.url, status);
-            } else if (result.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
-            } else {
-                throw new Error(result.message);
-            }
-        })
-        .then((result) => {
-            if (result.success === ApiResponseStatus.OK) {
                 this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
                 this.appService.clearBusy();
                 this.router.navigate(["/publish-complete"]);
-            } else if (result.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
-            } else {
-                throw new Error(result.message);
-            }
         })
         .catch(error => {
             if (error === ApiSymbols.AuthorizationFailure) {
@@ -183,48 +152,32 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/publish-login"]);
             } else {
                 this.appService.clear();
-                this.appService.setAlert("danger", "ERROR: " + JSON.stringify(error));
+                this.appService.setAlert("danger", "ERROR: " + error);
             }
         });
     }
 
     private publishGrid() {
-        this.getGridImage()
-        .then((image) => {
-            if (image) {
-                //publish the grid
-                return this.publicationService.publishGrid(image, this.puzzle.info.title);
-            } else {
-                // no grid to publish, return a dummy response
-                return Promise.resolve({
-                    success: ApiResponseStatus.OK,
-                    url: null,
-                    message: null,
-                })
-            }
-        })
-        .then((result) => {
-            if (result.success === ApiResponseStatus.OK) {
+        let image = this.getGridImage()
+
+        if (image) {
+            this.publicationService.publishGrid(image, this.puzzle.info.title)
+            .then(() => {
                 this.appService.clearBusy();
                 this.router.navigate(["/publish-complete"]);
-            } else if (result.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
-            } else {
-                throw new Error(result.message);
-            }
-        })
-        .catch(error => {
-            if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.clear();
-                this.appService.setAlert("danger", "Username or password incorrect");
-                this.authService.clearCredentials();
-                this.router.navigate(["/publish-login"]);
-            } else {
-                this.appService.clear();
-                this.appService.setAlert("danger", "An error occurred whilst tyring to publish the grid.");
-                console.log("ERROR publishing grid: " + JSON.stringify(error));
-            }
-        });
+            })
+            .catch(error => {
+                if (error === ApiSymbols.AuthorizationFailure) {
+                    this.appService.clear();
+                    this.appService.setAlert("danger", "Username or password incorrect");
+                    this.authService.clearCredentials();
+                    this.router.navigate(["/publish-login"]);
+                } else {
+                    this.appService.clear();
+                    this.appService.setAlert("danger", "ERROR: " + error);
+                }
+            });
+        }
     }
 
 }

@@ -5,12 +5,18 @@ import { AuthService } from './auth.service';
 import { environment } from "../../environments/environment";
 import { OpenPuzzleParamters } from '../ui/services/app.service';
 
-export abstract class PuzzleResponse implements ApiResponse {
+abstract class ApiPuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
     public abstract message: string;
     public abstract puzzle: any;
     public abstract warnings: any;
     public abstract completionState: string;
+}
+
+export interface PuzzleResponse {
+    readonly puzzle: any;
+    readonly warnings: any;
+    readonly completionState: string;
 }
 
 @Injectable({
@@ -34,8 +40,18 @@ export class HttpPuzzleSourceService {
 
         return this.http.post(environment.apiRoot + "puzzle/", params)
         .toPromise()
-        .then(data => data as PuzzleResponse)
-        .catch(error => { throw error.message });
+        .then((data: ApiPuzzleResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return data as PuzzleResponse;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw data.message;
+            }
+        })
+        .catch(error => { 
+            throw "HTTP.POST failed:" + error;
+        });
     }
 }
 

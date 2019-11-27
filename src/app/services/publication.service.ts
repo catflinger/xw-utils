@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from '../model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { ContentGeneratorTableLayout } from './content-generator/content-generator-table-layout';
-import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus } from './common';
+import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols } from './common';
 import { AuthService, Credentials } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { ContentGeneratorListLayout } from './content-generator/content-generator-list-layout';
@@ -21,6 +21,15 @@ abstract class PublishGridResponse implements ApiResponse {
     public abstract url: string;
 }
 
+export interface PublishPostResult {
+    readonly wordpressId: number;
+}
+
+export interface PublishGridResult {
+    readonly wordpressId: number;
+    readonly url: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -36,7 +45,7 @@ export class PublicationService {
     // review this component for XSS vunerabilities
 
 
-    public publishGrid(image: string, title: string): Promise<PublishGridResponse> {
+    public publishGrid(image: string, title: string): Promise<PublishGridResult> {
         const credentials: Credentials = this.authService.getCredentials();
 
         if (image) {
@@ -48,13 +57,22 @@ export class PublicationService {
                 sandbox: this.settingsService.settings.sandbox,
             })
             .toPromise()
-            .then(data => data as PublishGridResponse)
+            .then((data: PublishGridResponse) => {
+                if (data.success === ApiResponseStatus.OK) {
+                    return data as PublishGridResult;
+                } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                    throw ApiSymbols.AuthorizationFailure;
+                } else {
+                    console.log("Publish Grid Failure: " + data.message);
+                    throw "Publish Grid Failure: " + data.message;
+                }
+            });
         } else {
             return Promise.resolve(null);
         }
     }
 
-    public publishPost(puzzle: Puzzle, gridUrl: string, status: PublishStatus): Promise<PublishPostResponse> {
+    public publishPost(puzzle: Puzzle, gridUrl: string, status: PublishStatus): Promise<PublishPostResult> {
         const credentials: Credentials = this.authService.getCredentials();
 
         let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
@@ -73,6 +91,15 @@ export class PublicationService {
             sandbox: this.settingsService.settings.sandbox,
     })
         .toPromise()
-        .then(data => data as PublishPostResponse);
-    }
+        .then((data: PublishPostResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return data as PublishPostResult;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                console.log("Publish Post Failure: " + data.message);
+                throw "Publish Post Failure: " + data.message;
+            }
+        });
+}
 }

@@ -25,55 +25,31 @@ abstract class ArchiveResponse implements ApiResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ArchiveService {
     private bs: BehaviorSubject<Archive>;
 
-  constructor(private http: HttpClient) {
-      this.bs = new BehaviorSubject<Archive>(new Archive(null));
-  }
+    constructor(private http: HttpClient) {
+        this.bs = new BehaviorSubject<Archive>(new Archive(null));
+    }
 
-  public observe(): Observable<Archive> {
-      return this.bs.asObservable();
-  }
+    public observe(): Observable<Archive> {
+        return this.bs.asObservable();
+    }
 
-  public getList(provider: PuzzleProvider): Promise<void> {
+    public getList(provider: PuzzleProvider): Promise<void> {
 
-    return this.http.get(environment.apiRoot + "archive/" + provider)
-      .toPromise()
-      .then((data: ArchiveResponse) => {
-
-        if (data) {
-              if (data.success === ApiResponseStatus.OK) {
-                //let current = this.bs.value;
-
-                // create a temporary writable archive
-                // let archive = {
-                //     indexes: []
-                // };
-
-                // copy across existing indexes
-                // if (current) {
-                //     current.indexes.forEach((index) => {
-                //         if (index.provider !== provider) {
-                //             archive.indexes.push(index);
-                //         }
-                //     });
-                // }
-                
-                // refresh the requested index
-                // data.indexes.forEach((index) => {
-                //     if (index.provider === provider) {
-                //         archive.indexes.push(new ArchiveIndex(index));
-                //     }
-                // });
-
-                // publish a readonly version of the updated index
-                this.bs.next(new Archive(data));
-              }
-          }
-      })
-      .catch(error => { throw error.message });
+        return this.http.get(environment.apiRoot + "archive/" + provider)
+        .toPromise()
+        .then((data: ArchiveResponse) => {
+            if (data) {
+                if (data.success === ApiResponseStatus.OK) {
+                    this.bs.next(new Archive(data));
+                } else {
+                    throw data.message
+                }
+            }
+        });
     }
 }
