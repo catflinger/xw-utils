@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService, PublishGridResult } from 'src/app/services/publication.service';
@@ -6,7 +6,7 @@ import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
 import { Puzzle } from 'src/app/model/puzzle';
-import { ApiResponseStatus, ApiSymbols, PublishStatus } from 'src/app/services/common';
+import { ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
 
@@ -17,7 +17,7 @@ export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "c
     templateUrl: './publish.component.html',
     styleUrls: ['./publish.component.css']
 })
-export class PublishComponent implements OnInit, OnDestroy {
+export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public alreadyPublished = false;
@@ -26,8 +26,14 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    @ViewChild('app-grid', { static: true }) 
+    //@ViewChild(GridComponent, { static: true }) 
     private gridControl: GridComponent;
+
+    @ViewChild(GridComponent, { static: true }) set content(content: GridComponent) {
+        this.gridControl = content;
+     }
+
+    //@ViewChildren(GridComponent) children: QueryList<GridComponent>;
 
     constructor(
         private appService: AppService,
@@ -65,6 +71,14 @@ export class PublishComponent implements OnInit, OnDestroy {
                     }
                 ));
         }
+    }
+
+    public ngAfterViewInit() {
+        // this.subs.push( this.children.changes.subscribe((comps: QueryList<GridComponent>) => {
+        //     if (comps.length > 0) {
+        //         this.gridControl = comps[0];
+        //     }
+        // }));
     }
 
     public ngOnDestroy() {
@@ -124,13 +138,21 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     private getGridImage(): string {
-        return !this.puzzle.publishOptions.includeGrid && this.puzzle.grid ?
-            this.gridControl.getDataUrl().replace("data:image/png;base64,", "") :
-            null;
+        let result: string = null;
+
+        try {
+            result = this.gridControl.getDataUrl().replace("data:image/png;base64,", "");
+        } catch (error) {
+            console.log(error);
+        }
+
+        return result;
     }
 
     private publishPost(status: PublishStatus) {
-        let image = this.getGridImage();
+        let image = this.puzzle.publishOptions.includeGrid && this.puzzle.grid ?
+            this.getGridImage() :
+            null;
 
         let promise: Promise<PublishGridResult> = image ?
             this.publicationService.publishGrid(image, this.puzzle.info.title) :
@@ -140,9 +162,9 @@ export class PublishComponent implements OnInit, OnDestroy {
             return this.publicationService.publishPost(this.puzzle, result.url, status);
         })
         .then((result) => {
-                this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
-                this.appService.clearBusy();
-                this.router.navigate(["/publish-complete"]);
+            this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
+            this.appService.clearBusy();
+            this.router.navigate(["/publish-complete"]);
         })
         .catch(error => {
             if (error === ApiSymbols.AuthorizationFailure) {
@@ -158,7 +180,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     private publishGrid() {
-        let image = this.getGridImage()
+        let image = this.puzzle.grid ? this.getGridImage() : null;
 
         if (image) {
             this.publicationService.publishGrid(image, this.puzzle.info.title)
