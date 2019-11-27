@@ -48,7 +48,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public warnings: ClueValidationWarning[] = [];
     public showAnnotation: boolean = false;
     public latestAnswer: AnswerTextChunk[] = [];
-    public showLatestAnswer: boolean = true;
 
     //private puzzle: Puzzle;
     private shadowPuzzle: Puzzle;
@@ -104,6 +103,11 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.tipInstance.destroy();
         }
     }
+
+    public get showLatestAnswer(): boolean {
+        return this.latestAnswer.length > 0;
+    }
+
 
     public onClearDefinition() {
         this.form.patchValue({

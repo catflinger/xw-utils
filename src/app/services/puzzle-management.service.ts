@@ -133,12 +133,29 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle> {
-        return this.httpPuzzleService.getArchivePuzzle(params)
+        return this.httpPuzzleService.getPuzzle(params)
         .then((response) => {
             if (response.success === ApiResponseStatus.OK) {
 
+                console.log("COMPLETIOn STATE " + response.completionState);
+
+                if (Array.isArray(response.warnings)) {
+                    response.warnings.forEach(warning => console.log("WARNING " + JSON.stringify(warning))); 
+                }
+
+
+
+
+                // TO DO: carry on from here.  What to next if there are warnings?
+
+
+
+
+
+
+
                 let puzzle = new Puzzle(response.puzzle);
-                
+
                 // add some defaults
                 let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
                 new AddPlaceholders().exec(puzzleM);

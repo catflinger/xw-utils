@@ -136,6 +136,13 @@ export abstract class IGridSize {
     abstract readonly down: number;
 }
 
+export abstract class IParseWarning {
+    abstract readonly answer: string;
+    abstract readonly clue: string;
+    abstract readonly lineNumber: number;
+    abstract readonly reason: string;
+}
+
 export abstract class IDiary {
     abstract readonly entries: readonly IDiaryEntry[]
 }

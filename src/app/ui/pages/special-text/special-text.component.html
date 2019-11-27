@@ -1,13 +1,21 @@
+<form [formGroup]="form">
 <div class="row">
     <div class="col">
         <h3>Open puzzle from text</h3>
-        <p>Enter the clues in the text box below</p>
     </div>
 </div>
+
+<div class="row">
+    <div class="col form-group">
+        <label for="title" class="form-label">Give this puzzle a title</label>
+        <input id="title" type="text" class="form-control" formControlName="title">
+    </div>
+</div>
+
 <div class="row">
     <div class="col form-group">
         <app-tip key="specialText">
-<h5>Notes on formatting the text:</h5>
+<h5>Notes on formatting the clues:</h5>
 <p>
     Clues for a puzzle can be entered manually here.  The format is simple and based on that used
     by the daily cyptics in a newspaper.  In general, text cut-and-pasted from a newspaper website should
@@ -60,13 +68,15 @@ DOWN
 
 <div class="row">
     <div class="col form-group">
-        <textarea class="form-control" rows="24" [(ngModel)]="text"></textarea>
+        <label for="text" class="form-label">Enter text for the clues here</label>
+        <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
     </div>
 </div>
     
 <div class="row">
     <div class="col form-group">
-        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()" [disabled]="!form.valid">Continue</button>
         <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
     </div>
 </div>
+</form>
