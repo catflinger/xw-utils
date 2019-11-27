@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, AfterViewInit, ViewChild, Elem
 import { AppService } from '../../services/app.service';
 
 export interface DownloadInstance {
-    download(filaneame: string, dataUrl: string): void;
+    download(filename: string, dataUrl: string): void;
 }
 
 @Component({

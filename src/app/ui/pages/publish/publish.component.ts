@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService, PublishGridResult } from 'src/app/services/publication.service';
@@ -17,7 +17,7 @@ export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "c
     templateUrl: './publish.component.html',
     styleUrls: ['./publish.component.css']
 })
-export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PublishComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public alreadyPublished = false;
@@ -26,14 +26,10 @@ export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    //@ViewChild(GridComponent, { static: true }) 
     private gridControl: GridComponent;
 
-    @ViewChild(GridComponent, { static: true }) set content(content: GridComponent) {
-        this.gridControl = content;
-     }
-
-    //@ViewChildren(GridComponent) children: QueryList<GridComponent>;
+    @ViewChild(GridComponent, { static: true }) 
+    set content(content: GridComponent) { this.gridControl = content };
 
     constructor(
         private appService: AppService,
@@ -73,21 +69,12 @@ export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public ngAfterViewInit() {
-        // this.subs.push( this.children.changes.subscribe((comps: QueryList<GridComponent>) => {
-        //     if (comps.length > 0) {
-        //         this.gridControl = comps[0];
-        //     }
-        // }));
-    }
-
     public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
     public onContinue() {
-        this.appService.setBusy();
-        this.appService.clearAlerts();
+        this.appService.clear();
 
         // TO DO: link the media on WP to the post id
         // 1. first create a post with placeholder content, get back the post id
@@ -96,28 +83,29 @@ export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
 
         switch (this.action) {
             case "upload":
+                this.appService.setBusy();
                 this.publishPost("draft");
                 break;
             case "publish":
+                this.appService.setBusy();
                 this.publishPost("publish");
                 break;
             case "copy-grid":
+                this.appService.setBusy();
                 this.publishGrid();
                 break;
             case "copy-post":
+                this.appService.setBusy();
                 this.publishPost("draft");
                 break;
             case "replace-grid":
-                this.appService.clearBusy();
                 this.appService.setAlert("info", "Sorry, this feature is still work in progress, we hope to have it finished soon.")
                 break;
             case "replace-post":
-                this.appService.clearBusy();
                 this.appService.setAlert("info", "Sorry, this feature is still work in progress, we hope to have it finished soon.")
                 break;
             default:
                 // do nothing
-                this.appService.clearBusy();
                 break;
         }
     }
@@ -201,5 +189,4 @@ export class PublishComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
     }
-
 }

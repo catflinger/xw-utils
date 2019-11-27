@@ -44,6 +44,13 @@ export class PublicationService {
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
 
+    public getContent(puzzle: Puzzle, gridUrl: string) {
+        let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
+            new ContentGeneratorListLayout():
+            new ContentGeneratorTableLayout();
+
+            return generator.getContent(puzzle, gridUrl);
+    }
 
     public publishGrid(image: string, title: string): Promise<PublishGridResult> {
         const credentials: Credentials = this.authService.getCredentials();
@@ -74,12 +81,7 @@ export class PublicationService {
 
     public publishPost(puzzle: Puzzle, gridUrl: string, status: PublishStatus): Promise<PublishPostResult> {
         const credentials: Credentials = this.authService.getCredentials();
-
-        let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
-            new ContentGeneratorListLayout():
-            new ContentGeneratorTableLayout();
-        
-            let content = generator.getContent(puzzle, gridUrl);
+        let content = this.getContent(puzzle, gridUrl);
 
         return this.http.post(environment.apiRoot + "PublishPost", {
             provider: puzzle.info.provider,
@@ -101,5 +103,5 @@ export class PublicationService {
                 throw "Publish Post Failure: " + data.message;
             }
         });
-}
+    }
 }

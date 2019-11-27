@@ -15,16 +15,16 @@
                     </div>
 
                     <div class="form-check" *ngIf="!alreadyPublished">
+                        <input name="action" class="form-check-input" type="radio" value="publish" [(ngModel)]="action">
+                        <label class=form-check-label>publish immediately</label>
+                    </div>
+        
+                    <div class="form-check" *ngIf="!alreadyPublished">
                         <input name="action" class="form-check-input" type="radio" value="upload"
                             [(ngModel)]="action">
                         <label class=form-check-label>upload as draft</label>
                     </div>
 
-                    <div class="form-check" *ngIf="!alreadyPublished">
-                        <input name="action" class="form-check-input" type="radio" value="publish" [(ngModel)]="action">
-                        <label class=form-check-label>publish immediately</label>
-                    </div>
-    
                     <div class="form-check" *ngIf="alreadyPublished">
                         <input name="action" class="form-check-input" type="radio" value="copy-post"
                             [(ngModel)]="action">
@@ -47,6 +47,7 @@
                         <input name="action" class="form-check-input" type="radio" value="replace-grid" [(ngModel)]="action">
                         <label class=form-check-label>replace the grid only</label>
                     </div>
+
                 </div>
             </div>
         </form>
@@ -60,8 +61,8 @@
         </ngb-alert>
 
         <ngb-alert type="info" [dismissible]="false" *ngIf="action === 'publish'">
-                The post will be published to fifteensquared.net immediately.
-            </ngb-alert>
+            The post will be published to fifteensquared.net immediately.
+        </ngb-alert>
     
         <ngb-alert type="info" [dismissible]="false" *ngIf="action === 'upload'">
             The post will be uploaded to fifteensquared.net as a draft.
@@ -98,9 +99,20 @@
 
 <div class="row" *ngIf="appStatus && puzzle">
     <div class="col">
-        <button [disabled]="appStatus.busy || action === 'nothing'" type="button" class="btn btn-primary mr-3"
-            (click)="onContinue()">Publish</button>
-        <button [disabled]="appStatus.busy" type="button" class="btn btn-primary" (click)="onBack()">Back</button>
+        <button 
+            [disabled]="appStatus.busy || action === 'nothing'" 
+            type="button" 
+            class="btn btn-primary mr-3"
+            (click)="onContinue()">
+            Publish
+        </button>
+        <button 
+            [disabled]="appStatus.busy" 
+            type="button" 
+            class="btn btn-primary" 
+            (click)="onBack()">
+            Back
+        </button>
     </div>
 </div>
 
