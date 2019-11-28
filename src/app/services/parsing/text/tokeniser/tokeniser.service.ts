@@ -2,19 +2,9 @@ import { Injectable } from '@angular/core';
 import { Line } from '../line';
 import { ParseToken, GroupMarkerToken, SyntaxErrorToken, ClueToken, ClueStartToken, ClueEndToken, TextToken } from './tokens';
 
-const TextParsingErrors = {
-    invalidState: Symbol("invalidState"),
-    unexpectedLineType: Symbol("unexpectedLineType"),
-    unexpectedDirectionMarker: Symbol("unexpectedDirectionMarker"),
-
-    isParseError(error: any) {
-        return  error === TextParsingErrors.invalidState ||
-                error  === TextParsingErrors.unexpectedLineType ||
-                error  === TextParsingErrors.unexpectedDirectionMarker;
-    }
-}
-
 type TextParseDirection = "across" | "down" | null;
+
+export const TextParsingError = Symbol("TextParsingError");
 
 type TextParseState = 
 
@@ -36,179 +26,216 @@ interface ParseState {
     readonly direction: TextParseDirection,
 }
 
+export interface TokeniserOptions {
+    allowPreamble?: boolean,
+    allowPostamble?: boolean,
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TokeniserService {
 
-  constructor() { }
+    constructor() { }
 
-  public parse(lines: ReadonlyArray<Line>): ReadonlyArray<ParseToken> {
-    let tokens: ParseToken[] = [];
+    public parse(lines: ReadonlyArray<Line>, options: TokeniserOptions): ReadonlyArray<ParseToken> {
+        let tokens: ParseToken[] = [];
 
-    let state: ParseState = { direction: null, state: "waiting" };
-    let nextState: ParseState;
-
-    try {
-        lines.forEach(line => {
-
-            if (state.state === "waiting" && state.direction !== null ||
-                state.state === "waitingForClue" && state.direction === null ||
-                state.state === "waitingForClueEnd" && state.direction === null ||
-                state.state === "ending" && state.direction !== null) {
-
-                throw TextParsingErrors.invalidState;
-
-            } else if (state.state === "waiting") {
-
-                nextState = this.onWaiting(state, line, tokens);
-
-            } else if (state.state === "waitingForClue") {
-
-                nextState = this.onWaitingForClue(state, line, tokens);
-
-            } else if (state.state === "waitingForClueEnd") {
-
-                nextState = this.onWaitingForClueEnd(state, line, tokens);
-
-            } else if (state.state === "ending") {
-
-                nextState = this.onEnding(state, line, tokens);
-            
-            } else {
-
-                throw TextParsingErrors.invalidState;
-            }
-
-            state = nextState;
-        });
-    
-    } catch (error) {
-
-        if (TextParsingErrors.isParseError(error)) {
-            // TO DO: print out the tokens somewhere...
-        } else {
-            throw error;
+        const _options: TokeniserOptions = {
+            allowPreamble: options && options.allowPreamble,
+            allowPostamble: options && options.allowPostamble,
         }
-    }
-    
-    return tokens;
-}
 
-private onWaiting(currentState: ParseState, line: Line, tokens: ParseToken[]): ParseState {
-    let nextState: ParseState;
+        let state: ParseState = { direction: null, state: "waiting" };
+        let nextState: ParseState;
 
-    switch (line.lineType) {
-        case "empty":
-        case "unknown":
-            // ignore this line
-            nextState = currentState;
-            break;
-    
-        case "acrossMarker":
-            // found the start of the across clues
-            tokens.push(new GroupMarkerToken(line, "across"));
-            nextState = { state: "waitingForClue", direction: "across" };
-            break;
-        
-        default:
-            // no other line types allowed here
-            tokens.push(new SyntaxErrorToken(line, "expected to find the ACROSS marker before this point"));
-            throw TextParsingErrors.unexpectedLineType;
-    }
+        try {
 
-    return nextState;
-}
+            lines.forEach(line => {
 
-private onWaitingForClue(currentState: ParseState, line: Line, tokens: ParseToken[]): ParseState {
-    let nextState: ParseState;
+                if (state.state === "waiting" && state.direction !== null) {
+                    tokens.push(new SyntaxErrorToken(line, "invalid parse state - waiting but direction not null"));
+                    throw TextParsingError;
 
-    switch (line.lineType) {
-        case "empty":
-            // ignore this line
-            nextState = currentState;
-            break;
-    
-        case "downMarker":
-            if (currentState.direction === "across") {
-                // found the start of the down clues
-                tokens.push(new GroupMarkerToken(line, "down"));
-                nextState = { state: "waitingForClue", direction: "down"};
-            } else {
-                tokens.push(new SyntaxErrorToken(line, "unexpected DOWN marker in the down clues"));
-                throw TextParsingErrors.unexpectedDirectionMarker;
+                } else if (state.state === "waitingForClue" && state.direction === null ) {
+                    tokens.push(new SyntaxErrorToken(line, "invalid parse state - waiting for clue but direction is null"));
+                    throw TextParsingError;
+
+                } else if (state.state === "waitingForClueEnd" && state.direction === null) {
+                    tokens.push(new SyntaxErrorToken(line, "invalid parse state - waiting for clue end but direction is null"));
+                    throw TextParsingError;
+
+                } else if (state.state === "ending" && state.direction !== null) {
+                    tokens.push(new SyntaxErrorToken(line, "invalid parse state - ended but direction is not null"));
+                    throw TextParsingError;
+
+                } else if (state.state === "waiting") {
+                    nextState = this.onWaiting(state, line, tokens, _options);
+
+                } else if (state.state === "waitingForClue") {
+                    nextState = this.onWaitingForClue(state, line, tokens, _options);
+
+                } else if (state.state === "waitingForClueEnd") {
+                    nextState = this.onWaitingForClueEnd(state, line, tokens, _options);
+
+                } else if (state.state === "ending") {
+                    nextState = this.onEnding(state, line, tokens, _options);
+                
+                } else {
+                    tokens.push(new SyntaxErrorToken(line, "unexpcted parse state"));
+                    throw TextParsingError;
+                }
+
+                state = nextState;
+            });
+
+        } catch (error) {
+            if (error !== TextParsingError) {
+                throw error;
             }
-            break;
+        }
+
+        return tokens;
+    }
+
+    private onWaiting(currentState: ParseState, line: Line, tokens: ParseToken[], options: TokeniserOptions): ParseState {
+        let nextState: ParseState;
+
+        switch (line.lineType) {
+            case "empty":
+                // ignore this line
+                nextState = currentState;
+                break;
+
+            case "unknown":
+                if (options.allowPreamble) {
+                    // ignore this line
+                    nextState = currentState;
+                } else {
+                    tokens.push(new SyntaxErrorToken(line, "unexpected text before ACROSS marker"));
+                    throw TextParsingError;
+                }
+                break;
         
-        case "clue":
-            // found the start of the down clues
-            tokens.push(new ClueToken(line));
-            nextState = { state: "waitingForClue", direction: currentState.direction};
-            break;
+            case "acrossMarker":
+                // found the start of the across clues
+                tokens.push(new GroupMarkerToken(line, "across"));
+                nextState = { state: "waitingForClue", direction: "across" };
+                break;
+            
+            default:
+                // no other line types allowed here
+                tokens.push(new SyntaxErrorToken(line, "expected to find the ACROSS marker before this point"));
+                throw TextParsingError;
+            }
 
-        case "partialClueStart":
-            // found the start of the down clues
-            tokens.push(new ClueStartToken(line));
-            nextState = { state: "waitingForClueEnd", direction: currentState.direction};
-            break;
-
-        default:
-            // no other line types allowed here
-            tokens.push(new SyntaxErrorToken(line, "expected start of a clue but found " + line.lineType));
-            throw TextParsingErrors.unexpectedLineType;
+        return nextState;
     }
 
-    return nextState;
-}
+    private onWaitingForClue(currentState: ParseState, line: Line, tokens: ParseToken[], options: TokeniserOptions): ParseState {
+        let nextState: ParseState;
 
-private onWaitingForClueEnd(currentState: ParseState, line: Line, tokens: ParseToken[]): ParseState {
-    let nextState: ParseState;
+        switch (line.lineType) {
+            case "empty":
+                // ignore this line
+                nextState = currentState;
+                break;
+        
+            case "downMarker":
+                if (currentState.direction === "across") {
+                    // found the start of the down clues
+                    tokens.push(new GroupMarkerToken(line, "down"));
+                    nextState = { state: "waitingForClue", direction: "down"};
+                } else {
+                    tokens.push(new SyntaxErrorToken(line, "unexpected DOWN marker in the down clues"));
+                    throw TextParsingError;
+                }
+                break;
+            
+            case "clue":
+                tokens.push(new ClueToken(line));
+                nextState = { state: "waitingForClue", direction: currentState.direction};
+                break;
 
-    switch (line.lineType) {
-        case "empty":
-            // ignore this line
-            nextState = currentState;
-            break;
+            case "partialClueStart":
+                tokens.push(new ClueStartToken(line));
+                nextState = { state: "waitingForClueEnd", direction: currentState.direction};
+                break;
 
-        case "partialClueEnd":
-            // found the end of the clue
-            tokens.push(new ClueEndToken(line));
-            nextState = { state: "waitingForClue", direction: currentState.direction};
-            break;
+            case "unknown":
+                if (currentState.direction === "down" && options.allowPostamble) {
+                    nextState = { state: "ending", direction: null };
+                } else {
+                    tokens.push(new SyntaxErrorToken(line, "expected start of a clue but found text"));
+                    throw TextParsingError;
+                }
+                break;
+        
+            default:
+                // no other line types allowed here
+                tokens.push(new SyntaxErrorToken(line, "expected start of a clue but found " + line.lineType));
+                throw TextParsingError;
+            }
 
-        case "unknown":
-            // found what might be the middle of this clue
-            tokens.push(new TextToken(line));
-            nextState = currentState;
-            break;
-
-        default:
-            // no other line types allowed here
-            tokens.push(new SyntaxErrorToken(line, "expected to find the ending for a clue"));
-            throw TextParsingErrors.unexpectedLineType;
+        return nextState;
     }
 
-    return nextState;
-}
+    private onWaitingForClueEnd(currentState: ParseState, line: Line, tokens: ParseToken[], options: TokeniserOptions): ParseState {
+        let nextState: ParseState;
 
+        switch (line.lineType) {
+            case "empty":
+                // ignore this line
+                nextState = currentState;
+                break;
 
-private onEnding(currentState: ParseState, line: Line, tokens: ParseToken[]): ParseState {
-    let nextState: ParseState;
+            case "partialClueEnd":
+                // found the end of the clue
+                tokens.push(new ClueEndToken(line));
+                nextState = { state: "waitingForClue", direction: currentState.direction};
+                break;
 
-    switch (line.lineType) {
-        case "empty":
-        case "unknown":
-            // ignore this line
-            nextState = currentState;
-            break;
+            case "unknown":
+                // found what might be the middle of this clue
+                tokens.push(new TextToken(line));
+                nextState = currentState;
+                break;
 
-        default:
-            // no other line types allowed here
-            tokens.push(new SyntaxErrorToken(line, "unexpected text after the end of the clues"));
-            throw TextParsingErrors.unexpectedLineType;
+            default:
+                // no other line types allowed here
+                tokens.push(new SyntaxErrorToken(line, "expected to find the ending for a clue"));
+                throw TextParsingError;
+            }
+
+        return nextState;
     }
 
 
-    return nextState;
-}
+    private onEnding(currentState: ParseState, line: Line, tokens: ParseToken[], options: TokeniserOptions): ParseState {
+        let nextState: ParseState;
+
+        switch (line.lineType) {
+            case "empty":
+                // ignore this line
+                nextState = currentState;
+                break;
+            
+            case "unknown":
+                if (options.allowPostamble) {
+                    // ignore this line
+                    nextState = currentState;
+                } else {
+                    tokens.push(new SyntaxErrorToken(line, "unexpected text after the end of the clues"));
+                    throw TextParsingError;
+                    }
+                break;
+
+            default:
+                // no other line types allowed here
+                tokens.push(new SyntaxErrorToken(line, "unexpected text after the end of the clues"));
+                throw TextParsingError;
+            }
+
+        return nextState;
+    }
 }
