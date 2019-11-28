@@ -53,19 +53,22 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
-                        this.puzzle = puzzle;
-                        this.alreadyPublished = !!puzzle.info.wordpressId;
-                        
-                        if (!this.alreadyPublished) {
-                            this.action = "upload";
-                        }
-
-                        this.gridOnly = puzzle.grid && puzzle.clues === null;
-                        if (this.gridOnly) {
-                            this.action = "copy-grid";
+                        if (puzzle) {
+                            this.puzzle = puzzle;
+                            this.alreadyPublished = !!puzzle.info.wordpressId;
+                            
+                            if (!this.alreadyPublished) {
+                                this.action = "upload";
+                            }
+    
+                            this.gridOnly = puzzle.grid && puzzle.clues === null;
+                            if (this.gridOnly) {
+                                this.action = "copy-grid";
+                            }
                         }
                     }
-                ));
+                )
+            );
         }
     }
 
