@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TokeniserService, TokeniserOptions } from './tokeniser.service';
+import { TokeniserService, TokeniserOptions, TokenList } from './tokeniser.service';
 import { Line } from '../line';
-import { not } from '@angular/compiler/src/output/output_ast';
 import { ParseToken, parseTokenTypes } from './tokens';
 
 describe('TokeniserService', () => {
@@ -89,10 +88,12 @@ describe('TokeniserService', () => {
 
 });
 
-function getTestResult(service, data, options?:TokeniserOptions): ParseToken[] {
+function getTestResult(service: TokeniserService, data, options?:TokeniserOptions): ReadonlyArray<ParseToken> {
     let lines = [];
     data.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
-    return service.parse(lines, options);
+    let list: TokenList = service.parse(lines, options);
+
+    return list.tokens;
 }
 function logTokens(tokens: ParseToken[]) {
     tokens.forEach((token: ParseToken) => {

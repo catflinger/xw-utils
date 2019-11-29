@@ -26,6 +26,41 @@ interface ParseState {
     readonly direction: TextParseDirection,
 }
 
+export class TokenGroup {
+    constructor(
+        public readonly previous: ParseToken,
+        public readonly current: ParseToken,
+        public readonly next: ParseToken
+    ) {}
+}
+
+export class TokenList {
+    constructor(private _tokens: ReadonlyArray<ParseToken>) {}
+
+    public get tokens(): ReadonlyArray<ParseToken> {
+        return this._tokens;
+    }
+
+    *getIterator() {
+        const max = this._tokens.length - 1;
+        const min = 0;
+
+        let previous: ParseToken = null;
+        let current: ParseToken = null;
+        let next: ParseToken = null;
+
+        for(let i = min; i <= max; i++) {
+            current = this._tokens[i];
+            previous = (i - 1 >= min) ? this._tokens[i - 1] : null;
+            next = (i + 1 <= max) ? this._tokens[i + 1] : null;
+
+            yield(new TokenGroup(previous, current, next));
+        }
+
+        return null as TokenGroup;
+    }
+}
+
 export interface TokeniserOptions {
     allowPreamble?: boolean,
     allowPostamble?: boolean,
@@ -38,7 +73,7 @@ export class TokeniserService {
 
     constructor() { }
 
-    public parse(lines: ReadonlyArray<Line>, options: TokeniserOptions): ReadonlyArray<ParseToken> {
+    public parse(lines: ReadonlyArray<Line>, options: TokeniserOptions): TokenList {
         let tokens: ParseToken[] = [];
 
         const _options: TokeniserOptions = {
@@ -95,7 +130,7 @@ export class TokeniserService {
             }
         }
 
-        return tokens;
+        return new TokenList(tokens);
     }
 
     private onWaiting(currentState: ParseState, line: Line, tokens: ParseToken[], options: TokeniserOptions): ParseState {

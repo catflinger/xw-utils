@@ -13,79 +13,72 @@ export const parseTokenTypes = {
 export abstract class ParseToken {
     protected readonly rawText: string; 
     protected readonly lineNumber: number;
+    protected readonly _type: Symbol;
 
-    constructor(line: Line) {
+    constructor(line: Line, type: Symbol) {
         this.rawText = line.rawText;
         this.lineNumber= line.lineNumber;
+        this._type = type;
     }
 
-    public abstract get type(): Symbol;
+    public get text() {
+        return this.rawText;
+    }
+
+    public get type(): Symbol {
+        return this._type;
+    }
 
     public toString(): string {
-        return `line ${this.lineNumber}: text="${this.rawText}"`;
+        return this._type.toString();
+    }
+
+    public toJSON(): any {
+        return {
+            type: this._type.toString(),
+            line: this.lineNumber,
+            text: this.rawText
+        };
     }
 }
 
 export class GroupMarkerToken extends ParseToken {
     public readonly groupMarker: ClueGroup;
+
     constructor(line: Line, groupMarker: ClueGroup) {
-        super(line);
+        super(line, parseTokenTypes.GroupMarkerToken);
         this.groupMarker = groupMarker;
-    }
-    public get type(): Symbol {
-        return parseTokenTypes.GroupMarkerToken;
-    }
-    public toString(): string {
-        return `GroupMarkerToken ${this.groupMarker} ${super.toString()}}`;
     }
 }
 
 export class ClueStartToken extends ParseToken {
-    public get type(): Symbol {
-        return parseTokenTypes.ClueStartToken;
-    }
-    public toString(): string {
-        return `ClueStartToken ${super.toString()}}`;
+    constructor(line: Line) {
+        super(line, parseTokenTypes.ClueStartToken);
     }
 }
 
 export class ClueEndToken extends ParseToken {
-    public get type(): Symbol {
-        return parseTokenTypes.ClueEndToken;
-    }
-    public toString(): string {
-        return `ClueEndToken ${super.toString()}}`;
+    constructor(line: Line) {
+        super(line, parseTokenTypes.ClueEndToken);
     }
 }
 
 export class ClueToken extends ParseToken {
-    public get type(): Symbol {
-        return parseTokenTypes.ClueToken;
-    }
-    public toString(): string {
-        return `ClueToken ${super.toString()}}`;
+    constructor(line: Line) {
+        super(line, parseTokenTypes.ClueToken);
     }
 }
 
 export class TextToken extends ParseToken {
-    public get type(): Symbol {
-        return parseTokenTypes.TextToken;
-    }
-    public toString(): string {
-        return `TextToken ${super.toString()}}`;
+    constructor(line: Line) {
+        super(line, parseTokenTypes.TextToken);
     }
 }
 
 export class SyntaxErrorToken extends ParseToken {
     public readonly message: string;
     constructor(line, message: string) {
-        super(line);
+        super(line, parseTokenTypes.SyntaxErrorToken);
         this.message = message;
-    }
-    public get type(): Symbol {
-        return parseTokenTypes.SyntaxErrorToken;
-    }
-    public toString(): string {
-        return `SyntaxErrorToken "${this.message}" ${super.toString()}}`;
     }
 }
