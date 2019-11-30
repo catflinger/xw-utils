@@ -11,33 +11,25 @@ export const parseTokenTypes = {
 } 
 
 export abstract class ParseToken {
-    protected readonly rawText: string; 
-    protected readonly lineNumber: number;
-    protected readonly _type: Symbol;
+    public readonly text: string; 
+    public readonly lineNumber: number;
+    public readonly type: Symbol;
 
     constructor(line: Line, type: Symbol) {
-        this.rawText = line.rawText;
+        this.text = line.rawText;
         this.lineNumber= line.lineNumber;
-        this._type = type;
-    }
-
-    public get text() {
-        return this.rawText;
-    }
-
-    public get type(): Symbol {
-        return this._type;
+        this.type = type;
     }
 
     public toString(): string {
-        return this._type.toString();
+        return this.type.toString();
     }
 
     public toJSON(): any {
         return {
-            type: this._type.toString(),
+            type: this.type.toString(),
             line: this.lineNumber,
-            text: this.rawText
+            text: this.text
         };
     }
 }

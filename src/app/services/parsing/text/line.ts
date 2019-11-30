@@ -36,11 +36,11 @@ export class Line {
     }
 
     protected get hasStartMarker(): boolean {
-        return /^\d/i.test(this.text);
+        return /^\*?\s*\d{1,2}\D/i.test(this.text);
     }
 
     protected get hasEndMarker(): boolean {
-        return /\(\d+\)$/i.test(this.text);
+        return /\(\d[,0-9- ]*( words)?\s?\)$/i.test(this.text);
     }
 
     protected get hasAcrossMarker(): boolean {

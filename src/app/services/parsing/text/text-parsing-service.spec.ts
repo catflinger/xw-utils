@@ -4,11 +4,9 @@ import { ParseToken, GroupMarkerToken, ClueToken, ClueStartToken, ClueEndToken, 
 import { Line } from './line';
 import { ParseData } from './parse-data';
 import { MockTokeniserService } from './tokeniser/mock-tokeniser.service';
-import { TokeniserService } from "./tokeniser/tokeniser.service";
 
 describe('TextParsingService', () => {
     let mockTokeniser: MockTokeniserService = new MockTokeniserService();
-    //let tokeniser: TokeniserService = new MockTokeniserService();
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
@@ -21,7 +19,6 @@ describe('TextParsingService', () => {
 
     it('should parse simple text', () => {
         mockTokeniser.setTestData(testData.simple);
-        //const service: TextParsingService = TestBed.get(TextParsingService);
         const service: TextParsingService = new TextParsingService(mockTokeniser);
         let result = service.parse(new ParseData());
 
@@ -30,7 +27,6 @@ describe('TextParsingService', () => {
 
     it('should parse split text', () => {
         mockTokeniser.setTestData(testData.split);
-        //const service: TextParsingService = TestBed.get(TextParsingService);
         const service: TextParsingService = new TextParsingService(mockTokeniser);
         let result = service.parse(new ParseData());
 
@@ -40,12 +36,6 @@ describe('TextParsingService', () => {
     });
 
 });
-
-function logTokens(tokens: ParseToken[]) {
-    tokens.forEach((token: ParseToken) => {
-        console.log(`${token.toString()}`);
-    });
-}
 
 const testData = {
     simple: [

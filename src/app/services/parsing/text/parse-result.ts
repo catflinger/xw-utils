@@ -7,7 +7,7 @@ export type ParseStatus = "OK" | "Warnings" | "Fail";
 export class ParseResult {
 
     // temporary, during development
-    clues: Clue[] = [];
+    clues: ReadonlyArray<Clue> = [];
 
     // a hopefully working puzzle
     puzzle: Puzzle;

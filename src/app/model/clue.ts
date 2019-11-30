@@ -2,7 +2,6 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
-import { stringify } from 'querystring';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -82,7 +81,7 @@ export class Clue implements IClue {
         let result = "";
         let match = null;
 
-        let exp = /\d+|\D/g;
+        let exp = /\d+|[^a-z0-9]/gi;
 
         while(match = exp.exec(group.trim())) {
             let text: string = match[0];
