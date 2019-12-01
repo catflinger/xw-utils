@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Line } from '../line';
 import { ParseToken } from './tokens';
-import { TokeniserOptions, TokenList, TokeniserService } from './tokeniser.service';
+import { TokenList, TokeniserService } from './tokeniser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { TokeniserOptions, TokenList, TokeniserService } from './tokeniser.servi
 export class MockTokeniserService extends TokeniserService {
     public tokens: any[] = [];
 
-    public parse(lines: ReadonlyArray<Line>, options: TokeniserOptions): TokenList {
+    public parse(data: string): TokenList {
         return new TokenList(this.tokens);
     }
 

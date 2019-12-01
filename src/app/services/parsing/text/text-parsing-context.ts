@@ -1,6 +1,7 @@
-import { ClueGroup } from "../../../model/interfaces";
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
+
+type ParsingDirection = "across" | "down" | "ended" | null;
 
 export class TextParsingError {
     constructor(
@@ -12,7 +13,7 @@ export class TextParsingError {
 
 export interface IParseContext {
     readonly done: boolean;
-    readonly direction: string;
+    readonly direction: ParsingDirection;
     readonly clues: ReadonlyArray<Clue>;
     readonly buffer: string;
     readonly tokenGroup: TokenGroup;
@@ -26,7 +27,7 @@ export class ParseContext implements IParseContext {
     private _done: boolean;
     private _error: TextParsingError = null;
 
-    public  direction: ClueGroup =  null;
+    public  direction: ParsingDirection =  null;
 
     public addText(text: string) {
         if (this._clueBuffer === null) {

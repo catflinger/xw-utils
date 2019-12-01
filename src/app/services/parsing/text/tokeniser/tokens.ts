@@ -1,13 +1,13 @@
-import { ClueGroup } from '../../../../model/interfaces';
 import { Line } from '../line';
+import { ClueGroup } from 'src/app/model/interfaces';
 
 export const parseTokenTypes = {
     ClueEndToken: Symbol("ClueEndToken"),
     ClueStartToken: Symbol("ClueStartToken"),
     ClueToken: Symbol("ClueToken"),
-    GroupMarkerToken: Symbol("GroupMarkerToken"),
+    AcrossMarkerToken: Symbol("AcrossMarkerToken"),
+    DownMarkerToken: Symbol("DownMarkerToken"),
     TextToken: Symbol("TextToken"),
-    SyntaxErrorToken: Symbol("SyntaxErrorToken"),
 } 
 
 export abstract class ParseToken {
@@ -34,12 +34,15 @@ export abstract class ParseToken {
     }
 }
 
-export class GroupMarkerToken extends ParseToken {
-    public readonly groupMarker: ClueGroup;
+export class AcrossMarkerToken extends ParseToken {
+    constructor(line: Line) {
+        super(line, parseTokenTypes.AcrossMarkerToken);
+    }
+}
 
-    constructor(line: Line, groupMarker: ClueGroup) {
-        super(line, parseTokenTypes.GroupMarkerToken);
-        this.groupMarker = groupMarker;
+export class DownMarkerToken extends ParseToken {
+    constructor(line: Line) {
+        super(line, parseTokenTypes.DownMarkerToken);
     }
 }
 
@@ -67,10 +70,10 @@ export class TextToken extends ParseToken {
     }
 }
 
-export class SyntaxErrorToken extends ParseToken {
-    public readonly message: string;
-    constructor(line, message: string) {
-        super(line, parseTokenTypes.SyntaxErrorToken);
-        this.message = message;
-    }
-}
+// export class SyntaxErrorToken extends ParseToken {
+//     public readonly message: string;
+//     constructor(line, message: string) {
+//         super(line, parseTokenTypes.SyntaxErrorToken);
+//         this.message = message;
+//     }
+// }

@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
-import { TokeniserService, TokeniserOptions, TokenList } from './tokeniser.service';
-import { Line } from '../line';
+import { TokeniserService, TokenList } from './tokeniser.service';
 import { ParseToken, parseTokenTypes } from './tokens';
 
 describe('TokeniserService', () => {
@@ -16,54 +14,32 @@ describe('TokeniserService', () => {
 
     it('should parse simple text', () => {
         const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.simple);
+        let tokens = service.parse(testData.simple).tokens;
 
         expect(tokens.length).toEqual(5);
-        expect(tokens[0].type).toEqual(parseTokenTypes.GroupMarkerToken);
+        expect(tokens[0].type).toEqual(parseTokenTypes.AcrossMarkerToken);
         expect(tokens[1].type).toEqual(parseTokenTypes.ClueToken);
-        expect(tokens[2].type).toEqual(parseTokenTypes.GroupMarkerToken);
+        expect(tokens[2].type).toEqual(parseTokenTypes.DownMarkerToken);
+        expect(tokens[3].type).toEqual(parseTokenTypes.ClueToken);
         expect(tokens[3].type).toEqual(parseTokenTypes.ClueToken);
     });
 
-    it('should parse with preamble option set', () => {
+    it('should parse with preamble', () => {
         const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.simpleWithPreamble, { allowPreamble: true, allowPostamble: true });
+        let tokens = service.parse(testData.simpleWithPreamble).tokens;
 
-        expect(tokens.length).toEqual(5);
-        expect(tokens[0].type).toEqual(parseTokenTypes.GroupMarkerToken);
-        expect(tokens[2].type).toEqual(parseTokenTypes.GroupMarkerToken);
-        expect(tokens[4].type).toEqual(parseTokenTypes.ClueToken);
-    });
-
-    it('should reject preamble if option not set', () => {
-        const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.simpleWithPreamble, { allowPreamble: false, allowPostamble: true });
-
-        expect(tokens.length).toEqual(1);
-        expect(tokens[0].type).toEqual(parseTokenTypes.SyntaxErrorToken);
-    });
-
-    it('should reject postable if option not set', () => {
-        const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.simpleWithPreamble, { allowPreamble: true, allowPostamble: false });
-
-        expect(tokens.length).toEqual(6);
-        expect(tokens[5].type).toEqual(parseTokenTypes.SyntaxErrorToken);
-    });
-
-    it('should handle bad text', () => {
-        const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.bad_RepeatedDowns);
-
-        expect(tokens.length).toEqual(4);
+        expect(tokens.length).toEqual(9);
+        expect(tokens[2].type).toEqual(parseTokenTypes.AcrossMarkerToken);
+        expect(tokens[4].type).toEqual(parseTokenTypes.DownMarkerToken);
+        expect(tokens[5].type).toEqual(parseTokenTypes.ClueToken);
     });
 
     it('should parse split text', () => {
         const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.splitLines);
+        let tokens = service.parse(testData.splitLines).tokens;
 
         expect(tokens.length).toEqual(10);
-        expect(tokens[0].type).toEqual(parseTokenTypes.GroupMarkerToken);
+        expect(tokens[0].type).toEqual(parseTokenTypes.AcrossMarkerToken);
         expect(tokens[1].type).toEqual(parseTokenTypes.ClueToken);
         expect(tokens[2].type).toEqual(parseTokenTypes.ClueStartToken);
         expect(tokens[3].type).toEqual(parseTokenTypes.ClueEndToken);
@@ -74,10 +50,10 @@ describe('TokeniserService', () => {
 
     it('should skip blank lines', () => {
         const service: TokeniserService = TestBed.get(TokeniserService);
-        let tokens = getTestResult(service, testData.splitLinesWithBlanks);
+        let tokens = service.parse(testData.splitLinesWithBlanks).tokens;
 
         expect(tokens.length).toEqual(10);
-        expect(tokens[0].type).toEqual(parseTokenTypes.GroupMarkerToken);
+        expect(tokens[0].type).toEqual(parseTokenTypes.AcrossMarkerToken);
         expect(tokens[1].type).toEqual(parseTokenTypes.ClueToken);
         expect(tokens[2].type).toEqual(parseTokenTypes.ClueStartToken);
         expect(tokens[3].type).toEqual(parseTokenTypes.ClueEndToken);
@@ -87,19 +63,6 @@ describe('TokeniserService', () => {
     });
 
 });
-
-function getTestResult(service: TokeniserService, data, options?:TokeniserOptions): ReadonlyArray<ParseToken> {
-    let lines = [];
-    data.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
-    let list: TokenList = service.parse(lines, options);
-
-    return list.tokens;
-}
-function logTokens(tokens: ParseToken[]) {
-    tokens.forEach((token: ParseToken) => {
-        console.log(`${token.toString()}`);
-    });
-}
 
 const testData = {
 
@@ -123,15 +86,6 @@ DOWN
 
 all done, just ignore me
 blahblah blah
-`,
-
-bad_RepeatedDowns: `
-ACROSS
-1 A clue (4)
-DOWN
-DOWN
-2 A clue (6)
-2 A clue (6)
 `,
 
 splitLines: `
