@@ -1,50 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ParseData } from "./parse-data";
-import { ParseResult } from './parse-result';
-import { ClueGroup } from "../../../model/interfaces";
 import { Line } from './line';
-import { Clue } from '../../../model/clue';
-import { TokeniserService, TokenList, TokenGroup } from './tokeniser/tokeniser.service';
-import { Grid } from 'src/app/model/grid';
-import { parseTokenTypes, GroupMarkerToken, ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken } from './tokeniser/tokens';
-
-class ParseContext {
-    private _clueBuffer: string = null;
-    private _clues: Clue[] = [];
-
-    public  direction: ClueGroup =  null;
-
-    public addText(text: string) {
-        if (this._clueBuffer === null) {
-            this._clueBuffer = "";
-        }
-        this._clueBuffer += text;
-    }
-
-    public get clues(): ReadonlyArray<Clue> { return this._clues; }
-    public get hasContent(): boolean { return this._clueBuffer !== null; }
-
-    public save() {
-        this._clues.push(new Clue({
-            group: this.direction,
-            entries: [],
-            chunks: [],
-            warnings: [],
-            text: this._clueBuffer,
-        }));
-
-        this._clueBuffer = null;
-    }
-
-}
-
-export class TextParsingError {
-    constructor(
-        public readonly line: number,
-        public readonly text: string,
-        public readonly message: string,
-    ){}
-}
+import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
+import { parseTokenTypes, GroupMarkerToken, ClueToken, ClueStartToken, ClueEndToken, TextToken } from './tokeniser/tokens';
+import { IParseContext, ParseContext, TextParsingError } from './text-parsing-context';
 
 @Injectable({
     providedIn: 'root'
@@ -53,58 +12,54 @@ export class TextParsingService {
 
     constructor(private tokeniser: TokeniserService) {}
 
-    public parse(data: ParseData): ParseResult {
+    public *parser(data: ParseData): IterableIterator<IParseContext> {
+
+        // make an array of lines from the source data
         let lines: Line[] = [];
+        data.rawData.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
 
-            // fill the lines array fron the source data
-            data.rawData.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
+        // parse the lines into tokens
+        let tokens: TokenList = this.tokeniser.parse(lines, { allowPreamble: false, allowPostamble: false});
 
-            // parse the lines into tokens
-            let tokens: TokenList = this.tokeniser.parse(lines, { allowPreamble: false, allowPostamble: false});
-
-            // now compile the tokens into clues for the puzzle
-            let context: ParseContext = this.compile(tokens, data.grid);
-
-        let result = new ParseResult();
-        result.clues = context.clues;
-
-        return result;
-    }
-
-    private compile(tokens: TokenList, grid: Grid): ParseContext {
+        // now compile the tokens into clues for the puzzle
         let context: ParseContext = new ParseContext();
-
         let iterator = tokens.getIterator();
         let item = iterator.next();
 
         while(!item.done) {
+            context.setGroup(item.value);
 
-            switch (item.value.current.type) {
+            switch (context.tokenGroup.current.type) {
                 case parseTokenTypes.GroupMarkerToken:
-                    this.onGroupMarker(context, item.value);
+                    this.onGroupMarker(context);
                     break;
                 case parseTokenTypes.ClueToken:
-                    this.onClueToken(context, item.value);
+                    this.onClueToken(context);
                     break;
                 case parseTokenTypes.ClueStartToken:
-                    this.onClueStartToken(context, item.value);
+                    this.onClueStartToken(context);
                     break;
                 case parseTokenTypes.TextToken:
-                    this.onTextToken(context, item.value);
+                    this.onTextToken(context);
                     break;
                 case parseTokenTypes.ClueEndToken:
-                    this.onClueEndToken(context, item.value);
+                    this.onClueEndToken(context);
                     break;
                 default:
             }
+
+            yield context;
             item = iterator.next();
+            context.setGroup(item.value);
         }
 
+        context.done = true;
+        context.setGroup(null);
         return context;
     }
 
-    private onGroupMarker(context: ParseContext, item: TokenGroup) {
-        const token = item.current as GroupMarkerToken;
+    private onGroupMarker(context: ParseContext) {
+        const token = context.tokenGroup.current as GroupMarkerToken;
 
         if (context.direction === null && token.groupMarker === "across") {
             context.direction = "across";
@@ -126,41 +81,58 @@ export class TextParsingService {
         }
     }
 
-    private onClueToken(context: ParseContext, item: TokenGroup) {
-        const token = item.current as ClueToken;
+    private onClueToken(context: ParseContext) {
+        const token = context.tokenGroup.current as ClueToken;
 
         if (!context.hasContent) {
             context.addText(token.text);
             context.save();
         } else {
-            throw new TextParsingError(token.lineNumber, token.text, "Found startof new clue when old clue not finished (1)");
+
+            // TO DO: maybe 
+            //      1) previous clue is missing letter count
+            //      2) the current clue has a line-break that leaves a digit at teh start of the next line
+            //
+            // Look in the grid and try to find some supporting evidence for what is going on
+            // and then either :
+            //      1) auto-fix and alert he user
+            //      2) carry on with a missing letter count
+            //      3) give up and ask the user to fix it manually
+
+            throw new TextParsingError(token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
         }
     }
 
-    private onClueStartToken(context: ParseContext, item: TokenGroup) {
-        const token = item.current as ClueStartToken;
+    private onClueStartToken(context: ParseContext) {
+        const token = context.tokenGroup.current as ClueStartToken;
 
         if (!context.hasContent) {
             context.addText(token.text);
         } else {
-            throw new TextParsingError(token.lineNumber, token.text, "Found startof new clue when old clue not finished (2)");
+            
+            // TO DO: same situation as in onClueToken()
+
+            throw new TextParsingError(token.lineNumber, token.text, "Found start of new clue when old clue not finished (2)");
         }
     }
 
-    private onClueEndToken(context: ParseContext, item: TokenGroup) {
-        const token = item.current as ClueEndToken;
+    private onClueEndToken(context: ParseContext) {
+        const token = context.tokenGroup.current as ClueEndToken;
 
         if (context.hasContent) {
             context.addText(token.text);
             context.save();
 
         } else {
-            throw new TextParsingError(token.lineNumber, token.text, "Found enf of clue when no clue started");
+
+        // TO DO: ask the user to fix this manually
+
+            throw new TextParsingError(token.lineNumber, token.text, "Found end of clue when no clue started");
         }
     }
     
-    private onTextToken(context: ParseContext, item: TokenGroup) {
-        const token = item.current as TextToken;
+    private onTextToken(context: ParseContext) {
+        const token = context.tokenGroup.current as TextToken;
 
         if (context.hasContent) {
             context.addText(token.text);

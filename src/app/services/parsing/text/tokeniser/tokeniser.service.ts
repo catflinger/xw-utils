@@ -4,8 +4,6 @@ import { ParseToken, GroupMarkerToken, SyntaxErrorToken, ClueToken, ClueStartTok
 
 type TextParseDirection = "across" | "down" | null;
 
-export const TextParsingError = Symbol("TextParsingError");
-
 type TextParseState = 
 
     // currently reading and discarding lines of junk
@@ -26,6 +24,8 @@ interface ParseState {
     readonly direction: TextParseDirection,
 }
 
+export TokeniserError
+
 export class TokenGroup {
     constructor(
         public readonly previous: ParseToken,
@@ -41,7 +41,7 @@ export class TokenList {
         return this._tokens;
     }
 
-    *getIterator() {
+    *getIterator(): IterableIterator<TokenGroup> {
         const max = this._tokens.length - 1;
         const min = 0;
 
