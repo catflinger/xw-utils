@@ -1,5 +1,6 @@
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
+import { headersToString } from 'selenium-webdriver/http';
 
 type ParsingDirection = "across" | "down" | "ended" | null;
 
@@ -51,10 +52,19 @@ export class ParseContext implements IParseContext {
     public set error(error: TextParsingError) { this._error = error } 
 
     public save() {
+
+        // TO DO: fill in teh missing properties on teh clue: letterCount for example
+        //compileError - start again here, also need to update tests as they will fail because of new start and end tokens
+
         this._clues.push(new Clue({
             group: this.direction,
             entries: [],
-            chunks: [],
+            chunks: [
+                {
+                    text: this.buffer,
+                    isDefinition: false,
+                }
+            ],
             warnings: [],
             text: this._clueBuffer,
         }));

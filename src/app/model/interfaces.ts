@@ -12,7 +12,7 @@ export type GridNavigation = "left" | "right" | "up" | "down" | "absolute" | nul
 
 export type WritingDirection = "static" | "forward" | "backward";
 
-export class QuillDelta implements ReadonlyQuillDelta{ 
+export class QuillDelta implements ReadonlyQuillDelta { 
     ops: DeltaOperation[]
 }
 
