@@ -1,13 +1,19 @@
 import { Line } from '../line';
-import { ClueGroup } from 'src/app/model/interfaces';
 
 export const parseTokenTypes = {
-    ClueEndToken: Symbol("ClueEndToken"),
-    ClueStartToken: Symbol("ClueStartToken"),
-    ClueToken: Symbol("ClueToken"),
-    AcrossMarkerToken: Symbol("AcrossMarkerToken"),
-    DownMarkerToken: Symbol("DownMarkerToken"),
-    TextToken: Symbol("TextToken"),
+
+    StartMarker: Symbol("StartMarkerToken"),
+    AcrossMarker: Symbol("AcrossMarkerToken"),
+    DownMarker: Symbol("DownMarkerToken"),
+    EndMarker: Symbol("EndMarkerToken"),
+
+    ClueStart: Symbol("ClueStartToken"),
+    Clue: Symbol("ClueToken"),
+    ClueEnd: Symbol("ClueEndToken"),
+
+    Text: Symbol("TextToken"),
+
+    Null: Symbol("NullToken"),
 } 
 
 export abstract class ParseToken {
@@ -36,44 +42,54 @@ export abstract class ParseToken {
 
 export class AcrossMarkerToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.AcrossMarkerToken);
+        super(line, parseTokenTypes.AcrossMarker);
     }
 }
 
 export class DownMarkerToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.DownMarkerToken);
+        super(line, parseTokenTypes.DownMarker);
     }
 }
 
 export class ClueStartToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.ClueStartToken);
+        super(line, parseTokenTypes.ClueStart);
     }
 }
 
 export class ClueEndToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.ClueEndToken);
+        super(line, parseTokenTypes.ClueEnd);
     }
 }
 
 export class ClueToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.ClueToken);
+        super(line, parseTokenTypes.Clue);
     }
 }
 
 export class TextToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.TextToken);
+        super(line, parseTokenTypes.Text);
     }
 }
 
-// export class SyntaxErrorToken extends ParseToken {
-//     public readonly message: string;
-//     constructor(line, message: string) {
-//         super(line, parseTokenTypes.SyntaxErrorToken);
-//         this.message = message;
-//     }
-// }
+export class StartMarkerToken extends ParseToken {
+    constructor() {
+        super(new Line("[start-of-file]", NaN), parseTokenTypes.StartMarker);
+    }
+}
+
+export class EndMarkerToken extends ParseToken {
+    constructor() {
+        super(new Line("[end-of-file]", NaN), parseTokenTypes.EndMarker);
+    }
+}
+
+export class NullToken extends ParseToken {
+    constructor() {
+        super(new Line("", NaN), parseTokenTypes.Null);
+    }
+}

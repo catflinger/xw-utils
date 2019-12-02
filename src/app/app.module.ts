@@ -56,6 +56,7 @@ import { DiarySettingsEditorComponent } from './ui/components/diary-settings-edi
 import { SpecialPdfComponent } from './ui/pages/special-pdf/special-pdf.component';
 import { SpecialComponent } from './ui/pages/special/special.component';
 import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
+import { ParseResultComponent } from './ui/components/parse-result/parse-result.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -114,6 +115,7 @@ const quillGlobalConfig = {
         SpecialPdfComponent,
         SpecialComponent,
         SpecialTextComponent,
+        ParseResultComponent,
     ],
     imports: [
         BrowserModule,

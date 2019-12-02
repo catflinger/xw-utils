@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Line } from '../line';
-import { ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken } from './tokens';
-import { ParseData } from '../parse-data';
+import { ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken, StartMarkerToken, NullToken } from './tokens';
 
 export class TokenGroup {
     constructor(
@@ -22,19 +21,21 @@ export class TokenList {
         const max = this._tokens.length - 1;
         const min = 0;
 
-        let previous: ParseToken = null;
-        let current: ParseToken = null;
-        let next: ParseToken = null;
+        // set some defaults here so that if there are no lines to read the flow 
+        // of control will fall through and return a TokenGroup with current=EOF
+        let previous: ParseToken = new NullToken();
+        let current: ParseToken = new StartMarkerToken();
+        let next: ParseToken = new EndMarkerToken();
 
         for(let i = min; i <= max; i++) {
+            previous = (i - 1 >= min) ? this._tokens[i - 1] : new NullToken();
             current = this._tokens[i];
-            previous = (i - 1 >= min) ? this._tokens[i - 1] : null;
-            next = (i + 1 <= max) ? this._tokens[i + 1] : null;
+            next = (i + 1 <= max) ? this._tokens[i + 1] : new NullToken();
 
             yield(new TokenGroup(previous, current, next));
         }
 
-        return null as TokenGroup;
+        return new TokenGroup(current, next, new NullToken());
     }
 }
 
@@ -51,6 +52,8 @@ export class TokeniserService {
         // make an array of lines from the source data
         let lines: Line[] = [];
         data.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
+
+        tokens.push(new StartMarkerToken());
 
         lines.forEach(line => {
             switch (line.lineType) {
@@ -77,6 +80,9 @@ export class TokeniserService {
                     break;
             }
         });
+
+        tokens.push(new EndMarkerToken());
+
         return new TokenList(tokens);
     }
 }

@@ -8,6 +8,7 @@ export class TextParsingError {
         public readonly line: number,
         public readonly text: string,
         public readonly message: string,
+        public readonly hint?: string,
     ){}
 }
 

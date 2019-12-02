@@ -66,10 +66,14 @@ DOWN
     </div>
 </div>
 
-<div class="row">
+<div *ngIf="parseResult">
+    <app-parse-result [result]="parseResult"></app-parse-result>
+</div>
+
+<div class="row" *ngIf="!parseResult">
     <div class="col form-group">
         <label for="text" class="form-label">Enter text for the clues here</label>
-        <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
+        <textarea id="text" class="form-control" rows="24" formControlName="text" (keydown)="onKeyDown($event)"></textarea>
     </div>
 </div>
     

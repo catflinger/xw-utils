@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ParseData } from "./parse-data";
 import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
-import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken } from './tokeniser/tokens';
+import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { IParseContext, ParseContext, TextParsingError } from './text-parsing-context';
+
+const hints = {
+    missingLetterCount: "Does the previous clue have a missing or incomplete letter count?"
+}
 
 export interface TextParsingOptions {
     allowPreamble?: boolean,
@@ -16,14 +20,14 @@ export class TextParsingService {
 
     constructor(private tokeniser: TokeniserService) {}
 
-    public *parser(data: ParseData, options: TextParsingOptions): IterableIterator<IParseContext> {
+    public *parser(data: ParseData, options: TextParsingOptions) {
 
         const _options: TextParsingOptions = {
             allowPreamble: options && options.allowPreamble,
             allowPostamble: options && options.allowPostamble,
         }
 
-        let context: ParseContext = new ParseContext();
+        let context = new ParseContext();
         let tokens: TokenList = this.tokeniser.parse(data.rawData);
 
         let tokeniser = tokens.getIterator();
@@ -32,36 +36,50 @@ export class TextParsingService {
         while(!item.done) {
             context.setGroup(item.value);
 
-            switch (context.tokenGroup.current.type) {
-                case parseTokenTypes.AcrossMarkerToken:
-                    this.onAcrossMarker(context, _options);
-                    break;
-                case parseTokenTypes.DownMarkerToken:
-                    this.onDownMarker(context, _options);
-                    break;
-                case parseTokenTypes.ClueToken:
-                    this.onClueToken(context, _options);
-                    break;
-                case parseTokenTypes.ClueStartToken:
-                    this.onClueStartToken(context, _options);
-                    break;
-                case parseTokenTypes.TextToken:
-                    this.onTextToken(context, _options);
-                    break;
-                case parseTokenTypes.ClueEndToken:
-                    this.onClueEndToken(context, _options);
-                    break;
-                default:
-            }
+            try {
+                switch (context.tokenGroup.current.type) {
+                    case parseTokenTypes.StartMarker:
+                        //ignore this
+                        break;
+                    case parseTokenTypes.AcrossMarker:
+                        this.onAcrossMarker(context, _options);
+                        break;
+                    case parseTokenTypes.DownMarker:
+                        this.onDownMarker(context, _options);
+                        break;
+                    case parseTokenTypes.EndMarker:
+                        this.onEndMarker(context, _options);
+                        break;
+                    case parseTokenTypes.Clue:
+                        this.onClueToken(context, _options);
+                        break;
+                    case parseTokenTypes.ClueStart:
+                        this.onClueStartToken(context, _options);
+                        break;
+                    case parseTokenTypes.Text:
+                        this.onTextToken(context, _options);
+                        break;
+                    case parseTokenTypes.ClueEnd:
+                        this.onClueEndToken(context, _options);
+                        break;
+                    default:
+                }
 
-            yield context;
-            item = tokeniser.next();
-            context.setGroup(item.value);
+                yield context as IParseContext;
+                item = tokeniser.next();
+                context.setGroup(item.value);
+
+            } catch(error) {
+                context.done = true;
+                context.error = error;
+                return context;
+            }
         }
 
         context.done = true;
         context.setGroup(null);
-        return context;
+
+        return context as IParseContext;
     }
 
     private onAcrossMarker(context: ParseContext, options: TextParsingOptions) {
@@ -91,7 +109,11 @@ export class TextParsingService {
 
         switch (context.direction) {
             case "across":
-                context.direction = "down";
+                if (context.buffer === null) {
+                    context.direction = "down";
+                } else {
+                    throw new TextParsingError(token.lineNumber, token.text, "Found DOWN marker when expecting end of a clue", hints.missingLetterCount);
+                }
                 break;
 
             case null:
@@ -106,6 +128,27 @@ export class TextParsingService {
             case "ended":
                 if (!options.allowPostamble) {
                     throw new TextParsingError(token.lineNumber, token.text, "Found ACROSS marker in the down clues");
+                }
+                break;
+        }
+    }
+
+    private onEndMarker(context: ParseContext, options: TextParsingOptions) {
+        const token = context.tokenGroup.current as EndMarkerToken;
+
+        switch (context.direction) {
+            case null:
+                throw new TextParsingError(token.lineNumber, token.text, "reached end of file and no clues found");
+                break;
+
+            case "across":
+                case null:
+                    throw new TextParsingError(token.lineNumber, token.text, "reached end of file and no down clues found");
+                    break;
+    
+            case "down":
+                if (context.buffer !== null) {
+                    throw new TextParsingError(token.lineNumber, token.text, "reached the end of the file with an unfinished clue.", hints.missingLetterCount);
                 }
                 break;
         }
@@ -217,7 +260,7 @@ export class TextParsingService {
         switch (context.direction) {
             case null:
                 if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found start of clue before ACROSS or DOWN marker");
+                    throw new TextParsingError(token.lineNumber, token.text, "Found some text before the ACROSS or DOWN markers.");
                 }
                 break;
 
@@ -225,7 +268,7 @@ export class TextParsingService {
                 if (context.hasContent) {
                     context.addText(token.text);
                 } else {
-                    throw new TextParsingError(token.lineNumber, token.text, "Expected the start of a new clue");
+                    throw new TextParsingError(token.lineNumber, token.text, "Expected the start of a new clue but found unrecognised text.");
                 }
                 break;
 
@@ -240,7 +283,6 @@ export class TextParsingService {
                     }
                 }
                 break;
-                
         }
     }
 }

@@ -1,0 +1,35 @@
+<ngb-alert type="warning" *ngIf="result && result.error">
+    <h5 *ngIf="result.tokenGroup.current.lineNumber">Failed to parse the text at line {{result.tokenGroup.current.lineNumber + 1}}</h5>
+    <h5 *ngIf="!result.tokenGroup.current.lineNumber">Failed to parse the text</h5>
+    
+    <div class="mt-3">{{result.error.message}}</div>
+    <div class="mt-3" *ngIf="result.error.hint">{{result.error.hint}}</div>
+
+    <table class="table table-sm mt-5">
+        <thead>
+            <tr>
+                <th>Line number</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{result.tokenGroup.previous.lineNumber + 1 | number}}</td>
+                <td>{{result.tokenGroup.previous.text}}</td>
+            </tr>
+            <tr>
+                <td>{{result.tokenGroup.current.lineNumber + 1 | number}}</td>
+                <td class="text-danger">{{result.tokenGroup.current.text}}</td>
+            </tr>
+            <tr>
+                <td>{{result.tokenGroup.next.lineNumber + 1 | number}}</td>
+                <td>{{result.tokenGroup.next.text}}</td>
+            </tr>
+        </tbody>
+    </table>
+</ngb-alert>
+    
+<!-- <div>
+    <h5>clues parsed</h5>
+    <div *ngFor="let clue of result.clues">{{clue.text}}</div>
+</div> -->
