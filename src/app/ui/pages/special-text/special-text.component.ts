@@ -56,6 +56,10 @@ export class SpecialTextComponent implements OnInit {
         this.router.navigate(["/home"]);
     }
 
+    public onAmend() {
+        this.parseResult = null;
+    }
+
     public onKeyDown(event: KeyboardEvent) {
         // to stop errors from LastPass and other add-ons that attach listeners 
         // to this control

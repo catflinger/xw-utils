@@ -54,7 +54,7 @@ export class ParseContext implements IParseContext {
     public save() {
 
         // TO DO: fill in teh missing properties on teh clue: letterCount for example
-        //compileError - start again here, also need to update tests as they will fail because of new start and end tokens
+        //compileError - start again here
 
         this._clues.push(new Clue({
             group: this.direction,
