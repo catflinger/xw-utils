@@ -7,9 +7,14 @@
     
 <div class="row">
     <div class="col">
-        <ul>
-            <li><a [routerLink]="['/special-pdf']">Open from PDF file</a></li>
-            <li><a [routerLink]="['/special-text']">Enter clues manually</a></li>
-        </ul>
+
+        <div>Load a PDF file form your computer</div>
+        <button class="btn btn-primary mt-3" (click)="onPdf()">Open PDF</button>
+
+        <div class="mt-5">Create a grid and enter the clues</div>
+        <button class="btn btn-primary mt-3" (click)="onGridText()">Grid and clues</button>
+
+        <div class="mt-5">Enter the clues manually</div>
+        <button class="btn btn-primary mt-3" (click)="onText()">Clues only</button>
     </div>
 </div>

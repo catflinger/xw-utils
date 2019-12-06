@@ -9,6 +9,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'app-solver',
@@ -21,6 +22,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private appService: AppService,
         private activePuzzle: IActivePuzzle, 
         private modalService: NgbModal,
         private router: Router) { }
@@ -28,14 +30,14 @@ export class SolverComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (puzzle) {
                             if (!puzzle.info.solveable) {
-                                this.router.navigate(["home"]);
+                                this.appService.goHome();
                             }
                              this.puzzle = puzzle;
                         }
@@ -69,16 +71,18 @@ export class SolverComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new Clear());
+        this.appService.navContext.track = "publish";
         this.router.navigate(["/publish-options"]);
     }
 
     onClose() {
         this.activePuzzle.update(new Clear());
-        this.router.navigate(["/home"]);
+        this.appService.goHome();
     }
 
     onBlogger() {
         this.activePuzzle.update(new Clear());
+        this.appService.navContext.editor = "blogger";
         this.router.navigate(["/blogger"]);
     }
 

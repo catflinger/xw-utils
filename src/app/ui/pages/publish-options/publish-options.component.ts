@@ -33,7 +33,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
 
             this.subs.push(
@@ -60,7 +60,8 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     onBack() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.router.navigate(["/", this.appService.editor]);
+        this.appService.navContext.track = "blog";
+        this.router.navigate(["/", this.appService.navContext.editor]);
     }
 
     onGrid() {

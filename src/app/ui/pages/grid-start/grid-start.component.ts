@@ -6,6 +6,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid-properties-editor.component';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'app-grid-start',
@@ -15,6 +16,7 @@ import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid
 export class GridStartComponent implements OnInit {
 
     constructor(
+        private appService: AppService,
         private puzzleService: IPuzzleManager,
         private router: Router,
     ) { }
@@ -27,7 +29,7 @@ export class GridStartComponent implements OnInit {
             this.puzzleService.addPuzzle(this.createGrid(result));
             this.router.navigate(["/grid-editor"]);
         } else {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         }
     }
 

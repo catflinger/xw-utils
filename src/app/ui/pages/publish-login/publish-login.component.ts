@@ -26,7 +26,7 @@ export class PublishLoginComponent implements OnInit {
 
     ngOnInit() {
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
             this.settings = this.settingsService.settings;
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));

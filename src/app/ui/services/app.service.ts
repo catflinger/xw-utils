@@ -5,6 +5,26 @@ import { Router } from '@angular/router';
 import { Alert, AlertType } from '../common';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 
+export type NavTrack = "blog" | "publish" | "create" | null;
+
+export class NavContext {
+    public track: NavTrack;
+    public editor: EditorType;
+    public useGrid: boolean;
+    public returnAddress: string;
+
+    constructor() {
+        this.clear();
+    }
+
+    public clear() {
+        this.track = null;
+        this.editor = "blogger";
+        this.useGrid = false;
+        this.returnAddress = null;
+    }
+}
+
 export type LoginCallback = () => void;
 
 export type EditorType = "blogger" | "solver";
@@ -31,19 +51,46 @@ export interface OpenPuzzleParamters {
     setter?: string,
 }
 
+class ActivityMonitor {
+    public busy: boolean = false;
+    public late: boolean = false;
+    public busyCounter: number = 0;
+
+    public clear() {
+        this.busy = false;
+        this.late = false;
+        this.busyCounter = 0;
+    }
+
+    public setBusy() {
+        this.busy = true;
+        this.late = false;
+        this.busyCounter = 0;
+    }
+
+    public onTick(): boolean {
+        let emitEvent = false;
+
+        if (this.busy) {
+            this.busyCounter++;
+            if (this.busyCounter === 2) {
+                this.late = true;
+                emitEvent = true;
+            }
+        }
+        return emitEvent;
+    }
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class AppService implements OnDestroy {
-    private busy: boolean = false;
-    private late: boolean = false;
-    private busyCounter: number = 0;
-
+    private _activityMonitor: ActivityMonitor = new ActivityMonitor();
     private alerts: Alert[] = [];
-    private _editor: EditorType = "blogger";
+    private _navContext: NavContext = new NavContext();
     private _onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
-    private returnAddress: string;
     private _openPuzzleParameters: OpenPuzzleParamters;
 
     private bs: BehaviorSubject<AppStatus>;
@@ -60,15 +107,10 @@ export class AppService implements OnDestroy {
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
         this.subs.push(timer(100, 100).subscribe((t) => {
-            if (this.busy) {
-                this.busyCounter++;
-                if (this.busyCounter === 2) {
-                    this.late = true;
-                    this.emitNext();
-                }
+            if (this._activityMonitor.onTick()) {
+                this.emitNext();
             }
         }));
-
     }
 
     public ngOnDestroy() {
@@ -87,8 +129,8 @@ export class AppService implements OnDestroy {
         return this._onLogin;
     }
 
-    public get editor(): EditorType {
-        return this._editor;
+    public get navContext(): NavContext {
+        return this._navContext;
     }
 
     public clear() {
@@ -114,16 +156,12 @@ export class AppService implements OnDestroy {
     }
 
     public setBusy() {
-        this.busy = true;
-        this.late = false;
-        this.busyCounter = 0;
+        this._activityMonitor.setBusy();
         this.emitNext();
     }
 
     public clearBusy() {
-        this.busy = false;
-        this.late = false;
-        this.busyCounter = 0;
+        this._activityMonitor.clear();
         this.emitNext();
     }
 
@@ -137,24 +175,24 @@ export class AppService implements OnDestroy {
         this.emitNext();
     }
 
-    public setEditor(editor: EditorType) {
-        this._editor = editor;
-    }
-
-    public setReturnAddress(route: string) {
-        this.returnAddress = route;
-    }
-
     public returnToSender() {
-        const address = this.returnAddress || "/home";
+        const address = this.navContext.returnAddress || "/home";
 
-        this.returnAddress = null;
+        this.navContext.returnAddress = null;
         this.router.navigate([address]);
+    }
+
+    public goHome() {
+        this._openPuzzleParameters = null;
+        this._onLogin = null;
+        this.clear();
+        this.navContext.clear();
+        this.router.navigate(["/home"]);
     }
 
     private emitNext() {
         let alerts = JSON.parse(JSON.stringify(this.alerts));
-        this.bs.next(new AppStatus(this.busy, this.late, alerts));
+        this.bs.next(new AppStatus(this._activityMonitor.busy, this._activityMonitor.late, alerts));
     }
 
 }

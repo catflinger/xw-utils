@@ -40,7 +40,7 @@ export class PublishPreambleComponent implements OnInit {
         this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
 
 

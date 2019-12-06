@@ -57,6 +57,7 @@ import { SpecialPdfComponent } from './ui/pages/special-pdf/special-pdf.componen
 import { SpecialComponent } from './ui/pages/special/special.component';
 import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
 import { ParseResultComponent } from './ui/components/parse-result/parse-result.component';
+import { ParseErrorHintComponent } from './ui/components/parse-error-hint/parse-error-hint.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -116,6 +117,7 @@ const quillGlobalConfig = {
         SpecialComponent,
         SpecialTextComponent,
         ParseResultComponent,
+        ParseErrorHintComponent,
     ],
     imports: [
         BrowserModule,

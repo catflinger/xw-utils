@@ -32,7 +32,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         let params = this.appService.openPuzzleParameters;
 
         if (!params) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         }
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
@@ -45,7 +45,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
 
     public onLoginClose(result: UIResult) {
         if (result !== "ok") {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         }
     }
 
@@ -60,7 +60,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
             let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-            this.appService.setEditor(editor);
+            this.appService.navContext.editor = editor;
             this.router.navigate([editor]);
         })
         .catch((error) => {

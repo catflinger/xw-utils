@@ -62,13 +62,13 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (!puzzle.info.gridable) {
-                            this.router.navigate(["home"]);
+                            this.appService.goHome();
                         }
                         this.form.patchValue({title: puzzle.info.title});
                         this.symmetrical = puzzle.grid.properties.symmetrical;
@@ -126,7 +126,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onClose() {
         this.appService.clear();
         this.activePuzzle.update(new Clear());
-        this.router.navigate(["/home"]);
+        this.appService.goHome();
     }
 
     public onSubmit() {

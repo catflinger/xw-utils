@@ -4,8 +4,6 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
-import { ArchiveItem } from 'src/app/model/archive-item';
-import { PuzzleProvider } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-root',
@@ -16,6 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public credentials: Credentials;
     public isNavbarCollapsed: boolean;
+    public currentTrack: string = null;
 
     private subs: Subscription[] = [];
 
@@ -48,6 +47,13 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.currentRoute = this.router.url;
             }
         }));
+
+        // for development and debug
+        this.subs.push(this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                this.currentTrack = this.appService.navContext.track;
+            }
+        }));
     }
 
     public ngOnDestroy() {
@@ -55,8 +61,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public onArchive(provider: string) {
-        this.appService.clear();
         this.activePuzzle.clear();
+        this.appService.clear();
+        this.appService.navContext.clear();
         
         if (provider === "independent" || provider === "ios") {
             this.router.navigate(["indy"]);
@@ -71,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public onHome() {
         this.appService.clear();
-        this.router.navigate(["home"])
+        this.appService.goHome();
     }
 
     public onLogin() {
@@ -86,7 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public onSettings() {
-        this.appService.setReturnAddress(this.currentRoute);
+        this.appService.navContext.returnAddress = this.currentRoute;
         this.router.navigate(["/settings"]);
     }
 }

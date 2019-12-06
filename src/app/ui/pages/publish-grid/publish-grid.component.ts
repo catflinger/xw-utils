@@ -33,7 +33,7 @@ export class PublishGridComponent implements OnInit {
         this.color = "#ffebcd";
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(

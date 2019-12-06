@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PublicationService } from 'src/app/services/publication.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'app-publish-complete',
@@ -17,13 +18,13 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private router: Router,
-        private activePuzzle: IActivePuzzle,
-        private publiationService: PublicationService) { }
+        private appService: AppService,
+        private activePuzzle: IActivePuzzle
+    ) { }
 
     ngOnInit() {
         if (!this.activePuzzle.hasPuzzle) {
-            this.router.navigate(["/home"]);
+            this.appService.goHome();
         }
     }
     
@@ -32,7 +33,7 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.router.navigate(["/home"]);
+        this.appService.goHome();
     }
 
 }

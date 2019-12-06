@@ -4,10 +4,6 @@ import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
 import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { IParseContext, ParseContext, TextParsingError } from './text-parsing-context';
 
-const hints = {
-    missingLetterCount: "Does the previous clue have a missing or incomplete letter count?"
-}
-
 export interface TextParsingOptions {
     allowPreamble?: boolean,
     allowPostamble?: boolean,
@@ -70,13 +66,13 @@ export class TextParsingService {
                 context.setGroup(item.value);
 
             } catch(error) {
-                context.done = true;
+                //context.state = true;
                 context.error = error;
                 return context;
             }
         }
 
-        context.done = true;
+        //context.state = true;
         context.setGroup(null);
 
         return context as IParseContext;
@@ -85,20 +81,22 @@ export class TextParsingService {
     private onAcrossMarker(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as AcrossMarkerToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
-                context.direction = "across";
+                context.state = "across";
                 break;
 
             case "across":
-                throw new TextParsingError(token.lineNumber, token.text, "Found unexpected ACROSS marker");
+                throw new TextParsingError("acrossMarker_across", token.lineNumber, token.text, "Found unexpected ACROSS marker");
 
             case "down":
-                throw new TextParsingError(token.lineNumber, token.text, "Found ACROSS marker in the down clues");
+                throw new TextParsingError("acrossMarker_down", token.lineNumber, token.text, "Found ACROSS marker in the down clues");
 
             case "ended":
-                if (!options.allowPostamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found ACROSS marker in the down clues");
+                if (options.allowPostamble) {
+                    // this is OK, it will happen when the solutions from last weeks puzzle appear at the end of a PDF
+                } else {
+                    throw new TextParsingError("acrossMarker_ended", token.lineNumber, token.text, "Found ACROSS marker after the end of the puzzle");
                 }
                 break;
         }
@@ -107,27 +105,29 @@ export class TextParsingService {
     private onDownMarker(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as DownMarkerToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case "across":
                 if (context.buffer === null) {
-                    context.direction = "down";
+                    context.state = "down";
                 } else {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found DOWN marker when expecting end of a clue", hints.missingLetterCount);
+                    throw new TextParsingError("downMarker_across", token.lineNumber, token.text, "Found DOWN marker when expecting end of a clue");
                 }
                 break;
 
             case null:
-                if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found unexpected DOWN marker");
-                }
+                // even in preamble mode this is probably an error.  Answers to last weeks clues normally appear at the end of a puzzle
+                throw new TextParsingError("downMarker_null", token.lineNumber, token.text, "Found unexpected DOWN marker");
                 break;
 
             case "down":
-                throw new TextParsingError(token.lineNumber, token.text, "Found DOWN marker in the down clues");
+                // even in preamble mode this is probably an error.  Answers to last weeks clues don't normally start with a down marker
+                throw new TextParsingError("downMarker_down", token.lineNumber, token.text, "Found DOWN marker in the down clues");
 
             case "ended":
-                if (!options.allowPostamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found ACROSS marker in the down clues");
+                if (options.allowPostamble) {
+                    // this is probably OK, down markers can appear in solutions to last week's puzzle
+                } else {
+                    throw new TextParsingError("downMarker_ended", token.lineNumber, token.text, "Found DOWN marker after the end of the puzzle");
                 }
                 break;
         }
@@ -136,19 +136,21 @@ export class TextParsingService {
     private onEndMarker(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as EndMarkerToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
-                throw new TextParsingError(token.lineNumber, token.text, "reached end of file and no clues found");
+                throw new TextParsingError("endMarker_null", token.lineNumber, token.text, "reached end of file and no clues found");
                 break;
 
             case "across":
                 case null:
-                    throw new TextParsingError(token.lineNumber, token.text, "reached end of file and no down clues found");
+                    throw new TextParsingError("endMarker_across", token.lineNumber, token.text, "reached end of file and no down clues found");
                     break;
     
             case "down":
-                if (context.buffer !== null) {
-                    throw new TextParsingError(token.lineNumber, token.text, "reached the end of the file with an unfinished clue.", hints.missingLetterCount);
+                if (context.buffer === null) {
+                    // this is good news, the input ends following a completed down clue
+                } else {
+                    throw new TextParsingError("endMarker_down", token.lineNumber, token.text, "reached the end of the file with an unfinished clue.");
                 }
                 break;
         }
@@ -157,17 +159,15 @@ export class TextParsingService {
     private onClueToken(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as ClueToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
-                if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found start of clue before ACROSS or DOWN marker");
-                }
+                // even in preamble mode this is probably an error, we don't expect to see a well formatted clue before the first across marker
+                throw new TextParsingError("clue_null", token.lineNumber, token.text, "Found start of clue before ACROSS or DOWN marker");
                 break;
 
             case "ended":
-                if (!options.allowPostamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found clue after and of down clues");
-                }
+                // we don't expect to se whole clues cropping up in the solutions
+                throw new TextParsingError("clue_ended", token.lineNumber, token.text, "Found clue after and of down clues");
                 break;
 
             case "across":
@@ -176,18 +176,7 @@ export class TextParsingService {
                     context.addText(token.text);
                     context.save();
                 } else {
-
-                    // TO DO: maybe 
-                    //      1) previous clue is missing letter count
-                    //      2) the current clue has a line-break that leaves a digit at teh start of the next line
-                    //
-                    // Look in the grid and try to find some supporting evidence for what is going on
-                    // and then either :
-                    //      1) auto-fix and alert he user
-                    //      2) carry on with a missing letter count
-                    //      3) give up and ask the user to fix it manually
-
-                    throw new TextParsingError(token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
+                    throw new TextParsingError("clue_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
                 }
                 break;
             }
@@ -196,10 +185,10 @@ export class TextParsingService {
     private onClueStartToken(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as ClueStartToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
                 if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found start of clue before ACROSS or DOWN marker");
+                    throw new TextParsingError("clueStart_null", token.lineNumber, token.text, "Found start of clue before ACROSS or DOWN marker");
                 }
                 break;
 
@@ -211,25 +200,29 @@ export class TextParsingService {
                     
                     // TO DO: same situation as in onClueToken()
 
-                    throw new TextParsingError(token.lineNumber, token.text, "Found start of new clue when old clue not finished (2)");
+                    throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (2)");
                 }
                 break;
 
             case "ended": 
-                if (!options.allowPostamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found clue start after end of down clues");
-                }
-                break;
+            if (options.allowPostamble) {
+                // This situation is ambiguous.  Probably indicates something htat caused the down clues to end early
+                // but we can't be sure at this stage
+                context.addWarning(context.tokenGroup.current.lineNumber, "Found another clue after the end of the puzzle.");
+            } else {
+                throw new TextParsingError("clueStart_ended", token.lineNumber, token.text, "Found clue start after end of down clues");
+            }
+            break;
         }
     }
 
     private onClueEndToken(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as ClueEndToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
                 if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found end of clue before ACROSS or DOWN marker");
+                    throw new TextParsingError("clueEnd_null", token.lineNumber, token.text, "Found end of clue before ACROSS or DOWN marker");
                 }
                 break;
 
@@ -242,13 +235,17 @@ export class TextParsingService {
 
                 // TO DO: ask the user to fix this manually
 
-                    throw new TextParsingError(token.lineNumber, token.text, "Found end of clue when no clue started");
+                    throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found end of clue when no clue started");
                 }
                 break;
 
             case "ended":
-                if (!options.allowPostamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found clue end after end of down clues");
+                if (options.allowPostamble) {
+                    // This situation is ambiguous.  Probably indicates something htat caused the down clues to end early
+                    // but we can't be sure at this stage
+                    context.addWarning(context.tokenGroup.current.lineNumber, "Found a clue after the end of the puzzle.");
+                } else {
+                        throw new TextParsingError("clueEnd_ended", token.lineNumber, token.text, "Found clue end after end of down clues");
                 }
                 break;
         }
@@ -257,10 +254,10 @@ export class TextParsingService {
     private onTextToken(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as TextToken;
 
-        switch (context.direction) {
+        switch (context.state) {
             case null:
                 if (!options.allowPreamble) {
-                    throw new TextParsingError(token.lineNumber, token.text, "Found some text before the ACROSS or DOWN markers.");
+                    throw new TextParsingError("text_null", token.lineNumber, token.text, "Found some text before the ACROSS or DOWN markers.");
                 }
                 break;
 
@@ -268,7 +265,7 @@ export class TextParsingService {
                 if (context.hasContent) {
                     context.addText(token.text);
                 } else {
-                    throw new TextParsingError(token.lineNumber, token.text, "Expected the start of a new clue but found unrecognised text.");
+                    throw new TextParsingError("text_across", token.lineNumber, token.text, "Expected the start of a new clue but found unrecognised text.");
                 }
                 break;
 
@@ -277,9 +274,11 @@ export class TextParsingService {
                     context.addText(token.text);
                 } else {
                     if (options.allowPostamble) {
-                        context.direction = "ended";
+                        // in postamble mode the down clues are over when a completed down clue is followed by
+                        // something not recognisable as part of another clue
+                        context.state = "ended";
                     } else {
-                        throw new TextParsingError(token.lineNumber, token.text, "Expected the start of a new clue");
+                        throw new TextParsingError("text_down", token.lineNumber, token.text, "Expected the start of a new clue");
                     }
                 }
                 break;

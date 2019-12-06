@@ -53,7 +53,7 @@ export class SpecialTextComponent implements OnInit {
     }
 
     public onCancel() {
-        this.router.navigate(["/home"]);
+        this.appService.goHome();
     }
 
     public onAmend() {

@@ -1,0 +1,104 @@
+<div *ngIf="code === 'endMarker_down'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'acrossMarker_across'">
+    <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'acrossMarker_down'">
+    <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'acrossMarker_ended'">
+    <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'downMarker_null'">
+    <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
+</div>
+<div *ngIf="code === 'downMarker_across'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'downMarker_down'">
+    <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
+</div>
+<div *ngIf="code === 'downMarker_ended'">
+    <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
+</div>
+<div *ngIf="code === 'endMarker_null'">
+    Could not find any clues in the puzzle!
+</div>
+<div *ngIf="code === 'endMarker_across'">
+    Could not find an "across" heading at the start of the clues.
+</div>
+<div *ngIf="code === 'endMarker_down'">
+    Could not find an "down" heading in the puzzle.
+</div>
+<div *ngIf="code === 'clue_null'">
+    <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'clue_acrossdown'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'clue_ended'">
+    <ng-container *ngTemplateOutlet="contentAfterEnd"></ng-container>
+</div>
+<div *ngIf="code === 'clueStart_null'">
+    <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'clueStart_ended'">
+    <ng-container *ngTemplateOutlet="contentAfterEnd"></ng-container>
+</div>
+<div *ngIf="code === 'clueStart_acrossdown'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'clueEnd_acrossdown'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'clueEnd_null'">
+    <!-- is this really an error ? -->
+</div>
+<div *ngIf="code === 'clueEnd_ended'">
+</div>
+<div *ngIf="code === 'text_null'">
+    <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
+</div>
+<div *ngIf="code === 'text_across'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+<div *ngIf="code === 'text_down'">
+    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+</div>
+
+
+<ng-template #unfinishedClue>
+    There seems to be a clue that is not finished.
+    This is often caused by problems with the letter-count of the previous clue.
+    Look out for:
+    <ul>
+        <li>A missing letter count</li>
+        <li>An incomplete letter count, eg (2,3</li>
+        <li>An unusual or miss-spelled letter count, eg (2 wrds)</li>
+    </ul>
+    Sometimes this is caused by a line-break in a clue that results in the first character of the new line being a
+    number.
+    This makes the line appear to be the start of a new clue.
+    Fix this by removing the line break and having the whole clue on one line.
+
+</ng-template>
+
+<ng-template #contentBeforeAcrossMarker>
+    Found some content before the "Across" heading. Look out for a missing or mis-spelled heading.
+</ng-template>
+
+<ng-template #invalidAcrossMarker>
+    There appears to be a misplaced or duplicated across heading.
+    Look out for more than one line containing the text "Across" (upper or lower case).
+</ng-template>
+
+<ng-template #invalidDownMarker>
+    There appears to be a misplaced or duplicated down heading.
+    Look out for more than one line containing the text "Down" (upper or lower case).
+</ng-template>
+
+<ng-template #contentAfterEnd>
+    There appears to be a misplaced or duplicated down heading.
+    Look out for more than one line containing the text "Down" (upper or lower case).
+</ng-template>

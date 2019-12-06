@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                     this.router.navigate(["/grid-editor"]);
                 } else {
                     let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                    this.appService.setEditor(editor);
+                    this.appService.navContext.editor = editor;
                     this.router.navigate(["/" + editor]);
                 }
             }

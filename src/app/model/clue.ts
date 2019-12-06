@@ -22,7 +22,6 @@ export class Clue implements IClue {
 
     constructor(data: any) {
         this.id = data.id;
-        this.group = data.group;
         this.caption = data.caption;
         this.text = data.text;
         this.letterCount = data.letterCount;
@@ -32,6 +31,12 @@ export class Clue implements IClue {
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;
+
+        if (typeof data.group === "string" && (data.group === "across" || data.group === "down")) {
+            this.group = data.group;
+        } else {
+            throw "unrecognised clue group when reading clue data";
+        }
 
         if (typeof data.redirect === "boolean") {
             this.redirect = data.redirect;
