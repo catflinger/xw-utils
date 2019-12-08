@@ -36,21 +36,21 @@
                         <li class="nav-item dropdown" ngbDropdown>
                             <button class="btn btn-link nav-link dropdown-toggle" id="id02" ngbDropdownToggle>Tools</button>
                             <div class="dropdown-menu" aria-labelledby="id02" ngbDropdownMenu>
-                                <a [routerLink]="['/grid-start']"><button class="dropdown-item btn btn-link">Grid editor</button></a>
-                                <a [routerLink]="['/diary']"><button class="dropdown-item btn btn-link">Diary</button></a>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('grid-start')">Grid editor</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('diary')">Diary</button>
                             </div>
                         </li>
 
                         <li class="nav-item">
-                            <button type="button" class="nav-link btn btn-link" (click)="onSettings()">Settings</button>
+                            <button type="button" class="nav-link btn btn-link" (click)="onGoTo('settings')">Settings</button>
                         </li>
 
                         <li class="nav-item">
-                                <a class="nav-link" [routerLink]="['/readme']">Readme</a>
-                            </li>
-    
-                            <li class="nav-item" *ngIf="!credentials.authenticated">
-                            <button type="button" class="nav-link btn btn-link" (click)="onLogin()">Login</button>
+                            <button type="button" class="nav-link btn btn-link" (click)="onGoTo('readme')">Readme</button>
+                        </li>
+
+                        <li class="nav-item" *ngIf="!credentials.authenticated">
+                            <button type="button" class="nav-link btn btn-link" (click)="onGoTo('login')">Login</button>
                         </li>
 
                         <li class="nav-item" *ngIf="credentials.authenticated">

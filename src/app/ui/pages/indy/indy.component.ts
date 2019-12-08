@@ -7,6 +7,8 @@ import moment from "moment";
 import { ArchiveItem } from 'src/app/model/archive-item';
 import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
+import { NavService } from '../../navigation/nav.service';
+import { PublishingTrackData } from '../../navigation/tracks/publish-track';
 
 const Sunday = 0;
 
@@ -24,8 +26,8 @@ const Sunday = 0;
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
-        private router: Router,
         private formBuilder: FormBuilder,
     ) {
         this.provider = moment().day() === Sunday ? "ios" : "independent";
@@ -60,7 +62,7 @@ const Sunday = 0;
     private openPuzzle(provider: PuzzleProvider, date: Date) {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider, date});
-        this.router.navigate(["open-puzzle"])
+        this.navService.beginTrack("publish", new PublishingTrackData(null));
     }
 }
 

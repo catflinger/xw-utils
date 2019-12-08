@@ -1,7 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorComponent } from '../../components/clue-editor/clue-editor.component';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
@@ -9,7 +8,8 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
-import { AppService } from '../../services/app.service';
+import { NavService } from '../../navigation/nav.service';
+import { PublishingTrackData } from '../../navigation/tracks/publish-track';
 
 @Component({
     selector: 'app-solver',
@@ -22,22 +22,22 @@ export class SolverComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private appService: AppService,
+        private navService: NavService,
         private activePuzzle: IActivePuzzle, 
         private modalService: NgbModal,
-        private router: Router) { }
+    ) { }
 
     ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (puzzle) {
                             if (!puzzle.info.solveable) {
-                                this.appService.goHome();
+                                this.navService.goHome();
                             }
                              this.puzzle = puzzle;
                         }
@@ -71,19 +71,18 @@ export class SolverComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new Clear());
-        this.appService.navContext.track = "publish";
-        this.router.navigate(["/publish-options"]);
+        this.navService.goNext("continue");
     }
 
     onClose() {
         this.activePuzzle.update(new Clear());
-        this.appService.goHome();
+        this.navService.goHome();
     }
 
     onBlogger() {
-        this.activePuzzle.update(new Clear());
-        this.appService.navContext.editor = "blogger";
-        this.router.navigate(["/blogger"]);
+        let appData: PublishingTrackData = this.navService.navContext.appData;
+        appData.editor = "blogger";
+        this.navService.goNext("blogger");
     }
 
     onClueClick(clue: Clue) {

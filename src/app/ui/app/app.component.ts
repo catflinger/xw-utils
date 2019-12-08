@@ -4,6 +4,7 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
+import { NavService } from '../navigation/nav.service';
 
 @Component({
     selector: 'app-root',
@@ -19,9 +20,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     // TO DO: think about making this a stack so that returns can be be nested
-    private currentRoute: string;
+    //private currentRoute: string;
 
     constructor(
+        private navService: NavService,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
@@ -42,16 +44,16 @@ export class AppComponent implements OnInit, OnDestroy {
             this.credentials = credentials;
         }));
 
-        this.subs.push(this.router.events.subscribe((x: Event) => {
-            if (x instanceof NavigationEnd) {
-                this.currentRoute = this.router.url;
-            }
-        }));
+        // this.subs.push(this.router.events.subscribe((x: Event) => {
+        //     if (x instanceof NavigationEnd) {
+        //         this.currentRoute = this.router.url;
+        //     }
+        // }));
 
         // for development and debug
         this.subs.push(this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-                this.currentTrack = this.appService.navContext.track;
+                //this.currentTrack = this.appService.navContext.track;
             }
         }));
     }
@@ -63,38 +65,32 @@ export class AppComponent implements OnInit, OnDestroy {
     public onArchive(provider: string) {
         this.activePuzzle.clear();
         this.appService.clear();
-        this.appService.navContext.clear();
+        //this.appService.navContext.clear();
         
         if (provider === "independent" || provider === "ios") {
-            this.router.navigate(["indy"]);
+            this.navService.gotoRoute(["indy"]);
         
         } else if (provider === "special" ) {
-            this.router.navigate(["special"]);
+            this.navService.gotoRoute(["special"]);
         
         } else {
-            this.router.navigate(["archive", provider]);
+            this.navService.gotoRoute(["archive", provider]);
         }
     }
 
     public onHome() {
-        this.appService.clear();
-        this.appService.goHome();
+        this.navService.goHome();
     }
 
-    public onLogin() {
+    public onGoTo(route: string) {
         this.appService.clear();
-        this.router.navigate(["login"])
+        this.navService.gotoRoute([route]);
     }
 
     public onLogout() {
         this.authService.clearCredentials();
         this.appService.clear();
-        this.router.navigate(["login"])
-    }
-
-    public onSettings() {
-        this.appService.navContext.returnAddress = this.currentRoute;
-        this.router.navigate(["/settings"]);
+        this.navService.gotoRoute(["login"])
     }
 }
 

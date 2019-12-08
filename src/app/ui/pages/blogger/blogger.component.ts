@@ -9,6 +9,8 @@ import { SelectNextClue } from 'src/app/services/modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppService } from '../../services/app.service';
+import { NavService } from '../../navigation/nav.service';
+import { PublishingTrackData } from '../../navigation/tracks/publish-track';
 
 @Component({
   selector: 'app-blogger',
@@ -21,22 +23,23 @@ export class BloggerComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private appSettinsgService: AppSettingsService, 
-        private router: Router) { }
+    ) { }
 
     ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
             this.appSettings = this.appSettinsgService.settings;
 
             this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
                 if (puzzle) {
                     if (!puzzle.info.blogable) {
-                        this.appService.goHome();
+                        this.navService.goHome();
                     }
                     this.puzzle = puzzle;
                 }
@@ -51,18 +54,18 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.appService.navContext.track = "publish";
-        this.router.navigate(["/publish-options"]);
+        this.navService.goNext("continue");
     }
 
     onClose() {
         this.activePuzzle.update(new Clear());
-        this.appService.goHome();
+        this.navService.goHome();
     }
 
     onSolver() {
-        this.appService.navContext.editor = "solver";
-        this.router.navigate(["/solver"]);
+        let appData: PublishingTrackData = this.navService.navContext.appData;
+        appData.editor = "solver";
+        this.navService.goNext("solver");
     }
 
     onRowClick(clue: Clue) {

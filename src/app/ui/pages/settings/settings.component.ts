@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings, BooleanSettingsGroupKey } from 'src/app/services/common';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-settings',
@@ -17,6 +18,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public form: FormGroup;
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private settingsService: AppSettingsService,
         private formBuilder: FormBuilder,
@@ -74,11 +76,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
 
         this.settingsService.update(changes);
-        this.appService.returnToSender();
+        //this.navService.returnToSender();
+        this.navService.goHome();
     }
 
     public onCancel() {
-        this.appService.returnToSender();
+        //this.navService.returnToSender();
+        this.navService.goHome();
     }
 
     public get tipKeys() {
@@ -91,7 +95,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onReset() {
         this.settingsService.factoryReset();
-        this.appService.returnToSender();
+        this.navService.goHome();
+        //this.navService.returnToSender();
     }
 
     private getChanges(groupKey: BooleanSettingsGroupKey): any {

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UIResult } from '../../common';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-publish-login',
@@ -18,7 +19,7 @@ export class PublishLoginComponent implements OnInit {
     public settings: AppSettings;
 
     constructor(
-        private router: Router,
+        private navService: NavService,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
         private settingsService: AppSettingsService,
@@ -26,7 +27,7 @@ export class PublishLoginComponent implements OnInit {
 
     ngOnInit() {
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
             this.settings = this.settingsService.settings;
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
@@ -34,20 +35,13 @@ export class PublishLoginComponent implements OnInit {
     }
 
     public onClose(result: UIResult) {
-        let route: string;
         const puzzle = this.activePuzzle.puzzle;
-        const gridOnly = puzzle && puzzle.grid && !puzzle.clues;
 
         this.appService.clear();
         if (result === "cancel" || result==="back") {
-            if (gridOnly) {
-                route = "/grid-editor"
-            } else {
-                route = "/publish-preamble";
-            }
+            this.navService.goNext("back");
         } else {
-            route = "/publish";
+            this.navService.goNext("continue");
         }
-        this.router.navigate([route]);
     }
 }

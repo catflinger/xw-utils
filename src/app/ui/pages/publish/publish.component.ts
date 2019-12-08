@@ -9,6 +9,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
+import { NavService } from '../../navigation/nav.service';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -32,9 +33,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     set content(content: GridComponent) { this.gridControl = content };
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private authService: AuthService,
-        private router: Router,
         private activePuzzle: IActivePuzzle,
         private publicationService: PublicationService
         ) { }
@@ -42,10 +43,10 @@ export class PublishComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
 
         } else if (!this.authService.getCredentials().authenticated) {
-            this.router.navigate(["/publish-login"]);
+            this.navService.goNext("authenticate");
 
         } else {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
@@ -118,14 +119,11 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        let route: string;
-
         if (this.gridOnly) {
-            route = "/grid-editor"
+            this.navService.goNext("grid-editor");
         } else {
-            route = "/publish-preamble";
+            this.navService.goNext("publish-preamble");
         }
-        this.router.navigate([route]);
     }
 
     private getGridImage(): string {
@@ -155,14 +153,14 @@ export class PublishComponent implements OnInit, OnDestroy {
         .then((result) => {
             this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
             this.appService.clearBusy();
-            this.router.navigate(["/publish-complete"]);
+            this.navService.goNext("continue");
         })
         .catch(error => {
             if (error === ApiSymbols.AuthorizationFailure) {
                 this.appService.clear();
                 this.appService.setAlert("danger", "Username or password incorrect");
                 this.authService.clearCredentials();
-                this.router.navigate(["/publish-login"]);
+                this.navService.goNext("authenticate");
             } else {
                 this.appService.clear();
                 this.appService.setAlert("danger", "ERROR: " + error);
@@ -177,14 +175,14 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.publicationService.publishGrid(image, this.puzzle.info.title)
             .then(() => {
                 this.appService.clearBusy();
-                this.router.navigate(["/publish-complete"]);
+                this.navService.goNext("publish-complete");
             })
             .catch(error => {
                 if (error === ApiSymbols.AuthorizationFailure) {
                     this.appService.clear();
                     this.appService.setAlert("danger", "Username or password incorrect");
                     this.authService.clearCredentials();
-                    this.router.navigate(["/publish-login"]);
+                    this.navService.goNext("authenticate");
                 } else {
                     this.appService.clear();
                     this.appService.setAlert("danger", "ERROR: " + error);

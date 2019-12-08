@@ -149,6 +149,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
             return this.bsActive.value;
         })
+        .catch(error => {
+            throw error.message ? error.message : error.toString();
+        });
     }
 
     public deletePuzzle(id: string): Promise<void> {

@@ -18,6 +18,7 @@ import { GridEditorService } from '../../services/grid-editors/grid-editor.servi
 import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 import { AppService } from '../../services/app.service';
 import { DownloadInstance } from '../../components/download-button/download-button.component';
+import { NavService } from '../../navigation/nav.service';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -43,9 +44,9 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     private gridEditor: GridEditor;
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
-        private router: Router,
         private formBuilder: FormBuilder,
         private gridEditorService: GridEditorService,
     ) { }
@@ -62,13 +63,13 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (!puzzle.info.gridable) {
-                            this.appService.goHome();
+                            this.navService.goHome();
                         }
                         this.form.patchValue({title: puzzle.info.title});
                         this.symmetrical = puzzle.grid.properties.symmetrical;
@@ -120,13 +121,12 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onContinue() {
         this.appService.clear();
         this.activePuzzle.update(new Clear());
-        this.router.navigate(["publish"]);
+        this.navService.goNext("continue");
     }
 
     public onClose() {
-        this.appService.clear();
         this.activePuzzle.update(new Clear());
-        this.appService.goHome();
+        this.navService.goHome();
     }
 
     public onSubmit() {

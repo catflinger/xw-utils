@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AppService, OpenPuzzleParamters } from '../../services/app.service';
 import { Router } from '@angular/router';
+import { NavService } from '../../navigation/nav.service';
+import { PublishingTrackData } from '../../navigation/tracks/publish-track';
 
 @Component({
     selector: 'app-special-pdf',
@@ -14,8 +16,8 @@ export class SpecialPdfComponent implements OnInit {
     private content: string = null;
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
-        private router: Router,
     ) { }
 
     public ngOnInit() {
@@ -45,6 +47,6 @@ export class SpecialPdfComponent implements OnInit {
     public onOpenPdf() {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider: "pdf", sourceDataB64: this.content });
-        this.router.navigate(["open-puzzle"]);
+        this.navService.beginTrack("publish", new PublishingTrackData(null));
     }
 }

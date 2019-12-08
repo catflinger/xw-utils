@@ -8,6 +8,7 @@ import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
 import { UpdatePublsihOptions } from 'src/app/services/modifiers/update-publish-options';
 import { PublishOptionsM } from 'src/app/services/modifiers/mutable-model/publish-options-m';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-publish-options',
@@ -23,8 +24,8 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
-        private router: Router,
         private activePuzzle: IActivePuzzle,
     ) { }
 
@@ -33,7 +34,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
 
             this.subs.push(
@@ -55,18 +56,17 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.router.navigate(["/publish-preamble"]);
+        this.navService.goNext("continue");
     }
 
     onBack() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.appService.navContext.track = "blog";
-        this.router.navigate(["/", this.appService.navContext.editor]);
+        this.navService.goNext("back");
     }
 
     onGrid() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.router.navigate(["/publish-grid"]);
+        this.navService.goNext("grid");
     }
 
 }

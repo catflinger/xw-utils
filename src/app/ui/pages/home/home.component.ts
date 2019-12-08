@@ -2,9 +2,10 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
-import { AppService, AppStatus, EditorType } from 'src/app/ui/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
+import { NavService, EditorType } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
-        private router: Router,
+        private navService: NavService,
         private puzzleManagement: IPuzzleManager,
         private authService: AuthService,
     ) { }
@@ -47,11 +48,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         .then((puzzle) => {
             if (puzzle) {
                 if (puzzle.info.gridable && !(puzzle.info.solveable || puzzle.info.blogable)) {
-                    this.router.navigate(["/grid-editor"]);
+                    //this.appService.navContext.editor = null;
+                    this.navService.beginTrack("publish", {});
                 } else {
                     let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                    this.appService.navContext.editor = editor;
-                    this.router.navigate(["/" + editor]);
+                    this.navService.beginTrack("publish", { editor }, editor);
                 }
             }
         });

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from '../../services/app.service';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-special',
@@ -10,30 +11,24 @@ import { AppService } from '../../services/app.service';
 export class SpecialComponent implements OnInit {
 
     constructor(
-        private appService: AppService,
-        private router: Router,
+        private navService: NavService,
     ) { }
 
     ngOnInit() {
     }
 
     public onPdf() {
-        this.router.navigate(['/special-pdf']);
+        this.navService.gotoRoute(['/special-pdf']);
     }
 
     public onText() {
-        this.appService.navContext.clear();
-        this.appService.navContext.track = "create";
-        this.appService.navContext.useGrid = false;
-
-        this.router.navigate(['/special-text']);
+        //this.appService.navContext.useGrid = false;
+        this.navService.beginTrack("create", {});
     }
 
     public onGridText() {
-        this.appService.navContext.clear();
-        this.appService.navContext.track = "create";
-        this.appService.navContext.useGrid = false;
-        this.router.navigate(['/grid-start']);
+        //this.appService.navContext.useGrid = true;
+        this.navService.beginTrack("create", {});
     }
 
 }

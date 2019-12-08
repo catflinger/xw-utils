@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuid } from "uuid";
-import { Router } from '@angular/router';
 import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
 import { Puzzle } from 'src/app/model/puzzle';
 import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid-properties-editor.component';
-import { AppService } from '../../services/app.service';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-grid-start',
@@ -16,9 +15,8 @@ import { AppService } from '../../services/app.service';
 export class GridStartComponent implements OnInit {
 
     constructor(
-        private appService: AppService,
+        private navService: NavService,
         private puzzleService: IPuzzleManager,
-        private router: Router,
     ) { }
 
     ngOnInit() {
@@ -27,9 +25,9 @@ export class GridStartComponent implements OnInit {
     public onClose(result: GridPropertiesArgs) {
         if (result) {
             this.puzzleService.addPuzzle(this.createGrid(result));
-            this.router.navigate(["/grid-editor"]);
+            this.navService.beginTrack("publish", {});
         } else {
-            this.appService.goHome();
+            this.navService.goHome();
         }
     }
 

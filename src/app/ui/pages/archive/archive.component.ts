@@ -9,6 +9,8 @@ import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
+import { NavService } from '../../navigation/nav.service';
+import { PublishingTrackData } from '../../navigation/tracks/publish-track';
 
 @Component({
     selector: 'app-archive',
@@ -24,9 +26,9 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private archiveService: ArchiveService,
-        private router: Router,
         private activeRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
 
@@ -70,8 +72,6 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
     public openPuzzle(item: ArchiveItem) {
         this.appService.clear();
-        this.appService.navContext.clear();
-        this.appService.navContext.track = "blog";
         
         this.appService.setOpenPuzzleParams({
             provider: item.provider,
@@ -79,7 +79,10 @@ export class ArchiveComponent implements OnInit, OnDestroy {
             serialNumber: item.serialNumber,
             date: item.date,
             setter: item.setter});
-        this.navigate("open-puzzle");
+
+        this.appService.clearBusy();
+        this.appService.clearAlerts();
+        this.navService.beginTrack("publish", new PublishingTrackData(null));
     }
 
     public get latest(): ArchiveItem {
@@ -106,11 +109,5 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         }
 
         return items;
-    }
-
-    private navigate (destination: string) {
-        this.appService.clearBusy();
-        this.appService.clearAlerts();
-        this.router.navigate([destination])
     }
 }

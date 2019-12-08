@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
-        private router: Router,
         public settingsService: AppSettingsService,
         ) { 
             this.settings = this.settingsService.settings;
@@ -37,8 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (this.appService.loginCallback) {
             this.appService.loginCallback();
         } else {
-            this.appService.clear();
-            this.router.navigate(["home"]);
+            this.navService.goHome();
         }
     }
 

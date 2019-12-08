@@ -9,6 +9,7 @@ import { Clue } from 'src/app/model/clue';
 import { AuthService } from 'src/app/services/auth.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -26,10 +27,10 @@ export class PublishPreambleComponent implements OnInit {
     private subs: Subscription[] = [];
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private authService: AuthService,
         private appSettingsService: AppSettingsService,
-        private router: Router,
         private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder) { }
 
@@ -40,7 +41,7 @@ export class PublishPreambleComponent implements OnInit {
         this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
 
 
@@ -74,8 +75,12 @@ export class PublishPreambleComponent implements OnInit {
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
-        const next = this.authService.getCredentials() ? "/publish" : "/publish-login";
-        this.router.navigate([next]);
+
+        if (this.authService.getCredentials().authenticated) {
+            this.navService.goNext("continue");
+        } else {
+            this.navService.goNext("authenticate");
+        }
     }
 
     onBack() {
@@ -83,8 +88,9 @@ export class PublishPreambleComponent implements OnInit {
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
-        this.router.navigate(["/publish-options"]);
-    }
+            
+            this.navService.goNext("back");
+        }
 
     public getUsername(): string {
         return this.appSettings && this.appSettings.username ? 

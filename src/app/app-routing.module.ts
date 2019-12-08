@@ -23,7 +23,6 @@ import { SpecialPdfComponent } from './ui/pages/special-pdf/special-pdf.componen
 import { SpecialComponent } from './ui/pages/special/special.component';
 import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
 
-
 const routes: Routes = [
     // landing pages
     { path: "home", component: HomeComponent },

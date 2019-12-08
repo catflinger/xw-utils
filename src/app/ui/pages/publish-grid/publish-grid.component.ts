@@ -9,6 +9,7 @@ import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 import { DownloadInstance } from '../../components/download-button/download-button.component';
 import { AppService } from '../../services/app.service';
 import { GridComponent } from '../../components/grid/grid.component';
+import { NavService } from '../../navigation/nav.service';
 
 @Component({
   selector: 'app-publish-grid',
@@ -24,16 +25,17 @@ export class PublishGridComponent implements OnInit {
     public gridControl: GridComponent;
 
     constructor(
+        private navService: NavService,
         private appService: AppService,
         private activePuzzle: IActivePuzzle, 
-        private router: Router) { }
+    ) { }
 
     public ngOnInit() {
         // TO DO: record preferences for next time
         this.color = "#ffebcd";
 
         if (!this.activePuzzle.hasPuzzle) {
-            this.appService.goHome();
+            this.navService.goHome();
         } else {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
@@ -57,12 +59,12 @@ export class PublishGridComponent implements OnInit {
 
     public onContinue() {
         this.appService.clear();
-        this.router.navigate(["/publish-preamble"]);
+        this.navService.goNext("continue");
     }
 
     public onBack() {
         this.appService.clear();
-        this.router.navigate(["/publish-options"]);
+        this.navService.goNext("back");
     }
 
     public onClearAll() {
