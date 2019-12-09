@@ -7,7 +7,7 @@ import { PuzzleManagementService } from 'src/app/services/puzzle-management.serv
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
 import { NavService, EditorType } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-open-puzzle',
@@ -63,9 +63,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
 
-            const appData: PublishingTrackData = this.navService.navContext.appData;
-
-            appData.editor = editor;
+            this.navService.appData.editor = editor;
             this.navService.goNext(action);
         })
         .catch((error) => {

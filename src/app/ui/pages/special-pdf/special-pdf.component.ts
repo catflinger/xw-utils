@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AppService, OpenPuzzleParamters } from '../../services/app.service';
-import { Router } from '@angular/router';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-special-pdf',
@@ -47,9 +46,6 @@ export class SpecialPdfComponent implements OnInit {
     public onOpenPdf() {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider: "pdf", sourceDataB64: this.content });
-        this.navService.beginTrack({
-            track: "publish-post", 
-            data: new PublishingTrackData(null)
-        });
+        this.navService.beginTrack("publish-post", null, new AppTrackData(null));
     }
 }

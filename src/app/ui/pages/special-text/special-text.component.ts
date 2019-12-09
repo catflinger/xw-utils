@@ -1,6 +1,5 @@
 import { v4 as uuid } from "uuid";
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
@@ -10,7 +9,6 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { QuillDelta } from 'src/app/model/interfaces';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 

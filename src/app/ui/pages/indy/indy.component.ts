@@ -1,14 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
 import moment from "moment";
-
-import { ArchiveItem } from 'src/app/model/archive-item';
 import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 const Sunday = 0;
 
@@ -62,10 +59,7 @@ const Sunday = 0;
     private openPuzzle(provider: PuzzleProvider, date: Date) {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider, date});
-        this.navService.beginTrack({
-            track: "publish-post", 
-            data: new PublishingTrackData(null)
-        });
+        this.navService.beginTrack("open-puzzle", null, new AppTrackData(null));
     }
 }
 

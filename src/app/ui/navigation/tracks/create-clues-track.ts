@@ -1,4 +1,5 @@
 import { NavTrack } from '../interfaces';
+import { AppTrackData } from './app-track-data';
 
 export const createCluesTrack: NavTrack = {
     name: "create-clues",
@@ -18,7 +19,6 @@ export const createCluesTrack: NavTrack = {
             call: {
                 track: "publish-post",
                 start: "blogger",
-                data: { editor: "blogger"},
             },
             actions: {}
         },

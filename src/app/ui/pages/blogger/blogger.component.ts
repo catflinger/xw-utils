@@ -10,7 +10,7 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-blogger',
@@ -43,7 +43,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
                     }
                     this.puzzle = puzzle;
 
-                    console.log("PUZZLE " + JSON.stringify(puzzle));
+                    //console.log("PUZZLE " + JSON.stringify(puzzle));
                 }
             }));
 
@@ -65,8 +65,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onSolver() {
-        let appData: PublishingTrackData = this.navService.navContext.appData;
-        appData.editor = "solver";
+        this.navService.appData.editor = "solver";
         this.navService.goNext("solve");
     }
 

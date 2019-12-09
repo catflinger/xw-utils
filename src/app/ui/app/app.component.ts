@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.router.events.subscribe((event: Event) => {
             if (event instanceof NavigationEnd) {
-                let context = this.navService.navContext;
+                let context = this.navService.debugNavContext;
 
                 this.temp = context ? 
                 `${context.track.name}:${context.currentNode.name}` : 
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public onGrid() {
         this.activePuzzle.clear();
         this.appService.clear();
-        this.navService.beginTrack({ track: "create-grid", data: {} });
+        this.navService.beginTrack("create-grid", null, null);
     }
 
     public onHome() {

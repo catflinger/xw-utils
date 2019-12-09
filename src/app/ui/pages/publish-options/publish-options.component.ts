@@ -61,11 +61,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     onBack() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        if (this.navService.navContext.appData.editor === "solver") {
-            this.navService.goNext("solve");
-        } else {
-            this.navService.goNext("blog");
-        }
+        this.navService.goNext(this.navService.appData.editor);
     }
 
     onGrid() {

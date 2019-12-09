@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavTrack, NavTrackNode, TrackCallParamters } from './interfaces';
+import { NavTrack, NavTrackNode, TrackCallParamters, NavContext } from './interfaces';
 import { publishPostTrack } from "./tracks/publish-post-track";
 import { publishGridTrack } from './tracks/publish-grid-track';
 import { createGridTrack } from './tracks/create-grid-track';
 import { createCluesTrack } from './tracks/create-clues-track';
+import { openPuzzleTrack } from './tracks/open-puzzle-track';
+import { AppTrackData } from './tracks/app-track-data';
 
 //export type NavTrackName = "get-puzzle" | "solve" | "publish" | "create" | null;
 //export type NavAction = "continue" | "back" | "cancel";
@@ -15,23 +17,16 @@ const tracks: ReadonlyArray<NavTrack> = [
     publishGridTrack,
     createGridTrack,
     createCluesTrack,
+    openPuzzleTrack,
 ];
-
-export interface NavContext {
-    readonly track: NavTrack;
-    readonly currentNode: NavTrackNode;
-    appData: any;
-}
 
 class _NavContext implements NavContext {
     public track: NavTrack;
     public currentNode: NavTrackNode;
-    public appData: any;
 
     constructor() {
         this.track = null;
         this.currentNode = null;
-        this.appData = null;
     }
 }
 
@@ -40,11 +35,20 @@ class _NavContext implements NavContext {
 })
 export class NavService {
     private callStack: _NavContext[] = [];
+    private _appData: AppTrackData;
 
     constructor(private router: Router) { }
 
-    public get navContext(): NavContext {
+    private get navContext(): NavContext {
         return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
+    }
+
+    public get debugNavContext(): NavContext {
+        return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
+    }
+
+    public get appData(): AppTrackData {
+        return this._appData;
     }
 
     /*
@@ -59,12 +63,13 @@ export class NavService {
     /*
     Start a new track, if we have a current track then abandon it
     */
-   public beginTrack(params: TrackCallParamters) {
-        
+   public beginTrack(track: string, start?: string, data?: AppTrackData) {
+        this._appData = data;
+
         while(this.callStack.length > 0) {
             this.callStack.pop();
         }
-        this.call(params);
+        this.call(track, start);
     }
 
     /*
@@ -84,6 +89,7 @@ export class NavService {
 
                 if (nextNode) {
                     //console.log("D: " + nextNode.name);
+                    //console.log("E: " + nextNode.type);
 
                     switch (nextNode.type) {
                         case "route":
@@ -91,7 +97,8 @@ export class NavService {
                             this.router.navigate([nextNode.route]);
                             break;
                         case "call":
-                            this.call(nextNode.call);
+                            context.currentNode = nextNode;
+                            this.call(nextNode.call.track, nextNode.call.start);
                             break;
                         case "return":
                             let action = nextNode.return;
@@ -123,17 +130,16 @@ export class NavService {
         this.gotoRoute(["/home"]);
     }
 
-    private call(params: TrackCallParamters) {
+    private call(trackName: string, start: string) {
 
-        let track = tracks.find(t => t.name === params.track);
+        let track = tracks.find(t => t.name === trackName);
 
         if (track) {
-            const nodeName = params.start || track.start;
+            const nodeName = start || track.start;
             let startNode = track.nodes.find(n => n.name === nodeName);
 
             if (startNode) {
                 let context = new _NavContext();
-                context.appData = params.data;
                 context.track = track;
                 context.currentNode = startNode;
                 this.callStack.push(context);
@@ -143,7 +149,7 @@ export class NavService {
                 throw "Navigation Error - could not find start node";
             }
         } else {
-            throw "Navigation Error - could not find track with name " + params.track;
+            throw "Navigation Error - could not find track with name " + trackName;
         }
 }
 

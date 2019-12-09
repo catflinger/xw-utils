@@ -1,42 +1,21 @@
 import { NavTrack } from '../interfaces';
-import { EditorType } from '../nav.service';
-
-export class PublishingTrackData {
-    constructor(
-        public editor: EditorType,
-    ) {}
-}
+import { AppTrackData } from './app-track-data';
 
 export const publishPostTrack: NavTrack = {
     name: "publish-post",
-    start: "open",
+    start: "publish-options",
     nodes: [
         {
-            name: "open",
-            type: "route",
-            route: "/open-puzzle",
-            actions: {
-                "solve": "solver",
-                "blog": "blogger",
-            }
+            name: "exit-solver",
+            type: "return",
+            return: "solve",
+            actions: {}
         },
         {
-            name: "solver",
-            type: "route",
-            route: "/solver",
-            actions: {
-                "continue": "publish-options",
-                "blog": "blogger",
-            }
-        },
-        {
-            name: "blogger",
-            type: "route",
-            route: "/blogger",
-            actions: {
-                "continue": "publish-options",
-                "solve": "solver",
-            }
+            name: "exit-blogger",
+            type: "return",
+            return: "blog",
+            actions: {}
         },
         {
             name: "publish-options",
@@ -45,8 +24,8 @@ export const publishPostTrack: NavTrack = {
             actions: {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
-                "solve": "solver",
-                "blog": "blogger",
+                "solver": "exit-solver",
+                "blogger": "exit-blogger",
             }
         },
         {

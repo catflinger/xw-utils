@@ -1,12 +1,10 @@
 export type NavNodeType = "route" | "call" | "return";
 
-
 // Nav  actionis a map from teh actions names (object keys) to the target ndoe names (object values)
 export type NavAction = { [key: string]: string }
 
 export type TrackCallParamters = { 
     track: string;
-    data: any;
     start?: string;
  }
 
@@ -31,4 +29,10 @@ export interface NavTrack {
     start: string;
     nodes: NavTrackNode[]; 
 }
+
+export interface NavContext {
+    readonly track: NavTrack;
+    readonly currentNode: NavTrackNode;
+}
+
 

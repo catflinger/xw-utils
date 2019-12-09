@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-special',
@@ -20,12 +21,11 @@ export class SpecialComponent implements OnInit {
     }
 
     public onText() {
-        this.navService.beginTrack({track: "create-clues", data: {} });
+        this.navService.beginTrack("create-clues", null, new AppTrackData(null));
     }
 
     public onGridText() {
-        //this.appService.navContext.useGrid = true;
-        this.navService.beginTrack({ track: "create-grid-clues", data: {} });
+        this.navService.beginTrack("create-grid-clues", null, new AppTrackData(null));
     }
 
 }

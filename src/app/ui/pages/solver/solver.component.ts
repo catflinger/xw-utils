@@ -9,7 +9,7 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-solver',
@@ -80,8 +80,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onBlogger() {
-        let appData: PublishingTrackData = this.navService.navContext.appData;
-        appData.editor = "blogger";
+        this.navService.appData.editor = "blogger";
         this.navService.goNext("blog");
     }
 

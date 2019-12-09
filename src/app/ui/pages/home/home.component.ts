@@ -5,6 +5,7 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { NavService, EditorType } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-home',
@@ -47,11 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         .then((puzzle) => {
             if (puzzle) {
                 let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                this.navService.beginTrack({
-                    track: "publish-post",
-                    data: { editor }, 
-                    start: editor
-                });
+                this.navService.beginTrack("open-puzzle", editor, new AppTrackData(editor));
             }
         });
     }
@@ -60,11 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack({
-                    track: "create-grid", 
-                    data: {}, 
-                    start: "grid-editor"
-                });
+                this.navService.beginTrack("create-grid", "grid-editor", null);
             }
         });
     }
