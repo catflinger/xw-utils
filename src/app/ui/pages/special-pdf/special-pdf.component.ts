@@ -15,7 +15,7 @@ export class SpecialPdfComponent implements OnInit {
     private content: string = null;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
     ) { }
 

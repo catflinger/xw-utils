@@ -7,6 +7,7 @@ import { UIResult } from '../../common';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-publish-login',
@@ -19,7 +20,7 @@ export class PublishLoginComponent implements OnInit {
     public settings: AppSettings;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
         private settingsService: AppSettingsService,

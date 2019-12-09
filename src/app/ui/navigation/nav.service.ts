@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavTrack, NavTrackNode, TrackCallParamters, NavContext } from './interfaces';
+import { NavTrack, NavTrackNode, NavContext } from './interfaces';
+
 import { publishPostTrack } from "./tracks/publish-post-track";
 import { publishGridTrack } from './tracks/publish-grid-track';
 import { createGridTrack } from './tracks/create-grid-track';
 import { createCluesTrack } from './tracks/create-clues-track';
 import { openPuzzleTrack } from './tracks/open-puzzle-track';
-import { AppTrackData } from './tracks/app-track-data';
 
 //export type NavTrackName = "get-puzzle" | "solve" | "publish" | "create" | null;
 //export type NavAction = "continue" | "back" | "cancel";
@@ -33,9 +33,9 @@ class _NavContext implements NavContext {
 @Injectable({
     providedIn: 'root'
 })
-export class NavService {
+export class NavService<T> {
     private callStack: _NavContext[] = [];
-    private _appData: AppTrackData;
+    private _appData: T;
 
     constructor(private router: Router) { }
 
@@ -47,7 +47,7 @@ export class NavService {
         return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
     }
 
-    public get appData(): AppTrackData {
+    public get appData(): T {
         return this._appData;
     }
 
@@ -63,7 +63,7 @@ export class NavService {
     /*
     Start a new track, if we have a current track then abandon it
     */
-   public beginTrack(track: string, start?: string, data?: AppTrackData) {
+   public beginTrack(track: string, start?: string, data?: T) {
         this._appData = data;
 
         while(this.callStack.length > 0) {

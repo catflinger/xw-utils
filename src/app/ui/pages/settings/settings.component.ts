@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings, BooleanSettingsGroupKey } from 'src/app/services/common';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-settings',
@@ -18,7 +19,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public form: FormGroup;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private settingsService: AppSettingsService,
         private formBuilder: FormBuilder,

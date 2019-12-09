@@ -20,7 +20,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private authService: AuthService,
         private puzzleManagementService: PuzzleManagementService,

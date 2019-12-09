@@ -23,7 +23,7 @@ const Sunday = 0;
     private subs: Subscription[] = [];
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private formBuilder: FormBuilder,
     ) {

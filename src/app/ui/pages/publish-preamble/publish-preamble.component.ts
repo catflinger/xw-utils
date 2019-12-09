@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-publish-preamble',
@@ -27,7 +28,7 @@ export class PublishPreambleComponent implements OnInit {
     private subs: Subscription[] = [];
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private authService: AuthService,
         private appSettingsService: AppSettingsService,

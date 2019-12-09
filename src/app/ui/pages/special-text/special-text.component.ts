@@ -9,6 +9,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { QuillDelta } from 'src/app/model/interfaces';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -22,7 +23,7 @@ export class SpecialTextComponent implements OnInit {
     public parseResult: IParseContext = null;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private textParsingService: TextParsingService,
         private puzzleManager: IPuzzleManager,
@@ -45,7 +46,7 @@ export class SpecialTextComponent implements OnInit {
 
             if (!this.parseResult.error) {
                 this.puzzleManager.addPuzzle(this.createNewPuzzle());
-                this.navService.goNext("continue");
+                this.navService.goNext("blog");
             }
         } catch(error) {
             this.appService.setAlert("danger", "ERROR :" + error.message)

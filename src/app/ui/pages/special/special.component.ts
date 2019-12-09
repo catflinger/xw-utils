@@ -10,7 +10,7 @@ import { AppTrackData } from '../../navigation/tracks/app-track-data';
 export class SpecialComponent implements OnInit {
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
     ) { }
 
     ngOnInit() {
@@ -21,11 +21,11 @@ export class SpecialComponent implements OnInit {
     }
 
     public onText() {
-        this.navService.beginTrack("create-clues", null, new AppTrackData(null));
+        this.navService.beginTrack("create-clues", null, new AppTrackData("blogger"));
     }
 
     public onGridText() {
-        this.navService.beginTrack("create-grid-clues", null, new AppTrackData(null));
+        this.navService.beginTrack("create-grid-clues", null, new AppTrackData("solver"));
     }
 
 }

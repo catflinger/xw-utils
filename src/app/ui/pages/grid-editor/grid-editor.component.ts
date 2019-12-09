@@ -19,6 +19,7 @@ import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 import { AppService } from '../../services/app.service';
 import { DownloadInstance } from '../../components/download-button/download-button.component';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -44,7 +45,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     private gridEditor: GridEditor;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder,

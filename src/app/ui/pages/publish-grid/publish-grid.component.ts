@@ -10,6 +10,7 @@ import { DownloadInstance } from '../../components/download-button/download-butt
 import { AppService } from '../../services/app.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-publish-grid',
@@ -25,7 +26,7 @@ export class PublishGridComponent implements OnInit {
     public gridControl: GridComponent;
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle, 
     ) { }

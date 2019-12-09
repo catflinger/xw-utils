@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { NavService } from '../navigation/nav.service';
+import { AppTrackData } from '../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public temp: string = "undefined";
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,

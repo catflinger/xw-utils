@@ -10,6 +10,7 @@ import { ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -33,7 +34,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     set content(content: GridComponent) { this.gridControl = content };
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,

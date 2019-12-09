@@ -23,7 +23,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private appSettinsgService: AppSettingsService, 

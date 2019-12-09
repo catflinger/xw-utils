@@ -5,6 +5,7 @@ import { PublicationService } from 'src/app/services/publication.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-publish-complete',
@@ -19,7 +20,7 @@ export class PublishCompleteComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle
     ) { }

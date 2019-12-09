@@ -6,6 +6,7 @@ import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m'
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid-properties-editor.component';
 import { NavService } from '../../navigation/nav.service';
+import { AppTrackData } from '../../navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-grid-start',
@@ -15,7 +16,7 @@ import { NavService } from '../../navigation/nav.service';
 export class GridStartComponent implements OnInit {
 
     constructor(
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private puzzleService: IPuzzleManager,
     ) { }
 

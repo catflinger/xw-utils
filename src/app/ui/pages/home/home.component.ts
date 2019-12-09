@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     constructor(
         private appService: AppService,
-        private navService: NavService,
+        private navService: NavService<AppTrackData>,
         private puzzleManagement: IPuzzleManager,
         private authService: AuthService,
     ) { }
