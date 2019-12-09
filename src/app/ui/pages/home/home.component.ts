@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
-import { Router } from '@angular/router';
 import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
@@ -47,13 +46,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                if (puzzle.info.gridable && !(puzzle.info.solveable || puzzle.info.blogable)) {
-                    //this.appService.navContext.editor = null;
-                    this.navService.beginTrack("publish", {});
-                } else {
-                    let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                    this.navService.beginTrack("publish", { editor }, editor);
-                }
+                let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
+                this.navService.beginTrack("publish-post", { editor }, editor);
+            }
+        });
+    }
+
+    public onOpenSavedGrid(id: string) {
+        this.puzzleManagement.openPuzzle(id)
+        .then((puzzle) => {
+            if (puzzle) {
+                this.navService.beginTrack("create-grid", {}, "grid-editor");
             }
         });
     }

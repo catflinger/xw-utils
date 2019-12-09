@@ -8,7 +8,7 @@ import { ArchiveItem } from 'src/app/model/archive-item';
 import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-track';
+import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
 
 const Sunday = 0;
 
@@ -62,7 +62,7 @@ const Sunday = 0;
     private openPuzzle(provider: PuzzleProvider, date: Date) {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider, date});
-        this.navService.beginTrack("publish", new PublishingTrackData(null));
+        this.navService.beginTrack("publish-post", new PublishingTrackData(null));
     }
 }
 

@@ -7,7 +7,7 @@ import { PuzzleManagementService } from 'src/app/services/puzzle-management.serv
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
 import { NavService, EditorType } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-track';
+import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
 
 @Component({
   selector: 'app-open-puzzle',

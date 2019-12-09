@@ -7,13 +7,14 @@ export class PublishingTrackData {
     ) {}
 }
 
-export const publishingTrack: NavTrack = {
-    name: "publish",
+export const publishPostTrack: NavTrack = {
+    name: "publish-post",
     start: "open",
     nodes: [
         {
             name: "open",
-            route: "/open-puzzle",
+            type: "route",
+            value: "/open-puzzle",
             actions: {
                 "solve": "solver",
                 "blog": "blogger",
@@ -21,7 +22,8 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "solver",
-            route: "/solver",
+            type: "route",
+            value: "/solver",
             actions: {
                 "continue": "publish-options",
                 "blog": "blogger",
@@ -29,7 +31,8 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "blogger",
-            route: "/blogger",
+            type: "route",
+            value: "/blogger",
             actions: {
                 "continue": "publish-options",
                 "solve": "solver",
@@ -37,16 +40,19 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "publish-options",
-            route: "/publish-options",
+            type: "route",
+            value: "/publish-options",
             actions: {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
-                "back": "publish-options",
+                "solve": "solver",
+                "blog": "blogger",
             }
         },
         {
             name: "publish-grid",
-            route: "/publish-grid",
+            type: "route",
+            value: "/publish-grid",
             actions: {
                 "continue": "publish-preamble",
                 "back": "publish-options",
@@ -54,7 +60,8 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "publish-preamble",
-            route: "/publish-preamble",
+            type: "route",
+            value: "/publish-preamble",
             actions: {
                 "continue": "publish",
                 "authenticate": "publish-login",
@@ -63,7 +70,8 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "publish-login",
-            route: "/publish-login",
+            type: "route",
+            value: "/publish-login",
             actions: {
                 "continue": "publish",
                 "back": "publish-preamble",
@@ -71,12 +79,19 @@ export const publishingTrack: NavTrack = {
         },
         {
             name: "publish",
-            route: "/publish",
+            type: "route",
+            value: "/publish",
             actions: {
                 "authenticate": "publish-login",
                 "continue": "publish-complete",
                 "back": "publish-preamble",
             }
+        },
+        {
+            name: "publish-complete",
+            type: "route",
+            value: "/publish-complete",
+            actions: {}
         },
     ],
 }

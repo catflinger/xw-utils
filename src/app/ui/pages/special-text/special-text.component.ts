@@ -10,7 +10,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { QuillDelta } from 'src/app/model/interfaces';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-track';
+import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -47,7 +47,7 @@ export class SpecialTextComponent implements OnInit {
 
             if (!this.parseResult.error) {
                 this.puzzleManager.addPuzzle(this.createNewPuzzle());
-                this.navService.beginTrack("publish", new PublishingTrackData("blogger"), "blogger");
+                this.navService.beginTrack("publish-post", new PublishingTrackData("blogger"), "blogger");
             }
         } catch(error) {
             this.appService.setAlert("danger", "ERROR :" + error.message)

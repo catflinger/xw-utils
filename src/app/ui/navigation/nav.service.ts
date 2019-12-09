@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavTrack, NavTrackNode } from './interfaces';
-import { publishingTrack } from "./tracks/publish-track";
+import { publishPostTrack } from "./tracks/publish-post-track";
+import { publishGridTrack } from './tracks/publish-grid-track';
+import { createGridTrack } from './tracks/create-grid-track';
 
 //export type NavTrackName = "get-puzzle" | "solve" | "publish" | "create" | null;
 //export type NavAction = "continue" | "back" | "cancel";
 export type EditorType = "blogger" | "solver";
 
 const tracks: ReadonlyArray<NavTrack> = [
-    publishingTrack,
+    publishPostTrack,
+    publishGridTrack,
+    createGridTrack,
 ];
 
 export interface NavContext {
@@ -23,27 +27,22 @@ class _NavContext implements NavContext {
     public appData: any;
 
     constructor() {
-        this.clear();
-    }
-
-    public clear() {
         this.track = null;
         this.currentNode = null;
         this.appData = null;
     }
 }
 
-
 @Injectable({
     providedIn: 'root'
 })
 export class NavService {
-    private _navContext: _NavContext = new _NavContext();
+    private contextStack: _NavContext[] = [];
 
     constructor(private router: Router) { }
 
     public get navContext(): NavContext {
-        return this._navContext;
+        return this.contextStack.length > 0 ? this.contextStack[this.contextStack.length - 1] : null;
     }
 
     /*
@@ -59,7 +58,10 @@ export class NavService {
     Start a new track, if we have a current track then abandon it
     */
    public beginTrack(trackName: string, data: any, startNodeName?: string) {
-        this._navContext.clear();
+        while(this.contextStack.length > 0) {
+            this.contextStack.pop();
+        }
+
         let track = tracks.find(t => t.name === trackName);
 
         if (track) {
@@ -67,44 +69,54 @@ export class NavService {
             let startNode = track.nodes.find(n => n.name === nodeName);
 
             if (startNode) {
-                this._navContext.appData = data;
-                this._navContext.track = track;
-                this._navContext.currentNode = startNode;
-                
-                console.log("START NODE: " + JSON.stringify(startNode));
+                let context = new _NavContext();
+                context.appData = data;
+                context.track = track;
+                context.currentNode = startNode;
+                this.contextStack.push(context);
 
-                this.router.navigate([startNode.route]);
+                this.router.navigate([startNode.value]);
             } else {
                 throw "Navigation Error - could not find start node";
             }
+        } else {
+            throw "Navigation Error - could not find track with name " + trackName;
         }
+}
+
+    /*
+    Move to the next node on the track.
+    */
+    public goNext(action: string) {
+
+        if (this.contextStack.length > 0) {
+            let context = this.contextStack[this.contextStack.length - 1];
+
+            if(context.currentNode) {
+                let nextNodeName = context.currentNode.actions[action];
+                let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+                
+                // good to go, switch to new context and navigate
+                context.currentNode = nextNode;
+                this.router.navigate([nextNode.value]);
+            }
+        } 
     }
 
     /*
     Go directly to the page named, abandon any current track.
     */
    public gotoRoute(route: string[]) {
-        this._navContext.clear();
+        while(this.contextStack.length > 0) {
+            this.contextStack.pop();
+        }
         this.router.navigate(route);
     }
 
     /*
     Go to the home page, abandon any current track.
     */
-   public goHome() {
+    public goHome() {
         this.gotoRoute(["/home"]);
-    }
-
-    /*
-    Move to the next node on the track.
-    */
-    public goNext(action: string) {
-                        
-        console.log("CURRENT NODE: " + JSON.stringify(this._navContext.currentNode));
-
-        if (this._navContext.currentNode) {
-            let route = this._navContext.currentNode.actions[action];
-            this.router.navigate([route]);
-        }
     }
 }

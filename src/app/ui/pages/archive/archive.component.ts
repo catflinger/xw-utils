@@ -10,7 +10,7 @@ import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { NavService } from '../../navigation/nav.service';
-import { PublishingTrackData } from '../../navigation/tracks/publish-track';
+import { PublishingTrackData } from '../../navigation/tracks/publish-post-track';
 
 @Component({
     selector: 'app-archive',
@@ -82,7 +82,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
         this.appService.clearBusy();
         this.appService.clearAlerts();
-        this.navService.beginTrack("publish", new PublishingTrackData(null));
+        this.navService.beginTrack("publish-post", new PublishingTrackData(null));
     }
 
     public get latest(): ArchiveItem {

@@ -119,11 +119,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        if (this.gridOnly) {
-            this.navService.goNext("grid-editor");
-        } else {
-            this.navService.goNext("publish-preamble");
-        }
+        this.navService.goNext("back");
     }
 
     private getGridImage(): string {
@@ -175,7 +171,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.publicationService.publishGrid(image, this.puzzle.info.title)
             .then(() => {
                 this.appService.clearBusy();
-                this.navService.goNext("publish-complete");
+                this.navService.goNext("continue");
             })
             .catch(error => {
                 if (error === ApiSymbols.AuthorizationFailure) {

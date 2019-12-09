@@ -15,12 +15,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public credentials: Credentials;
     public isNavbarCollapsed: boolean;
-    public currentTrack: string = null;
 
     private subs: Subscription[] = [];
 
-    // TO DO: think about making this a stack so that returns can be be nested
-    //private currentRoute: string;
+    public temp: string = "undefined";
 
     constructor(
         private navService: NavService,
@@ -44,17 +42,14 @@ export class AppComponent implements OnInit, OnDestroy {
             this.credentials = credentials;
         }));
 
-        // this.subs.push(this.router.events.subscribe((x: Event) => {
-        //     if (x instanceof NavigationEnd) {
-        //         this.currentRoute = this.router.url;
-        //     }
-        // }));
-
-        // for development and debug
-        this.subs.push(this.router.events.subscribe((event) => {
+        this.subs.push(this.router.events.subscribe((event: Event) => {
             if (event instanceof NavigationEnd) {
-                //this.currentTrack = this.appService.navContext.track;
-            }
+                let context = this.navService.navContext;
+
+                this.temp = context ? 
+                `${context.track.name}:${context.currentNode.name}` : 
+                "none";
+            };
         }));
     }
 
@@ -76,6 +71,12 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
             this.navService.gotoRoute(["archive", provider]);
         }
+    }
+
+    public onGrid() {
+        this.activePuzzle.clear();
+        this.appService.clear();
+        this.navService.beginTrack("create-grid", {});
     }
 
     public onHome() {

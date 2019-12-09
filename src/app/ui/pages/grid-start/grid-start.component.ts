@@ -25,7 +25,7 @@ export class GridStartComponent implements OnInit {
     public onClose(result: GridPropertiesArgs) {
         if (result) {
             this.puzzleService.addPuzzle(this.createGrid(result));
-            this.navService.beginTrack("publish", {});
+            this.navService.goNext("continue");
         } else {
             this.navService.goHome();
         }

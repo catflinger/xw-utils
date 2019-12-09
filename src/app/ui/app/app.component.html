@@ -36,7 +36,7 @@
                         <li class="nav-item dropdown" ngbDropdown>
                             <button class="btn btn-link nav-link dropdown-toggle" id="id02" ngbDropdownToggle>Tools</button>
                             <div class="dropdown-menu" aria-labelledby="id02" ngbDropdownMenu>
-                                <button class="dropdown-item btn btn-link" (click)="onGoTo('grid-start')">Grid editor</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGrid()">Grid editor</button>
                                 <button class="dropdown-item btn btn-link" (click)="onGoTo('diary')">Diary</button>
                             </div>
                         </li>
@@ -57,14 +57,14 @@
                             <button type="button" class="nav-link btn btn-link" (click)="onLogout()">Logout</button>
                         </li>
                     </ul>
-
-                    <div>{{currentTrack}}</div>
                 </div>
+
+                <div>{{temp}}</div>
             </nav>
 
             <app-alert></app-alert>
         </div>
     </div>
 
-    <router-outlet></router-outlet>
+    <router-outlet ></router-outlet>
 </div>
