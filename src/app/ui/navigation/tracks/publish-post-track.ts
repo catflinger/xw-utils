@@ -14,7 +14,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "open",
             type: "route",
-            value: "/open-puzzle",
+            route: "/open-puzzle",
             actions: {
                 "solve": "solver",
                 "blog": "blogger",
@@ -23,7 +23,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "solver",
             type: "route",
-            value: "/solver",
+            route: "/solver",
             actions: {
                 "continue": "publish-options",
                 "blog": "blogger",
@@ -32,7 +32,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "blogger",
             type: "route",
-            value: "/blogger",
+            route: "/blogger",
             actions: {
                 "continue": "publish-options",
                 "solve": "solver",
@@ -41,7 +41,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish-options",
             type: "route",
-            value: "/publish-options",
+            route: "/publish-options",
             actions: {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
@@ -52,7 +52,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish-grid",
             type: "route",
-            value: "/publish-grid",
+            route: "/publish-grid",
             actions: {
                 "continue": "publish-preamble",
                 "back": "publish-options",
@@ -61,7 +61,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish-preamble",
             type: "route",
-            value: "/publish-preamble",
+            route: "/publish-preamble",
             actions: {
                 "continue": "publish",
                 "authenticate": "publish-login",
@@ -71,7 +71,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish-login",
             type: "route",
-            value: "/publish-login",
+            route: "/publish-login",
             actions: {
                 "continue": "publish",
                 "back": "publish-preamble",
@@ -80,7 +80,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish",
             type: "route",
-            value: "/publish",
+            route: "/publish",
             actions: {
                 "authenticate": "publish-login",
                 "continue": "publish-complete",
@@ -90,7 +90,7 @@ export const publishPostTrack: NavTrack = {
         {
             name: "publish-complete",
             type: "route",
-            value: "/publish-complete",
+            route: "/publish-complete",
             actions: {}
         },
     ],

@@ -134,7 +134,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return this.httpPuzzleService.getPuzzle(params)
         .then((response) => {
             if (Array.isArray(response.warnings)) {
-                response.warnings.forEach(warning => console.log("WARNING " + JSON.stringify(warning))); 
+                //response.warnings.forEach(warning => console.log("WARNING " + JSON.stringify(warning))); 
             }
 
             let puzzle = new Puzzle(response.puzzle);

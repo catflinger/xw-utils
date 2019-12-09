@@ -47,7 +47,7 @@ export class SpecialTextComponent implements OnInit {
 
             if (!this.parseResult.error) {
                 this.puzzleManager.addPuzzle(this.createNewPuzzle());
-                this.navService.beginTrack("publish-post", new PublishingTrackData("blogger"), "blogger");
+                this.navService.goNext("continue");
             }
         } catch(error) {
             this.appService.setAlert("danger", "ERROR :" + error.message)

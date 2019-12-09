@@ -42,6 +42,8 @@ export class BloggerComponent implements OnInit, OnDestroy {
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;
+
+                    console.log("PUZZLE " + JSON.stringify(puzzle));
                 }
             }));
 

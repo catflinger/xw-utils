@@ -47,7 +47,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         .then((puzzle) => {
             if (puzzle) {
                 let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                this.navService.beginTrack("publish-post", { editor }, editor);
+                this.navService.beginTrack({
+                    track: "publish-post",
+                    data: { editor }, 
+                    start: editor
+                });
             }
         });
     }
@@ -56,7 +60,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack("create-grid", {}, "grid-editor");
+                this.navService.beginTrack({
+                    track: "create-grid", 
+                    data: {}, 
+                    start: "grid-editor"
+                });
             }
         });
     }

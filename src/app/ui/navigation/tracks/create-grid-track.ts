@@ -7,7 +7,7 @@ export const createGridTrack: NavTrack = {
         {
             name: "grid-start",
             type: "route",
-            value: "/grid-start",
+            route: "/grid-start",
             actions: {
                 "continue": "grid-editor",
             }
@@ -15,7 +15,7 @@ export const createGridTrack: NavTrack = {
         {
             name: "grid-editor",
             type: "route",
-            value: "/grid-editor",
+            route: "/grid-editor",
             actions: {
                 "continue": "publish",
                 "authenticate": "publish-login",
@@ -24,7 +24,7 @@ export const createGridTrack: NavTrack = {
         {
             name: "publish-login",
             type: "route",
-            value: "/publish-login",
+            route: "/publish-login",
             actions: {
                 "continue": "publish",
                 "back": "grid-editor",
@@ -33,7 +33,7 @@ export const createGridTrack: NavTrack = {
         {
             name: "publish",
             type: "route",
-            value: "/publish",
+            route: "/publish",
             actions: {
                 "authenticate": "publish-login",
                 "continue": "publish-complete",
@@ -43,7 +43,7 @@ export const createGridTrack: NavTrack = {
         {
             name: "publish-complete",
             type: "route",
-            value: "/publish-complete",
+            route: "/publish-complete",
             actions: {}
         },
 

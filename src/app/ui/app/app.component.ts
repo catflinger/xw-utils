@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public onGrid() {
         this.activePuzzle.clear();
         this.appService.clear();
-        this.navService.beginTrack("create-grid", {});
+        this.navService.beginTrack({ track: "create-grid", data: {} });
     }
 
     public onHome() {

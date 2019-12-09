@@ -7,7 +7,7 @@ export const publishGridTrack: NavTrack = {
         {
             name: "publish-grid",
             type: "route",
-            value: "/publish-grid",
+            route: "/publish-grid",
             actions: {
                 "continue": "publish",
                 "authenticate": "publish-login",
@@ -16,7 +16,7 @@ export const publishGridTrack: NavTrack = {
         {
             name: "publish-login",
             type: "route",
-            value: "/publish-login",
+            route: "/publish-login",
             actions: {
                 "continue": "publish",
                 "back": "publish-grid",
@@ -25,7 +25,7 @@ export const publishGridTrack: NavTrack = {
         {
             name: "publish",
             type: "route",
-            value: "/publish",
+            route: "/publish",
             actions: {
                 "authenticate": "publish-login",
                 "continue": "publish-complete",
@@ -35,7 +35,7 @@ export const publishGridTrack: NavTrack = {
         {
             name: "publish-complete",
             type: "route",
-            value: "/publish-complete",
+            route: "/publish-complete",
             actions: {}
         },
 

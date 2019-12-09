@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavTrack, NavTrackNode } from './interfaces';
+import { NavTrack, NavTrackNode, TrackCallParamters } from './interfaces';
 import { publishPostTrack } from "./tracks/publish-post-track";
 import { publishGridTrack } from './tracks/publish-grid-track';
 import { createGridTrack } from './tracks/create-grid-track';
+import { createCluesTrack } from './tracks/create-clues-track';
 
 //export type NavTrackName = "get-puzzle" | "solve" | "publish" | "create" | null;
 //export type NavAction = "continue" | "back" | "cancel";
@@ -13,6 +14,7 @@ const tracks: ReadonlyArray<NavTrack> = [
     publishPostTrack,
     publishGridTrack,
     createGridTrack,
+    createCluesTrack,
 ];
 
 export interface NavContext {
@@ -37,12 +39,12 @@ class _NavContext implements NavContext {
     providedIn: 'root'
 })
 export class NavService {
-    private contextStack: _NavContext[] = [];
+    private callStack: _NavContext[] = [];
 
     constructor(private router: Router) { }
 
     public get navContext(): NavContext {
-        return this.contextStack.length > 0 ? this.contextStack[this.contextStack.length - 1] : null;
+        return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
     }
 
     /*
@@ -57,48 +59,49 @@ export class NavService {
     /*
     Start a new track, if we have a current track then abandon it
     */
-   public beginTrack(trackName: string, data: any, startNodeName?: string) {
-        while(this.contextStack.length > 0) {
-            this.contextStack.pop();
+   public beginTrack(params: TrackCallParamters) {
+        
+        while(this.callStack.length > 0) {
+            this.callStack.pop();
         }
-
-        let track = tracks.find(t => t.name === trackName);
-
-        if (track) {
-            const nodeName = startNodeName || track.start;
-            let startNode = track.nodes.find(n => n.name === nodeName);
-
-            if (startNode) {
-                let context = new _NavContext();
-                context.appData = data;
-                context.track = track;
-                context.currentNode = startNode;
-                this.contextStack.push(context);
-
-                this.router.navigate([startNode.value]);
-            } else {
-                throw "Navigation Error - could not find start node";
-            }
-        } else {
-            throw "Navigation Error - could not find track with name " + trackName;
-        }
-}
+        this.call(params);
+    }
 
     /*
     Move to the next node on the track.
     */
     public goNext(action: string) {
+        //console.log("Action: " + action);
 
-        if (this.contextStack.length > 0) {
-            let context = this.contextStack[this.contextStack.length - 1];
+        if (this.callStack.length > 0) {
+            let context = this.callStack[this.callStack.length - 1];
 
             if(context.currentNode) {
+                //console.log("CurrentNode: " + context.currentNode.name);
                 let nextNodeName = context.currentNode.actions[action];
+                //console.log("NextNode: " + nextNodeName);
                 let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
-                
-                // good to go, switch to new context and navigate
-                context.currentNode = nextNode;
-                this.router.navigate([nextNode.value]);
+
+                if (nextNode) {
+                    //console.log("D: " + nextNode.name);
+
+                    switch (nextNode.type) {
+                        case "route":
+                            context.currentNode = nextNode;
+                            this.router.navigate([nextNode.route]);
+                            break;
+                        case "call":
+                            this.call(nextNode.call);
+                            break;
+                        case "return":
+                            let action = nextNode.return;
+                            this.callStack.pop();
+                            this.goNext(action);
+                            break;
+                    }
+                } else {
+                    throw `Cannot find a node ${nextNodeName} for the action ${action}`;
+                }
             }
         } 
     }
@@ -107,8 +110,8 @@ export class NavService {
     Go directly to the page named, abandon any current track.
     */
    public gotoRoute(route: string[]) {
-        while(this.contextStack.length > 0) {
-            this.contextStack.pop();
+        while(this.callStack.length > 0) {
+            this.callStack.pop();
         }
         this.router.navigate(route);
     }
@@ -119,4 +122,29 @@ export class NavService {
     public goHome() {
         this.gotoRoute(["/home"]);
     }
+
+    private call(params: TrackCallParamters) {
+
+        let track = tracks.find(t => t.name === params.track);
+
+        if (track) {
+            const nodeName = params.start || track.start;
+            let startNode = track.nodes.find(n => n.name === nodeName);
+
+            if (startNode) {
+                let context = new _NavContext();
+                context.appData = params.data;
+                context.track = track;
+                context.currentNode = startNode;
+                this.callStack.push(context);
+
+                this.router.navigate([startNode.route]);
+            } else {
+                throw "Navigation Error - could not find start node";
+            }
+        } else {
+            throw "Navigation Error - could not find track with name " + params.track;
+        }
+}
+
 }
