@@ -1,18 +1,12 @@
-export type NavNodeType = "route" | "call" | "return";
+export type NavNodeType = "route" | "call" | "return" | "exit"; // | "exec";
 
-// Nav  actionis a map from teh actions names (object keys) to the target ndoe names (object values)
+// Nav  action is a map from the actions names (object keys) to the target ndoe names (object values)
 export type NavAction = { [key: string]: string }
 
 export type TrackCallParamters = { 
     track: string;
     start?: string;
  }
-
-// Note on NavTrackNode values:
-//  type "route": value contains an Angular route
-//  type "transfer" value contains the name of a track
-//  type "enter" value contains the name of a track
-//  type "exit" value contains the action to be returned
 
 export interface NavTrackNode {
     name: string;
@@ -34,5 +28,9 @@ export interface NavContext {
     readonly track: NavTrack;
     readonly currentNode: NavTrackNode;
 }
+
+// export interface NavProcess<T = any> {
+//     exec(appData: T): string;
+// }
 
 

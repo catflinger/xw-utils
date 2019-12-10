@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 
 @Component({
     selector: 'app-special',
@@ -10,6 +11,7 @@ import { AppTrackData } from '../../navigation/tracks/app-track-data';
 export class SpecialComponent implements OnInit {
 
     constructor(
+        private puzzleManager: IPuzzleManager,
         private navService: NavService<AppTrackData>,
     ) { }
 
@@ -21,10 +23,12 @@ export class SpecialComponent implements OnInit {
     }
 
     public onText() {
+        this.puzzleManager.newPuzzle();
         this.navService.beginTrack("create-clues", null, new AppTrackData("blogger"));
     }
 
     public onGridText() {
+        this.puzzleManager.newPuzzle();
         this.navService.beginTrack("create-grid-clues", null, new AppTrackData("solver"));
     }
 

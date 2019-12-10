@@ -1,9 +1,26 @@
 import { NavTrack } from '../interfaces';
 
-export const createCluesTrack: NavTrack = {
-    name: "create-clues",
-    start: "parser",
+export const createGridCluesTrack: NavTrack = {
+    name: "create-grid-clues",
+    start: "grid-start",
     nodes: [
+        {
+            name: "grid-start",
+            type: "route",
+            route: "/grid-start",
+            actions: {
+                "continue": "grid-editor",
+            }
+        },
+        {
+            name: "grid-editor",
+            type: "route",
+            route: "/grid-editor",
+            actions: {
+                "continue": "parser",
+                "authenticate": "publish-login",
+            }
+        },
         {
             name: "parser",
             type: "route",
@@ -20,7 +37,6 @@ export const createCluesTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "blog": "blogger",
-                "back": "parser",
             }
         },
         {
@@ -30,7 +46,6 @@ export const createCluesTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "solve": "solver",
-                "back": "parser"
             }
         },
 

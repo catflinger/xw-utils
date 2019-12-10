@@ -40,9 +40,9 @@ export class PublishLoginComponent implements OnInit {
 
         this.appService.clear();
         if (result === "cancel" || result==="back") {
-            this.navService.goNext("back");
+            this.navService.navigate("back");
         } else {
-            this.navService.goNext("continue");
+            this.navService.navigate("continue");
         }
     }
 }

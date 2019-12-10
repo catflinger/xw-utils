@@ -12,6 +12,9 @@ export class PuzzleInfo implements IPuzzleInfo {
     public readonly solveable: boolean;
     public readonly gridable: boolean;
 
+    //public readonly ready: boolean;
+    public readonly source: string;
+
     constructor(data: any) {
         this.id = data.id;
         this.title = data.title;
@@ -22,5 +25,7 @@ export class PuzzleInfo implements IPuzzleInfo {
         this.blogable = data.blogable;
         this.solveable = data.solveable;
         this.gridable = data.gridable;
+        //this.ready = typeof data.ready === "boolean" ? data.ready : true; 
+        this.source = typeof data.source === "string" ? data.source : null; 
         }
 }

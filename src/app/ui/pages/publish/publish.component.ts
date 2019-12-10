@@ -47,7 +47,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.navService.goHome();
 
         } else if (!this.authService.getCredentials().authenticated) {
-            this.navService.goNext("authenticate");
+            this.navService.navigate("authenticate");
 
         } else {
             this.subs.push(this.appService.getObservable().subscribe(s => this.appStatus = s));
@@ -120,7 +120,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        this.navService.goNext("back");
+        this.navService.navigate("back");
     }
 
     private getGridImage(): string {
@@ -150,14 +150,14 @@ export class PublishComponent implements OnInit, OnDestroy {
         .then((result) => {
             this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
             this.appService.clearBusy();
-            this.navService.goNext("continue");
+            this.navService.navigate("continue");
         })
         .catch(error => {
             if (error === ApiSymbols.AuthorizationFailure) {
                 this.appService.clear();
                 this.appService.setAlert("danger", "Username or password incorrect");
                 this.authService.clearCredentials();
-                this.navService.goNext("authenticate");
+                this.navService.navigate("authenticate");
             } else {
                 this.appService.clear();
                 this.appService.setAlert("danger", "ERROR: " + error);
@@ -172,14 +172,14 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.publicationService.publishGrid(image, this.puzzle.info.title)
             .then(() => {
                 this.appService.clearBusy();
-                this.navService.goNext("continue");
+                this.navService.navigate("continue");
             })
             .catch(error => {
                 if (error === ApiSymbols.AuthorizationFailure) {
                     this.appService.clear();
                     this.appService.setAlert("danger", "Username or password incorrect");
                     this.authService.clearCredentials();
-                    this.navService.goNext("authenticate");
+                    this.navService.navigate("authenticate");
                 } else {
                     this.appService.clear();
                     this.appService.setAlert("danger", "ERROR: " + error);

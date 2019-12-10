@@ -1,6 +1,4 @@
 import { NavTrack } from '../interfaces';
-import { EditorType } from '../nav.service';
-import { AppTrackData } from './app-track-data';
 
 export const openPuzzleTrack: NavTrack = {
     name: "open-puzzle",
@@ -22,6 +20,7 @@ export const openPuzzleTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "blog": "blogger",
+                "back": "exit",
             }
         },
         {
@@ -31,6 +30,7 @@ export const openPuzzleTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "solve": "solver",
+                "back": "exit",
             }
         },
         {
@@ -44,5 +44,10 @@ export const openPuzzleTrack: NavTrack = {
                 "blog": "blogger",
             }
         },
+        {
+            name: "exit",
+            type: "exit",
+            actions: {}
+        }
     ],
 }

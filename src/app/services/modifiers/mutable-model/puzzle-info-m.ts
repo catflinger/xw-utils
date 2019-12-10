@@ -10,4 +10,6 @@ export abstract class PuzzleInfoM implements IPuzzleInfo {
     public abstract blogable: boolean;
     public abstract solveable: boolean;
     public abstract gridable: boolean;
+    //public abstract ready: boolean;
+    public abstract source: string;
 } 

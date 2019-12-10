@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PuzzleInfo } from '../model/puzzle-info';
@@ -6,7 +7,7 @@ import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
 import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
-import { IPuzzle } from '../model/interfaces';
+import { IPuzzle, QuillDelta } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { AddPlaceholders } from './modifiers/add-placeholders';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
@@ -23,6 +24,9 @@ export abstract class IActivePuzzle {
     abstract update(reducer: IPuzzleModifier);
 }
 export abstract class IPuzzleManager {
+    // TO DO: rename these to make it clearer exactly what each one does
+    // at teh moment some of the name sound quite similar
+    abstract newPuzzle(reducer?: IPuzzleModifier): void;
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
@@ -83,6 +87,15 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     public get puzzle(): Puzzle {
         return this.bsActive.value;
+    }
+
+    public newPuzzle(reducer?: IPuzzleModifier): void {
+        let puzzle: PuzzleM = this.makeEmptyPuzzle();
+
+        if (reducer) {
+            reducer.exec(puzzle);
+        }
+        this.bsActive.next(new Puzzle(puzzle));
     }
 
     public get hasPuzzle(): boolean {
@@ -204,6 +217,55 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     private savePuzzle(puzzle: IPuzzle): void {
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
+    }
+
+    private makeEmptyPuzzle(): PuzzleM {
+        return {
+            clues: [],
+            grid: null,
+            linked: false,
+            revision: 0,
+            info: {
+                id: uuid(),
+                title: "untitled",
+                puzzleDate: new Date(),
+                provider: "text",
+                setter: "anon", 
+                wordpressId: null,
+                blogable: true,
+                solveable: false,
+                gridable: false,
+                source: null,
+            },
+            notes: {
+                header: new QuillDelta(),
+                body: new QuillDelta(),
+                footer: new QuillDelta(),
+            },
+            publishOptions: {
+                clueStyle: {
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+                answerStyle: {
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+                definitionStyle: {
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+                includeGrid: false,
+                layout: "table",
+                spacing: "small",
+            },
+        };
     }
 
     //#endregion

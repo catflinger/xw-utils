@@ -78,9 +78,9 @@ export class PublishPreambleComponent implements OnInit {
             this.form.value.body));
 
         if (this.authService.getCredentials().authenticated) {
-            this.navService.goNext("continue");
+            this.navService.navigate("continue");
         } else {
-            this.navService.goNext("authenticate");
+            this.navService.navigate("authenticate");
         }
     }
 
@@ -90,7 +90,7 @@ export class PublishPreambleComponent implements OnInit {
             this.form.value.header,
             this.form.value.body));
             
-            this.navService.goNext("back");
+            this.navService.navigate("back");
         }
 
     public getUsername(): string {

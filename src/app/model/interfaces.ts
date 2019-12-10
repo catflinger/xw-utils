@@ -90,8 +90,8 @@ export abstract class IPuzzle {
     abstract readonly clues: readonly IClue[];
 
     abstract readonly linked: boolean;
-    abstract readonly version: string;
-    abstract readonly createdWithVersion: string;
+    //abstract readonly version: string;
+    //abstract readonly createdWithVersion: string;
 
     abstract readonly revision: number;
 }
@@ -107,6 +107,10 @@ export abstract class IPuzzleInfo {
     abstract readonly blogable: boolean;
     abstract readonly solveable: boolean;
     abstract readonly gridable: boolean;
+
+    // TO DO: find a permanent home for these
+    //abstract readonly ready: boolean;
+    abstract readonly source: string;
 } 
 
 export abstract class IPublishOptions {

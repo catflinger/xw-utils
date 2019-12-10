@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppService, OpenPuzzleParamters } from '../../services/app.service';
-import { Router } from '@angular/router';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
-import { NavService, EditorType } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../navigation/nav.service';
+import { AppTrackData, EditorType } from '../../navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-open-puzzle',
@@ -64,7 +63,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
             this.appService.clearOpenPuzzleParams();
 
             this.navService.appData.editor = editor;
-            this.navService.goNext(action);
+            this.navService.navigate(action);
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {

@@ -71,17 +71,17 @@ export class SolverComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new Clear());
-        this.navService.goNext("continue");
+        this.navService.navigate("continue");
     }
 
-    onClose() {
+    onBack() {
         this.activePuzzle.update(new Clear());
-        this.navService.goHome();
+        this.navService.navigate("back");
     }
 
     onBlogger() {
         this.navService.appData.editor = "blogger";
-        this.navService.goNext("blog");
+        this.navService.navigate("blog");
     }
 
     onClueClick(clue: Clue) {

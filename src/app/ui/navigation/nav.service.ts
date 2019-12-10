@@ -1,24 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext } from './interfaces';
-
-import { publishPostTrack } from "./tracks/publish-post-track";
-import { publishGridTrack } from './tracks/publish-grid-track';
-import { createGridTrack } from './tracks/create-grid-track';
-import { createCluesTrack } from './tracks/create-clues-track';
-import { openPuzzleTrack } from './tracks/open-puzzle-track';
-
-//export type NavTrackName = "get-puzzle" | "solve" | "publish" | "create" | null;
-//export type NavAction = "continue" | "back" | "cancel";
-export type EditorType = "blogger" | "solver";
-
-const tracks: ReadonlyArray<NavTrack> = [
-    publishPostTrack,
-    publishGridTrack,
-    createGridTrack,
-    createCluesTrack,
-    openPuzzleTrack,
-];
 
 class _NavContext implements NavContext {
     public track: NavTrack;
@@ -30,6 +12,8 @@ class _NavContext implements NavContext {
     }
 }
 
+export const NAV_TRACKS = new InjectionToken<ReadonlyArray<NavTrack>>("Navigation Trakcs");
+
 @Injectable({
     providedIn: 'root'
 })
@@ -37,11 +21,9 @@ export class NavService<T> {
     private callStack: _NavContext[] = [];
     private _appData: T;
 
-    constructor(private router: Router) { }
-
-    private get navContext(): NavContext {
-        return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
-    }
+    constructor(
+        private router: Router,
+        @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>) { }
 
     public get debugNavContext(): NavContext {
         return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
@@ -75,7 +57,7 @@ export class NavService<T> {
     /*
     Move to the next node on the track.
     */
-    public goNext(action: string) {
+    public navigate(action: string) {
         //console.log("Action: " + action);
 
         if (this.callStack.length > 0) {
@@ -103,14 +85,20 @@ export class NavService<T> {
                         case "return":
                             let action = nextNode.return;
                             this.callStack.pop();
-                            this.goNext(action);
+                                this.navigate(action);
+                            break;
+                        case "exit":
+                            this.goHome();
                             break;
                     }
                 } else {
                     throw `Cannot find a node ${nextNodeName} for the action ${action}`;
                 }
             }
-        } 
+        } else {
+            // we have no graph to work with, bail out
+            this.goHome();
+        }
     }
 
     /*
@@ -132,7 +120,7 @@ export class NavService<T> {
 
     private call(trackName: string, start: string) {
 
-        let track = tracks.find(t => t.name === trackName);
+        let track = this.tracks.find(t => t.name === trackName);
 
         if (track) {
             const nodeName = start || track.start;

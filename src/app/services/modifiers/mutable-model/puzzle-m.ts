@@ -15,8 +15,8 @@ export abstract class PuzzleM implements IPuzzle {
 
     public abstract linked: boolean;
     //public abstract solveable: boolean;
-    public abstract version: string;
-    public abstract createdWithVersion: string;
+    //public abstract version: string;
+    //public abstract createdWithVersion: string;
 
     public abstract revision: number;
 }

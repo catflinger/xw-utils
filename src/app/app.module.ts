@@ -58,6 +58,14 @@ import { SpecialComponent } from './ui/pages/special/special.component';
 import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
 import { ParseResultComponent } from './ui/components/parse-result/parse-result.component';
 import { ParseErrorHintComponent } from './ui/components/parse-error-hint/parse-error-hint.component';
+import { NavTrack } from './ui/navigation/interfaces';
+import { publishPostTrack } from './ui/navigation/tracks/publish-post-track';
+import { publishGridTrack } from './ui/navigation/tracks/publish-grid-track';
+import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
+import { createCluesTrack } from './ui/navigation/tracks/create-clues-track';
+import { createGridCluesTrack } from './ui/navigation/tracks/create-grid-clues-track';
+import { openPuzzleTrack } from './ui/navigation/tracks/open-puzzle-track';
+import { NAV_TRACKS } from './ui/navigation/nav.service';
 
 const quillGlobalConfig = {
     modules: {
@@ -69,6 +77,16 @@ const quillGlobalConfig = {
         ]
     }
 };
+
+const tracks: ReadonlyArray<NavTrack> = [
+    publishPostTrack,
+    publishGridTrack,
+    createGridTrack,
+    createCluesTrack,
+    createGridCluesTrack,
+    openPuzzleTrack,
+];
+
 
 @NgModule({
     declarations: [
@@ -136,6 +154,8 @@ const quillGlobalConfig = {
         {provide: IActivePuzzle, useExisting: PuzzleManagementService},
         HttpClient,
         TipInstanceFactory,
+        {provide: NAV_TRACKS, useValue: tracks},
+
     ],
     entryComponents: [
         ClueEditorComponent,

@@ -122,7 +122,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onContinue() {
         this.appService.clear();
         this.activePuzzle.update(new Clear());
-        this.navService.goNext("continue");
+        this.navService.navigate("continue");
     }
 
     public onClose() {

@@ -18,8 +18,8 @@ export class Puzzle implements IPuzzle {
 
     public readonly linked: boolean;
     //public readonly solveable;
-    public readonly version: string;
-    public readonly createdWithVersion: string;
+    //public readonly version: string;
+    //public readonly createdWithVersion: string;
 
     public readonly revision: number;
 
@@ -55,8 +55,8 @@ export class Puzzle implements IPuzzle {
         this.publishOptions = new PublishOptions(data.publishOptions);
 
         this.linked = data.linked;
-        this.version = data.version;
-        this.createdWithVersion = data.createdWithVersion;
+        //this.version = data.version;
+        //this.createdWithVersion = data.createdWithVersion;
     }
 
     public getSelectedClue(): Clue {

@@ -57,17 +57,17 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     onContinue() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.navService.goNext("continue");
+        this.navService.navigate("continue");
     }
 
     onBack() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.navService.goNext(this.navService.appData.editor);
+        this.navService.navigate(this.navService.appData.editor);
     }
 
     onGrid() {
         this.activePuzzle.update(new UpdatePublsihOptions(this.publishOptions));
-        this.navService.goNext("grid");
+        this.navService.navigate("grid");
     }
 
 }

@@ -60,12 +60,12 @@ export class PublishGridComponent implements OnInit {
 
     public onContinue() {
         this.appService.clear();
-        this.navService.goNext("continue");
+        this.navService.navigate("continue");
     }
 
     public onBack() {
         this.appService.clear();
-        this.navService.goNext("back");
+        this.navService.navigate("back");
     }
 
     public onClearAll() {

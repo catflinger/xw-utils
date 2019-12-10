@@ -1,32 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { v4 as uuid } from "uuid";
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
 import { Puzzle } from 'src/app/model/puzzle';
 import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m';
-import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid-properties-editor.component';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-grid-start',
     templateUrl: './grid-start.component.html',
     styleUrls: ['./grid-start.component.css']
 })
-export class GridStartComponent implements OnInit {
+export class GridStartComponent implements OnInit, OnDestroy {
+    public puzzle: Puzzle;
+
+    private subs: Subscription[] = [];
 
     constructor(
+        private activePuzzle: IActivePuzzle,
         private navService: NavService<AppTrackData>,
         private puzzleService: IPuzzleManager,
     ) { }
 
     ngOnInit() {
+        this.subs.push(
+            this.activePuzzle.observe().subscribe(
+                (puzzle) => {
+                    this.puzzle = puzzle;
+                }
+        ));
+    }
+
+    public ngOnDestroy(){
+        this.subs.forEach(sub => sub.unsubscribe());
     }
 
     public onClose(result: GridPropertiesArgs) {
         if (result) {
             this.puzzleService.addPuzzle(this.createGrid(result));
-            this.navService.goNext("continue");
+            this.navService.navigate("continue");
         } else {
             this.navService.goHome();
         }
@@ -58,12 +72,12 @@ export class GridStartComponent implements OnInit {
 
         let data: PuzzleM = {
             linked: false,
-            version: null,
-            createdWithVersion: null,
+            //version: null,
+            //createdWithVersion: null,
             revision:0,
 
             info: {
-                id: uuid(),
+                id: "foo", //uuid(),
                 title: params.title,
                 provider: null,
                 setter: null,
@@ -72,6 +86,8 @@ export class GridStartComponent implements OnInit {
                 blogable: false,
                 solveable:false,
                 gridable: true,
+                //ready: false,
+                source: null,
             },
             notes: {
                 header: null,

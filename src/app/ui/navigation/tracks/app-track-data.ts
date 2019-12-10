@@ -1,4 +1,4 @@
-import { EditorType } from '../nav.service';
+export type EditorType = "blogger" | "solver";
 
 export class AppTrackData {
     constructor(
