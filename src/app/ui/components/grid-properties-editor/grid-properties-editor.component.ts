@@ -5,13 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GridStyles } from 'src/app/model/interfaces';
 import { GridProperties } from 'src/app/model/grid-properties';
 
-export class GridPropertiesArgs {
-    constructor(
-        public readonly title: string,
-        public readonly properties: GridProperties,
-    ) {} 
-};
-
 @Component({
   selector: 'app-grid-properties-editor',
   templateUrl: './grid-properties-editor.component.html',
@@ -27,8 +20,8 @@ export class GridPropertiesEditorComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    @Input() public data: GridPropertiesArgs;
-    @Output() public close:EventEmitter<GridPropertiesArgs> = new EventEmitter();
+    @Input() public data: GridProperties;
+    @Output() public close:EventEmitter<GridProperties> = new EventEmitter();
 
     constructor(
         private appService: AppService,
@@ -38,24 +31,20 @@ export class GridPropertiesEditorComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            title: [
-                this.data ? this.data.title : "", 
-                [Validators.required]],
-            
             gridStyle: [
-                this.data ? this.data.properties.style : GridStyles.standard, 
+                this.data ? this.data.style : GridStyles.standard, 
                 [Validators.required]],
 
             cellsAcross: [
-                this.data ? this.data.properties.size.across : 15, 
+                this.data ? this.data.size.across : 15, 
                 [Validators.required, Validators.max(this.maxCellsAcross), Validators.min(this.minCellsAcross)]],
 
             cellsDown: [
-                this.data ? this.data.properties.size.down : 15, 
+                this.data ? this.data.size.down : 15, 
                 [Validators.required, Validators.max(this.maxCellsDown), Validators.min(this.minCellsDown)]],
 
             symmetrical : [
-                this.data ? this.data.properties.symmetrical : true,
+                this.data ? this.data.symmetrical : true,
                 [Validators.required],
             ]
         });
@@ -70,15 +59,12 @@ export class GridPropertiesEditorComponent implements OnInit, OnDestroy {
 
     public onContinue() {
         this.close.emit({
-            title: this.form.value.title,
-            properties: {
-                style: this.form.value.gridStyle,
-                size: {
-                    across: this.form.value.cellsAcross,
-                    down: this.form.value.cellsDown,
-                },
-                symmetrical: this.form.value.symmetrical,
-            }
+            style: this.form.value.gridStyle,
+            size: {
+                across: this.form.value.cellsAcross,
+                down: this.form.value.cellsDown,
+            },
+            symmetrical: this.form.value.symmetrical,
         });
     }
 

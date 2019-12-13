@@ -1,9 +1,18 @@
 import { NavTrack } from '../interfaces';
+import { AppTrackData } from './app-track-data';
 
 export const createCluesTrack: NavTrack = {
     name: "create-clues",
-    start: "parser",
+    start: "create",
     nodes: [
+        {
+            name: "create",
+            type: "route",
+            route: "/create-puzzle",
+            actions: {
+                "continue": "parser",
+            }
+        },
         {
             name: "parser",
             type: "route",

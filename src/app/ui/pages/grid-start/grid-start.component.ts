@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
 import { Puzzle } from 'src/app/model/puzzle';
 import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m';
-import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { GridPropertiesArgs } from '../../components/grid-properties-editor/grid-properties-editor.component';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
+import { AddGrid } from 'src/app/services/modifiers/add-grid';
+import { Grid } from 'src/app/model/grid';
+import { GridProperties } from 'src/app/model/grid-properties';
 
 @Component({
     selector: 'app-grid-start',
@@ -21,7 +22,6 @@ export class GridStartComponent implements OnInit, OnDestroy {
     constructor(
         private activePuzzle: IActivePuzzle,
         private navService: NavService<AppTrackData>,
-        private puzzleService: IPuzzleManager,
     ) { }
 
     ngOnInit() {
@@ -37,19 +37,20 @@ export class GridStartComponent implements OnInit, OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    public onClose(result: GridPropertiesArgs) {
+    public onClose(result: GridProperties) {
         if (result) {
-            this.puzzleService.addPuzzle(this.createGrid(result));
+            let grid = this.createGrid(result);
+            this.activePuzzle.update(new AddGrid({ grid }));
             this.navService.navigate("continue");
         } else {
             this.navService.goHome();
         }
     }
 
-    private createGrid(params: GridPropertiesArgs): Puzzle {
+    private createGrid(params: GridProperties): Grid {
         let cells: GridCellM[] = [];
-        const cellsAcross = params.properties.size.across;
-        const cellsDown = params.properties.size.down;
+        const cellsAcross = params.size.across;
+        const cellsDown = params.size.down;
 
         for(let x = 0; x < cellsAcross; x++) {
             for(let y = 0; y < cellsDown; y++) {
@@ -70,45 +71,9 @@ export class GridStartComponent implements OnInit, OnDestroy {
             }
         }
 
-        let data: PuzzleM = {
-            linked: false,
-            //version: null,
-            //createdWithVersion: null,
-            revision:0,
-
-            info: {
-                id: "foo", //uuid(),
-                title: params.title,
-                provider: null,
-                setter: null,
-                wordpressId: null,
-                puzzleDate: new Date(),
-                blogable: false,
-                solveable:false,
-                gridable: true,
-                //ready: false,
-                source: null,
-            },
-            notes: {
-                header: null,
-                body: null,
-                footer: null,
-            },
-            grid: {
-                properties: params.properties,
-                cells: cells,
-            },
-            clues: null,
-            publishOptions: {
-                answerStyle: null,
-                clueStyle: null,
-                definitionStyle: null,
-                layout: null,
-                includeGrid: true,
-                spacing: null,
-            },
-        }
-
-        return new Puzzle(data);
+        return new Grid({
+            properties: params,
+            cells: cells,
+        });
     }
 }

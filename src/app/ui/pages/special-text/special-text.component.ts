@@ -12,6 +12,7 @@ import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
 import { AddClues } from 'src/app/services/modifiers/add-clues';
+import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -62,7 +63,9 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
 
     public onParse() {
         this.appService.clear();
+
         try {
+            this.activePuzzle.update(new PatchPuzzleInfo({ source: this.form.value.text }))
             this.parseResult = this.parse(this.form.value.text);
 
             if (!this.parseResult.error) {

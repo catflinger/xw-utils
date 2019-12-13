@@ -2,8 +2,16 @@ import { NavTrack } from '../interfaces';
 
 export const createGridTrack: NavTrack = {
     name: "create-grid",
-    start: "grid-start",
+    start: "create",
     nodes: [
+        {
+            name: "create",
+            type: "route",
+            route: "/create-puzzle",
+            actions: {
+                "continue": "grid-start",
+            }
+        },
         {
             name: "grid-start",
             type: "route",

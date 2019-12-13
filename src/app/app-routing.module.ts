@@ -22,6 +22,7 @@ import { DiaryComponent } from './ui/pages/diary/diary.component';
 import { SpecialPdfComponent } from './ui/pages/special-pdf/special-pdf.component';
 import { SpecialComponent } from './ui/pages/special/special.component';
 import { SpecialTextComponent } from './ui/pages/special-text/special-text.component';
+import { CreatePuzzleComponent } from './ui/pages/create-puzzle/create-puzzle.component';
 
 const routes: Routes = [
     // landing pages
@@ -33,7 +34,6 @@ const routes: Routes = [
     { path: "indy", component: IndyComponent },
     { path: "special", component: SpecialComponent },
     { path: "special-pdf", component: SpecialPdfComponent },
-    { path: "special-text", component: SpecialTextComponent },
     { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
@@ -47,6 +47,8 @@ const routes: Routes = [
     { path: "publish-complete", component: PublishCompleteComponent },
 
     // creating and editing grids
+    { path: "create-puzzle", component: CreatePuzzleComponent },
+    { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
 

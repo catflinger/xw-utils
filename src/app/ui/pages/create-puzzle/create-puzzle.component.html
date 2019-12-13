@@ -1,0 +1,16 @@
+<p>create-puzzle works!</p>
+
+<form [formGroup]="form">
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input id="title" type="text" class="form-control" formControlName="title"
+            placeholder="Enter a title for your grid...">
+    </div>
+
+    <div class="formGroup mt-5">
+        <button class="btn btn-primary mr-3" type="button" [disabled]="!form.valid"
+            (click)="onContinue()">Continue</button>
+        <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+    </div>
+</form>

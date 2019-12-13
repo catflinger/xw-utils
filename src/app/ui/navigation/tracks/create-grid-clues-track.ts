@@ -1,19 +1,31 @@
 import { NavTrack } from '../interfaces';
 
+/*
+This track is for creating a new puzzle containing both a grid and text.
+*/
+
 export const createGridCluesTrack: NavTrack = {
     name: "create-grid-clues",
-    start: "grid-start",
+    start: "create",
     nodes: [
+        {
+            name: "create",
+            type: "route",
+            route: "/create-puzzle",
+            actions: {
+                "continue": "grid-start",
+            }
+        },
         {
             name: "grid-start",
             type: "route",
             route: "/grid-start",
             actions: {
-                "continue": "grid-editor",
+                "continue": "grid",
             }
         },
         {
-            name: "grid-editor",
+            name: "grid",
             type: "route",
             route: "/grid-editor",
             actions: {
@@ -26,6 +38,15 @@ export const createGridCluesTrack: NavTrack = {
             type: "route",
             route: "/special-text",
             actions: {
+                "continue": "clues-editor",
+            }
+        },
+        {
+            name: "clues",
+            type: "route",
+            route: "/clues-editor",
+            actions: {
+                "back": "grid-editor",
                 "solve": "solver",
                 "blog": "blogger",
             }

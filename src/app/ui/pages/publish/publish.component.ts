@@ -148,7 +148,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             return this.publicationService.publishPost(this.puzzle, result.url, status);
         })
         .then((result) => {
-            this.activePuzzle.update(new PatchPuzzleInfo(result.wordpressId));
+            this.activePuzzle.update(new PatchPuzzleInfo({ wordPressId: result.wordpressId }));
             this.appService.clearBusy();
             this.navService.navigate("continue");
         })

@@ -65,7 +65,11 @@ import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
 import { createCluesTrack } from './ui/navigation/tracks/create-clues-track';
 import { createGridCluesTrack } from './ui/navigation/tracks/create-grid-clues-track';
 import { openPuzzleTrack } from './ui/navigation/tracks/open-puzzle-track';
-import { NAV_TRACKS } from './ui/navigation/nav.service';
+import { NAV_TRACKS, NAV_PROCESSOR } from './ui/navigation/nav.service';
+import { CreatePuzzleComponent } from './ui/pages/create-puzzle/create-puzzle.component';
+import { CluesEditorComponent } from './ui/pages/clues-editor/clues-editor.component';
+import { ValidatePuzzleComponent } from './ui/pages/validate-puzzle/validate-puzzle.component';
+import { AppProcessService } from './services/app-process.service';
 
 const quillGlobalConfig = {
     modules: {
@@ -136,6 +140,9 @@ const tracks: ReadonlyArray<NavTrack> = [
         SpecialTextComponent,
         ParseResultComponent,
         ParseErrorHintComponent,
+        CreatePuzzleComponent,
+        CluesEditorComponent,
+        ValidatePuzzleComponent,
     ],
     imports: [
         BrowserModule,
@@ -155,7 +162,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         HttpClient,
         TipInstanceFactory,
         {provide: NAV_TRACKS, useValue: tracks},
-
+        {provide: NAV_PROCESSOR, useClass: AppProcessService},
     ],
     entryComponents: [
         ClueEditorComponent,

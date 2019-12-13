@@ -3,12 +3,15 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class PatchPuzzleInfo implements IPuzzleModifier {
     constructor(
-        private wordPressId:  number,
+        private args: { wordPressId?:  number, source?: string },
     ) { }
 
     exec(puzzle: PuzzleM) {
-        if (this.wordPressId !== undefined) {
-            puzzle.info.wordpressId = this.wordPressId;
+        if (this.args.wordPressId !== undefined) {
+            puzzle.info.wordpressId = this.args.wordPressId;
+        }
+        if (this.args.source !== undefined) {
+            puzzle.info.source = this.args.source;
         }
     }
 }

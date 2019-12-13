@@ -1,8 +1,8 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavTrack, NavTrackNode, NavContext } from './interfaces';
+import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
 
-class _NavContext implements NavContext {
+class _NavContext<T> implements NavContext {
     public track: NavTrack;
     public currentNode: NavTrackNode;
 
@@ -12,18 +12,21 @@ class _NavContext implements NavContext {
     }
 }
 
-export const NAV_TRACKS = new InjectionToken<ReadonlyArray<NavTrack>>("Navigation Trakcs");
+export const NAV_TRACKS = new InjectionToken<ReadonlyArray<NavTrack>>("Navigation Tracks");
+export const NAV_PROCESSOR = new InjectionToken<NavProcessor<any>>("Navigation Processes");
 
 @Injectable({
     providedIn: 'root'
 })
 export class NavService<T> {
-    private callStack: _NavContext[] = [];
+    private callStack: _NavContext<T>[] = [];
     private _appData: T;
 
     constructor(
         private router: Router,
-        @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>) { }
+        @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>,
+        @Inject(NAV_PROCESSOR) private processor: NavProcessor<T>
+        ) { }
 
     public get debugNavContext(): NavContext {
         return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
@@ -57,21 +60,17 @@ export class NavService<T> {
     /*
     Move to the next node on the track.
     */
-    public navigate(action: string) {
-        //console.log("Action: " + action);
+    public navigate(action: string): void {
 
         if (this.callStack.length > 0) {
             let context = this.callStack[this.callStack.length - 1];
 
             if(context.currentNode) {
-                //console.log("CurrentNode: " + context.currentNode.name);
                 let nextNodeName = context.currentNode.actions[action];
-                //console.log("NextNode: " + nextNodeName);
                 let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
 
                 if (nextNode) {
-                    //console.log("D: " + nextNode.name);
-                    //console.log("E: " + nextNode.type);
+                    let action: string;
 
                     switch (nextNode.type) {
                         case "route":
@@ -83,9 +82,13 @@ export class NavService<T> {
                             this.call(nextNode.call.track, nextNode.call.start);
                             break;
                         case "return":
-                            let action = nextNode.return;
+                            action = nextNode.return;
                             this.callStack.pop();
-                                this.navigate(action);
+                            this.navigate(action);
+                            break;
+                        case "process":
+                            action = this.processor.exec(nextNode.process, this._appData);
+                            this.navigate(action);
                             break;
                         case "exit":
                             this.goHome();
