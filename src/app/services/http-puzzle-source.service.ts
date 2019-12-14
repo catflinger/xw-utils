@@ -62,7 +62,6 @@ export class HttpPuzzleSourceService {
     }
 
     public getPdfExtract(pdf: string): Promise<ApiPdfExtractResponse> {
-        console.log("making request...");
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {

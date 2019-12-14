@@ -74,6 +74,7 @@ import { ReadmeComponent } from './ui/app-general/readme/readme.component';
 import { SettingsComponent } from './ui/app-general/settings/settings.component';
 import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
+import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -151,6 +152,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         CluesStartComponent,
         LinkErrorComponent,
         SpecialLoginComponent,
+        NavErrorComponent,
     ],
     imports: [
         BrowserModule,

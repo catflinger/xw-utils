@@ -68,12 +68,13 @@ export const puzzleEditTrack: NavTrack = {
             actions: {
                 "ok": "parser",
                 "authenticate": "login",
+                "error": "error",
             }
         },
         {
             name: "login",
             type: "route",
-            route: "/login",
+            route: "/special-login",
             actions: {
                 "ok": "pdf-extract",
                 "cancel": "abandon",
@@ -86,7 +87,7 @@ export const puzzleEditTrack: NavTrack = {
             process: "parse",
             actions: {
                 "ok": "linker",
-                "error": "clues-editor",
+                "error": "error",
             }
         },
         {
@@ -102,7 +103,7 @@ export const puzzleEditTrack: NavTrack = {
             type: "process",
             process: "link",
             actions: {
-                "ok": "?",
+                "ok": "validator",
                 "error": "clues-error",
             }
         },
@@ -116,7 +117,7 @@ export const puzzleEditTrack: NavTrack = {
             }
         },
         {
-            name: "validater",
+            name: "validator",
             type: "process",
             process: "validate",
             actions: {
@@ -147,6 +148,14 @@ export const puzzleEditTrack: NavTrack = {
             route: "/clues-editor",
             actions: {
                 "continue": "linker",
+            }
+        },
+        {
+            name: "error",
+            type: "route",
+            route: "/nav-error",
+            actions: {
+                "continue": "end"
             }
         },
         {

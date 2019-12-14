@@ -4,6 +4,7 @@ import { TokenGroup } from './tokeniser/tokeniser.service';
 export type TextParsingState = "across" | "down" | "ended" | null;
 
 export type TextParsingErrorCode =
+    "exception" |
     // naming convention X_Y is: unexpected token X found while in parsing state Y 
     "acrossMarker_across" | 
     "acrossMarker_down" | 
@@ -73,7 +74,7 @@ export class ParseContext implements IParseContext {
     private _clueBuffer: string = null;
     private _clues: Clue[] = [];
     private _group: TokenGroup = null;
-    private _state: TextParsingState;
+    private _state: TextParsingState = null;
     private _error: TextParsingError = null;
     private _warnings: TextParsingWarning[] = [];
 

@@ -47,8 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-                this.navService.beginTrack("open-puzzle", editor, new AppTrackData(editor));
+                this.navService.beginTrack("solve-track");
             }
         });
     }

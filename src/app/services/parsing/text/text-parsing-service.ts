@@ -59,6 +59,7 @@ export class TextParsingService {
                         this.onClueEndToken(context, _options);
                         break;
                     default:
+                        throw "unrecognised Token Type";
                 }
 
                 yield context as IParseContext;
@@ -67,7 +68,11 @@ export class TextParsingService {
 
             } catch(error) {
                 //context.state = true;
-                context.error = error;
+                if (error instanceof TextParsingError) {
+                    context.error = error;
+                } else {
+                    context.error = new TextParsingError("exception", 0, "", error.toString());
+                }
                 return context;
             }
         }

@@ -23,6 +23,8 @@ import { LoginComponent } from './ui/app-general/login/login.component';
 import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { ReadmeComponent } from './ui/app-general/readme/readme.component';
 import { SettingsComponent } from './ui/app-general/settings/settings.component';
+import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
+import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 
 const routes: Routes = [
     // landing pages
@@ -34,6 +36,7 @@ const routes: Routes = [
     { path: "indy", component: IndyComponent },
     { path: "special", component: SpecialComponent },
     { path: "special-pdf", component: SpecialPdfComponent },
+    { path: "special-login", component: SpecialLoginComponent },
     { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
@@ -51,6 +54,7 @@ const routes: Routes = [
     { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
+    { path: "nav-error", component: NavErrorComponent },
 
     // general
     { path: "diary", component: DiaryComponent },

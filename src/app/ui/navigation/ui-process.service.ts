@@ -3,9 +3,14 @@ import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../services/app.service';
 import { HttpPuzzleSourceService } from 'src/app/services/http-puzzle-source.service';
-import { ApiSymbols } from 'src/app/services/common';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { ApiSymbols, ApiResponseStatus } from 'src/app/services/common';
+import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { AddGrid } from 'src/app/services/modifiers/add-grid';
+import { ParseData } from 'src/app/services/parsing/text/parse-data';
+import { TextParsingService, TextParsingOptions } from 'src/app/services/parsing/text/text-parsing-service';
+import { AddClues } from 'src/app/services/modifiers/add-clues';
+import { Grid } from 'src/app/model/grid';
 
 @Injectable({
     providedIn: 'root'
@@ -16,10 +21,12 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         private appService: AppService,
         private puzzleSource: HttpPuzzleSourceService,
         private activePuzzle: IActivePuzzle,
+        private puzzleManager: IPuzzleManager,
+        private textParsingService: TextParsingService,
     ) {}
 
     async exec(processName: string, appData: AppTrackData): Promise<string> {
-        let action: string = null;
+        let action: Promise<string>;
 
         switch (processName) {
             case "make-clues":
@@ -27,7 +34,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
 
             case "pdf-extract":
-                action = await this.extractPdf();
+                action = this.extractPdf();
                 break;
 
             case "parse":
@@ -47,38 +54,86 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
         
             default:
-                throw "Could not find navivgation process with name " + processName;
+                action = Promise.reject("Could not find navivgation process with name " + processName);
         }
 
         return action;
     }
 
-    private makeClues(): string {
-        return "ok";
+    private makeClues(): Promise<string> {
+        return Promise.resolve("ok");
     }
 
-    private parse(): string {
-        return "ok";
+    private parse(): Promise<string> {
+        let action = "error";
+
+        try {
+            let parseData = new ParseData();
+            parseData.clueDataType = "text";
+            parseData.rawData = this.activePuzzle.puzzle.info.source;
+    
+            let options: TextParsingOptions = {
+                allowPreamble: true,
+                allowPostamble: true,
+            }
+
+            let parser = this.textParsingService.parser(parseData, options);
+            let context = parser.next();
+    
+            while(!context.done) {
+                context = parser.next();
+            }
+
+            if (!context.value.error) {
+                this.activePuzzle.update(new AddClues({ clues: context.value.clues }));
+                action = "ok";
+            } else {
+                this.appService.setAlert("danger", "Parsing Error :" + context.value.error.message);
+            }
+        } catch(error) {
+            this.appService.setAlert("danger", "ERROR :" + error.message)
+        }
+
+        return Promise.resolve(action);
     }
 
-    private link(): string {
-        return "ok";
+    private link(): Promise<string> {
+        return Promise.resolve("ok");
     }
 
-    private validate(): string {
-        return "ok";
+    private validate(): Promise<string> {
+        return Promise.resolve("ok");
     }
 
-    private editor(): string {
-        return "blogger";
+    private editor(): Promise<string> {
+    
+        // if (this.activePuzzle.puzzle.grid) {
+        //     return Promise.resolve("solve");
+        // }
+        return Promise.resolve("blog");
     }
 
     private extractPdf(): Promise<string> {
 
         return this.puzzleSource.getPdfExtract(this.appService.openPuzzleParameters.sourceDataB64)
         .then((result) => {
-            this.activePuzzle.update(new UpdateInfo({ source: result.text }));
-            return "ok";
+
+            if (result.success === ApiResponseStatus.OK) {
+                //console.log("EXTRACTED PDF - GRID" + JSON.stringify(result.grid))
+                //console.log("EXTRACTED PDF - TEXT" + result.text)
+                this.puzzleManager.newPuzzle();
+                this.activePuzzle.update(new UpdateInfo({ source: result.text }));
+
+                if (result.grid) {
+                    let grid = new Grid(result.grid)
+                    this.activePuzzle.update(new AddGrid({ grid }));
+                }
+
+                return "ok";
+            } else {
+                return "error";
+            }
+
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {
