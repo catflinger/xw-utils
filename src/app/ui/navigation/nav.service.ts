@@ -54,13 +54,14 @@ export class NavService<T> {
         while(this.callStack.length > 0) {
             this.callStack.pop();
         }
-        this.call(track, start);
+        this.callTrack(track, start);
     }
 
     /*
     Move to the next node on the track.
     */
-    public navigate(action: string): void {
+    public async navigate(action: string): Promise<void> {
+        let result = Promise.resolve();
 
         if (this.callStack.length > 0) {
             let context = this.callStack[this.callStack.length - 1];
@@ -70,38 +71,17 @@ export class NavService<T> {
                 let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
 
                 if (nextNode) {
-                    let action: string;
-
-                    switch (nextNode.type) {
-                        case "route":
-                            context.currentNode = nextNode;
-                            this.router.navigate([nextNode.route]);
-                            break;
-                        case "call":
-                            context.currentNode = nextNode;
-                            this.call(nextNode.call.track, nextNode.call.start);
-                            break;
-                        case "return":
-                            action = nextNode.return;
-                            this.callStack.pop();
-                            this.navigate(action);
-                            break;
-                        case "process":
-                            action = this.processor.exec(nextNode.process, this._appData);
-                            this.navigate(action);
-                            break;
-                        case "exit":
-                            this.goHome();
-                            break;
-                    }
+                    result = this.invokeNode(nextNode, context);
                 } else {
-                    throw `Cannot find a node ${nextNodeName} for the action ${action}`;
+                    result = Promise.reject(`Cannot find a node ${nextNodeName} for the action ${action}`);
                 }
             }
         } else {
             // we have no graph to work with, bail out
             this.goHome();
         }
+
+        return result;
     }
 
     /*
@@ -121,7 +101,37 @@ export class NavService<T> {
         this.gotoRoute(["/home"]);
     }
 
-    private call(trackName: string, start: string) {
+public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<void> {
+    let result = Promise.resolve();
+    let action: string;
+
+    switch (node.type) {
+        case "route":
+            context.currentNode = node;
+            this.router.navigate([node.route]);
+            break;
+        case "call":
+            context.currentNode = node;
+            this.callTrack(node.call.track, node.call.start);
+            break;
+        case "return":
+            action = node.return;
+            this.callStack.pop();
+            result = this.navigate(action);
+            break;
+        case "process":
+            action = await this.processor.exec(node.process, this._appData);
+            context.currentNode = node;
+            result = this.navigate(action);
+            break;
+        case "exit":
+            this.goHome();
+            break;
+    }
+    return result;
+}
+
+    private callTrack(trackName: string, start: string) {
 
         let track = this.tracks.find(t => t.name === trackName);
 
@@ -134,8 +144,7 @@ export class NavService<T> {
                 context.track = track;
                 context.currentNode = startNode;
                 this.callStack.push(context);
-
-                this.router.navigate([startNode.route]);
+                this.invokeNode(startNode, context);
             } else {
                 throw "Navigation Error - could not find start node";
             }

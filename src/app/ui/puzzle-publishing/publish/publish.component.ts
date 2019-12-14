@@ -4,13 +4,13 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService, PublishGridResult } from 'src/app/services/publication.service';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
 import { Puzzle } from 'src/app/model/puzzle';
 import { ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -148,7 +148,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             return this.publicationService.publishPost(this.puzzle, result.url, status);
         })
         .then((result) => {
-            this.activePuzzle.update(new PatchPuzzleInfo({ wordPressId: result.wordpressId }));
+            this.activePuzzle.update(new UpdateInfo({ wordPressId: result.wordpressId }));
             this.appService.clearBusy();
             this.navService.navigate("continue");
         })

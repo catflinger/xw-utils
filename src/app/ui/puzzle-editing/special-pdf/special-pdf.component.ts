@@ -45,7 +45,7 @@ export class SpecialPdfComponent implements OnInit {
 
     public onOpenPdf() {
         this.appService.clear();
-        this.appService.setOpenPuzzleParams({ provider: "pdf", sourceDataB64: this.content });
-        this.navService.beginTrack("publish-post", null, new AppTrackData(null));
+        this.appService.setOpenPuzzleParams({ provider: "pdf", sourceDataB64: this.content })
+        this.navService.navigate("continue");
     }
 }

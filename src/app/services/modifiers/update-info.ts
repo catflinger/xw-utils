@@ -3,16 +3,22 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 
 export class UpdateInfo implements IPuzzleModifier {
     constructor(
-        public args: {title: string}
+        private args: { 
+            wordPressId?:  number, 
+            source?: string,
+            title?: string,
+        },
     ) { }
 
     exec(puzzle: PuzzleM) {
-        if (puzzle) {
-            if (this.args) {
-                if (this.args.title) {
-                    puzzle.info.title = this.args.title;
-                }
-            }
+        if (this.args.wordPressId !== undefined) {
+            puzzle.info.wordpressId = this.args.wordPressId;
+        }
+        if (this.args.source !== undefined) {
+            puzzle.info.source = this.args.source;
+        }
+        if (this.args.title !== undefined) {
+            puzzle.info.title = this.args.title;
         }
     }
 }

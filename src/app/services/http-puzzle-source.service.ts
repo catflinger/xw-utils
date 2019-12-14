@@ -5,6 +5,13 @@ import { AuthService } from './auth.service';
 import { environment } from "../../environments/environment";
 import { OpenPuzzleParamters } from '../ui/services/app.service';
 
+abstract class ApiPdfExtractResponse implements ApiResponse {
+    public abstract success: ApiResponseStatus;
+    public abstract message: string;
+    public abstract grid: any;
+    public abstract text: string;
+}
+
 abstract class ApiPuzzleResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
     public abstract message: string;
@@ -43,6 +50,36 @@ export class HttpPuzzleSourceService {
         .then((data: ApiPuzzleResponse) => {
             if (data.success === ApiResponseStatus.OK) {
                 return data as PuzzleResponse;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw data.message;
+            }
+        })
+        .catch(error => { 
+            throw "HTTP.POST failed:" + error;
+        });
+    }
+
+    public getPdfExtract(pdf: string): Promise<ApiPdfExtractResponse> {
+        console.log("making request...");
+        const credentials = this.authService.getCredentials();
+
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        let params: any = {
+            username: credentials.username,
+            password: credentials.password,
+            sourceDataB64: pdf,
+        }
+
+        return this.http.post(environment.apiRoot + "pdfextract/", params)
+        .toPromise()
+        .then((data: ApiPdfExtractResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return data as ApiPdfExtractResponse;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {

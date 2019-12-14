@@ -19,17 +19,17 @@ export class SpecialComponent implements OnInit {
     }
 
     public onPdf() {
-        this.navService.gotoRoute(['/special-pdf']);
+        this.navService.navigate("pdf");
     }
 
     public onText() {
         this.puzzleManager.newPuzzle();
-        this.navService.beginTrack("create-clues", null, new AppTrackData("blogger"));
+        this.navService.navigate("clues");
     }
 
     public onGridText() {
         this.puzzleManager.newPuzzle();
-        this.navService.beginTrack("create-grid-clues", null, new AppTrackData("solver"));
+        this.navService.navigate("grid");
     }
 
 }

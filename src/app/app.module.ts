@@ -10,7 +10,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './ui/app/app.component';
-import { HomeComponent } from './ui/pages/home/home.component';
 import { PublishOptionsComponent } from './ui/puzzle-publishing/publish-options/publish-options.component';
 import { PublishComponent } from './ui/puzzle-publishing/publish/publish.component';
 import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complete/publish-complete.component';
@@ -31,7 +30,6 @@ import { CluesPreviewComponent } from './ui/components/clues-preview/clues-previ
 import { ContentPreviewComponent } from './ui/components/content-preview/content-preview.component';
 import { HtmlAsIsPipe } from './ui/pipes/html-as-is.pipe';
 import { ValidationMessageComponent } from './ui/components/validation-message/validation-message.component';
-import { LoginComponent } from './ui/pages/login/login.component';
 import { LoginControlComponent } from './ui/components/login-control/login-control.component';
 import { ArchiveComponent } from './ui/puzzle-editing/archive/archive.component';
 import { ProviderPipe } from './ui/pipes/provider.pipe';
@@ -39,8 +37,6 @@ import { PublishGridComponent } from './ui/puzzle-publishing/publish-grid/publis
 import { ColorControlComponent } from './ui/components/color-control/color-control.component';
 import { PublishLoginComponent } from './ui/puzzle-publishing/publish-login/publish-login.component';
 import { TipComponent } from './ui/components/tip/tip.component';
-import { ReadmeComponent } from './ui/pages/readme/readme.component';
-import { SettingsComponent } from './ui/pages/settings/settings.component';
 import { TipInstanceFactory } from './ui/components/tip/tip-instance';
 import { OpenPuzzleComponent } from './ui/puzzle-editing/open-puzzle/open-puzzle.component';
 import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
@@ -50,7 +46,6 @@ import { GridEditorComponent } from './ui/puzzle-editing/grid-editor/grid-editor
 import { GridStartComponent } from './ui/puzzle-editing/grid-start/grid-start.component';
 import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
 import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
-import { DiaryComponent } from './ui/pages/diary/diary.component';
 import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
 import { DiarySettingsEditorComponent } from './ui/components/diary-settings-editor/diary-settings-editor.component';
 import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf.component';
@@ -64,12 +59,21 @@ import { publishGridTrack } from './ui/navigation/tracks/publish-grid-track';
 import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
 import { createCluesTrack } from './ui/navigation/tracks/create-clues-track';
 import { createGridCluesTrack } from './ui/navigation/tracks/create-grid-clues-track';
-import { openPuzzleTrack } from './ui/navigation/tracks/open-puzzle-track';
+import { openPuzzleTrack } from './ui/navigation/tracks/solve-track';
 import { NAV_TRACKS, NAV_PROCESSOR } from './ui/navigation/nav.service';
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
 import { ValidatePuzzleComponent } from './ui/puzzle-editing/validate-puzzle/validate-puzzle.component';
-import { AppProcessService } from './services/app-process.service';
+import { UIProcessService } from './ui/navigation/ui-process.service';
+import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
+import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
+import { puzzleEditTrack } from './ui/navigation/tracks/puzzle-edit-track';
+import { HomeComponent } from './ui/app-general/home/home.component';
+import { LoginComponent } from './ui/app-general/login/login.component';
+import { ReadmeComponent } from './ui/app-general/readme/readme.component';
+import { SettingsComponent } from './ui/app-general/settings/settings.component';
+import { DiaryComponent } from './ui/app-general/diary/diary.component';
+import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -89,6 +93,7 @@ const tracks: ReadonlyArray<NavTrack> = [
     createCluesTrack,
     createGridCluesTrack,
     openPuzzleTrack,
+    puzzleEditTrack,
 ];
 
 
@@ -143,6 +148,9 @@ const tracks: ReadonlyArray<NavTrack> = [
         CreatePuzzleComponent,
         CluesEditorComponent,
         ValidatePuzzleComponent,
+        CluesStartComponent,
+        LinkErrorComponent,
+        SpecialLoginComponent,
     ],
     imports: [
         BrowserModule,
@@ -162,7 +170,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         HttpClient,
         TipInstanceFactory,
         {provide: NAV_TRACKS, useValue: tracks},
-        {provide: NAV_PROCESSOR, useClass: AppProcessService},
+        {provide: NAV_PROCESSOR, useClass: UIProcessService},
     ],
     entryComponents: [
         ClueEditorComponent,

@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -6,13 +5,12 @@ import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-s
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { IParseContext } from 'src/app/services/parsing/text/text-parsing-context';
 import { Puzzle } from 'src/app/model/puzzle';
-import { QuillDelta } from 'src/app/model/interfaces';
 import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
 import { AddClues } from 'src/app/services/modifiers/add-clues';
-import { PatchPuzzleInfo } from 'src/app/services/modifiers/patch-puzzle-info';
+import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -65,7 +63,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         this.appService.clear();
 
         try {
-            this.activePuzzle.update(new PatchPuzzleInfo({ source: this.form.value.text }))
+            this.activePuzzle.update(new UpdateInfo({ source: this.form.value.text }))
             this.parseResult = this.parse(this.form.value.text);
 
             if (!this.parseResult.error) {

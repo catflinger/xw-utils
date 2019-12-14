@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.navService.gotoRoute(["indy"]);
         
         } else if (provider === "special" ) {
-            this.navService.gotoRoute(["special"]);
+            this.navService.beginTrack("puzzle-edit-track");
         
         } else {
             this.navService.gotoRoute(["archive", provider]);

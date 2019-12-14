@@ -4,7 +4,7 @@ export type NavNodeType = "route" | "call" | "return" | "exit" | "process";
 export type NavAction = { [key: string]: string }
 
 export interface NavProcessor<T> {
-    exec(processName: string, appData: T): string;
+    exec(processName: string, appData: T): Promise<string>;
 }
 
 export type TrackCallParamters = { 

@@ -1,0 +1,4 @@
+<h3>Login</h3>
+<p>Enter your fifteensquared username and password <span *ngIf="settings.sandbox">(Using Sandbox)</span></p>
+
+<app-login-control *ngIf="appStatus" (close)="onLoginClose($event)"></app-login-control>

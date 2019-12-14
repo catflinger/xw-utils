@@ -1,13 +1,13 @@
 import { NavTrack } from '../interfaces';
 
 export const openPuzzleTrack: NavTrack = {
-    name: "open-puzzle",
-    start: "open",
+    name: "solve-track",
+    start: "editor",
     nodes: [
         {
-            name: "open",
-            type: "route",
-            route: "/open-puzzle",
+            name: "editor",
+            type: "process",
+            process: "editor",
             actions: {
                 "solve": "solver",
                 "blog": "blogger",
