@@ -179,7 +179,7 @@ export class TextParsingService {
             case "down":
                 if (!context.hasContent) {
                     context.addText(token.text);
-                    context.save();
+                    context.save(token.lineNumber);
                 } else {
                     throw new TextParsingError("clue_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
                 }
@@ -235,7 +235,7 @@ export class TextParsingService {
             case "down":
                 if (context.hasContent) {
                     context.addText(token.text);
-                    context.save();
+                    context.save(token.lineNumber);
                 } else {
 
                 // TO DO: ask the user to fix this manually

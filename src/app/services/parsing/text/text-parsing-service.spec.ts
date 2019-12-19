@@ -9,29 +9,35 @@ import { IParseContext } from './text-parsing-context';
 let mockTokeniser: MockTokeniserService = new MockTokeniserService();
 
 describe('TextParsingService', () => {
+    
+    describe('Parsing', () => {
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({});
+        beforeEach(() => {
+            TestBed.configureTestingModule({});
+        });
+
+        it('should be created', () => {
+            const service: TextParsingService = new TextParsingService(mockTokeniser);
+            expect(service).toBeTruthy();
+        });
+
+        it('should parse simple text', () => {
+            let result = runParser(testData.simple);
+            expect(result.clues.length).toEqual(4);
+            expect(result.clues[0].text).toEqual("1 A (4)");
+            expect(result.clues[1].text).toEqual("2 B (4)");
+            expect(result.clues[2].text).toEqual("3 C (4)");
+            expect(result.clues[3].text).toEqual("4 D (4)");
+        });
+
+        it('should parse split text', () => {
+            let result = runParser(testData.split);
+
+            expect(result.clues.length).toEqual(2);
+            expect(result.clues[0].text).toEqual("1 A B (4)");
+            expect(result.clues[1].text).toEqual("2 C D E (4)");
+        });
     });
-
-    it('should be created', () => {
-        const service: TextParsingService = new TextParsingService(mockTokeniser);
-        expect(service).toBeTruthy();
-    });
-
-    it('should parse simple text', () => {
-        let result = runParser(testData.simple);
-        expect(result.clues.length).toEqual(4);
-    });
-
-    it('should parse split text', () => {
-        let result = runParser(testData.split);
-
-        expect(result.clues.length).toEqual(2);
-        expect(result.clues[0].text).toEqual("AB");
-        expect(result.clues[1].text).toEqual("CDE");
-    });
-
 });
 
 function runParser(data: ParseToken[]) {
@@ -41,8 +47,11 @@ function runParser(data: ParseToken[]) {
     let parser = service.parser(new ParseData(), null);
     let context = parser.next();
 
+    //console.log("CONTEXT " + JSON.stringify(context));
+
     while(!context.done) {
         context = parser.next();
+        //console.log("CONTEXT " + JSON.stringify(context));
     }
 
     return context.value as IParseContext;
@@ -52,22 +61,22 @@ const testData = {
     simple: [
         new StartMarkerToken(),
         new AcrossMarkerToken(new Line("ACROSS", 0)),
-        new ClueToken(new Line("A", 1)),
-        new ClueToken(new Line("B", 2)),
+        new ClueToken(new Line("1 A (4)", 1)),
+        new ClueToken(new Line("2 B (4)", 2)),
         new DownMarkerToken(new Line("DOWN", 3)),
-        new ClueToken(new Line("C", 4)),
-        new ClueToken(new Line("D", 5)),
+        new ClueToken(new Line("3 C (4)", 4)),
+        new ClueToken(new Line("4 D (4)", 5)),
         new EndMarkerToken(),
     ],
     split: [
         new StartMarkerToken(),
         new AcrossMarkerToken(new Line("ACROSS", 0)),
-        new ClueStartToken(new Line("A", 1)),
-        new ClueEndToken(new Line("B", 2)),
+        new ClueStartToken(new Line("1 A", 1)),
+        new ClueEndToken(new Line("B (4)", 2)),
         new DownMarkerToken(new Line("DOWN", 3)),
-        new ClueStartToken(new Line("C", 4)),
-        new TextToken(new Line("D", 4)),
-        new ClueEndToken(new Line("E", 5)),
+        new ClueStartToken(new Line("2 C ", 4)),
+        new TextToken(new Line("D ", 4)),
+        new ClueEndToken(new Line("E (4)", 5)),
         new EndMarkerToken(),
     ],
 }

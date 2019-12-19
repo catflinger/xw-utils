@@ -63,6 +63,8 @@ export class NavService<T> {
     public async navigate(action: string): Promise<void> {
         let result = Promise.resolve();
 
+        //console.log("NAVIGATE " + action);
+
         if (this.callStack.length > 0) {
             let context = this.callStack[this.callStack.length - 1];
 
@@ -104,6 +106,8 @@ export class NavService<T> {
 public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<void> {
     let result = Promise.resolve();
     let action: string;
+
+    //console.log("INVOKING " + node.name);
 
     switch (node.type) {
         case "route":

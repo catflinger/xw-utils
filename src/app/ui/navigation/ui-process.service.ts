@@ -2,15 +2,11 @@ import { Injectable } from '@angular/core';
 import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../services/app.service';
-import { HttpPuzzleSourceService } from 'src/app/services/http-puzzle-source.service';
-import { ApiSymbols, ApiResponseStatus } from 'src/app/services/common';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
-import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { AddGrid } from 'src/app/services/modifiers/add-grid';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { TextParsingService, TextParsingOptions } from 'src/app/services/parsing/text/text-parsing-service';
 import { AddClues } from 'src/app/services/modifiers/add-clues';
-import { Grid } from 'src/app/model/grid';
+import { LinkCluesToGrid } from 'src/app/services/modifiers/link-clues-to-grid';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +15,6 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
     
     constructor(
         private appService: AppService,
-        private puzzleSource: HttpPuzzleSourceService,
         private activePuzzle: IActivePuzzle,
         private puzzleManager: IPuzzleManager,
         private textParsingService: TextParsingService,
@@ -30,29 +25,36 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
         switch (processName) {
             case "make-clues":
-                action = this.makeClues();
+                action = Promise.resolve("ok");
                 break;
 
             case "pdf-extract":
-                action = this.extractPdf();
-                break;
+                action = this.puzzleManager.loadPuzzleFromPdf(this.appService.openPuzzleParameters.sourceDataB64);
+                break; 
 
             case "parse":
                 action = this.parse();
                 break;
 
             case "link":
-                action = this.link();
+                try {
+                    this.activePuzzle.update(new LinkCluesToGrid());
+                    action = Promise.resolve("ok");
+                } catch (error) {
+                    action = Promise.resolve("error");
+                }
                 break;
 
             case "validate":
                 action = this.validate();
                 break;
-    
+
             case "editor":
-                action = this.editor();
-                break;
-        
+                action = this.activePuzzle.puzzle.grid ?
+                    Promise.resolve("solve") :
+                    Promise.resolve("blog");
+                    break;
+
             default:
                 action = Promise.reject("Could not find navivgation process with name " + processName);
         }
@@ -60,10 +62,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         return action;
     }
 
-    private makeClues(): Promise<string> {
-        return Promise.resolve("ok");
-    }
-
+    // TO DO: move this to an UPDATE modifier
     private parse(): Promise<string> {
         let action = "error";
 
@@ -97,51 +96,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         return Promise.resolve(action);
     }
 
-    private link(): Promise<string> {
-        return Promise.resolve("ok");
-    }
-
     private validate(): Promise<string> {
         return Promise.resolve("ok");
     }
-
-    private editor(): Promise<string> {
-    
-        // if (this.activePuzzle.puzzle.grid) {
-        //     return Promise.resolve("solve");
-        // }
-        return Promise.resolve("blog");
-    }
-
-    private extractPdf(): Promise<string> {
-
-        return this.puzzleSource.getPdfExtract(this.appService.openPuzzleParameters.sourceDataB64)
-        .then((result) => {
-
-            if (result.success === ApiResponseStatus.OK) {
-                //console.log("EXTRACTED PDF - GRID" + JSON.stringify(result.grid))
-                //console.log("EXTRACTED PDF - TEXT" + result.text)
-                this.puzzleManager.newPuzzle();
-                this.activePuzzle.update(new UpdateInfo({ source: result.text }));
-
-                if (result.grid) {
-                    let grid = new Grid(result.grid)
-                    this.activePuzzle.update(new AddGrid({ grid }));
-                }
-
-                return "ok";
-            } else {
-                return "error";
-            }
-
-        })
-        .catch((error) => {
-            if (error === ApiSymbols.AuthorizationFailure) {
-                return "authenticate";
-            } else {
-                throw error && error.message ? error.message : error.toString();
-            }
-        });
-    }
-
 }

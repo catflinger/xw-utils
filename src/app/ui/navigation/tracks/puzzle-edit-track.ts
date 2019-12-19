@@ -104,7 +104,7 @@ export const puzzleEditTrack: NavTrack = {
             process: "link",
             actions: {
                 "ok": "validator",
-                "error": "clues-error",
+                "error": "link-error",
             }
         },
         {

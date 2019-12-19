@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { Line } from './line';
-import { parseTokenTypes } from './tokeniser/tokens';
 
 describe('Line', () => {
 

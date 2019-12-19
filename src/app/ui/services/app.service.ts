@@ -1,10 +1,10 @@
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, Type } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 import { Alert, AlertType } from '../common';
-import { PuzzleProvider } from 'src/app/model/interfaces';
+import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
 
+// TO DO: do we still need this?
 export type LoginCallback = () => void;
 
 export type OpenPuzzleAction = "openByDate" | "openLatest";
@@ -24,7 +24,7 @@ export interface OpenPuzzleParamters {
     title?: string,
     sourceUrl?: string,
     sourceText?: string,
-    sourceDataB64?: string,
+    sourceDataB64?: Base64Encoded,
     serialNumber?: number,
     date?: Date,
     setter?: string,

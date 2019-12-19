@@ -25,6 +25,7 @@ import { ReadmeComponent } from './ui/app-general/readme/readme.component';
 import { SettingsComponent } from './ui/app-general/settings/settings.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
+import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 
 const routes: Routes = [
     // landing pages
@@ -55,6 +56,7 @@ const routes: Routes = [
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
     { path: "nav-error", component: NavErrorComponent },
+    { path: "link-error", component: LinkErrorComponent },
 
     // general
     { path: "diary", component: DiaryComponent },

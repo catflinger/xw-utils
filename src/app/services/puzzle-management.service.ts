@@ -7,10 +7,14 @@ import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
 import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
-import { IPuzzle, QuillDelta } from '../model/interfaces';
+import { IPuzzle, QuillDelta, Base64Encoded } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { AddPlaceholders } from './modifiers/add-placeholders';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
+import { ApiResponseStatus, ApiSymbols } from './common';
+import { UpdateInfo } from './modifiers/update-info';
+import { Grid } from '../model/grid';
+import { AddGrid } from './modifiers/add-grid';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -30,6 +34,8 @@ export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
+    abstract loadPuzzleFromPdf(pdf: Base64Encoded): Promise<string>;
+
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
 }
@@ -116,8 +122,11 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {
-            reducer.exec(puzzle);
-            this.commit(puzzle);
+            const cancel = reducer.exec(puzzle);
+            
+            if (!cancel) {
+                this.commit(puzzle);
+            }
         }
     }
 
@@ -175,6 +184,35 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 this.clear();
                 this.refreshPuzzleList();
             });
+    }
+
+    public loadPuzzleFromPdf(pdf: Base64Encoded): Promise<string> {
+
+        return this.httpPuzzleService.getPdfExtract(pdf)
+        .then((result) => {
+
+            if (result.success === ApiResponseStatus.OK) {
+                this.newPuzzle();
+
+                this.update(new UpdateInfo({ source: result.text }));
+
+                if (result.grid) {
+                    let grid = new Grid(result.grid)
+                    this.update(new AddGrid({ grid }));
+                }
+                return "ok";
+            } else {
+                return "error";
+            }
+
+        })
+        .catch((error) => {
+            if (error === ApiSymbols.AuthorizationFailure) {
+                return "authenticate";
+            } else {
+                return "error";
+            }
+        });
     }
 
     //#endregion

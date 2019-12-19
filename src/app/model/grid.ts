@@ -1,7 +1,6 @@
 import { IGrid, GridNavigation, Direction } from './interfaces';
 import { GridCell } from './grid-cell';
 import { GridProperties } from './grid-properties';
-import { prepareEventListenerParameters } from '@angular/compiler/src/render3/view/template';
 
 export class Grid implements IGrid {
     public readonly properties: GridProperties;
@@ -94,7 +93,7 @@ export class Grid implements IGrid {
         return null as GridCell;
     }
 
-    public getGridEntry(cellId: string): GridCell[] {
+    public getGridEntryForCell(cellId: string): GridCell[] {
         let entry: GridCell[] = [];
         let startCell = this.cells.find(c => c.id === cellId);
 
@@ -108,6 +107,18 @@ export class Grid implements IGrid {
         return entry;
     }
 
+    public getGridEntryForCaption(caption: string,  direction: Direction): GridCell[] {
+        let entry: GridCell[] = [];
+
+        let startCell = this.cells.find(c => c.caption === caption);
+
+        if (startCell) {
+            entry = this.getEntry(startCell, direction);
+        }
+
+        return entry;
+    }
+    
     private getEntry(entryCell: GridCell, direction: Direction): GridCell[] {
         let result: GridCell[] = [];
         let startCell: GridCell = null;

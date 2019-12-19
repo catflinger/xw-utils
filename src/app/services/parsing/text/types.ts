@@ -1,3 +1,5 @@
+import { ClueGroup } from 'src/app/model/interfaces';
+
 export type LineType = 
     
     // contains whitespace only
@@ -20,3 +22,4 @@ export type LineType =
 
     // contains a down marker, typically "DOWN"
     "downMarker";
+

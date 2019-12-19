@@ -43,7 +43,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
                     }
                     this.puzzle = puzzle;
 
-                    console.log("BLOGGER " + JSON.stringify(puzzle.clues));
+                    //console.log("BLOGGER " + JSON.stringify(puzzle.clues));
                 }
             }));
 

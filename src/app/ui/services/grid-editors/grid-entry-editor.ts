@@ -18,7 +18,7 @@ export class GridEntryEditor extends GridEditor {
         let result: IPuzzleModifier[] = [];
 
         result.push(new Clear());
-        let entry = puzzle.grid.getGridEntry(entryCell.id);
+        let entry = puzzle.grid.getGridEntryForCell(entryCell.id);
 
         if (entry.length > 0) {
             result.push(new SelectCellsForEdit(entry));

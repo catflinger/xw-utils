@@ -4,6 +4,7 @@ import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
 import { AuthService } from './auth.service';
 import { environment } from "../../environments/environment";
 import { OpenPuzzleParamters } from '../ui/services/app.service';
+import { Base64Encoded } from '../model/interfaces';
 
 abstract class ApiPdfExtractResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -61,7 +62,7 @@ export class HttpPuzzleSourceService {
         });
     }
 
-    public getPdfExtract(pdf: string): Promise<ApiPdfExtractResponse> {
+    public getPdfExtract(pdf: Base64Encoded): Promise<ApiPdfExtractResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {

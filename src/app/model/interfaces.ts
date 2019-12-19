@@ -1,6 +1,8 @@
 import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
 
+export type Base64Encoded = string;
+
 export type Direction = "across" | "down";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";

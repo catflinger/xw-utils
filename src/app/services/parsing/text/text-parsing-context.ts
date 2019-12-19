@@ -1,5 +1,7 @@
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
+import { QuillDelta, ClueGroup } from 'src/app/model/interfaces';
+import { Line } from './line';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -79,10 +81,11 @@ export class ParseContext implements IParseContext {
     private _warnings: TextParsingWarning[] = [];
 
     public addText(text: string) {
-        if (this._clueBuffer === null) {
-            this._clueBuffer = "";
+        if (!this._clueBuffer) {
+            this._clueBuffer = text.trim();
+        } else {
+            this._clueBuffer += " " + text.trim();
         }
-        this._clueBuffer += text;
     }
 
     public addWarning(lineNumber: number, message: string) {
@@ -104,23 +107,63 @@ export class ParseContext implements IParseContext {
     public get error(): TextParsingError { return this._error } 
     public set error(error: TextParsingError) { this._error = error } 
 
-    public save() {
+    public save(lineNumber: number) {
 
         // TO DO: fill in the missing properties on teh clue: letterCount for example
         //compileError - start again here
 
+        let line: Line = new Line(this._clueBuffer, lineNumber);
+
         this._clues.push(new Clue({
+            id: "",
             group: this.state,
+            caption: ParseContext.readCaption(this._clueBuffer),
+            text: this._clueBuffer,
+            letterCount: "(5, 4)",
+            answer: null,
+            solution: null,
+            annotation: null,
+            redirect: false,
+            format: null,
+            comment: new QuillDelta(),
+            highlight: false,
             entries: [],
+            warnings: [], 
             chunks: [
                 {
                     text: this.buffer,
                     isDefinition: false,
                 }
             ],
-            warnings: [],
-            text: this._clueBuffer,
         }));
         this._clueBuffer = null;
     }
+
+    private static readCaption(text: string): string {
+
+        if (!text || text.trim().length === 0) {
+            return null;
+        }
+
+        // one or two digits
+        const firstPart = String.raw`\d{1,2}`;
+        
+        // optional space, a comma, optional space, one or two digits, then an optioanl "across" or "down"
+        const additionalPart = String.raw`\s*,\s*\d{1,2}(\s?(across)|(down))?`;
+        
+        // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
+        const captionGroup = String.raw`(?<caption>\*?\s*${firstPart}(${additionalPart})*)`;
+        
+        // start of line, optional space, (the caption group)
+        const expression = String.raw`^\s*${captionGroup}`;
+        
+        const regExp = new RegExp(expression, "i");
+        const match = regExp.exec(text);
+
+        //console.log("READING CAPTION " + match.groups.caption )
+
+        return match.groups.caption;
+    }
+
+
 }
