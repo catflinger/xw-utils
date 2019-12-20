@@ -4,9 +4,9 @@ import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
-import { TextParsingService, TextParsingOptions } from 'src/app/services/parsing/text/text-parsing-service';
 import { AddClues } from 'src/app/services/modifiers/add-clues';
 import { LinkCluesToGrid } from 'src/app/services/modifiers/link-clues-to-grid';
+import { ParseText } from 'src/app/services/modifiers/parse-text';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +17,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private puzzleManager: IPuzzleManager,
-        private textParsingService: TextParsingService,
+        private textParser: ParseText,
     ) {}
 
     async exec(processName: string, appData: AppTrackData): Promise<string> {
@@ -49,8 +49,8 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 action = this.validate();
                 break;
 
-            case "editor":
-                action = this.activePuzzle.puzzle.grid ?
+            case "editor-select":
+                action = this.activePuzzle.puzzle.linked && appData && appData.editor === "solver" ?
                     Promise.resolve("solve") :
                     Promise.resolve("blog");
                     break;
@@ -66,31 +66,13 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
     private parse(): Promise<string> {
         let action = "error";
 
-        try {
-            let parseData = new ParseData();
-            parseData.clueDataType = "text";
-            parseData.rawData = this.activePuzzle.puzzle.info.source;
-    
-            let options: TextParsingOptions = {
-                allowPreamble: true,
-                allowPostamble: true,
-            }
+        let result = this.activePuzzle.update(this.textParser);
 
-            let parser = this.textParsingService.parser(parseData, options);
-            let context = parser.next();
-    
-            while(!context.done) {
-                context = parser.next();
-            }
-
-            if (!context.value.error) {
-                this.activePuzzle.update(new AddClues({ clues: context.value.clues }));
-                action = "ok";
-            } else {
-                this.appService.setAlert("danger", "Parsing Error :" + context.value.error.message);
-            }
-        } catch(error) {
-            this.appService.setAlert("danger", "ERROR :" + error.message)
+        if (!result) {
+            action = "ok";
+        } else {
+            action = "error";
+            this.appService.setAlert("danger", "Parsing Error :" + result);
         }
 
         return Promise.resolve(action);

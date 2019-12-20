@@ -5,8 +5,7 @@
     <table>
         <tbody>
             <tr *ngFor="let clue of clues" (click)="onClueClick(clue)">
-                <td class="caption">{{clue.caption}}</td>
-                <td [ngClass]="getClueTextClass(clue)">{{clue.text}}</td>
+                <app-clue-list-item [clue]="clue"></app-clue-list-item>
             </tr>
         </tbody>
     </table>

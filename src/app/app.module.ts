@@ -56,10 +56,6 @@ import { ParseErrorHintComponent } from './ui/components/parse-error-hint/parse-
 import { NavTrack } from './ui/navigation/interfaces';
 import { publishPostTrack } from './ui/navigation/tracks/publish-post-track';
 import { publishGridTrack } from './ui/navigation/tracks/publish-grid-track';
-import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
-import { createCluesTrack } from './ui/navigation/tracks/create-clues-track';
-import { createGridCluesTrack } from './ui/navigation/tracks/create-grid-clues-track';
-import { openPuzzleTrack } from './ui/navigation/tracks/solve-track';
 import { NAV_TRACKS, NAV_PROCESSOR } from './ui/navigation/nav.service';
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
@@ -67,7 +63,6 @@ import { ValidatePuzzleComponent } from './ui/puzzle-editing/validate-puzzle/val
 import { UIProcessService } from './ui/navigation/ui-process.service';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
-import { puzzleEditTrack } from './ui/navigation/tracks/puzzle-edit-track';
 import { HomeComponent } from './ui/app-general/home/home.component';
 import { LoginComponent } from './ui/app-general/login/login.component';
 import { ReadmeComponent } from './ui/app-general/readme/readme.component';
@@ -75,6 +70,9 @@ import { SettingsComponent } from './ui/app-general/settings/settings.component'
 import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
+import { ClueListItemComponent } from './ui/components/clue-list-item/clue-list-item.component';
+import { createTrack } from './ui/navigation/tracks/create-track';
+import { solveTrack } from './ui/navigation/tracks/solve-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -88,13 +86,10 @@ const quillGlobalConfig = {
 };
 
 const tracks: ReadonlyArray<NavTrack> = [
+    createTrack,
+    solveTrack,
     publishPostTrack,
     publishGridTrack,
-    createGridTrack,
-    createCluesTrack,
-    createGridCluesTrack,
-    openPuzzleTrack,
-    puzzleEditTrack,
 ];
 
 
@@ -153,6 +148,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         LinkErrorComponent,
         SpecialLoginComponent,
         NavErrorComponent,
+        ClueListItemComponent,
     ],
     imports: [
         BrowserModule,

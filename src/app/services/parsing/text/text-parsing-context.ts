@@ -39,6 +39,11 @@ export type TextParsingErrorCode =
 
 const marker = Symbol("TextParsingError");
 
+interface ClueTextParts {
+    caption: string;
+    clue: string;
+}
+
 export class TextParsingWarning {
     constructor(
         public readonly lineNumber: number,
@@ -112,14 +117,15 @@ export class ParseContext implements IParseContext {
         // TO DO: fill in the missing properties on teh clue: letterCount for example
         //compileError - start again here
 
-        let line: Line = new Line(this._clueBuffer, lineNumber);
+        //let line: Line = new Line(this._clueBuffer, lineNumber);
+        let parts: ClueTextParts = this.readCaption(this._clueBuffer);
 
         this._clues.push(new Clue({
             id: "",
             group: this.state,
-            caption: ParseContext.readCaption(this._clueBuffer),
-            text: this._clueBuffer,
-            letterCount: "(5, 4)",
+            caption: parts.caption,
+            text: parts.clue,
+            letterCount: this.readLetterCount(),
             answer: null,
             solution: null,
             annotation: null,
@@ -131,7 +137,7 @@ export class ParseContext implements IParseContext {
             warnings: [], 
             chunks: [
                 {
-                    text: this.buffer,
+                    text: parts.clue,
                     isDefinition: false,
                 }
             ],
@@ -139,7 +145,7 @@ export class ParseContext implements IParseContext {
         this._clueBuffer = null;
     }
 
-    private static readCaption(text: string): string {
+    private readCaption(text: string): ClueTextParts {
 
         if (!text || text.trim().length === 0) {
             return null;
@@ -148,22 +154,31 @@ export class ParseContext implements IParseContext {
         // one or two digits
         const firstPart = String.raw`\d{1,2}`;
         
-        // optional space, a comma, optional space, one or two digits, then an optioanl "across" or "down"
-        const additionalPart = String.raw`\s*,\s*\d{1,2}(\s?(across)|(down))?`;
+        // optional space, a comma or slash, optional space, one or two digits, then an optioanl "across" or "down" or "/""
+        const additionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across)|(down))?`;
         
         // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
         const captionGroup = String.raw`(?<caption>\*?\s*${firstPart}(${additionalPart})*)`;
         
-        // start of line, optional space, (the caption group)
-        const expression = String.raw`^\s*${captionGroup}`;
+        // any characters up to the end of the line
+        const clueGroup = String.raw`(?<clue>.*$)`;
         
-        const regExp = new RegExp(expression, "i");
+        // start of line, optional space, (the caption group)
+        const expression = String.raw`^\s*${captionGroup}${clueGroup}`;
+        
+        const regExp = new RegExp(expression);
         const match = regExp.exec(text);
 
         //console.log("READING CAPTION " + match.groups.caption )
 
-        return match.groups.caption;
+        return {
+            caption: match.groups.caption.trim(),
+            clue: match.groups.clue.trim(),
+        };
     }
 
+    private readLetterCount(): string {
+        return "(5, 4)"
+    }
 
 }

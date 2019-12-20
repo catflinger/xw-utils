@@ -3,6 +3,7 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
 import { GridEntryM } from './mutable-model/grid-entry-m';
 import { Direction, ClueGroup } from 'src/app/model/interfaces';
+import { RenumberGid } from './renumber-grid';
 
 interface GridReference {
     // for example: 2 down or 23 across
@@ -15,6 +16,9 @@ export class LinkCluesToGrid implements IPuzzleModifier {
     public exec(puzzle: PuzzleM): boolean {
         try {
             if (puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
+                let captionWriter = new RenumberGid();
+                captionWriter.exec(puzzle);
+                
                 puzzle.clues.forEach((clue) => {
                     const grid = new Grid(puzzle.grid);
         
@@ -28,6 +32,7 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
                 puzzle.info.blogable = true;
                 puzzle.info.solveable = true;
+                puzzle.linked = true;
             }
         } catch (error) {
             //console.log("Link error: " + error)

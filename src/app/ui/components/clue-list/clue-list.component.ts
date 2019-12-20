@@ -45,26 +45,4 @@ export class ClueListComponent implements OnInit {
             this.activePuzzle.update(new SelectClue(clue.id));
         }
     }
-
-    public getClueTextClass(clue: Clue): string[] {
-        const validationRequired: boolean = this.appSettings.general.showCommentValidation.enabled;
-        const detailsRequired: boolean = this.appSettings.general.showCommentEditor.enabled;
-        let result = [];
-
-        if (clue.highlight) {
-            result.push("highlight");
-        }
-
-        if (validationRequired) {
-            let isSolved = detailsRequired ? 
-                clue.warnings.length === 0 :
-                clue.answer.length > 0;
-
-            if (isSolved) {
-                result.push("solved");
-            }
-        }
-
-        return result;
-    }
 }

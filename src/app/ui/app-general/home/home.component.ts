@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack("solve-track");
+                this.navService.beginTrack("solve");
             }
         });
     }
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack("create-grid", "grid-editor", null);
+                this.navService.beginTrack("create", "grid-editor", null);
             }
         });
     }

@@ -15,11 +15,7 @@ export class Puzzle implements IPuzzle {
 
     public readonly grid: Grid;
     public readonly clues: readonly Clue[];
-
     public readonly linked: boolean;
-    //public readonly solveable;
-    //public readonly version: string;
-    //public readonly createdWithVersion: string;
 
     public readonly revision: number;
 

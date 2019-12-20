@@ -24,18 +24,29 @@ describe('TextParsingService', () => {
         it('should parse simple text', () => {
             let result = runParser(testData.simple);
             expect(result.clues.length).toEqual(4);
-            expect(result.clues[0].text).toEqual("1 A (4)");
-            expect(result.clues[1].text).toEqual("2 B (4)");
-            expect(result.clues[2].text).toEqual("3 C (4)");
-            expect(result.clues[3].text).toEqual("4 D (4)");
+            expect(result.clues[0].caption).toEqual("1");
+            expect(result.clues[0].text).toEqual("A (4)");
+
+            expect(result.clues[1].caption).toEqual("2");
+            expect(result.clues[1].text).toEqual("B (4)");
+
+            expect(result.clues[2].caption).toEqual("3");
+            expect(result.clues[2].text).toEqual("C (4)");
+
+            expect(result.clues[3].caption).toEqual("4");
+            expect(result.clues[3].text).toEqual("D (4)");
         });
 
         it('should parse split text', () => {
             let result = runParser(testData.split);
 
             expect(result.clues.length).toEqual(2);
-            expect(result.clues[0].text).toEqual("1 A B (4)");
-            expect(result.clues[1].text).toEqual("2 C D E (4)");
+            
+            expect(result.clues[0].caption).toEqual("1");
+            expect(result.clues[0].text).toEqual("A B (4)");
+            
+            expect(result.clues[1].caption).toEqual("2");
+            expect(result.clues[1].text).toEqual("C D E (4)");
         });
     });
 });

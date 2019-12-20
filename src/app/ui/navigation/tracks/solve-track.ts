@@ -1,13 +1,13 @@
 import { NavTrack } from '../interfaces';
 
-export const openPuzzleTrack: NavTrack = {
-    name: "solve-track",
+export const solveTrack: NavTrack = {
+    name: "solve",
     start: "editor",
     nodes: [
         {
             name: "editor",
             type: "process",
-            process: "editor",
+            process: "editor-select",
             actions: {
                 "solve": "solver",
                 "blog": "blogger",

@@ -1,0 +1,15 @@
+.highlight {
+    background-color: burlywood;
+}
+.solved {
+    color: silver;
+}
+.highlight.solved {
+    color: inherit;
+}
+.caption {
+    font-weight: bold;
+}
+td {
+    vertical-align: top;
+}

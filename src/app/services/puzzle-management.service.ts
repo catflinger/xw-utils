@@ -25,7 +25,7 @@ export abstract class IActivePuzzle {
     abstract get puzzle(): Puzzle;
     abstract hasPuzzle: boolean;
     abstract clear(id?: string);
-    abstract update(reducer: IPuzzleModifier);
+    abstract update(reducer: IPuzzleModifier): any;
 }
 export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does

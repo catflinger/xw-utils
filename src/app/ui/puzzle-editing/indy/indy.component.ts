@@ -59,7 +59,7 @@ const Sunday = 0;
     private openPuzzle(provider: PuzzleProvider, date: Date) {
         this.appService.clear();
         this.appService.setOpenPuzzleParams({ provider, date});
-        this.navService.beginTrack("open-puzzle", null, new AppTrackData(null));
+        this.navService.beginTrack("create", "open", new AppTrackData(null));
     }
 }
 

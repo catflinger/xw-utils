@@ -6,10 +6,18 @@ This track is for creating a new puzzle or amending an existing puzzle
 Edit refers to the role of a crossword editor, both a comissioner and a modifier of puzzles
 */
 
-export const puzzleEditTrack: NavTrack = {
-    name: "puzzle-edit-track",
+export const createTrack: NavTrack = {
+    name: "create",
     start: "special",
     nodes: [
+        {
+            name: "open",
+            type: "route",
+            route: "/open-puzzle",
+            actions: {
+                "continue": "end",
+            }
+        },
         {
             name: "special",
             type: "route",
@@ -162,7 +170,7 @@ export const puzzleEditTrack: NavTrack = {
             name: "end",
             type: "call",
             call: {
-                track: "solve-track"
+                track: "solve"
             },
             actions: {}
         },

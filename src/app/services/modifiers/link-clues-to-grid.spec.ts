@@ -91,112 +91,113 @@ describe('LinkCLuesToGrid modifier', () => {
         });
 
         describe('create grid references', () => {
+            let puzzle: PuzzleM;
 
-            it('should process an across clue', () => {
+            beforeAll(() => {
                 const modifier = new LinkCluesToGrid();
-                const puzzle = getPuzzleWithNoClues();
+                puzzle = getPuzzleWithNoClues();
                 addTestClues(puzzle);
                 modifier.exec(puzzle);
+            })
 
+            it('should have processed all clues', () => {
                 expect(puzzle.clues.length).toEqual(3);
+            });
 
-                // 1 across
-                let clue = puzzle.clues[0];
+            it('should process an across clue', () => {
+
+                // 1st clue - 1 (across clue)
+                const clue = puzzle.clues[0];
                 expect(Array.isArray(clue.entries)).toBeTruthy;
                 expect(clue.entries.length).toEqual(1);
-                let entry = clue.entries[0];
+                const entry = clue.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
-                expect(entry.cellIds.length).toEqual(4);
-                let cells = entry.cellIds;
+                expect(entry.cellIds.length).toEqual(5);
+                const cells = entry.cellIds;
 
                 expect(cells[0]).toEqual("00");
                 expect(cells[1]).toEqual("10");
                 expect(cells[2]).toEqual("20");
                 expect(cells[3]).toEqual("30");
+                expect(cells[4]).toEqual("40");
             });
 
             it('should process a down clue', () => {
-                const modifier = new LinkCluesToGrid();
-                const puzzle = getPuzzleWithNoClues();
-                addTestClues(puzzle);
-                modifier.exec(puzzle);
 
-                expect(puzzle.clues.length).toEqual(3);
-
-                // 1 down
+                // 2nd clue - 2 (down clue)
                 let clue = puzzle.clues[1];
                 expect(Array.isArray(clue.entries)).toBeTruthy;
                 expect(clue.entries.length).toEqual(1);
                 let entry = clue.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
-                expect(entry.cellIds.length).toEqual(3);
+                expect(entry.cellIds.length).toEqual(5);
                 let cells = entry.cellIds;
 
-                expect(cells[0]).toEqual("00");
-                expect(cells[1]).toEqual("01");
-                expect(cells[2]).toEqual("02");
+                expect(cells[0]).toEqual("20");
+                expect(cells[1]).toEqual("21");
+                expect(cells[2]).toEqual("22");
+                expect(cells[3]).toEqual("23");
+                expect(cells[4]).toEqual("24");
             });
 
             it('should process a mixed clue', () => {
-                const modifier = new LinkCluesToGrid();
-                const puzzle = getPuzzleWithNoClues();
-                addTestClues(puzzle);
-                modifier.exec(puzzle);
 
-                expect(puzzle.clues.length).toEqual(3);
-
-                // 2, 1 down
+                // 3rd clue - 5, 3 down (across clue)
                 let clue = puzzle.clues[2];
                 expect(Array.isArray(clue.entries)).toBeTruthy;
                 expect(clue.entries.length).toEqual(2);
 
-                // 2 across - 1st entry
+                // 5 across - 1st entry
                 let entry = clue.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
                 expect(entry.cellIds.length).toEqual(5);
                 let cells = entry.cellIds;
 
-                // this entry is labelled 2 across in teh grid
-                expect(cells[0]).toEqual("50");
-                expect(cells[1]).toEqual("60");
-                expect(cells[2]).toEqual("70");
-                expect(cells[3]).toEqual("80");
-                expect(cells[4]).toEqual("90");
+                // this entry is labelled 5 across in teh grid
+                expect(cells[0]).toEqual("04");
+                expect(cells[1]).toEqual("14");
+                expect(cells[2]).toEqual("24");
+                expect(cells[3]).toEqual("34");
+                expect(cells[4]).toEqual("44");
 
                 // 2 across - 2nd entry
                 entry = clue.entries[1];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
-                expect(entry.cellIds.length).toEqual(3);
+                expect(entry.cellIds.length).toEqual(5);
                 cells = entry.cellIds;
 
-                // this entry is labelled 1 down in the grid
-                expect(cells[0]).toEqual("00");
-                expect(cells[1]).toEqual("01");
-                expect(cells[2]).toEqual("02");
+                // this entry is labelled 3 down in the grid
+                expect(cells[0]).toEqual("40");
+                expect(cells[1]).toEqual("41");
+                expect(cells[2]).toEqual("42");
+                expect(cells[3]).toEqual("43");
+                expect(cells[4]).toEqual("44");
             });
         });
     });
 });
 
 function addTestClues(puzzle: PuzzleM) {
-    let start, end: GridCellM;
+
+/*  THE GRID
+0| 1 . 2 . 3 
+1| . x . x .
+2| 4 . . . .
+3| . x . x .
+4| 5 . . . .
+ -----------
+   0 1 2 3 4
+*/
+
 
     // add 1 across
-    puzzle.clues.push(makeClue("1", "across", "1 This is one across (4)"));
-    start = puzzle.grid.cells.find(c => c.x === 0 && c.y === 0);
-    end = puzzle.grid.cells.find(c => c.x === 4 && c.y === 0);
-    start.caption = "1";
-    end.light = false;
+    puzzle.clues.push(makeClue("1", "across", "This is one across (5)"));
 
-    // add 1 down
-    puzzle.clues.push(makeClue("1", "down", "1 This is one down (3)"));
-    end = puzzle.grid.cells.find(c => c.x === 0 && c.y === 3);
-    end.light = false;
+    // add 2 down
+    puzzle.clues.push(makeClue("2", "down", "This is 2 down (5)"));
 
-    // add 2 across
-    puzzle.clues.push(makeClue("2, 1 down", "across", "2, 1 down This has two grid entries (4, 3)"));
-    start = puzzle.grid.cells.find(c => c.x === 5 && c.y === 0);
-    start.caption = "2";
+    // add 5 across
+    puzzle.clues.push(makeClue("5, 3 down", "across", "This has two grid entries (5, 5)"));
 }
 
 function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
@@ -222,41 +223,11 @@ function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
 function getPuzzleWithNoClues(): PuzzleM {
 
     let puzzle: PuzzleM = getEmptyPuzzle();
-
-    let grid: GridM = {
-        properties: {
-            style: "standard",
-            symmetrical: false,
-            size: {
-                across: 10,
-                down: 10,
-            }
-        },
-        cells: []
-    }
-
-    for (let y = 0; y < 10; y++) {
-        for (let x = 0; x < 10; x++) {
-            let cell: GridCell = {
-                id: x.toString() + y.toString(),
-                x,
-                y,
-                caption: "",
-                content: "",
-                rightBar: false,
-                bottomBar: false,
-                highlight: false,
-                light: true,
-                shading: "",
-                edit: false,
-            }
-            grid.cells.push(cell);
-        }
-    }
-    puzzle.grid = grid;
+    puzzle.grid = testGridData();
 
     return puzzle;
 }
+
 function getEmptyPuzzle(): PuzzleM {
     return {
         clues: [],
@@ -304,4 +275,82 @@ function getEmptyPuzzle(): PuzzleM {
             spacing: "small",
         },
     };
+}
+
+/*  THE GRID
+0| 1 . 2 . 3 
+1| . x . x .
+2| 4 . . . .
+3| . x . x .
+4| 5 . . . .
+ -----------
+   0 1 2 3 4
+*/
+
+function testGridData() {
+    let data = emptyGridData();
+
+    // set the captions
+    let cell = data.cells.find(c => c.id === "00");
+    cell.caption = "1";
+
+    cell = data.cells.find(c => c.id === "20");
+    cell.caption = "2";
+
+    cell = data.cells.find(c => c.id === "40");
+    cell.caption = "3";
+
+    cell = data.cells.find(c => c.id === "02");
+    cell.caption = "4";
+
+    cell = data.cells.find(c => c.id === "04");
+    cell.caption = "5";
+
+    // set the blacked-out squares
+    let cells: GridCellM[] = [];
+
+    cells.push(data.cells.find(c => c.id === "11"))
+    cells.push(data.cells.find(c => c.id === "31"))
+    cells.push(data.cells.find(c => c.id === "13"))
+    cells.push(data.cells.find(c => c.id === "33"))
+
+    cells.forEach(c => c.light = false);
+
+    return data;
+}
+
+function emptyGridData(): GridM {
+
+    let grid: GridM = {
+        properties: {
+            style: "standard",
+            symmetrical: false,
+            size: {
+                across: 5,
+                down: 5,
+            }
+        },
+        cells: []
+    }
+
+    for (let x = 0; x < 5; x++) {
+        for (let y = 0; y < 5; y++) {
+            let cell: GridCellM = {
+                id: x.toString() + y.toString(),
+                x,
+                y,
+                caption: "",
+                content: "",
+                rightBar: false,
+                bottomBar: false,
+                highlight: false,
+                light: true,
+                shading: "",
+                edit: false,
+            }
+            grid.cells.push(cell);
+        }
+    }
+
+    return grid;
 }

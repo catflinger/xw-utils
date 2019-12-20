@@ -56,14 +56,11 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
 
         this.puzzleManagementService.openArchivePuzzle(params).then((puzzle) => {
-            let action: string = puzzle.info.solveable ? "solve" : "blog";
-            let editor: EditorType = puzzle.info.solveable ? "solver" : "blogger";
-
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
 
-            this.navService.appData.editor = editor;
-            this.navService.navigate(action);
+            this.navService.appData.editor = puzzle.info.solveable ? "solver" : "blogger";
+            this.navService.navigate("continue");
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {
