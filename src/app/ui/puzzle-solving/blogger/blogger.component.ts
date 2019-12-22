@@ -65,7 +65,6 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onSolver() {
-        this.navService.appData.editor = "solver";
         this.navService.navigate("solve");
     }
 

@@ -1,7 +1,7 @@
+import { v4 as uuid } from "uuid";
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
-import { QuillDelta, ClueGroup } from 'src/app/model/interfaces';
-import { Line } from './line';
+import { QuillDelta } from 'src/app/model/interfaces';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -119,18 +119,20 @@ export class ParseContext implements IParseContext {
 
         //let line: Line = new Line(this._clueBuffer, lineNumber);
         let parts: ClueTextParts = this.readCaption(this._clueBuffer);
+        let letterCount = this.readLetterCount(this._clueBuffer);
+        let format = this.makeAnswerFormat(letterCount);
 
         this._clues.push(new Clue({
-            id: "",
+            id: uuid(),
             group: this.state,
             caption: parts.caption,
             text: parts.clue,
-            letterCount: this.readLetterCount(),
-            answer: null,
-            solution: null,
+            letterCount,
+            answer: "",
+            solution: "",
             annotation: null,
             redirect: false,
-            format: null,
+            format,
             comment: new QuillDelta(),
             highlight: false,
             entries: [],
@@ -169,16 +171,68 @@ export class ParseContext implements IParseContext {
         const regExp = new RegExp(expression);
         const match = regExp.exec(text);
 
-        //console.log("READING CAPTION " + match.groups.caption )
-
         return {
             caption: match.groups.caption.trim(),
             clue: match.groups.clue.trim(),
         };
     }
 
-    private readLetterCount(): string {
-        return "(5, 4)"
+    private readLetterCount(text: string): string {
+        let result = null;
+
+        const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
+
+        const regExp = new RegExp(expression);
+        const match = regExp.exec(text);
+
+        if (match.groups["letterCount"]) {
+            result = match.groups["letterCount"].trim();
+        }
+
+        return result;
     }
 
+
+    private makeAnswerFormat(letterCount: string): string {
+        let result: string = "";
+
+        const startMarker = new RegExp(String.raw`^\(`);
+        const endMarker = new RegExp(String.raw`\d words\)$`);
+
+        let parts: string[] = letterCount
+            .trim()
+            .replace(startMarker, "")
+            .trim()
+            .replace(endMarker, "")
+            .trim()
+            .replace(")", "")
+            .trim()
+            .split(",");
+
+        parts.forEach((part) => {
+            let exp = new RegExp(/(\d{1,2})|([^0-9 ])/g);
+            let match;
+
+            if (part.trim().length > 0) {
+                let partResult = "";
+
+                while ((match = exp.exec(part)) !== null) {
+                    if (match[1] !== null && match[1] !== undefined ) {
+                        let count = parseInt(match[1]);
+                        partResult += ",".repeat(count);
+                    } else {
+                        partResult += match[2];
+                    }
+                };
+
+                if (partResult && result) {
+                    result += "/";
+                }
+                result += partResult;
+
+            }
+        });
+
+        return result;
+    }
 }

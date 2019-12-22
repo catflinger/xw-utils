@@ -1,7 +1,7 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { PuzzleM } from './mutable-model/puzzle-m';
-import { ClueM } from './mutable-model/clue-m';
 import { Clue } from 'src/app/model/clue';
+import { AddPlaceholders } from './add-placeholders';
 
 export class AddClues implements IPuzzleModifier {
     constructor(
@@ -13,6 +13,8 @@ export class AddClues implements IPuzzleModifier {
             if (typeof this.args.clues !== "undefined") {
                 puzzle.clues = JSON.parse(JSON.stringify(this.args.clues));
                 puzzle.linked = false;
+
+                new AddPlaceholders().exec(puzzle);
             }
         }
     }

@@ -5,15 +5,9 @@ export const publishPostTrack: NavTrack = {
     start: "publish-options",
     nodes: [
         {
-            name: "exit-solver",
+            name: "exit",
             type: "return",
-            return: "solve",
-            actions: {}
-        },
-        {
-            name: "exit-blogger",
-            type: "return",
-            return: "blog",
+            return: "edit",
             actions: {}
         },
         {
@@ -23,8 +17,7 @@ export const publishPostTrack: NavTrack = {
             actions: {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
-                "solver": "exit-solver",
-                "blogger": "exit-blogger",
+                "back": "exit",
             }
         },
         {

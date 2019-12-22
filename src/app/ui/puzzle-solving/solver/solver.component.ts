@@ -41,7 +41,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                             }
                              this.puzzle = puzzle;
 
-                             //console.log("SOLVER " + JSON.stringify(puzzle));
+                            //console.log("SOLVER " + JSON.stringify(puzzle));
                         }
                     }
             ));
@@ -82,7 +82,6 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onBlogger() {
-        this.navService.appData.editor = "blogger";
         this.navService.navigate("blog");
     }
 

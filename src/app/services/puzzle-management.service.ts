@@ -101,6 +101,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         if (reducer) {
             reducer.exec(puzzle);
         }
+
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
         this.bsActive.next(new Puzzle(puzzle));
@@ -122,11 +123,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {
-            const cancel = reducer.exec(puzzle);
-            
-            if (!cancel) {
-                this.commit(puzzle);
-            }
+            reducer.exec(puzzle);
+            this.commit(puzzle);
         }
     }
 

@@ -33,13 +33,13 @@ describe('Navigation Service', () => {
 
     it('should begin a route', async () => {
         const service: NavService<string> = new NavService<string>(<unknown>mockRouter as Router, [simpleTrack], new TestProcessor());
-        await service.beginTrack("simpleTrack");
+        await service.beginTrack("simpleTrack", null);
         expect(mockRouter.route.join()).toEqual("route-A");
     });
 
     it('should navigate to next page', async () => {
         const service: NavService<string> = new NavService<string>(<unknown>mockRouter as Router, [simpleTrack], new TestProcessor());
-        await service.beginTrack("simpleTrack");
+        await service.beginTrack("simpleTrack", null);
         expect(mockRouter.route.join()).toEqual("route-A");
         await service.navigate("ok");
         expect(mockRouter.route.join()).toEqual("route-B");
@@ -47,7 +47,7 @@ describe('Navigation Service', () => {
 
     it('should run a process', async () => {
         const service: NavService<string> = new NavService<string>(<unknown>mockRouter as Router, [trackWithProcess], new TestProcessor());
-        await service.beginTrack("trackWithProcess");
+        await service.beginTrack("trackWithProcess", null);
         expect(mockRouter.route.join()).toEqual("route-A");
         await service.navigate("ok");
         expect(mockRouter.route.join()).toEqual("route-C");

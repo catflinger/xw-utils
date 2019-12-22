@@ -23,6 +23,7 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
             const detailsRequired: boolean = this.appSettings.settings.general.showCommentEditor.enabled;
             this.klasses = [];
 
+
             if (this.clue.highlight) {
                 this.klasses.push("highlight");
             }

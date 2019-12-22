@@ -13,32 +13,26 @@ interface GridReference {
 export class LinkCluesToGrid implements IPuzzleModifier {
     constructor() { }
 
-    public exec(puzzle: PuzzleM): boolean {
-        try {
-            if (puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
-                let captionWriter = new RenumberGid();
-                captionWriter.exec(puzzle);
-                
-                puzzle.clues.forEach((clue) => {
-                    const grid = new Grid(puzzle.grid);
-        
-                    // parse the clue caption into grid references
-                    if (!clue.redirect) {
-                        clue.entries = LinkCluesToGrid.makeGridEntries(grid, clue.caption, clue.group);
-                    }
-                });
+    public exec(puzzle: PuzzleM) {
+        if (puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
+            let captionWriter = new RenumberGid();
+            captionWriter.exec(puzzle);
+            
+            puzzle.clues.forEach((clue) => {
+                const grid = new Grid(puzzle.grid);
+    
+                // parse the clue caption into grid references
+                if (!clue.redirect) {
+                    clue.entries = LinkCluesToGrid.makeGridEntries(grid, clue.caption, clue.group);
+                }
+            });
 
-                // TO DO: check entries match the letter count
+            // TO DO: check entries match the letter count
 
-                puzzle.info.blogable = true;
-                puzzle.info.solveable = true;
-                puzzle.linked = true;
-            }
-        } catch (error) {
-            //console.log("Link error: " + error)
-            return true;
+            puzzle.info.blogable = true;
+            puzzle.info.solveable = true;
+            puzzle.linked = true;
         }
-        return false;
     }
 
     private static makeGridEntries(grid: Grid, caption: string, direction: Direction): GridEntryM[] {

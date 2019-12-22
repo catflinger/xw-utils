@@ -48,7 +48,7 @@ export class NavService<T> {
     /*
     Start a new track, if we have a current track then abandon it
     */
-   public beginTrack(track: string, start?: string, data?: T) {
+   public beginTrack(track: string, data: T, start?: string) {
         this._appData = data;
 
         while(this.callStack.length > 0) {

@@ -6,5 +6,5 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 export interface IPuzzleModifier {
     
     // return any truthy value to cancel the update
-    exec(puzzle: PuzzleM): any;
+    exec(puzzle: PuzzleM): void;
 };

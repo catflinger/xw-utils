@@ -35,9 +35,9 @@
             </div>
         </div>
 
-        <div *ngIf="showLatestAnswer" class="modal-body">
+        <div class="modal-body">
             <h4 class="spacey">
-                <span *ngFor="let chunk of latestAnswer" [ngClass]="chunk.klass">{{chunk.text}}</span>
+                <span *ngFor="let chunk of latestAnswer" [ngClass]="chunk.klass">{{chunk.letter}}</span>
             </h4>
         </div>
 

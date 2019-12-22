@@ -20,12 +20,12 @@ type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" 
 
 class AnswerTextChunk {
     constructor(
-        public readonly text: string,
+        public readonly letter: string,
         public readonly klass: AnswerTextKlass,
     ) {}
 
     public toString(): string {
-        return this.text;
+        return this.letter;
     }
 }
 
@@ -58,7 +58,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
-        //public activeModal: NgbActiveModal,
     ) { }
 
     ngOnInit() {
@@ -72,7 +71,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
-                        //this.puzzle = puzzle;
                         this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clueId);
 
                         this.clue = puzzle.clues.find((c) => c.id === this.clueId);
@@ -103,11 +101,6 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             this.tipInstance.destroy();
         }
     }
-
-    public get showLatestAnswer(): boolean {
-        return this.latestAnswer.length > 0;
-    }
-
 
     public onClearDefinition() {
         this.form.patchValue({
@@ -265,33 +258,31 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     private setLatestAnswer(): void {
         let result: AnswerTextChunk[] = [];
-        let answer = this.getLatestAnswer();
-        let format = this.clue.answerFormat;
-        let index = 0;
+        let answer: AnswerTextChunk[] = this.getLatestAnswer();
+        let format = this.clue.format;
+        let formatIndex = 0;
+        let answerIndex = 0;
 
-        answer.forEach((chunk) => {
-            while(index < format.length && format[index] != ",") {
-                result.push(new AnswerTextChunk("/", "separator"));
-                index++;
-            }
-            result.push(chunk);
-            index++;
-        });
-
-        while(index < format.length) {
-            if (format[index] === ",") {
-                result.push(new AnswerTextChunk("_", "placeholder"));
+        while (formatIndex < format.length) {
+            if (format[formatIndex] === ",") {
+                if (answerIndex < answer.length) {
+                    result.push(answer[answerIndex]);
+                    answerIndex++;
+                } else {
+                    result.push(new AnswerTextChunk("_", "placeholder"));
+                }
             } else {
-                result.push(new AnswerTextChunk("/", "separator"));
+                result.push(new AnswerTextChunk(format[formatIndex], "separator"));
             }
-            index++;
+            formatIndex++;
+        }
+
+        while (answerIndex < answer.length) {
+            result.push(answer[answerIndex]);
+            answerIndex++;
         }
 
         this.latestAnswer = result;
-        // let clash = !!result.find(item => item.klass === "clash");
-        // let placeholder = !!result.find(item => item.klass === "placeholder");
-
-        // this.showLatestAnswer = clash || placeholder;
     }
 
     private getLatestAnswer(): AnswerTextChunk[] {

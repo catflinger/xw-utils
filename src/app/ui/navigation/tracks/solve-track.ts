@@ -42,6 +42,7 @@ export const solveTrack: NavTrack = {
             actions: {
                 "solve": "solver",
                 "blog": "blogger",
+                "edit": "editor",
             }
         },
         {

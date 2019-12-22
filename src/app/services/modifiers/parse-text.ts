@@ -17,41 +17,28 @@ import { AddClues } from './add-clues';
 export class ParseText implements IPuzzleModifier {
     constructor(private textParsingService: TextParsingService) { }
 
-    public exec(puzzle: PuzzleM): boolean {
-        let cancel = false;
+    public exec(puzzle: PuzzleM): void {
+        let parseData = new ParseData();
+        parseData.clueDataType = "text";
+        parseData.rawData = puzzle.info.source;
 
-        try {
-            let parseData = new ParseData();
-            parseData.clueDataType = "text";
-            parseData.rawData = puzzle.info.source;
-    
-            let options: TextParsingOptions = {
-                allowPreamble: true,
-                allowPostamble: true,
-            }
-
-            let parser = this.textParsingService.parser(parseData, options);
-            let context = parser.next();
-    
-            while(!context.done) {
-                context = parser.next();
-            }
-
-            if (!context.value.error) {
-                new AddClues({ clues: context.value.clues }).exec(puzzle);
-
-            } else {
-                // TO DO: work out where to add parse errors into the puzzle model
-                //this.appService.setAlert("danger", "Parsing Error :" + context.value.error.message);
-                cancel = true;
-            }
-        } catch(error) {
-            // TO DO: work out where to add parse errors into the puzzle model
-            //this.appService.setAlert("danger", "ERROR :" + error.message)
-            cancel = true;
+        let options: TextParsingOptions = {
+            allowPreamble: true,
+            allowPostamble: true,
         }
 
-        return cancel;
+        let parser = this.textParsingService.parser(parseData, options);
+        let context = parser.next();
+
+        while(!context.done) {
+            context = parser.next();
+        }
+
+        if (!context.value.error) {
+            new AddClues({ clues: context.value.clues }).exec(puzzle);
+        } else {
+            throw new Error(`Failed to parse puzzle at line ${context.value.error.line} ${context.value.error.message}`);
+        }
     }
 
 }

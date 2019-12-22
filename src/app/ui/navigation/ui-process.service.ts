@@ -50,7 +50,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
 
             case "editor-select":
-                action = this.activePuzzle.puzzle.linked && appData && appData.editor === "solver" ?
+                action = this.activePuzzle.puzzle.linked ?
                     Promise.resolve("solve") :
                     Promise.resolve("blog");
                     break;

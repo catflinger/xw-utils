@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.navService.gotoRoute(["indy"]);
         
         } else if (provider === "special" ) {
-            this.navService.beginTrack("create");
+            this.navService.beginTrack("create", new AppTrackData());
         
         } else {
             this.navService.gotoRoute(["archive", provider]);
@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public onGrid() {
         this.activePuzzle.clear();
         this.appService.clear();
-        this.navService.beginTrack("create", null, null);
+        this.navService.beginTrack("create", new AppTrackData());
     }
 
     public onHome() {
