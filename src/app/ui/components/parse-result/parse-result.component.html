@@ -3,7 +3,7 @@
     <h5 *ngIf="!result.tokenGroup.current.lineNumber">Failed to parse the text</h5>
     
     <div class="mt-3">{{result.error.message}}</div>
-    <div class="mt-3" *ngIf="result.error.hint">{{result.error.hint}}</div>
+    <div class="mt-3" *ngIf="result.error">{{result.error.message}}</div>
 
     <table class="table table-sm mt-5">
         <thead>

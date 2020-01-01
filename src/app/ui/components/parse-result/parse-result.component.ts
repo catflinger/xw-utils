@@ -12,6 +12,9 @@ export class ParseResultComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+
+// TO DO: convert the errors to hints here...
+
     }
 
 }

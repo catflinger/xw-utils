@@ -56,9 +56,6 @@ export class HttpPuzzleSourceService {
             } else {
                 throw data.message;
             }
-        })
-        .catch(error => { 
-            throw "HTTP.POST failed:" + error;
         });
     }
 
@@ -85,9 +82,6 @@ export class HttpPuzzleSourceService {
             } else {
                 throw data.message;
             }
-        })
-        .catch(error => { 
-            throw "HTTP.POST failed:" + error;
         });
     }
 }
