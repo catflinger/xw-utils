@@ -71,8 +71,9 @@ export class TextParsingService {
                 if (error instanceof TextParsingError) {
                     context.error = error;
                 } else {
-                    context.error = new TextParsingError("exception", 0, "", error.toString());
+                    throw error.toString();
                 }
+                
                 return context;
             }
         }

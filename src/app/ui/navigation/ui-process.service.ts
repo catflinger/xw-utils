@@ -62,17 +62,15 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         return action;
     }
 
-    // TO DO: move this to an UPDATE modifier
     private parse(): Promise<string> {
         let action = "error";
 
-        let result = this.activePuzzle.update(this.textParser);
-
-        if (!result) {
+        try {
+            this.activePuzzle.update(this.textParser);
             action = "ok";
-        } else {
+        } catch(error) {
             action = "error";
-            this.appService.setAlert("danger", "Parsing Error :" + result);
+            this.appService.setAlert("danger", "Parsing Error :" + error);
         }
 
         return Promise.resolve(action);

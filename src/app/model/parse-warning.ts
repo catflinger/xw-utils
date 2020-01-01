@@ -1,6 +1,5 @@
-import { IParseWarning } from './interfaces';
 
-export class ParseWarning implements IParseWarning {
+export class ParseWarning { // implements IParseWarning {
     public readonly answer: string;
     public readonly clue: string;
     public readonly lineNumber: number;

@@ -11,8 +11,9 @@ export type Layouts = "table" | "list";
 export type Spacings = "small" | "medium" | "large";
 
 export type GridNavigation = "left" | "right" | "up" | "down" | "absolute" | null;
-
 export type WritingDirection = "static" | "forward" | "backward";
+
+export type ParsingErrorLevel = "warning" | "error";  // and "fatal-error" | "system-error" ??
 
 export class QuillDelta implements ReadonlyQuillDelta { 
     ops: DeltaOperation[]
@@ -92,10 +93,12 @@ export abstract class IPuzzle {
     abstract readonly clues: readonly IClue[];
 
     abstract readonly linked: boolean;
-    //abstract readonly version: string;
-    //abstract readonly createdWithVersion: string;
-
     abstract readonly revision: number;
+}
+
+export abstract class IPuzzleSource {
+    abstract readonly source: string;
+    abstract readonly parseErrors: ReadonlyArray<IParseError>;
 }
 
 export abstract class IPuzzleInfo {
@@ -109,10 +112,6 @@ export abstract class IPuzzleInfo {
     abstract readonly blogable: boolean;
     abstract readonly solveable: boolean;
     abstract readonly gridable: boolean;
-
-    // TO DO: find a permanent home for these
-    //abstract readonly ready: boolean;
-    abstract readonly source: string;
 } 
 
 export abstract class IPublishOptions {
@@ -142,7 +141,8 @@ export abstract class IGridSize {
     abstract readonly down: number;
 }
 
-export abstract class IParseWarning {
+export abstract class IParseError {
+    abstract readonly level: ParsingErrorLevel;
     abstract readonly answer: string;
     abstract readonly clue: string;
     abstract readonly lineNumber: number;
