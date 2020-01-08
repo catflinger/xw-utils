@@ -30,6 +30,7 @@ export const solveTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "solve": "solver",
+                "edit": "edit-clues",
                 "back": "exit",
             }
         },
@@ -40,10 +41,17 @@ export const solveTrack: NavTrack = {
                 track: "publish-post",
             },
             actions: {
-                "solve": "solver",
-                "blog": "blogger",
                 "edit": "editor",
             }
+        },
+        {
+            name: "edit-clues",
+            type: "call",
+            call: {
+                track: "create",
+                start: "edit-clues"
+            },
+            actions: {}
         },
         {
             name: "exit",

@@ -15,7 +15,7 @@ export const createTrack: NavTrack = {
             type: "route",
             route: "/open-puzzle",
             actions: {
-                "continue": "end",
+                "continue": "solve",
             }
         },
         {
@@ -129,7 +129,7 @@ export const createTrack: NavTrack = {
             type: "process",
             process: "validate",
             actions: {
-                "ok": "end",
+                "ok": "solve",
                 "error": "link-error",
             }
         },
@@ -163,11 +163,11 @@ export const createTrack: NavTrack = {
             type: "route",
             route: "/nav-error",
             actions: {
-                "continue": "end"
+                "continue": "abandon"
             }
         },
         {
-            name: "end",
+            name: "solve",
             type: "call",
             call: {
                 track: "solve"

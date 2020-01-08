@@ -68,6 +68,10 @@ export class BloggerComponent implements OnInit, OnDestroy {
         this.navService.navigate("solve");
     }
 
+    onEditClues() {
+        this.navService.navigate("edit");
+    }
+
     onRowClick(clue: Clue) {
         this.activePuzzle.update(new SelectClue(clue.id));
     }

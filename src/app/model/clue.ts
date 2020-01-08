@@ -2,6 +2,7 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
+import { GridReference } from './grid-reference';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -16,9 +17,10 @@ export class Clue implements IClue {
     public readonly format: string;
     public readonly comment: QuillDelta;
     public readonly highlight: boolean;
-    public readonly entries: readonly GridEntry[];
-    public readonly chunks: readonly TextChunk[];
-    public readonly warnings: readonly ClueValidationWarning[]; 
+    public readonly entries: ReadonlyArray<GridEntry>;
+    public readonly chunks: ReadonlyArray<TextChunk>;
+    public readonly warnings: ReadonlyArray<ClueValidationWarning>; 
+    public readonly gridRefs: ReadonlyArray<GridReference>; 
 
     constructor(data: any) {
         this.id = data.id;
@@ -53,6 +55,12 @@ export class Clue implements IClue {
         let chunks: TextChunk[] = [];
         data.chunks.forEach(chunk => chunks.push(new TextChunk(chunk)));
         this.chunks = chunks;
+
+        let refs: GridReference[] = [];
+        if (data.gridRefs && Array.isArray(data.gridRefs)) {
+            data.gridRefs.forEach(ref => refs.push(new GridReference(ref.clueNumber, ref.clueGroup)));
+        }
+        this.gridRefs = refs;
 
         let warnings: ClueValidationWarning[] = [];
         if (data.warnings) {

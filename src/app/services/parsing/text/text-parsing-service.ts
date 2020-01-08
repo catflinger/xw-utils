@@ -123,7 +123,6 @@ export class TextParsingService {
             case null:
                 // even in preamble mode this is probably an error.  Answers to last weeks clues normally appear at the end of a puzzle
                 throw new TextParsingError("downMarker_null", token.lineNumber, token.text, "Found unexpected DOWN marker");
-                break;
 
             case "down":
                 // even in preamble mode this is probably an error.  Answers to last weeks clues don't normally start with a down marker
@@ -145,12 +144,10 @@ export class TextParsingService {
         switch (context.state) {
             case null:
                 throw new TextParsingError("endMarker_null", token.lineNumber, token.text, "reached end of file and no clues found");
-                break;
 
             case "across":
                 case null:
                     throw new TextParsingError("endMarker_across", token.lineNumber, token.text, "reached end of file and no down clues found");
-                    break;
     
             case "down":
                 if (context.buffer === null) {
@@ -174,14 +171,17 @@ export class TextParsingService {
             case "ended":
                 // we don't expect to se whole clues cropping up in the solutions
                 throw new TextParsingError("clue_ended", token.lineNumber, token.text, "Found clue after and of down clues");
-                break;
 
             case "across":
             case "down":
                 if (!context.hasContent) {
-                    context.addText(token.text);
-                    context.save(token.lineNumber);
+                    context.addClueText(token.text);
+                    context.save();
                 } else {
+                    
+
+
+
                     throw new TextParsingError("clue_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
                 }
                 break;
@@ -201,7 +201,7 @@ export class TextParsingService {
             case "across":
             case "down":
                 if (!context.hasContent) {
-                    context.addText(token.text);
+                    context.addClueText(token.text);
                 } else {
                     
                     // TO DO: same situation as in onClueToken()
@@ -235,8 +235,8 @@ export class TextParsingService {
             case "across":
             case "down":
                 if (context.hasContent) {
-                    context.addText(token.text);
-                    context.save(token.lineNumber);
+                    context.addClueText(token.text);
+                    context.save();
                 } else {
 
                 // TO DO: ask the user to fix this manually
@@ -269,7 +269,7 @@ export class TextParsingService {
 
             case "across":
                 if (context.hasContent) {
-                    context.addText(token.text);
+                    context.addClueText(token.text);
                 } else {
                     throw new TextParsingError("text_across", token.lineNumber, token.text, "Expected the start of a new clue but found unrecognised text.");
                 }
@@ -277,7 +277,7 @@ export class TextParsingService {
 
             case "down":
                 if (context.hasContent) {
-                    context.addText(token.text);
+                    context.addClueText(token.text);
                 } else {
                     if (options.allowPostamble) {
                         // in postamble mode the down clues are over when a completed down clue is followed by

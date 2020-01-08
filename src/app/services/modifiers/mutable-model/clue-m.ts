@@ -1,6 +1,7 @@
 import { IClue, ClueGroup, ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
 import { TextChunkM } from './text-chunk-m';
 import { GridEntryM } from './grid-entry-m';
+import { GridReference } from 'src/app/model/grid-reference';
 
 export abstract class ClueM implements IClue {
     public abstract id: string;
@@ -18,5 +19,6 @@ export abstract class ClueM implements IClue {
     public abstract entries: GridEntryM[];
     public abstract chunks: TextChunkM[];
     public abstract warnings: ClueValidationWarning[];
+    public abstract gridRefs: GridReference[];
 }
 

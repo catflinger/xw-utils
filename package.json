@@ -19,7 +19,7 @@
     "@angular/platform-browser": "~8.1.0",
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.5",
     "@types/luxon": "^1.21.0",
     "bootstrap": "^4.4.1",
     "escape-html": "^1.0.3",

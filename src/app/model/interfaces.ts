@@ -37,6 +37,12 @@ export abstract class ITextChunk {
     abstract readonly isDefinition: boolean;
 }
 
+export abstract class IGridReference {
+    // for example: 2 down or 23 across
+    abstract readonly clueNumber: number;
+    abstract readonly clueGroup: ClueGroup; 
+}
+
 export abstract class IClue {
     abstract readonly id: string;
     abstract readonly group: ClueGroup;
@@ -50,9 +56,10 @@ export abstract class IClue {
     abstract readonly format: string;
     abstract readonly comment: QuillDelta;
     abstract readonly highlight: boolean;
-    abstract readonly entries: readonly IGridEntry[];
-    abstract readonly chunks: readonly ITextChunk[];
-    abstract readonly warnings: readonly ClueValidationWarning[]; 
+    abstract readonly entries: ReadonlyArray<IGridEntry>;
+    abstract readonly chunks: ReadonlyArray<ITextChunk>;
+    abstract readonly warnings: ReadonlyArray<ClueValidationWarning>;
+    abstract readonly gridRefs: ReadonlyArray<IGridReference>;
 }
 
 export abstract class IGridEntry {

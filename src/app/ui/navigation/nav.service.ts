@@ -1,6 +1,7 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
+import { ActionSequence } from 'protractor';
 
 class _NavContext<T> implements NavContext {
     public track: NavTrack;
@@ -69,17 +70,26 @@ export class NavService<T> {
             let context = this.callStack[this.callStack.length - 1];
 
             if(context.currentNode) {
-                let nextNodeName = context.currentNode.actions[action];
-                let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+                if (Object.keys(context.currentNode.actions).length === 0) {
+                    // there are no actions specified, finish here
+                    this.goHome();
 
-                if (nextNode) {
-                    result = this.invokeNode(nextNode, context);
                 } else {
-                    result = Promise.reject(`Cannot find a node ${nextNodeName} for the action ${action}`);
+                    let nextNodeName = context.currentNode.actions[action];
+                    let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+    
+                    if (nextNode) {
+                        result = this.invokeNode(nextNode, context);
+                    } else {
+                        result = Promise.reject(`Cannot find a node ${nextNodeName} for the action ${action}`);
+                    }
                 }
+            } else {
+                // TO DO: what situation does this represent?
+                // is it always an error?
             }
         } else {
-            // we have no graph to work with, bail out
+            // we have no more graphs to work with, bail out
             this.goHome();
         }
 

@@ -1,1 +1,27 @@
-<p>clues-editor works!</p>
+<div class="row">
+    <div class="col">
+        <h3>Clue Editor</h3>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <h5>{{puzzle.info.title}}</h5>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <app-clue-list direction="across" (clueClick)="onClueClick($event)"></app-clue-list>
+    </div>
+
+    <div class="col">
+        <app-clue-list direction="down" (clueClick)="onClueClick($event)"></app-clue-list>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+    </div>
+</div>

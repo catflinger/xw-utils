@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
 import { LinkCluesToGrid } from './link-clues-to-grid';
 import { PuzzleM } from './mutable-model/puzzle-m';
-import { QuillDelta, ClueGroup } from 'src/app/model/interfaces';
+import { QuillDelta, ClueGroup, IGridReference } from 'src/app/model/interfaces';
 import { GridM } from './mutable-model/grid-m';
 import { GridCell } from 'src/app/model/grid-cell';
 import { ClueM } from './mutable-model/clue-m';
@@ -10,67 +10,6 @@ import { GridCellM } from './mutable-model/grid-cell-m';
 
 describe('LinkCLuesToGrid modifier', () => {
 
-    describe('readGridReferences', () => {
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({});
-        });
-
-        it('should read a simple caption (1)', () => {
-            const result = LinkCluesToGrid["readGridReferences"]("2", "across");
-
-            expect(Array.isArray(result)).toBeTruthy;
-            expect(result.length).toEqual(1);
-            expect(result[0].clueNumber).toEqual(2);
-            expect(result[0].clueGroup).toEqual("across");
-        });
-
-        it('should read a simple caption (2)', () => {
-            const result = LinkCluesToGrid["readGridReferences"]("33", "down");
-
-            expect(Array.isArray(result)).toBeTruthy;
-            expect(result.length).toEqual(1);
-            expect(result[0].clueNumber).toEqual(33);
-            expect(result[0].clueGroup).toEqual("down");
-        });
-
-        it('should read a simple multi-entry caption', () => {
-            const result = LinkCluesToGrid["readGridReferences"]("2, 3", "across");
-
-            expect(Array.isArray(result)).toBeTruthy;
-            expect(result.length).toEqual(2);
-            expect(result[0].clueNumber).toEqual(2);
-            expect(result[0].clueGroup).toEqual("across");
-            expect(result[1].clueNumber).toEqual(3);
-            expect(result[1].clueGroup).toEqual("across");
-        });
-
-        it('should read a complex multi-entry caption (1)', () => {
-            const result = LinkCluesToGrid["readGridReferences"]("2, 3 down, 4", "across");
-
-            expect(Array.isArray(result)).toBeTruthy;
-            expect(result.length).toEqual(3);
-            expect(result[0].clueNumber).toEqual(2);
-            expect(result[0].clueGroup).toEqual("across");
-            expect(result[1].clueNumber).toEqual(3);
-            expect(result[1].clueGroup).toEqual("down");
-            expect(result[2].clueNumber).toEqual(4);
-            expect(result[2].clueGroup).toEqual("across");
-        });
-
-        it('should read a complex multi-entry caption (2)', () => {
-            const result = LinkCluesToGrid["readGridReferences"]("2, 3 across, 4 down", "down");
-
-            expect(Array.isArray(result)).toBeTruthy;
-            expect(result.length).toEqual(3);
-            expect(result[0].clueNumber).toEqual(2);
-            expect(result[0].clueGroup).toEqual("down");
-            expect(result[1].clueNumber).toEqual(3);
-            expect(result[1].clueGroup).toEqual("across");
-            expect(result[2].clueNumber).toEqual(4);
-            expect(result[2].clueGroup).toEqual("down");
-        });
-    });
 
     describe('exec', () => {
 
@@ -191,16 +130,38 @@ function addTestClues(puzzle: PuzzleM) {
 
 
     // add 1 across
-    puzzle.clues.push(makeClue("1", "across", "This is one across (5)"));
+    puzzle.clues.push(makeClue(
+        "1", 
+        "across", 
+        "This is one across (5)",
+        [
+            { clueNumber: 1, clueGroup: "across" }
+        ]
+    ));
 
     // add 2 down
-    puzzle.clues.push(makeClue("2", "down", "This is 2 down (5)"));
+    puzzle.clues.push(makeClue(
+        "2", 
+        "down", 
+        "This is 2 down (5)",
+        [
+            { clueNumber: 2, clueGroup: "down", }
+        ]
+    ));
 
     // add 5 across
-    puzzle.clues.push(makeClue("5, 3 down", "across", "This has two grid entries (5, 5)"));
+    puzzle.clues.push(makeClue(
+        "5, 3 down", 
+        "across", 
+        "This has two grid entries (5, 5)",
+        [
+            { clueNumber: 5, clueGroup: "across" },
+            { clueNumber: 3, clueGroup: "down" }
+        ]
+    ));
 }
 
-function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
+function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGridReference[]): ClueM {
     return {
         id: "",
         group,
@@ -216,7 +177,8 @@ function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
         highlight: false,
         entries: [],
         chunks: [],
-        warnings: []
+        warnings: [],
+        gridRefs,
     };
 }
 

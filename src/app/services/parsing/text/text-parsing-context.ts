@@ -1,7 +1,9 @@
 import { v4 as uuid } from "uuid";
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
-import { QuillDelta } from 'src/app/model/interfaces';
+import { QuillDelta, ClueGroup } from 'src/app/model/interfaces';
+import { Line } from './line';
+import { ClueBuffer } from './clue-buffer';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -39,11 +41,6 @@ export type TextParsingErrorCode =
 
 const marker = Symbol("TextParsingError");
 
-interface ClueTextParts {
-    caption: string;
-    clue: string;
-}
-
 export class TextParsingWarning {
     constructor(
         public readonly lineNumber: number,
@@ -71,25 +68,29 @@ export class TextParsingError {
 export interface IParseContext {
     readonly state: TextParsingState;
     readonly clues: ReadonlyArray<Clue>;
-    readonly buffer: string;
+    readonly buffer: ClueBuffer;
     readonly tokenGroup: TokenGroup;
     readonly error: TextParsingError;
     readonly warnings: ReadonlyArray<TextParsingWarning>;
 }
 
 export class ParseContext implements IParseContext {
-    private _clueBuffer: string = null;
+    private _clueBuffer: ClueBuffer = null;
     private _clues: Clue[] = [];
     private _group: TokenGroup = null;
     private _state: TextParsingState = null;
     private _error: TextParsingError = null;
     private _warnings: TextParsingWarning[] = [];
 
-    public addText(text: string) {
-        if (!this._clueBuffer) {
-            this._clueBuffer = text.trim();
+    public addClueText(text: string) {
+        if (this._state === "across" || this._state === "down") {
+            if (!this._clueBuffer) {
+                this._clueBuffer = new ClueBuffer(text, this._state);
+            } else {
+                this._clueBuffer.add(text);
+            }
         } else {
-            this._clueBuffer += " " + text.trim();
+            throw "Attempt to add clue text when not reading across or down clues.";
         }
     }
 
@@ -101,7 +102,7 @@ export class ParseContext implements IParseContext {
     public get warnings(): ReadonlyArray<TextParsingWarning> { return this._warnings; }
 
     public get hasContent(): boolean { return this._clueBuffer !== null; }
-    public get buffer(): string { return this._clueBuffer; }
+    public get buffer(): ClueBuffer { return this._clueBuffer; }
 
     public get tokenGroup(): TokenGroup { return this._group; } 
     public setGroup(group: TokenGroup): void { this._group = group; }
@@ -112,22 +113,22 @@ export class ParseContext implements IParseContext {
     public get error(): TextParsingError { return this._error } 
     public set error(error: TextParsingError) { this._error = error } 
 
-    public save(lineNumber: number) {
+    public save() {
 
         // TO DO: fill in the missing properties on teh clue: letterCount for example
         //compileError - start again here
 
         //let line: Line = new Line(this._clueBuffer, lineNumber);
-        let parts: ClueTextParts = this.readCaption(this._clueBuffer);
-        let letterCount = this.readLetterCount(this._clueBuffer);
-        let format = this.makeAnswerFormat(letterCount);
+        //let parts: ClueTextParts = this.readCaption(this._clueBuffer);
+        //let letterCount = this.readLetterCount(this._clueBuffer);
+        let format = this.makeAnswerFormat(this._clueBuffer.letterCount);
 
         this._clues.push(new Clue({
             id: uuid(),
             group: this.state,
-            caption: parts.caption,
-            text: parts.clue,
-            letterCount,
+            caption: this._clueBuffer.caption,
+            text: this._clueBuffer.clue,
+            letterCount: this._clueBuffer.letterCount,
             answer: "",
             solution: "",
             annotation: null,
@@ -136,60 +137,16 @@ export class ParseContext implements IParseContext {
             comment: new QuillDelta(),
             highlight: false,
             entries: [],
-            warnings: [], 
+            warnings: [],
+            gridRefs: this._clueBuffer.gridRefs,
             chunks: [
                 {
-                    text: parts.clue,
+                    text: this._clueBuffer.clue,
                     isDefinition: false,
                 }
             ],
         }));
         this._clueBuffer = null;
-    }
-
-    private readCaption(text: string): ClueTextParts {
-
-        if (!text || text.trim().length === 0) {
-            return null;
-        }
-
-        // one or two digits
-        const firstPart = String.raw`\d{1,2}`;
-        
-        // optional space, a comma or slash, optional space, one or two digits, then an optioanl "across" or "down" or "/""
-        const additionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across)|(down))?`;
-        
-        // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
-        const captionGroup = String.raw`(?<caption>\*?\s*${firstPart}(${additionalPart})*)`;
-        
-        // any characters up to the end of the line
-        const clueGroup = String.raw`(?<clue>.*$)`;
-        
-        // start of line, optional space, (the caption group)
-        const expression = String.raw`^\s*${captionGroup}${clueGroup}`;
-        
-        const regExp = new RegExp(expression);
-        const match = regExp.exec(text);
-
-        return {
-            caption: match.groups.caption.trim(),
-            clue: match.groups.clue.trim(),
-        };
-    }
-
-    private readLetterCount(text: string): string {
-        let result = null;
-
-        const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
-
-        const regExp = new RegExp(expression);
-        const match = regExp.exec(text);
-
-        if (match.groups["letterCount"]) {
-            result = match.groups["letterCount"].trim();
-        }
-
-        return result;
     }
 
 
