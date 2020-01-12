@@ -3,6 +3,9 @@ import { ParseData } from "./parse-data";
 import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
 import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { IParseContext, ParseContext, TextParsingError } from './text-parsing-context';
+import { Grid } from 'src/app/model/grid';
+import { ClueBuffer } from './clue-buffer';
+import { ClueGroup } from 'src/app/model/interfaces';
 
 export interface TextParsingOptions {
     allowPreamble?: boolean,
@@ -47,10 +50,10 @@ export class TextParsingService {
                         this.onEndMarker(context, _options);
                         break;
                     case parseTokenTypes.Clue:
-                        this.onClueToken(context, _options);
+                        this.onClueToken(context, _options, data.grid);
                         break;
                     case parseTokenTypes.ClueStart:
-                        this.onClueStartToken(context, _options);
+                        this.onClueStartToken(context, _options, data.grid);
                         break;
                     case parseTokenTypes.Text:
                         this.onTextToken(context, _options);
@@ -159,7 +162,7 @@ export class TextParsingService {
         }
     }
 
-    private onClueToken(context: ParseContext, options: TextParsingOptions) {
+    private onClueToken(context: ParseContext, options: TextParsingOptions, grid: Grid) {
         const token = context.tokenGroup.current as ClueToken;
 
         switch (context.state) {
@@ -178,17 +181,13 @@ export class TextParsingService {
                     context.addClueText(token.text);
                     context.save();
                 } else {
-                    
-
-
-
-                    throw new TextParsingError("clue_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (1)");
+                    this.handleUnexpectedClue(token, context, grid);
                 }
                 break;
             }
     }
 
-    private onClueStartToken(context: ParseContext, options: TextParsingOptions) {
+    private onClueStartToken(context: ParseContext, options: TextParsingOptions, grid: Grid) {
         const token = context.tokenGroup.current as ClueStartToken;
 
         switch (context.state) {
@@ -203,10 +202,7 @@ export class TextParsingService {
                 if (!context.hasContent) {
                     context.addClueText(token.text);
                 } else {
-                    
-                    // TO DO: same situation as in onClueToken()
-
-                    throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (2)");
+                    this.handleUnexpectedClue(token, context, grid);
                 }
                 break;
 
@@ -240,6 +236,8 @@ export class TextParsingService {
                 } else {
 
                 // TO DO: ask the user to fix this manually
+
+                // 1.  
 
                     throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found end of clue when no clue started");
                 }
@@ -288,6 +286,57 @@ export class TextParsingService {
                     }
                 }
                 break;
+        }
+    }
+
+    private handleUnexpectedClue(token: TextToken, context: ParseContext, grid: Grid) {
+        if (grid) {
+
+            // This situation can arise when a clue has the letter count missing.
+
+            // TO DO: we need to consider the case where one of the clues involved has more than one entry in the caption.
+            // This will change what the expected next clue number will be.  Probably won't happen very often but should 
+            // still try and cover this case anyway.  Will need some careful thinking to get this right.  At the moment
+            // best to not attempt it at all than to code a botched attempt that causes more harm than good.
+
+            let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
+            let nextClueBuf = new ClueBuffer(token.text, context.state as ClueGroup);
+
+            let actualNextClueNumber = nextClueBuf.gridRefs[0].clueNumber;
+
+            if (expectedNextClueNumber === actualNextClueNumber) {
+                // create a new letter count
+                let letterCount = " (";
+                context.buffer.gridRefs.forEach((ref, index) => {
+                    let entry = grid.getGridEntryForCaption(ref.clueNumber.toString(), ref.clueGroup);
+                    if (index > 0) {
+                        letterCount += ", ";
+                    }
+                    letterCount += entry.length.toString();
+                });
+                letterCount += ")";
+                
+                // finish off the existing clue with an added lettercount
+                context.addClueText(letterCount);
+                context.save();
+                
+                //start the new clue
+                context.addClueText(token.text);
+            } else {
+                // assume this is OK, not a clue number we were expecting, just a clue that happens to contain a number in the middle
+                // of the text that by chance has word-wrapped to the start of a new line
+                
+                if (token.type === parseTokenTypes.Clue) {
+                    // looks like a clue token but is actually a clue end.  Treat as such.
+                    context.addClueText(token.text);
+                    context.save();
+                } else {
+                    // looks like a clue start token, is actually just plain text.  Treat as such.
+                    context.addClueText(token.text);
+                }
+            }
+        } else {
+            throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (3)");
         }
     }
 }

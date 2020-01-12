@@ -10,7 +10,7 @@ let mockTokeniser: MockTokeniserService = new MockTokeniserService();
 
 describe('TextParsingService', () => {
     
-    describe('Parsing', () => {
+    describe('Basic Parsing', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({});

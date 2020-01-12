@@ -4,6 +4,7 @@ import { ParseData } from '../parsing/text/parse-data';
 import { TextParsingOptions, TextParsingService } from '../parsing/text/text-parsing-service';
 import { Injectable } from '@angular/core';
 import { AddClues } from './add-clues';
+import { Grid } from 'src/app/model/grid';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -21,6 +22,7 @@ export class ParseText implements IPuzzleModifier {
         let parseData = new ParseData();
         parseData.clueDataType = "text";
         parseData.rawData = puzzle.info.source;
+        parseData.grid = new Grid(puzzle.grid);
 
         let options: TextParsingOptions = {
             allowPreamble: true,

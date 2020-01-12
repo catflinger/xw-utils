@@ -7,6 +7,7 @@ import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { AddClues } from 'src/app/services/modifiers/add-clues';
 import { LinkCluesToGrid } from 'src/app/services/modifiers/link-clues-to-grid';
 import { ParseText } from 'src/app/services/modifiers/parse-text';
+import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 
 @Injectable({
     providedIn: 'root'
@@ -30,6 +31,15 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
             case "pdf-extract":
                 action = this.puzzleManager.loadPuzzleFromPdf(this.appService.openPuzzleParameters.sourceDataB64);
+                break; 
+
+            case "grid-captions":
+                try {
+                    this.activePuzzle.update(new RenumberGid());
+                    action = Promise.resolve("ok");
+                } catch (error) {
+                    action = Promise.resolve("error");
+                }
                 break; 
 
             case "parse":

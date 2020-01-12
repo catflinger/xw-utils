@@ -1,6 +1,7 @@
-import { IGrid, GridNavigation, Direction } from './interfaces';
+import { IGrid, GridNavigation, Direction, ClueGroup, IGridReference } from './interfaces';
 import { GridCell } from './grid-cell';
 import { GridProperties } from './grid-properties';
+import { GridReference } from './grid-reference';
 
 export class Grid implements IGrid {
     public readonly properties: GridProperties;
@@ -28,7 +29,7 @@ export class Grid implements IGrid {
         return this.cells.find((cell) => cell.x === x && cell.y === y);
     }
 
-    public *getNavigator(startCellId: string, orientation: GridNavigation): Iterator<GridCell> {
+    public *getNavigator(startCellId: string, orientation: GridNavigation, wrap: boolean = true): Iterator<GridCell> {
         const cellsAcross = this.properties.size.across;
         const cellsDown = this.properties.size.down;
 
@@ -51,7 +52,7 @@ export class Grid implements IGrid {
                     } else if (current.y + 1 < cellsDown) {
                         current = this.cellAt(0, current.y + 1);
                     } else {
-                        current = this.cellAt(0, 0);
+                        current = wrap ? this.cellAt(0, 0) : null;
                     }
                     break;
                 case "left":
@@ -60,7 +61,7 @@ export class Grid implements IGrid {
                     } else if (current.y - 1 >= 0) {
                         current = this.cellAt(cellsAcross - 1, current.y - 1);
                     } else {
-                        current = this.cellAt(cellsAcross - 1, cellsDown - 1);
+                        current = wrap ? this.cellAt(cellsAcross - 1, cellsDown - 1) : null;
                     }
                     break;
                 case "up":
@@ -69,7 +70,7 @@ export class Grid implements IGrid {
                     } else if (current.x - 1 >= 0) {
                         current = this.cellAt(current.x - 1, cellsDown - 1);
                     } else {
-                        current = this.cellAt(cellsAcross - 1, cellsDown - 1);
+                        current = wrap ? this.cellAt(cellsAcross - 1, cellsDown - 1) : null;
                     }
                     break;
                 case "down":
@@ -78,12 +79,12 @@ export class Grid implements IGrid {
                     } else if (current.x + 1 < cellsDown) {
                         current = this.cellAt(current.x + 1, 0);
                     } else {
-                        current = this.cellAt(0, 0);
+                        current = wrap ? this.cellAt(0, 0) : null;
                     }
                     break;
             };
 
-            if (current.id !== startCellId) {
+            if (current && current.id !== startCellId) {
                 yield current;
             } else {
                 return null as GridCell;
@@ -107,16 +108,65 @@ export class Grid implements IGrid {
         return entry;
     }
 
-    public getGridEntryForCaption(caption: string,  direction: Direction): GridCell[] {
+    public getGridEntryForCaption(caption: string, group: ClueGroup): GridCell[] {
         let entry: GridCell[] = [];
 
         let startCell = this.cells.find(c => c.caption === caption);
 
         if (startCell) {
-            entry = this.getEntry(startCell, direction);
+            entry = this.getEntry(startCell, group);
         }
 
         return entry;
+    }
+
+    public getNextClueNumber(startRef: IGridReference): number {
+        let clueNumber = startRef.clueNumber;
+        let found = false;
+
+        // find the caption of the next entry in the same direction
+
+        do {
+            clueNumber++;
+            let startCell = this.cells.find(c => c.caption === clueNumber.toString());
+            let x: number;
+            let y : number;
+            
+            if (!startCell) {
+                return null;
+            } else {
+                x = startCell.x;
+                y = startCell.y;
+            }
+
+            if (startRef.clueGroup === "across") {
+                if (x === 0) {
+                    found = true;
+                } else {
+                    let prevCell = this.cellAt( x - 1, y);
+                    
+                    if (this.properties.style === "standard") {
+                        found = !prevCell.light;
+                    } else {
+                        found = prevCell.rightBar;
+                    }
+                }
+            } else {
+                if (y === 0) {
+                    found = true;
+                } else {
+                    let prevCell = this.cellAt( x, y - 1);
+                    
+                    if (this.properties.style === "standard") {
+                        found = !prevCell.light;
+                    } else {
+                        found = prevCell.bottomBar;
+                    }
+                }
+            }
+        } while (!found);
+
+        return clueNumber;
     }
     
     private getEntry(entryCell: GridCell, direction: Direction): GridCell[] {
@@ -170,6 +220,16 @@ export class Grid implements IGrid {
                 next = nav.next().value;
             }
         };
+
+        return result;
+    }
+
+    private getEntryDirection(entry: GridCell[]): ClueGroup {
+        let result: ClueGroup = "across";
+
+        if (entry && entry.length > 1 && entry[0].x === entry[1].x) {
+            result = "down";
+        }
 
         return result;
     }

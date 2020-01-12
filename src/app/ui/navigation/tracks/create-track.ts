@@ -74,8 +74,17 @@ export const createTrack: NavTrack = {
             type: "process",
             process: "pdf-extract",
             actions: {
-                "ok": "parser",
+                "ok": "grid-captions",
                 "authenticate": "login",
+                "error": "error",
+            }
+        },
+        {
+            name: "grid-captions",
+            type: "process",
+            process: "grid-captions",
+            actions: {
+                "ok": "parser",
                 "error": "error",
             }
         },
