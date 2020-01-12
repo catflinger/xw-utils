@@ -318,22 +318,19 @@ export class TextParsingService {
                 
                 // finish off the existing clue with an added lettercount
                 context.addClueText(letterCount);
+                context.addWarning(token.lineNumber, `A clue was found that looks to be missing a letter count, a new lettercount has been added.  The amended clue is: ${context.buffer.caption} ${context.buffer.clue}`);
                 context.save();
-                
-                //start the new clue
-                context.addClueText(token.text);
+
             } else {
                 // assume this is OK, not a clue number we were expecting, just a clue that happens to contain a number in the middle
                 // of the text that by chance has word-wrapped to the start of a new line
-                
-                if (token.type === parseTokenTypes.Clue) {
-                    // looks like a clue token but is actually a clue end.  Treat as such.
-                    context.addClueText(token.text);
-                    context.save();
-                } else {
-                    // looks like a clue start token, is actually just plain text.  Treat as such.
-                    context.addClueText(token.text);
-                }
+            }
+            
+            if (token.type === parseTokenTypes.Clue) {
+                context.addClueText(token.text);
+                context.save();
+            } else {
+                context.addClueText(token.text);
             }
         } else {
             throw new TextParsingError("clueStart_acrossdown", token.lineNumber, token.text, "Found start of new clue when old clue not finished (3)");

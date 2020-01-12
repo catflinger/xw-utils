@@ -24,16 +24,22 @@ describe('Text Parsing', () => {
 
         it('should repair a missing letter count', () => {
             let result = runParser(testData);
+
             expect(result.error).toEqual(null);
             expect(result.clues.length).toEqual(28);
+            expect(result.warnings.length).toEqual(2);
 
             // tests adding missing wordcount followed by a complete clue
             expect(result.clues[0].caption).toEqual("1");
             expect(result.clues[0].text).toEqual("John, for one, a powerless former president (7)");
+            expect(result.warnings[0].lineNumber).toEqual(8);
+            expect(result.warnings[0].message).toContain("The amended clue is: 1 John, for one, a powerless former president (7)");
 
             // tests adding missing wordcount followed by a clue start only
             expect(result.clues[17].caption).toEqual("4");
             expect(result.clues[17].text).toEqual("Disengaged, to some extent, about girl (5)");
+            expect(result.warnings[1].lineNumber).toEqual(45);
+            expect(result.warnings[1].message).toContain("The amended clue is: 4 Disengaged, to some extent, about girl (5)");
 
             // tests a random number in the text of a clue, including the clue end
             expect(result.clues[5].caption).toEqual("12");
