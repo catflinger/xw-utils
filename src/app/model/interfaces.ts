@@ -15,6 +15,38 @@ export type WritingDirection = "static" | "forward" | "backward";
 
 export type ParsingErrorLevel = "warning" | "error";  // and "fatal-error" | "system-error" ??
 
+export type TextParsingErrorCode =
+    "exception" |
+    // naming convention X_Y is: unexpected token X found while in parsing state Y 
+    "acrossMarker_across" | 
+    "acrossMarker_down" | 
+    "acrossMarker_ended" | 
+
+    "downMarker_null" | 
+    "downMarker_across" | 
+    "downMarker_down" | 
+    "downMarker_ended" | 
+
+    "endMarker_null" | 
+    "endMarker_across" | 
+    "endMarker_down" | 
+
+    "clue_null" | 
+    "clue_ended" | 
+    "clue_acrossdown" | 
+
+    "clueStart_null" | 
+    "clueStart_ended" | 
+    "clueStart_acrossdown" | 
+
+    "clueEnd_null" | 
+    "clueEnd_ended" | 
+    "clueEnd_acrossdown" | 
+
+    "text_null" | 
+    "text_across" | 
+    "text_down";
+
 export class QuillDelta implements ReadonlyQuillDelta { 
     ops: DeltaOperation[]
 }
@@ -105,7 +137,8 @@ export abstract class IPuzzle {
 
 export abstract class IPuzzleSource {
     abstract readonly source: string;
-    abstract readonly parseErrors: ReadonlyArray<IParseError>;
+    abstract readonly parseErrors: ReadonlyArray<ITextParsingError>;
+    abstract readonly parseWarnings: ReadonlyArray<ITextParsingWarning>;
 }
 
 export abstract class IPuzzleInfo {
@@ -115,6 +148,7 @@ export abstract class IPuzzleInfo {
     abstract readonly provider: PuzzleProvider;
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
+    abstract readonly source: IPuzzleSource;
 
     abstract readonly blogable: boolean;
     abstract readonly solveable: boolean;
@@ -148,12 +182,16 @@ export abstract class IGridSize {
     abstract readonly down: number;
 }
 
-export abstract class IParseError {
-    abstract readonly level: ParsingErrorLevel;
-    abstract readonly answer: string;
-    abstract readonly clue: string;
-    abstract readonly lineNumber: number;
-    abstract readonly reason: string;
+export abstract class ITextParsingError {
+    public readonly code: TextParsingErrorCode;
+    public readonly line: number;
+    public readonly text: string;
+    public readonly message: string;
+}
+
+export abstract class ITextParsingWarning {
+    public readonly lineNumber: number;
+    public readonly message: string;
 }
 
 export abstract class IDiary {

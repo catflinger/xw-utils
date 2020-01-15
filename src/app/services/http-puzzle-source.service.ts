@@ -84,5 +84,31 @@ export class HttpPuzzleSourceService {
             }
         });
     }
+
+    public getFtXXXXXXXXXX(): Promise<ApiPdfExtractResponse> {
+        const credentials = this.authService.getCredentials();
+
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        let params: any = {
+            username: credentials.username,
+            password: credentials.password,
+        }
+
+        return this.http.post(environment.apiRoot + "ft/", params)
+        .toPromise()
+        .then((data: ApiPdfExtractResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return data as ApiPdfExtractResponse;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw data.message;
+            }
+        });
+    }
+
 }
 

@@ -21,7 +21,7 @@ export class ParseText implements IPuzzleModifier {
     public exec(puzzle: PuzzleM): void {
         let parseData = new ParseData();
         parseData.clueDataType = "text";
-        parseData.rawData = puzzle.info.source;
+        parseData.rawData = puzzle.info.source.source;
         parseData.grid = new Grid(puzzle.grid);
 
         let options: TextParsingOptions = {

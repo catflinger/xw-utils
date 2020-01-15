@@ -1,69 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { Clue } from '../../../model/clue';
 import { TokenGroup } from './tokeniser/tokeniser.service';
-import { QuillDelta, ClueGroup } from 'src/app/model/interfaces';
-import { Line } from './line';
+import { QuillDelta } from 'src/app/model/interfaces';
 import { ClueBuffer } from './clue-buffer';
+import { TextParsingError } from 'src/app/model/text-parsing-error';
+import { TextParsingWarning } from 'src/app/model/text-parsing-warning';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
-
-export type TextParsingErrorCode =
-    "exception" |
-    // naming convention X_Y is: unexpected token X found while in parsing state Y 
-    "acrossMarker_across" | 
-    "acrossMarker_down" | 
-    "acrossMarker_ended" | 
-
-    "downMarker_null" | 
-    "downMarker_across" | 
-    "downMarker_down" | 
-    "downMarker_ended" | 
-
-    "endMarker_null" | 
-    "endMarker_across" | 
-    "endMarker_down" | 
-
-    "clue_null" | 
-    "clue_ended" | 
-    "clue_acrossdown" | 
-
-    "clueStart_null" | 
-    "clueStart_ended" | 
-    "clueStart_acrossdown" | 
-
-    "clueEnd_null" | 
-    "clueEnd_ended" | 
-    "clueEnd_acrossdown" | 
-
-    "text_null" | 
-    "text_across" | 
-    "text_down";
-
-const marker = Symbol("TextParsingError");
-
-export class TextParsingWarning {
-    constructor(
-        public readonly lineNumber: number,
-        public readonly message: string,
-    ) {}
-}
-
-export class TextParsingError {
-    private marker: Symbol;
-
-    constructor(
-        public readonly code: TextParsingErrorCode,
-        public readonly line: number,
-        public readonly text: string,
-        public readonly message: string,
-    ){
-        this.marker = marker;
-    }
-
-    static isTextParsingError(error: any) {
-        return error && error.code === marker;
-    }
-}
 
 export interface IParseContext {
     readonly state: TextParsingState;
@@ -95,7 +38,7 @@ export class ParseContext implements IParseContext {
     }
 
     public addWarning(lineNumber: number, message: string) {
-        this._warnings.push(new TextParsingWarning(lineNumber, message));
+        this._warnings.push(new TextParsingWarning({lineNumber, message}));
     }
 
     public get clues(): ReadonlyArray<Clue> { return this._clues; }
