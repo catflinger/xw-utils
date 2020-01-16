@@ -1,5 +1,4 @@
 import { IPuzzleInfo, PuzzleProvider } from 'src/app/model/interfaces';
-import { PuzzleSourceM } from './puzzle-source-m';
 
 export abstract class PuzzleInfoM implements IPuzzleInfo {
     public abstract id: string;
@@ -11,6 +10,4 @@ export abstract class PuzzleInfoM implements IPuzzleInfo {
     public abstract blogable: boolean;
     public abstract solveable: boolean;
     public abstract gridable: boolean;
-    //public abstract ready: boolean;
-    public abstract source: PuzzleSourceM;
 } 

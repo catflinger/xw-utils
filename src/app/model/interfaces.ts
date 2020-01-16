@@ -16,7 +16,9 @@ export type WritingDirection = "static" | "forward" | "backward";
 export type ParsingErrorLevel = "warning" | "error";  // and "fatal-error" | "system-error" ??
 
 export type TextParsingErrorCode =
+    "unparsed" |
     "exception" |
+    
     // naming convention X_Y is: unexpected token X found while in parsing state Y 
     "acrossMarker_across" | 
     "acrossMarker_down" | 
@@ -127,6 +129,8 @@ export abstract class IPuzzle {
     abstract readonly info: IPuzzleInfo;
     abstract readonly publishOptions: IPublishOptions;
     abstract readonly notes: IPuzzleAnnotation;
+    abstract readonly provision: IPuzzleProvision;
+
 
     abstract readonly grid: IGrid;
     abstract readonly clues: readonly IClue[];
@@ -135,7 +139,7 @@ export abstract class IPuzzle {
     abstract readonly revision: number;
 }
 
-export abstract class IPuzzleSource {
+export abstract class IPuzzleProvision {
     abstract readonly source: string;
     abstract readonly parseErrors: ReadonlyArray<ITextParsingError>;
     abstract readonly parseWarnings: ReadonlyArray<ITextParsingWarning>;
@@ -148,7 +152,6 @@ export abstract class IPuzzleInfo {
     abstract readonly provider: PuzzleProvider;
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
-    abstract readonly source: IPuzzleSource;
 
     abstract readonly blogable: boolean;
     abstract readonly solveable: boolean;

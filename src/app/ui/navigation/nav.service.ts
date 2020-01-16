@@ -1,7 +1,6 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
-import { ActionSequence } from 'protractor';
 
 class _NavContext<T> implements NavContext {
     public track: NavTrack;
@@ -23,14 +22,16 @@ export class NavService<T> {
     private callStack: _NavContext<T>[] = [];
     private _appData: T;
 
+    private _log: string[] = [];
+
     constructor(
         private router: Router,
         @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>,
         @Inject(NAV_PROCESSOR) private processor: NavProcessor<T>
         ) { }
 
-    public get debugNavContext(): NavContext {
-        return this.callStack.length > 0 ? this.callStack[this.callStack.length - 1] : null;
+    public getNavHistory(): ReadonlyArray<string> {
+        return this._log;
     }
 
     public get appData(): T {
@@ -50,11 +51,10 @@ export class NavService<T> {
     Start a new track, if we have a current track then abandon it
     */
    public beginTrack(track: string, data: T, start?: string) {
+        this.abandonAll();
         this._appData = data;
 
-        while(this.callStack.length > 0) {
-            this.callStack.pop();
-        }
+        this._log.push("BEGINNING TRACK " + track);
         this.callTrack(track, start);
     }
 
@@ -64,33 +64,36 @@ export class NavService<T> {
     public async navigate(action: string): Promise<void> {
         let result = Promise.resolve();
 
-        //console.log("NAVIGATE " + action);
-
-        if (this.callStack.length > 0) {
-            let context = this.callStack[this.callStack.length - 1];
-
-            if(context.currentNode) {
-                if (Object.keys(context.currentNode.actions).length === 0) {
-                    // there are no actions specified, finish here
-                    this.goHome();
-
-                } else {
-                    let nextNodeName = context.currentNode.actions[action];
-                    let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+        try {
+            if (this.callStack.length > 0) {
+                let context = this.callStack[this.callStack.length - 1];
     
-                    if (nextNode) {
-                        result = this.invokeNode(nextNode, context);
+                if(context.currentNode) {
+                    if (Object.keys(context.currentNode.actions).length === 0) {
+                        // there are no actions specified, finish here
+                        this.goHome();
+    
                     } else {
-                        result = Promise.reject(`Cannot find a node ${nextNodeName} for the action ${action}`);
+                        let nextNodeName = context.currentNode.actions[action];
+                        let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+        
+                        if (nextNode) {
+                            result = this.invokeNode(nextNode, context);
+                        } else {
+                            result = Promise.reject(`Cannot find a node ${nextNodeName} for the action ${action}`);
+                        }
                     }
+                } else {
+                    // TO DO: what situation does this represent?
+                    // is it always an error?
                 }
             } else {
-                // TO DO: what situation does this represent?
-                // is it always an error?
+                // we have no more graphs to work with, bail out
+                this.goHome();
             }
-        } else {
-            // we have no more graphs to work with, bail out
-            this.goHome();
+        } catch (error) {
+            this._log.push("ERROR " + error.toString());
+            result = Promise.reject();
         }
 
         return result;
@@ -100,9 +103,7 @@ export class NavService<T> {
     Go directly to the page named, abandon any current track.
     */
    public gotoRoute(route: string[]) {
-        while(this.callStack.length > 0) {
-            this.callStack.pop();
-        }
+        this.abandonAll();
         this.router.navigate(route);
     }
 
@@ -110,6 +111,7 @@ export class NavService<T> {
     Go to the home page, abandon any current track.
     */
     public goHome() {
+        this.abandonAll();
         this.gotoRoute(["/home"]);
     }
 
@@ -117,7 +119,7 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
     let result = Promise.resolve();
     let action: string;
 
-    //console.log("INVOKING " + node.name);
+    this._log.push("INVOKING " + node.name);
 
     switch (node.type) {
         case "route":
@@ -163,8 +165,16 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
                 throw "Navigation Error - could not find start node";
             }
         } else {
-            throw "Navigation Error - could not find track with name " + trackName;
+                throw "Navigation Error - could not find track with name " + trackName;
         }
-}
+    }
 
+    private abandonAll() {
+        try {
+            while(this.callStack.length > 0) {
+                this.callStack.pop();
+            }
+            this._log = [];
+        } catch {}
+    }
 }

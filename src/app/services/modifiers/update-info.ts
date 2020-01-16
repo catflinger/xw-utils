@@ -15,7 +15,7 @@ export class UpdateInfo implements IPuzzleModifier {
             puzzle.info.wordpressId = this.args.wordPressId;
         }
         if (this.args.source !== undefined) {
-            puzzle.info.source.source = this.args.source;
+            puzzle.provision.source = this.args.source;
         }
         if (this.args.title !== undefined) {
             puzzle.info.title = this.args.title;

@@ -15,6 +15,8 @@ import { ApiResponseStatus, ApiSymbols } from './common';
 import { UpdateInfo } from './modifiers/update-info';
 import { Grid } from '../model/grid';
 import { AddGrid } from './modifiers/add-grid';
+import { TextParsingError } from '../model/text-parsing-error';
+import { TextParsingErrorM } from './modifiers/mutable-model/text-parsing-error-m';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -30,7 +32,7 @@ export abstract class IActivePuzzle {
 export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
     // at teh moment some of the name sound quite similar
-    abstract newPuzzle(reducer?: IPuzzleModifier): void;
+    abstract newPuzzle(reducers?: IPuzzleModifier[]): void;
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
@@ -95,11 +97,11 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return this.bsActive.value;
     }
 
-    public newPuzzle(reducer?: IPuzzleModifier): void {
+    public newPuzzle(reducers?: IPuzzleModifier[]): void {
         let puzzle: PuzzleM = this.makeEmptyPuzzle();
 
-        if (reducer) {
-            reducer.exec(puzzle);
+        if (reducers) {
+            reducers.forEach(reducer => reducer.exec(puzzle));
         }
 
         this.localStorageService.putPuzzle(puzzle);
@@ -155,9 +157,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     public openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle> {
         return this.httpPuzzleService.getPuzzle(params)
         .then((response) => {
-            if (Array.isArray(response.warnings)) {
-                //response.warnings.forEach(warning => console.log("WARNING " + JSON.stringify(warning))); 
-            }
 
             let puzzle = new Puzzle(response.puzzle);
 
@@ -188,21 +187,17 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         return this.httpPuzzleService.getPdfExtract(pdf)
         .then((result) => {
+            let reducers = [];
 
-            if (result.success === ApiResponseStatus.OK) {
-                this.newPuzzle();
+            reducers.push(new UpdateInfo({ source: result.text }));
 
-                this.update(new UpdateInfo({ source: result.text }));
-
-                if (result.grid) {
-                    let grid = new Grid(result.grid)
-                    this.update(new AddGrid({ grid }));
-                }
-                return "ok";
-            } else {
-                return "error";
+            if (result.grid) {
+                let grid = new Grid(result.grid)
+                reducers.push(new AddGrid({ grid }));
             }
+            this.newPuzzle(reducers);
 
+            return "ok";
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {
@@ -273,9 +268,20 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 blogable: true,
                 solveable: false,
                 gridable: false,
-                source: null,
             },
-            notes: {
+            provision: {
+                source: null,
+                parseErrors: [
+                    {
+                        code: "unparsed",
+                        line: 0,
+                        text: "",
+                        message: "this puzzle has not been parsed yet",
+                    }
+                ],
+                parseWarnings: [],
+            },
+        notes: {
                 header: new QuillDelta(),
                 body: new QuillDelta(),
                 footer: new QuillDelta(),

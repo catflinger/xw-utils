@@ -19,14 +19,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    public temp: string = "undefined";
-
     constructor(
         private navService: NavService<AppTrackData>,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
-        private router: Router,
         ) {
     }
 
@@ -41,16 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
-        }));
-
-        this.subs.push(this.router.events.subscribe((event: Event) => {
-            if (event instanceof NavigationEnd) {
-                let context = this.navService.debugNavContext;
-
-                this.temp = context ? 
-                `${context.track.name}:${context.currentNode.name}` : 
-                "none";
-            };
         }));
     }
 

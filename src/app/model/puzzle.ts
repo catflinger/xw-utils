@@ -5,6 +5,7 @@ import { Grid } from './grid';
 import { Clue } from './clue';
 import { GridCell } from './grid-cell';
 import { IPuzzle } from './interfaces';
+import { PuzzleProvision } from './puzzle-provision';
 
 export const definitionMaskMarker: string = "d";
 
@@ -12,6 +13,7 @@ export class Puzzle implements IPuzzle {
     public readonly info: PuzzleInfo;
     public readonly publishOptions: PublishOptions;
     public readonly notes: PuzzleAnnotation;
+    public readonly provision: PuzzleProvision;
 
     public readonly grid: Grid;
     public readonly clues: readonly Clue[];
@@ -43,6 +45,8 @@ export class Puzzle implements IPuzzle {
             data.info.blogable  = true;
             data.info.gridable  = false;
         }
+
+        this.provision = data.provision ? new PuzzleProvision(data.provision) : null;
 
         this.info = new PuzzleInfo(data.info);
 

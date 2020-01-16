@@ -3,8 +3,8 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 import { ParseData } from '../parsing/text/parse-data';
 import { TextParsingOptions, TextParsingService } from '../parsing/text/text-parsing-service';
 import { Injectable } from '@angular/core';
-import { AddClues } from './add-clues';
 import { Grid } from 'src/app/model/grid';
+import { UpdateParsing } from './update-parsing';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -21,7 +21,7 @@ export class ParseText implements IPuzzleModifier {
     public exec(puzzle: PuzzleM): void {
         let parseData = new ParseData();
         parseData.clueDataType = "text";
-        parseData.rawData = puzzle.info.source.source;
+        parseData.rawData = puzzle.provision.source;
         parseData.grid = new Grid(puzzle.grid);
 
         let options: TextParsingOptions = {
@@ -37,7 +37,7 @@ export class ParseText implements IPuzzleModifier {
         }
 
         if (!context.value.error) {
-            new AddClues({ clues: context.value.clues }).exec(puzzle);
+            new UpdateParsing(context.value).exec(puzzle);
         } else {
             throw new Error(`Failed to parse puzzle at line ${context.value.error.line} ${context.value.error.message}`);
         }

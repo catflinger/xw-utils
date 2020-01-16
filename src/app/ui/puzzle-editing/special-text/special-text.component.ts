@@ -9,8 +9,8 @@ import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-managemen
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
-import { AddClues } from 'src/app/services/modifiers/add-clues';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { UpdateParsing } from 'src/app/services/modifiers/update-parsing';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -47,12 +47,11 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                     if (puzzle) {
                         this.form.patchValue({ 
                             title: puzzle.info.title,
-                            text: puzzle.info.source
+                            text: puzzle.provision.source,
                         });
                     }
                 }
         ));
-
     }
 
     public ngOnDestroy(){
@@ -68,7 +67,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
 
             if (!this.parseResult.error) {
                 //patch puzzle
-                this.activePuzzle.update(new AddClues({ clues: this.parseResult.clues }));
+                this.activePuzzle.update(new UpdateParsing(this.parseResult));
 
                 this.navService.navigate("blog");
             } else {

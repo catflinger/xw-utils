@@ -1,5 +1,5 @@
 import { IPuzzleInfo, PuzzleProvider } from './interfaces';
-import { PuzzleSource } from './puzzle-source';
+import { PuzzleProvision } from './puzzle-provision';
 
 export class PuzzleInfo implements IPuzzleInfo {
     public readonly id: string;
@@ -13,7 +13,7 @@ export class PuzzleInfo implements IPuzzleInfo {
     public readonly solveable: boolean;
     public readonly gridable: boolean;
 
-    public readonly source: PuzzleSource;
+    public readonly parsing: PuzzleProvision;
 
     constructor(data: any) {
         this.id = data.id;
@@ -25,9 +25,5 @@ export class PuzzleInfo implements IPuzzleInfo {
         this.blogable = data.blogable;
         this.solveable = data.solveable;
         this.gridable = data.gridable;
-
-        if (data.source) {
-            this.source = new PuzzleSource(data.source); 
-        }
     }
 }
