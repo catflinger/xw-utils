@@ -206,8 +206,8 @@ function getEmptyPuzzle(): PuzzleM {
             blogable: true,
             solveable: false,
             gridable: false,
-            parsing: null,
         },
+        provision: null,
         notes: {
             header: new QuillDelta(),
             body: new QuillDelta(),

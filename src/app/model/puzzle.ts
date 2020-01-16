@@ -3,7 +3,6 @@ import { PuzzleInfo } from './puzzle-info';
 import { PuzzleAnnotation } from './puzzle-annotation';
 import { Grid } from './grid';
 import { Clue } from './clue';
-import { GridCell } from './grid-cell';
 import { IPuzzle } from './interfaces';
 import { PuzzleProvision } from './puzzle-provision';
 
