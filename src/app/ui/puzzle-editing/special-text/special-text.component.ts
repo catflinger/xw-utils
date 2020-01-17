@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Provider } from '@angular/core';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
@@ -10,7 +10,8 @@ import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { UpdateParsing } from 'src/app/services/modifiers/update-parsing';
+import { ParseText } from 'src/app/services/modifiers/parse-text';
+import { ProviderService } from 'src/app/services/provider.service';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -30,7 +31,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private textParsingService: TextParsingService,
-        private puzzleManager: IPuzzleManager,
+        private providerService: ProviderService,
         private fb: FormBuilder,
     ) { }
 
@@ -62,18 +63,13 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         this.appService.clear();
 
         try {
-            this.activePuzzle.update(new UpdateInfo({ source: this.form.value.text }))
-            this.parseResult = this.parse(this.form.value.text);
-
-            if (!this.parseResult.error) {
-                //patch puzzle
-                this.activePuzzle.update(new UpdateParsing(this.parseResult));
+            this.activePuzzle.update(
+                new UpdateInfo({ source: this.form.value.text }),
+                new ParseText(this.textParsingService, this.providerService));
 
                 this.navService.navigate("blog");
-            } else {
-                this.appService.setAlert("danger", "Parsing Error :" + this.parseResult.error.message);
-            }
-        } catch(error) {
+
+            } catch(error) {
             this.appService.setAlert("danger", "ERROR :" + error.message)
         }
     }

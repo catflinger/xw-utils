@@ -6,6 +6,8 @@ import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-managemen
 import { LinkCluesToGrid } from 'src/app/services/modifiers/link-clues-to-grid';
 import { ParseText } from 'src/app/services/modifiers/parse-text';
 import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
+import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
+import { ProviderService } from 'src/app/services/provider.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +18,8 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private puzzleManager: IPuzzleManager,
-        private textParser: ParseText,
+        private textParsingService: TextParsingService,
+        private providerService: ProviderService,
     ) {}
 
     async exec(processName: string, appData: AppTrackData): Promise<string> {
@@ -74,7 +77,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         let action = "error";
 
         try {
-            this.activePuzzle.update(this.textParser);
+            this.activePuzzle.update(new ParseText(this.textParsingService, this.providerService));
             action = "ok";
         } catch(error) {
             action = "error";

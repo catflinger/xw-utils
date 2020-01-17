@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Line } from '../line';
 import { ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken, StartMarkerToken, NullToken } from './tokens';
+import { TextParsingOptions } from '../types';
 
 export class TokenGroup {
     constructor(
@@ -46,12 +47,12 @@ export class TokeniserService {
 
     constructor() { }
 
-    public parse(data: string): TokenList {
+    public parse(data: string, options: TextParsingOptions): TokenList {
         let tokens: ParseToken[] = [];
 
         // make an array of lines from the source data
         let lines: Line[] = [];
-        data.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index)));
+        data.replace("\r", "").split("\n").forEach((line, index) => lines.push(new Line(line, index, options)));
 
         tokens.push(new StartMarkerToken());
 

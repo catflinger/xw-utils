@@ -5,6 +5,7 @@ import { QuillDelta } from 'src/app/model/interfaces';
 import { ClueBuffer } from './clue-buffer';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingWarning } from 'src/app/model/text-parsing-warning';
+import { Line } from './line';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -12,6 +13,7 @@ export interface IParseContext {
     readonly state: TextParsingState;
     readonly clues: ReadonlyArray<Clue>;
     readonly buffer: ClueBuffer;
+    readonly preamble: ReadonlyArray<string>;
     readonly tokenGroup: TokenGroup;
     readonly error: TextParsingError;
     readonly warnings: ReadonlyArray<TextParsingWarning>;
@@ -24,6 +26,7 @@ export class ParseContext implements IParseContext {
     private _state: TextParsingState = null;
     private _error: TextParsingError = null;
     private _warnings: TextParsingWarning[] = [];
+    private _preamble: string[] = [];
 
     public addClueText(text: string) {
         if (this._state === "across" || this._state === "down") {
@@ -41,8 +44,13 @@ export class ParseContext implements IParseContext {
         this._warnings.push(new TextParsingWarning({lineNumber, message}));
     }
 
+    public addPreamble(text: string) {
+        this._preamble.push(text);
+    }
+
     public get clues(): ReadonlyArray<Clue> { return this._clues; }
     public get warnings(): ReadonlyArray<TextParsingWarning> { return this._warnings; }
+    public get preamble(): ReadonlyArray<string> { return this._preamble; }
 
     public get hasContent(): boolean { return this._clueBuffer !== null; }
     public get buffer(): ClueBuffer { return this._clueBuffer; }

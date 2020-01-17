@@ -23,12 +23,12 @@ export class SpecialComponent implements OnInit {
     }
 
     public onText() {
-        this.puzzleManager.newPuzzle();
+        this.puzzleManager.newPuzzle("text");
         this.navService.navigate("clues");
     }
 
     public onGridText() {
-        this.puzzleManager.newPuzzle();
+        this.puzzleManager.newPuzzle("text");
         this.navService.navigate("grid");
     }
 

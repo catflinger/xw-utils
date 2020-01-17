@@ -27,6 +27,11 @@ export interface PuzzleResponse {
     readonly completionState: string;
 }
 
+export interface PdfExtractResponse {
+    readonly grid: any;
+    readonly text: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,7 +41,31 @@ export class HttpPuzzleSourceService {
         private http: HttpClient,
         private authService: AuthService) { }
 
-    public getPuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
+        // TO DO: changeteh name of this and make it more generic
+        public getFT(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
+            const credentials = this.authService.getCredentials();
+    
+            if (!credentials.authenticated) {
+                return Promise.reject(ApiSymbols.AuthorizationFailure);
+            }
+    
+            params.username = credentials.username;
+            params.password = credentials.password;
+    
+            return this.http.post(environment.apiRoot + "Ft/", params)
+            .toPromise()
+            .then((data: ApiPdfExtractResponse) => {
+                if (data.success === ApiResponseStatus.OK) {
+                    return data as PdfExtractResponse;
+                } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                    throw ApiSymbols.AuthorizationFailure;
+                } else {
+                    throw data.message;
+                }
+            });
+        }
+    
+        public getPuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
@@ -59,7 +88,7 @@ export class HttpPuzzleSourceService {
         });
     }
 
-    public getPdfExtract(pdf: Base64Encoded): Promise<ApiPdfExtractResponse> {
+    public getPdfExtract(pdf: Base64Encoded): Promise<PdfExtractResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
@@ -76,7 +105,7 @@ export class HttpPuzzleSourceService {
         .toPromise()
         .then((data: ApiPdfExtractResponse) => {
             if (data.success === ApiResponseStatus.OK) {
-                return data as ApiPdfExtractResponse;
+                return data as PdfExtractResponse;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {
@@ -84,31 +113,5 @@ export class HttpPuzzleSourceService {
             }
         });
     }
-
-    public getFtXXXXXXXXXX(): Promise<ApiPdfExtractResponse> {
-        const credentials = this.authService.getCredentials();
-
-        if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
-        }
-
-        let params: any = {
-            username: credentials.username,
-            password: credentials.password,
-        }
-
-        return this.http.post(environment.apiRoot + "ft/", params)
-        .toPromise()
-        .then((data: ApiPdfExtractResponse) => {
-            if (data.success === ApiResponseStatus.OK) {
-                return data as ApiPdfExtractResponse;
-            } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
-            } else {
-                throw data.message;
-            }
-        });
-    }
-
 }
 

@@ -7,7 +7,7 @@ import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
 import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
-import { IPuzzle, QuillDelta, Base64Encoded } from '../model/interfaces';
+import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { AddPlaceholders } from './modifiers/add-placeholders';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
@@ -27,12 +27,12 @@ export abstract class IActivePuzzle {
     abstract get puzzle(): Puzzle;
     abstract hasPuzzle: boolean;
     abstract clear(id?: string);
-    abstract update(reducer: IPuzzleModifier): void;
+    abstract update(...reducers: IPuzzleModifier[]): void;
 }
 export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
     // at teh moment some of the name sound quite similar
-    abstract newPuzzle(reducers?: IPuzzleModifier[]): void;
+    abstract newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): void;
     abstract getPuzzleList(): Observable<PuzzleInfo[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
@@ -97,8 +97,10 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return this.bsActive.value;
     }
 
-    public newPuzzle(reducers?: IPuzzleModifier[]): void {
-        let puzzle: PuzzleM = this.makeEmptyPuzzle();
+    public newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): Puzzle {
+        let result: Puzzle = null;
+
+        let puzzle: PuzzleM = this.makeEmptyPuzzle(provider);
 
         if (reducers) {
             reducers.forEach(reducer => reducer.exec(puzzle));
@@ -106,7 +108,11 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         this.localStorageService.putPuzzle(puzzle);
         this.refreshPuzzleList();
-        this.bsActive.next(new Puzzle(puzzle));
+
+        result = new Puzzle(puzzle);
+        this.bsActive.next(result);
+
+        return result;
     }
 
     public get hasPuzzle(): boolean {
@@ -121,11 +127,11 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         }
     }
 
-    public update(reducer: IPuzzleModifier) {
+    public update(...reducers: IPuzzleModifier[]) {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {
-            reducer.exec(puzzle);
+            reducers.forEach(reducer => reducer.exec(puzzle));
             this.commit(puzzle);
         }
     }
@@ -155,24 +161,40 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle> {
-        return this.httpPuzzleService.getPuzzle(params)
-        .then((response) => {
+        let result;
 
-            let puzzle = new Puzzle(response.puzzle);
+        if(params.provider === "ft") {
+            result = this.httpPuzzleService.getFT(params).then(pdfExtract => {
+                let reducers = [];
 
-            // add some defaults
-            let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
-            new AddPlaceholders().exec(puzzleM);
+                reducers.push(new UpdateInfo({ source: pdfExtract.text }));
+    
+                if (pdfExtract.grid) {
+                    let grid = new Grid(pdfExtract.grid)
+                    reducers.push(new AddGrid({ grid }));
+                }
+                return this.newPuzzle(params.provider, reducers);
+            });
+        } else {
+            result = this.httpPuzzleService.getPuzzle(params).then((response) => {
+                let puzzle = new Puzzle(response.puzzle);
 
-            this.localStorageService.putPuzzle(puzzleM);
-            this.usePuzzle(puzzleM);
-            this.refreshPuzzleList();
+                // add some defaults
+                let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
+                new AddPlaceholders().exec(puzzleM);
 
-            return this.bsActive.value;
-        })
-        .catch(error => {
-            throw error.message ? error.message : error.toString();
-        });
+                this.localStorageService.putPuzzle(puzzleM);
+                this.usePuzzle(puzzleM);
+                this.refreshPuzzleList();
+
+                return this.bsActive.value;
+            })
+            .catch(error => {
+                throw error.message ? error.message : error.toString();
+            });
+        }
+
+        return result;
     }
 
     public deletePuzzle(id: string): Promise<void> {
@@ -195,7 +217,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 let grid = new Grid(result.grid)
                 reducers.push(new AddGrid({ grid }));
             }
-            this.newPuzzle(reducers);
+            this.newPuzzle("text", reducers);
 
             return "ok";
         })
@@ -252,7 +274,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.refreshPuzzleList();
     }
 
-    private makeEmptyPuzzle(): PuzzleM {
+    private makeEmptyPuzzle(provider: PuzzleProvider): PuzzleM {
         return {
             clues: [],
             grid: null,
@@ -260,9 +282,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             revision: 0,
             info: {
                 id: uuid(),
-                title: "untitled",
+                title: "",
                 puzzleDate: new Date(),
-                provider: "text",
+                provider,
                 setter: "anon", 
                 wordpressId: null,
                 blogable: true,

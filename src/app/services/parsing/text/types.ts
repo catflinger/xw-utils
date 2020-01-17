@@ -1,4 +1,9 @@
-import { ClueGroup } from 'src/app/model/interfaces';
+
+export interface TextParsingOptions {
+    allowPreamble?: boolean,
+    allowPostamble?: boolean,
+    allowTypos?: boolean,
+}
 
 export type LineType = 
     

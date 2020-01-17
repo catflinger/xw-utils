@@ -78,18 +78,18 @@ export class TextToken extends ParseToken {
 
 export class StartMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[start-of-file]", NaN), parseTokenTypes.StartMarker);
+        super(new Line("[start-of-file]", NaN, {}), parseTokenTypes.StartMarker);
     }
 }
 
 export class EndMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[end-of-file]", NaN), parseTokenTypes.EndMarker);
+        super(new Line("[end-of-file]", NaN, {}), parseTokenTypes.EndMarker);
     }
 }
 
 export class NullToken extends ParseToken {
     constructor() {
-        super(new Line("", NaN), parseTokenTypes.Null);
+        super(new Line("", NaN, {}), parseTokenTypes.Null);
     }
 }

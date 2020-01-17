@@ -59,7 +59,12 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
 
-            this.navService.navigate("continue");
+            if (puzzle.provision) {
+                this.navService.navigate("parse");
+            } else {
+                this.navService.navigate("continue");
+            }
+
         })
         .catch((error) => {
             if (error === ApiSymbols.AuthorizationFailure) {

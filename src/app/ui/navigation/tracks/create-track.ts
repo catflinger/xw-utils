@@ -16,7 +16,7 @@ export const createTrack: NavTrack = {
             route: "/open-puzzle",
             actions: {
                 "continue": "solve",
-                "parse": "parse",
+                "parse": "parser",
             }
         },
         {

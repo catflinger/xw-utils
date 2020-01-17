@@ -29,7 +29,7 @@ export class CreatePuzzleComponent implements OnInit {
     }
 
     public onContinue() {
-        this.puzzleManager.newPuzzle([new UpdateInfo({ title: this.form.value.title })]);
+        this.puzzleManager.newPuzzle("text", [new UpdateInfo({ title: this.form.value.title })]);
         this.navService.navigate("continue");
     }
 

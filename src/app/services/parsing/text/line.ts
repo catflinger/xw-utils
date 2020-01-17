@@ -1,10 +1,11 @@
-import { LineType } from './types';
+import { LineType, TextParsingOptions } from './types';
 
 export class Line {
 
     constructor(
         public readonly rawText: string,
         public readonly lineNumber: number,
+        public readonly options: TextParsingOptions,
     ) {}
 
     public get lineType(): LineType {
@@ -44,7 +45,12 @@ export class Line {
     }
 
     protected get hasAcrossMarker(): boolean {
-        return /^ACROSS$/i.test(this.text);
+        if (this.options.allowTypos) {
+            return /^(ACROSS)|(ACROS)|(AROSS)$/i.test(this.text);
+
+        } else {
+            return /^ACROSS$/i.test(this.text);
+        }
     }
 
     protected get hasDownMarker(): boolean {

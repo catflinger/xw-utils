@@ -7,11 +7,8 @@ import { Grid } from 'src/app/model/grid';
 import { ClueBuffer } from './clue-buffer';
 import { ClueGroup } from 'src/app/model/interfaces';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
+import { TextParsingOptions } from './types';
 
-export interface TextParsingOptions {
-    allowPreamble?: boolean,
-    allowPostamble?: boolean,
-}
 
 @Injectable({
     providedIn: 'root'
@@ -25,10 +22,11 @@ export class TextParsingService {
         const _options: TextParsingOptions = {
             allowPreamble: options && options.allowPreamble,
             allowPostamble: options && options.allowPostamble,
+            allowTypos: options && options.allowTypos,
         }
 
         let context = new ParseContext();
-        let tokens: TokenList = this.tokeniser.parse(data.rawData);
+        let tokens: TokenList = this.tokeniser.parse(data.rawData, options);
 
         let tokeniser = tokens.getIterator();
         let item = tokeniser.next();
@@ -240,7 +238,9 @@ export class TextParsingService {
 
         switch (context.state) {
             case null:
-                if (!options.allowPreamble) {
+                if (options.allowPreamble) {
+                    context.addPreamble(token.text);
+                } else {
                     throw new TextParsingError({
                         code: "clueStart_null",
                         line: token.lineNumber,
@@ -279,7 +279,9 @@ export class TextParsingService {
 
         switch (context.state) {
             case null:
-                if (!options.allowPreamble) {
+                if (options.allowPreamble) {
+                    context.addPreamble(token.text);
+                } else {
                     throw new TextParsingError({
                         code: "clueEnd_null",
                         line: token.lineNumber,
@@ -328,7 +330,9 @@ export class TextParsingService {
 
         switch (context.state) {
             case null:
-                if (!options.allowPreamble) {
+                if (options.allowPreamble) {
+                    context.addPreamble(token.text);
+                } else {
                     throw new TextParsingError({
                         code: "text_null",
                         line: token.lineNumber,
