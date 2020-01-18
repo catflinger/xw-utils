@@ -37,7 +37,11 @@ export class Line {
     }
 
     protected get hasStartMarker(): boolean {
-        return /^\*?\s*\d{1,2}\D/i.test(this.text);
+        if (this.options && this.options.azedFeatures) {
+            return /^\*?\s*\d{1,2}\D/i.test(this.text);
+        } else {
+            return /^\d{1,2}\D/i.test(this.text);
+        }
     }
 
     protected get hasEndMarker(): boolean {

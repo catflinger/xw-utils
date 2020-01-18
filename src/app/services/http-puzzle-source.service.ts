@@ -41,8 +41,7 @@ export class HttpPuzzleSourceService {
         private http: HttpClient,
         private authService: AuthService) { }
 
-        // TO DO: changeteh name of this and make it more generic
-        public getFT(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
+        public providePuzzle(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
             const credentials = this.authService.getCredentials();
     
             if (!credentials.authenticated) {
@@ -52,7 +51,7 @@ export class HttpPuzzleSourceService {
             params.username = credentials.username;
             params.password = credentials.password;
     
-            return this.http.post(environment.apiRoot + "Ft/", params)
+            return this.http.post(environment.apiRoot + "provision/", params)
             .toPromise()
             .then((data: ApiPdfExtractResponse) => {
                 if (data.success === ApiResponseStatus.OK) {

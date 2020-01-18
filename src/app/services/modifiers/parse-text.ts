@@ -27,9 +27,15 @@ export class ParseText implements IPuzzleModifier {
         parseData.rawData = puzzle.provision.source;
         parseData.grid = new Grid(puzzle.grid);
 
-        let options: TextParsingOptions = {
-            allowPreamble: true,
-            allowPostamble: true,
+        let options: TextParsingOptions = {}
+
+        if (puzzle.info.provider !== "text") {
+            options.allowPostamble = true;
+            options.allowPreamble = true;
+        }
+
+        if (puzzle.info.provider === "azed") {
+            options.azedFeatures = true;
         }
 
         let parser = this.textParsingService.parser(parseData, options);
@@ -57,7 +63,6 @@ export class ParseText implements IPuzzleModifier {
             new AddPlaceholders().exec(puzzle);
 
             if (!puzzle.info.title) {
-                // TO DO: set the title here...
                 const titleExpression = new RegExp(String.raw`(no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
 
                 for (let line of context.value.preamble) {

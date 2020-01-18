@@ -86,6 +86,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     //  Another idea is to have the on or both of the classes reference an interface rather than the concrete class.  Perhaps
     //  this will avoid the cyclic dependency.
     //
+    // Also: think about moving the active puzzle into the nav service.  It might make moe sense to have an active puzle more
+    // directly attached to a UI process.  This could allow for an MDI style UI.  Not required at the moment, but it feels cleaner.
 
     //#region Active Puzzle interface
 
@@ -163,8 +165,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     public openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle> {
         let result;
 
-        if(params.provider === "ft") {
-            result = this.httpPuzzleService.getFT(params).then(pdfExtract => {
+        if (params.provider === "ft" || params.provider === "azed") {
+            result = this.httpPuzzleService.providePuzzle(params).then(pdfExtract => {
                 let reducers = [];
 
                 reducers.push(new UpdateInfo({ source: pdfExtract.text }));

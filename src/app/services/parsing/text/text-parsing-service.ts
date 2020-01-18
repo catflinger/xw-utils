@@ -23,6 +23,7 @@ export class TextParsingService {
             allowPreamble: options && options.allowPreamble,
             allowPostamble: options && options.allowPostamble,
             allowTypos: options && options.allowTypos,
+            azedFeatures: options && options.azedFeatures,
         }
 
         let context = new ParseContext();
@@ -342,14 +343,21 @@ export class TextParsingService {
                 break;
 
             case "across":
+                let text = token.text.trim().toLowerCase();
+
                 if (context.hasContent) {
                     context.addClueText(token.text);
+
+                } else if (options.azedFeatures && (text === "name" || text === "address" || text === "post code")) {
+                    // extracts from AZED pdfs somethimes mistakenly include address details in the across clues
+                    // ignore these lines
+                    
                 } else {
                     throw new TextParsingError({
                         code: "text_across",
                         line: token.lineNumber,
                         text: token.text,
-                        message: "Expected the start of a new clue but found unrecognised text."});
+                        message: "Expected the start of a new clue but found unrecognised text: [" + token.text + "]"});
                 }
                 break;
 

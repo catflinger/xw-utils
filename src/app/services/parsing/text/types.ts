@@ -3,6 +3,7 @@ export interface TextParsingOptions {
     allowPreamble?: boolean,
     allowPostamble?: boolean,
     allowTypos?: boolean,
+    azedFeatures?: boolean,
 }
 
 export type LineType = 
