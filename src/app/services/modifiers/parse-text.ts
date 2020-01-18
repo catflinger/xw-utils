@@ -7,6 +7,7 @@ import { TextParsingOptions } from '../parsing/text/types';
 import { TextParsingErrorM } from './mutable-model/text-parsing-error-m';
 import { AddPlaceholders } from './add-placeholders';
 import { ProviderService } from '../provider.service';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -27,18 +28,7 @@ export class ParseText implements IPuzzleModifier {
         parseData.rawData = puzzle.provision.source;
         parseData.grid = new Grid(puzzle.grid);
 
-        let options: TextParsingOptions = {}
-
-        if (puzzle.info.provider !== "text") {
-            options.allowPostamble = true;
-            options.allowPreamble = true;
-        }
-
-        if (puzzle.info.provider === "azed") {
-            options.azedFeatures = true;
-        }
-
-        let parser = this.textParsingService.parser(parseData, options);
+        let parser = this.textParsingService.parser(parseData, this.getParsingOptions(puzzle.info.provider));
         let context = parser.next();
 
         while(!context.done) {
@@ -93,6 +83,25 @@ export class ParseText implements IPuzzleModifier {
         } else {
             throw new Error(`Failed to parse puzzle at line ${context.value.error.line} ${context.value.error.message}`);
         }
+    }
+
+    private getParsingOptions(provider: PuzzleProvider): TextParsingOptions {
+        let options: TextParsingOptions = {}
+
+        if (provider !== "text") {
+            options.allowPostamble = true;
+            options.allowPreamble = true;
+        }
+
+        if (provider === "ft") {
+            options.allowTypos = true;
+        }
+
+        if (provider === "azed") {
+            options.azedFeatures = true;
+        }
+
+        return options;
     }
 
 }

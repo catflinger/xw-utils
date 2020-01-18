@@ -50,7 +50,7 @@ export class Line {
 
     protected get hasAcrossMarker(): boolean {
         if (this.options.allowTypos) {
-            return /^(ACROSS)|(ACROS)|(AROSS)$/i.test(this.text);
+            return /^(ACROSS|ACROS|AROSS|ACRPSS)$/i.test(this.text);
 
         } else {
             return /^ACROSS$/i.test(this.text);
