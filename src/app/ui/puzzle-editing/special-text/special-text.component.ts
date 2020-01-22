@@ -5,12 +5,10 @@ import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-s
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { IParseContext } from 'src/app/services/parsing/text/text-parsing-context';
 import { Puzzle } from 'src/app/model/puzzle';
-import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
-import { UpdateInfo } from 'src/app/services/modifiers/update-info';
-import { ParseText } from 'src/app/services/modifiers/parse-text';
 import { ProviderService } from 'src/app/services/provider.service';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
@@ -30,8 +28,6 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
-        private textParsingService: TextParsingService,
-        private providerService: ProviderService,
         private fb: FormBuilder,
     ) { }
 
@@ -62,16 +58,17 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onParse() {
         this.appService.clear();
 
-        try {
-            this.activePuzzle.update(
-                new UpdateInfo({ source: this.form.value.text }),
-                new ParseText(this.textParsingService, this.providerService));
+        // try {
+        //     this.activePuzzle.update(
+        //         new UpdateInfo({ source: this.form.value.text }),
+        //         new ParseText(this.textParsingService, this.providerService));
 
-                this.navService.navigate("blog");
+        //         this.navService.navigate("blog");
 
-            } catch(error) {
-            this.appService.setAlert("danger", "ERROR :" + error.message)
-        }
+        //     } catch(error) {
+        //     this.appService.setAlert("danger", "ERROR :" + error.message)
+        // }
+        this.navService.navigate("parse");
     }
 
     public onCancel() {
@@ -87,19 +84,19 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         event.stopPropagation();
     }
 
-    private parse(text: string): IParseContext {
-        let parseData = new ParseData();
-        parseData.clueDataType = "text";
-        parseData.rawData = text;
+    // private parse(text: string): IParseContext {
+    //     let parseData = new ParseData();
+    //     parseData.clueDataType = "text";
+    //     parseData.rawData = text;
 
-        let parser = this.textParsingService.parser(parseData, null);
-        let context = parser.next();
+    //     let parser = this.textParsingService.parser(parseData, null);
+    //     let context = parser.next();
 
-        while(!context.done) {
-            context = parser.next();
-        }
+    //     while(!context.done) {
+    //         context = parser.next();
+    //     }
     
-        return context.value as IParseContext;
-    }
+    //     return context.value as IParseContext;
+    // }
 
 }

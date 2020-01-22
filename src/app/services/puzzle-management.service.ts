@@ -4,14 +4,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PuzzleInfo } from '../model/puzzle-info';
 import { LocalStorageService } from './local-storage.service';
 import { Puzzle } from '../model/puzzle';
-import { HttpPuzzleSourceService, PuzzleResponse } from './http-puzzle-source.service';
+import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { AddPlaceholders } from './modifiers/add-placeholders';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
-import { ApiResponseStatus, ApiSymbols } from './common';
+import { ApiSymbols } from './common';
 import { UpdateInfo } from './modifiers/update-info';
 import { Grid } from '../model/grid';
 import { AddGrid } from './modifiers/add-grid';
@@ -277,7 +277,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     private makeEmptyPuzzle(provider: PuzzleProvider): PuzzleM {
         return {
-            clues: [],
+            clues: null,
             grid: null,
             linked: false,
             revision: 0,
@@ -288,7 +288,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 provider,
                 setter: "anon", 
                 wordpressId: null,
-                blogable: true,
+                blogable: false,
                 solveable: false,
                 gridable: false,
             },

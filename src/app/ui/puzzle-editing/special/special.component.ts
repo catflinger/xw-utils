@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'app-special',
@@ -11,25 +12,28 @@ import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 export class SpecialComponent implements OnInit {
 
     constructor(
-        private puzzleManager: IPuzzleManager,
         private navService: NavService<AppTrackData>,
+        private appService: AppService,
     ) { }
 
     ngOnInit() {
     }
 
     public onPdf() {
-        this.navService.navigate("pdf");
+        this.navService.beginTrack("createPdfTrack", new AppTrackData());
     }
 
     public onText() {
-        this.puzzleManager.newPuzzle("text");
-        this.navService.navigate("clues");
+        this.appService.setOpenPuzzleParams({
+            provider: "text",
+        });
+        this.navService.beginTrack("createTextTrack", new AppTrackData());
     }
 
     public onGridText() {
-        this.puzzleManager.newPuzzle("text");
-        this.navService.navigate("grid");
+        this.appService.setOpenPuzzleParams({
+            provider: "text",
+        });
+        this.navService.beginTrack("createGridAndTextTrack", new AppTrackData());
     }
-
 }

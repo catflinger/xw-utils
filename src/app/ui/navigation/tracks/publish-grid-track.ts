@@ -1,7 +1,7 @@
 import { NavTrack } from '../interfaces';
 
 export const publishGridTrack: NavTrack = {
-    name: "publish-grid",
+    name: "publishGridTrack",
     start: "publish-grid",
     nodes: [
         {

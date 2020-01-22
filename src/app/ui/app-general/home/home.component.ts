@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack("create", new AppTrackData(), "grid-editor");
+                this.navService.beginTrack("createGridTrack", new AppTrackData(), "edit-grid");
             }
         });
     }

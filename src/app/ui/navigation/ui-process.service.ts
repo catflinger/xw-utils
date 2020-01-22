@@ -26,6 +26,11 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         let action: Promise<string>;
 
         switch (processName) {
+            // case "new-puzzle":
+            //     this.puzzleManager.newPuzzle(this.appService.openPuzzleParameters.provider);
+            //     action = Promise.resolve("ok");
+            //     break;
+
             case "make-clues":
                 action = Promise.resolve("ok");
                 break;

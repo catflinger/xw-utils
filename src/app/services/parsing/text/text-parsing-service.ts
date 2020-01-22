@@ -343,12 +343,12 @@ export class TextParsingService {
                 break;
 
             case "across":
-                let text = token.text.trim().toLowerCase();
+                let azedExp = /^\s*(name|address|postcode|post code)\s*$/i;
 
                 if (context.hasContent) {
                     context.addClueText(token.text);
 
-                } else if (options.azedFeatures && (text === "name" || text === "address" || text === "post code")) {
+                } else if (options.azedFeatures && azedExp.test(token.text)) {
                     // extracts from AZED pdfs somethimes mistakenly include address details in the across clues
                     // ignore these lines
                     

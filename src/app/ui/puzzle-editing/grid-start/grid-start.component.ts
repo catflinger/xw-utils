@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle';
 import { GridCellM } from 'src/app/services/modifiers/mutable-model/grid-cell-m';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
 import { AddGrid } from 'src/app/services/modifiers/add-grid';
 import { Grid } from 'src/app/model/grid';
 import { GridProperties } from 'src/app/model/grid-properties';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GridStyles } from 'src/app/model/interfaces';
+import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { AppService } from '../../services/app.service';
 
 @Component({
     selector: 'app-grid-start',
@@ -15,36 +18,85 @@ import { GridProperties } from 'src/app/model/grid-properties';
     styleUrls: ['./grid-start.component.css']
 })
 export class GridStartComponent implements OnInit, OnDestroy {
-    public puzzle: Puzzle;
+    public readonly minCellsAcross = 1;
+    public readonly minCellsDown = 1;
+    public readonly maxCellsAcross = 25;
+    public readonly maxCellsDown = 25;   
+
+    private form: FormGroup;
 
     private subs: Subscription[] = [];
 
     constructor(
-        private activePuzzle: IActivePuzzle,
+        private appService: AppService,
         private navService: NavService<AppTrackData>,
+        private puzzleManager: IPuzzleManager,
+        private formBuilder: FormBuilder,
     ) { }
 
     ngOnInit() {
-        this.subs.push(
-            this.activePuzzle.observe().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                }
-        ));
+
+        this.form = this.formBuilder.group({
+            title: ["", Validators.required],
+            gridStyle: [
+                GridStyles.standard, 
+                [Validators.required]
+            ],
+
+            cellsAcross: [
+                15, 
+                [
+                    Validators.required, 
+                    Validators.max(this.maxCellsAcross), 
+                    Validators.min(this.minCellsAcross)
+                ]
+            ],
+
+            cellsDown: [
+                15, 
+                [
+                    Validators.required, 
+                    Validators.max(this.maxCellsDown), 
+                    Validators.min(this.minCellsDown)
+                ]
+            ],
+
+            symmetrical : [
+                true,
+                [Validators.required],
+            ]
+        });
     }
 
     public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    public onClose(result: GridProperties) {
-        if (result) {
-            let grid = this.createGrid(result);
-            this.activePuzzle.update(new AddGrid({ grid }));
-            this.navService.navigate("continue");
-        } else {
-            this.navService.goHome();
-        }
+    public onCancel() {
+        this.navService.goHome();
+    }
+
+    public onContinue() {
+
+        let grid = this.createGrid({
+            style: this.form.value.gridStyle,
+            size: {
+                across: this.form.value.cellsAcross,
+                down: this.form.value.cellsDown,
+            },
+            symmetrical: this.form.value.symmetrical,
+        });
+
+        this.puzzleManager.newPuzzle("grid", [
+            new AddGrid({ grid }), 
+            new UpdateInfo({ 
+                title: this.form.value.title,
+                provider: this.appService.openPuzzleParameters.provider,
+                gridable: true,
+            }),
+        ]);
+
+        this.navService.navigate("continue");
     }
 
     private createGrid(params: GridProperties): Grid {

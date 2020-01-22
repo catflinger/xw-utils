@@ -1,7 +1,7 @@
 import { NavTrack } from '../interfaces';
 
 export const publishPostTrack: NavTrack = {
-    name: "publish-post",
+    name: "publishPostTrack",
     start: "publish-options",
     nodes: [
         {

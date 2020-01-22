@@ -44,7 +44,6 @@ import { IndyComponent } from './ui/puzzle-editing/indy/indy.component';
 import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-modal.component';
 import { GridEditorComponent } from './ui/puzzle-editing/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/puzzle-editing/grid-start/grid-start.component';
-import { GridPropertiesEditorComponent } from './ui/components/grid-properties-editor/grid-properties-editor.component';
 import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
 import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
 import { DiarySettingsEditorComponent } from './ui/components/diary-settings-editor/diary-settings-editor.component';
@@ -71,8 +70,11 @@ import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 import { ClueListItemComponent } from './ui/components/clue-list-item/clue-list-item.component';
-import { createTrack } from './ui/navigation/tracks/create-track';
 import { solveTrack } from './ui/navigation/tracks/solve-track';
+import { createPdfTrack } from './ui/navigation/tracks/create-pdf-track';
+import { createGridAndTextTrack } from './ui/navigation/tracks/create-grid-and-text-track';
+import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
+import { createTextTrack } from './ui/navigation/tracks/create-text-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -86,7 +88,10 @@ const quillGlobalConfig = {
 };
 
 const tracks: ReadonlyArray<NavTrack> = [
-    createTrack,
+    createTextTrack,
+    createGridTrack,
+    createGridAndTextTrack,
+    createPdfTrack,
     solveTrack,
     publishPostTrack,
     publishGridTrack,
@@ -131,7 +136,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         ConfirmModalComponent,
         GridEditorComponent,
         GridStartComponent,
-        GridPropertiesEditorComponent,
         DownloadButtonComponent,
         DiaryComponent,
         DiaryAliasControlComponent,

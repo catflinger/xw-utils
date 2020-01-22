@@ -6,7 +6,10 @@ export type Base64Encoded = string;
 export type Direction = "across" | "down";
 export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
-export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text";
+
+// TO DO: think of a better provider than "grid" for grid-only puzzles
+export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text" | "grid";  
+
 export type Layouts = "table" | "list";
 export type Spacings = "small" | "medium" | "large";
 

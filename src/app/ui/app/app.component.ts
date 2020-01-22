@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.navService.gotoRoute(["indy"]);
         
         } else if (provider === "special" ) {
-            this.navService.beginTrack("create", new AppTrackData());
+            this.navService.gotoRoute(["special"]);
         
         } else {
             this.navService.gotoRoute(["archive", provider]);
@@ -64,7 +64,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public onGrid() {
         this.activePuzzle.clear();
         this.appService.clear();
-        this.navService.beginTrack("create", new AppTrackData());
+        this.appService.setOpenPuzzleParams({
+            provider: "grid",
+        });
+        this.navService.beginTrack("createGridTrack", new AppTrackData());
     }
 
     public onHome() {
