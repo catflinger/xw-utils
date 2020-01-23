@@ -8,7 +8,7 @@ export type ClueGroup = "across" | "down";
 export type ClueValidationWarning = "missing answer" | "missing comment" | "missing definition";
 
 // TO DO: think of a better provider than "grid" for grid-only puzzles
-export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text" | "grid";  
+export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text" | "grid" | "grid-text";  
 
 export type Layouts = "table" | "list";
 export type Spacings = "small" | "medium" | "large";
@@ -133,13 +133,28 @@ export abstract class IPuzzle {
     abstract readonly publishOptions: IPublishOptions;
     abstract readonly notes: IPuzzleAnnotation;
     abstract readonly provision: IPuzzleProvision;
-
+    abstract readonly capability: IPuzzleCapability;
 
     abstract readonly grid: IGrid;
     abstract readonly clues: readonly IClue[];
 
+    // TO DO: move linked to puzzle provision as it is temporary
     abstract readonly linked: boolean;
+    
     abstract readonly revision: number;
+}
+
+export abstract class IPuzzleCapability {
+    // NOTE: a puzzle may be gridable or solveable but still not ready.  This represents the case
+    // where there are parse errors or warnings outstanding.  The puzzle is capable of being blogged, 
+    // but unless the user manually dismisses the warnings then the puzzle remains not ready and the
+    // blogging component should not be available
+
+    abstract readonly ready: boolean;       // puzzle is ready for use, has been fully parsed 
+
+    abstract readonly blogable: boolean;    // puzzle has clues that can be annotated
+    abstract readonly gridable: boolean;    // puzzle has a grid clues that can be edited or annotated
+    abstract readonly solveable: boolean;   // puzzle has both clues and grid that are linked. Can be solved online.
 }
 
 export abstract class IPuzzleProvision {

@@ -1,7 +1,7 @@
 import { NavTrack } from '../interfaces';
 
 export const solveTrack: NavTrack = {
-    name: "solve",
+    name: "solveTrack",
     start: "editor",
     nodes: [
         {

@@ -42,7 +42,7 @@ export const parseTrack: NavTrack = {
             type: "process",
             process: "validate",
             actions: {
-                "ok": "solve",
+                "ok": "finish",
                 "error": "link-error",
             }
         },
@@ -62,11 +62,9 @@ export const parseTrack: NavTrack = {
             actions: {}
         },
         {
-            name: "solve",
-            type: "call",
-            call: {
-                track: "solve"
-            },
+            name: "finish",
+            type: "return",
+            return: "ok",
             actions: {}
         },
         {

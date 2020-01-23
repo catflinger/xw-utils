@@ -46,8 +46,6 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                             text: puzzle.provision.source,
                         });
 
-                        console.log("PUZZLE PROVISION: " + JSON.stringify(puzzle.provision));
-
                         const errors = puzzle.provision.parseErrors;
                         this.parseError = errors && errors.length > 0 ? errors[0] : null;
                     }

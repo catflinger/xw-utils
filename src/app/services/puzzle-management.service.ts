@@ -297,7 +297,13 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 parseErrors: [],
                 parseWarnings: [],
             },
-        notes: {
+            capability: {
+                ready: false,
+                blogable: false,
+                solveable: false,
+                gridable: false,
+            },
+            notes: {
                 header: new QuillDelta(),
                 body: new QuillDelta(),
                 footer: new QuillDelta(),

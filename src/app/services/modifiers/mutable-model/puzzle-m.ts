@@ -5,12 +5,14 @@ import { PuzzleAnnotationM } from './puzzle-annotation-m';
 import { GridM } from './grid-m';
 import { ClueM } from './clue-m';
 import { PuzzleProvisionM } from './puzzle-provision-m';
+import { PuzzleCapabilityM } from './puzzle-capability-m';
 
 export abstract class PuzzleM implements IPuzzle {
     public abstract info: PuzzleInfoM;
     public abstract publishOptions: PublishOptionsM;
     public abstract notes: PuzzleAnnotationM;
     public abstract provision: PuzzleProvisionM;
+    public abstract capability: PuzzleCapabilityM;
     public abstract grid: GridM;
     public abstract clues: ClueM[];
 

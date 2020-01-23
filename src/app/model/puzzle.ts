@@ -5,6 +5,7 @@ import { Grid } from './grid';
 import { Clue } from './clue';
 import { IPuzzle } from './interfaces';
 import { PuzzleProvision } from './puzzle-provision';
+import { PuzzleCapability } from './puzzle-capability';
 
 export const definitionMaskMarker: string = "d";
 
@@ -13,6 +14,7 @@ export class Puzzle implements IPuzzle {
     public readonly publishOptions: PublishOptions;
     public readonly notes: PuzzleAnnotation;
     public readonly provision: PuzzleProvision;
+    public readonly capability: PuzzleCapability;
 
     public readonly grid: Grid;
     public readonly clues: readonly Clue[];
@@ -44,18 +46,23 @@ export class Puzzle implements IPuzzle {
             data.info.blogable  = true;
             data.info.gridable  = false;
         }
+        // backwards compatibility
+        if (data.capability === undefined) {
+            data.capabiity = {
+                ready: true,
+                solveable: data.info.solveable,
+                blogable: data.info.blogable,
+                gridable: data.info.blogable,
+            };
+        }
 
         this.provision = data.provision ? new PuzzleProvision(data.provision) : null;
-
         this.info = new PuzzleInfo(data.info);
-
         this.notes = new PuzzleAnnotation(data.notes);
-
         this.publishOptions = new PublishOptions(data.publishOptions);
+        this.capability = new PuzzleCapability(data.capability);
 
         this.linked = data.linked;
-        //this.version = data.version;
-        //this.createdWithVersion = data.createdWithVersion;
     }
 
     public getSelectedClue(): Clue {

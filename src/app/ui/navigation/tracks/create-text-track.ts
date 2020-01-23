@@ -35,7 +35,16 @@ export const createTextTrack: NavTrack = {
             },
             actions: {
                 "error": "special-text",
+                "ok": "solve",
             }
+        },
+        {
+            name: "solve",
+            type: "call",
+            call: {
+                track: "solveTrack"
+            },
+            actions: {}
         },
         {
             name: "abandon",

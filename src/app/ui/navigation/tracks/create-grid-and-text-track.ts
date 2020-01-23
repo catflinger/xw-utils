@@ -7,14 +7,14 @@ Edit refers to the role of a crossword editor, both a commissioner and a modifie
 
 export const createGridAndTextTrack: NavTrack = {
     name: "createGridAndTextTrack",
-    start: "special",
+    start: "grid-start",
     nodes: [
         {
             name: "grid-start",
             type: "route",
             route: "/grid-start",
             actions: {
-                "continue": "edit-grid-1",
+                "continue": "edit-grid",
             }
         },
         {
@@ -84,7 +84,9 @@ export const createGridAndTextTrack: NavTrack = {
             call: {
                 track: "parseTrack"
             },
-            actions: {}
+            actions: {
+                "error": "special-text",
+            }
         },
         {
             name: "abandon",
