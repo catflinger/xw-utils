@@ -41,7 +41,7 @@ export class TokeniserService {
 
     constructor() { }
 
-    public parse(data: string, options: TextParsingOptions): TokenList {
+    public parse(data: string, options?: TextParsingOptions): TokenList {
         let tokens: IParseToken[] = [];
 
         // make an array of lines from the source data

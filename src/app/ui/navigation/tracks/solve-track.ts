@@ -38,7 +38,7 @@ export const solveTrack: NavTrack = {
             name: "publish",
             type: "call",
             call: {
-                track: "publish-post",
+                track: "publishPostTrack",
             },
             actions: {
                 "edit": "editor",

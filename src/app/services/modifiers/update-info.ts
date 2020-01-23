@@ -12,6 +12,7 @@ export class UpdateInfo implements IPuzzleModifier {
             blogable?: boolean,
             solveable?: boolean,
             gridable?: boolean,
+            ready?: boolean,
         },
     ) { }
 
@@ -29,13 +30,16 @@ export class UpdateInfo implements IPuzzleModifier {
             puzzle.info.provider = this.args.provider;
         }
         if (this.args.solveable !== undefined) {
-            puzzle.info.solveable = this.args.solveable;
+            puzzle.capability.solveable = this.args.solveable;
         }
         if (this.args.blogable !== undefined) {
-            puzzle.info.blogable = this.args.blogable;
+            puzzle.capability.blogable = this.args.blogable;
         }
         if (this.args.gridable !== undefined) {
-            puzzle.info.gridable = this.args.gridable;
+            puzzle.capability.gridable = this.args.gridable;
+        }
+        if (this.args.ready !== undefined) {
+            puzzle.capability.ready = this.args.ready;
         }
     }
 }

@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { TextParsingService } from './text-parsing-service';
-import { ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, StartMarkerToken, EndMarkerToken } from './tokeniser/tokens';
+import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, StartMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { Line } from './line';
 import { ParseData } from './parse-data';
 import { MockTokeniserService } from './tokeniser/mock-tokeniser.service';
 import { IParseContext } from './text-parsing-context';
+import { IParseToken } from 'src/app/model/interfaces';
 
 let mockTokeniser: MockTokeniserService = new MockTokeniserService();
 
@@ -51,7 +52,7 @@ describe('TextParsingService', () => {
     });
 });
 
-function runParser(data: ParseToken[]) {
+function runParser(data: IParseToken[]) {
     mockTokeniser.setTestData(data);
     const service: TextParsingService = new TextParsingService(mockTokeniser);
 

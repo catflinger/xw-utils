@@ -288,9 +288,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 provider,
                 setter: "anon", 
                 wordpressId: null,
-                blogable: false,
-                solveable: false,
-                gridable: false,
             },
             provision: {
                 source: null,

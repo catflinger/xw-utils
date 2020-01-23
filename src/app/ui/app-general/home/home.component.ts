@@ -51,9 +51,37 @@ export class HomeComponent implements OnInit, OnDestroy {
             if (puzzle) {
 
                 // TO DO: see if the puzzle has parse errors and route accordingly
-                
+                switch (puzzle.info.provider) {
+                    // case "grid":
+                    //     this.navService.beginTrack("createGridTrack", new AppTrackData(), "edit-grid");
+                    //     break;
+                    case "text":
+                        if (puzzle.capability.ready) {
+                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                        } else {
+                            this.navService.beginTrack("createTextTrack", new AppTrackData(), "parser");
+                        }
+                        break;
+                    case "grid-text":
+                        if (puzzle.capability.ready) {
+                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                        } else {
+                            this.navService.beginTrack("createGridAndTextTrack", new AppTrackData(), "parser");
+                        }
+                        break;
+                    case "pdf":
+                        if (puzzle.capability.ready) {
+                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                        } else {
+                            this.navService.beginTrack("createPdfTrack", new AppTrackData(), "parser");
+                        }
+                        break;
+                    default:
+                        // TO DO: think about what happens to a downlaoded puzzle that fails to parse
+                        this.navService.beginTrack("solveTrack", new AppTrackData());
+                        break;
+                }
 
-                this.navService.beginTrack("solveTrack", new AppTrackData());
             }
         });
     }

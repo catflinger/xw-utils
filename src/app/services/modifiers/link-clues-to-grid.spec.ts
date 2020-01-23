@@ -203,6 +203,9 @@ function getEmptyPuzzle(): PuzzleM {
             provider: "text",
             setter: "anon",
             wordpressId: null,
+        },
+        capability: {
+            ready: true,
             blogable: true,
             solveable: false,
             gridable: false,

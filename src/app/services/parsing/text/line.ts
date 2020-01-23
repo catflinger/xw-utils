@@ -5,7 +5,7 @@ export class Line {
     constructor(
         public readonly rawText: string,
         public readonly lineNumber: number,
-        public readonly options: TextParsingOptions,
+        public readonly options?: TextParsingOptions,
     ) {}
 
     public get lineType(): LineType {
@@ -37,7 +37,7 @@ export class Line {
     }
 
     protected get hasStartMarker(): boolean {
-        if (this.options && this.options.azedFeatures) {
+        if (this.options && this.options && this.options.azedFeatures) {
             return /^\*?\s*\d{1,2}\D/i.test(this.text);
         } else {
             return /^\d{1,2}\D/i.test(this.text);
@@ -49,9 +49,8 @@ export class Line {
     }
 
     protected get hasAcrossMarker(): boolean {
-        if (this.options.allowTypos) {
+        if (this.options && this.options.allowTypos) {
             return /^(ACROSS|ACROS|AROSS|ACRPSS)$/i.test(this.text);
-
         } else {
             return /^ACROSS$/i.test(this.text);
         }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { TokeniserService, TokenList } from './tokeniser.service';
-import { ParseToken, parseTokenTypes } from './tokens';
+import { TokeniserService } from './tokeniser.service';
+import { parseTokenTypes } from './tokens';
 
 describe('TokeniserService', () => {
     beforeEach(() => {

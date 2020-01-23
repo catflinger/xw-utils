@@ -39,7 +39,9 @@ describe('Line', () => {
     });
 
     it('should recognise clue starts', () => {
-        expect(new Line(testData.starts.azed, 1).lineType).toEqual("partialClueStart");
+        expect(new Line(testData.starts.azed, 1).lineType).toEqual("unknown");
+        expect(new Line(testData.starts.azed, 1, { azedFeatures: true }).lineType).toEqual("partialClueStart");
+
         expect(new Line(testData.starts.comma, 1).lineType).toEqual("partialClueStart");
         expect(new Line(testData.starts.oneDigit, 1).lineType).toEqual("partialClueStart");
         expect(new Line(testData.starts.space1, 1).lineType).toEqual("partialClueStart");

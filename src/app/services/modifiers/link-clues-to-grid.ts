@@ -28,8 +28,8 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
             // TO DO: check entries match the letter count
 
-            puzzle.info.blogable = true;
-            puzzle.info.solveable = true;
+            puzzle.capability.blogable = true;
+            puzzle.capability.solveable = true;
             puzzle.linked = true;
         }
     }
