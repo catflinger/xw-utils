@@ -38,10 +38,30 @@ export class LinkCluesToGrid implements IPuzzleModifier {
         let result: GridEntryM[] = [];
 
         if (clue.gridRefs) {
-            clue.gridRefs.forEach((gridRef) => {
+            clue.gridRefs.forEach((gridRef, index) => {
                 let gridEntry: GridEntryM = { cellIds: [] };
                 let cells = grid.getGridEntryForCaption(gridRef.clueNumber.toString(), gridRef.clueGroup);
-    
+
+                // check that this is the right entry
+                if (index === 0) {
+                    if (cells.length === 0) {
+                        throw new Error(`Could not find any entry in grid for ${gridRef.clueNumber} ${gridRef.clueGroup}`);
+                    }
+                } else {
+                    if (cells.length === 0 || cells[0].caption !== gridRef.clueNumber.toString()) {
+                        
+                        // this might represent the case where the second or subsequent reference is not in the same group
+                        // as the first reference. Try again but look in the other group
+                        cells = grid.getGridEntryForCaption(
+                            gridRef.clueNumber.toString(), 
+                            gridRef.clueGroup === "across" ? "down" : "across");
+                        
+                            // check that the second go finds an entry
+                        if (cells.length === 0) {
+                            throw new Error(`Could not find any entry in grid for ${gridRef.clueNumber} ${gridRef.clueGroup}`);
+                        }
+                    }
+                }
                 cells.forEach(cell => gridEntry.cellIds.push(cell.id));
                 result.push(gridEntry);
             });

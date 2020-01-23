@@ -34,12 +34,6 @@ const routes: Routes = [
     { path: "login", component: LoginComponent },
 
     // solving and blogging puzzles
-    { path: "archive/:provider", component: ArchiveComponent },
-    { path: "indy", component: IndyComponent },
-    { path: "special", component: SpecialComponent },
-    { path: "special-pdf", component: SpecialPdfComponent },
-    { path: "special-login", component: SpecialLoginComponent },
-    { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
 
@@ -51,7 +45,13 @@ const routes: Routes = [
     { path: "publish", component: PublishComponent },
     { path: "publish-complete", component: PublishCompleteComponent },
 
-    // creating and editing grids
+    // creating and editing puzzles and grids
+    { path: "archive/:provider", component: ArchiveComponent },
+    { path: "indy", component: IndyComponent },
+    { path: "special", component: SpecialComponent },
+    { path: "special-pdf", component: SpecialPdfComponent },
+    { path: "special-login", component: SpecialLoginComponent },
+    { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "create-puzzle", component: CreatePuzzleComponent },
     { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },

@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
-import moment from "moment";
+import { ActivatedRoute } from '@angular/router';
 
 import { ArchiveItem } from 'src/app/model/archive-item';
-import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
@@ -83,7 +82,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         this.appService.clearBusy();
         this.appService.clearAlerts();
         
-        this.navService.beginTrack("create", new AppTrackData(), "open");
+        this.navService.beginTrack("createPdfTrack", new AppTrackData(), "open-puzzle");
     }
 
     public get latest(): ArchiveItem {

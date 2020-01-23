@@ -6,35 +6,17 @@ This track is for creating a new puzzle or amending an existing puzzle
 Edit refers to the role of a crossword editor, both a commissioner and a modifier of puzzles
 */
 
-export const createPdfTrack: NavTrack = {
-    name: "createPdfTrack",
-    start: "pdf-start",
+export const createArchiveTrack: NavTrack = {
+    name: "createArchiveTrack",
+    start: "open-puzzle",
     nodes: [
         {
             name: "open-puzzle",
             type: "route",
             route: "open-puzzle",
             actions: {
-                "continue": "solver",
+                "continue": "solve",
                 "parse": "grid-captions",
-                "error": "error",
-            }
-        },
-        {
-            name: "pdf-start",
-            type: "route",
-            route: "/special-pdf",
-            actions: {
-                "continue": "pdf-extract",
-            }
-        },
-        {
-            name: "pdf-extract",
-            type: "process",
-            process: "pdf-extract",
-            actions: {
-                "ok": "grid-captions",
-                "authenticate": "login",
                 "error": "error",
             }
         },
@@ -45,16 +27,6 @@ export const createPdfTrack: NavTrack = {
             actions: {
                 "ok": "parser",
                 "error": "error",
-            }
-        },
-        {
-            name: "login",
-            type: "route",
-            route: "/special-login",
-            actions: {
-                "ok": "pdf-extract",
-                "cancel": "abandon",
-                "back": "special-pdf",
             }
         },
         {
@@ -72,17 +44,8 @@ export const createPdfTrack: NavTrack = {
                 track: "parseTrack"
             },
             actions: {
-                ok: "solver",
-                error: "error",
+                error: "error"
             }
-        },
-        {
-            name: "solver",
-            type: "call",
-            call: {
-                track: "solveTrack"
-            },
-            actions: {}
         },
         {
             name: "abandon",
