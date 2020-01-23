@@ -18,8 +18,8 @@ import { GridEditorService } from '../../services/grid-editors/grid-editor.servi
 import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 import { AppService } from '../../services/app.service';
 import { DownloadInstance } from '../../components/download-button/download-button.component';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 

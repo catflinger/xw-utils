@@ -9,8 +9,8 @@ import { SelectNextClue } from 'src/app/services/modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppService } from '../../services/app.service';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-blogger',

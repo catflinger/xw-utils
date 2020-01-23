@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 import moment from "moment";
 import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/app.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 const Sunday = 0;
 

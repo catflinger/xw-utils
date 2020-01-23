@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
-import { AppService } from '../services/app.service';
+import { AppService } from '../../ui/services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { LinkCluesToGrid } from 'src/app/services/modifiers/link-clues-to-grid';
 import { ParseText } from 'src/app/services/modifiers/parse-text';

@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings, BooleanSettingsGroupKey } from 'src/app/services/common';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-settings',

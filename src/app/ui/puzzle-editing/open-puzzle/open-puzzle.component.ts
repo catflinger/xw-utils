@@ -5,8 +5,8 @@ import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData, EditorType } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData, EditorType } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-open-puzzle',

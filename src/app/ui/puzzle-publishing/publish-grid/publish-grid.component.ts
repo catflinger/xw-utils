@@ -9,8 +9,8 @@ import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 import { DownloadInstance } from '../../components/download-button/download-button.component';
 import { AppService } from '../../services/app.service';
 import { GridComponent } from '../../components/grid/grid.component';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-publish-grid',

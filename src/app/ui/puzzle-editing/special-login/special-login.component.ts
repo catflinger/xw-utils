@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppStatus, AppService } from '../../services/app.service';
 import { AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { UIResult } from '../../common';
 

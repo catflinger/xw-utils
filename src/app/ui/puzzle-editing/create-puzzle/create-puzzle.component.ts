@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { AppService } from '../../services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';

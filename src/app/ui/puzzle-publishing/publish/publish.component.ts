@@ -8,8 +8,8 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { ApiSymbols, PublishStatus } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";

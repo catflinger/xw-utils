@@ -9,8 +9,8 @@ import { AppStatus, AppService, OpenPuzzleParamters } from 'src/app/ui/services/
 import { ArchiveService } from 'src/app/services/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-archive',

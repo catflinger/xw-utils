@@ -52,14 +52,14 @@ import { SpecialComponent } from './ui/puzzle-editing/special/special.component'
 import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-text.component';
 import { ParseResultComponent } from './ui/components/parse-result/parse-result.component';
 import { ParseErrorHintComponent } from './ui/components/parse-error-hint/parse-error-hint.component';
-import { NavTrack } from './ui/navigation/interfaces';
-import { publishPostTrack } from './ui/navigation/tracks/publish-post-track';
-import { publishGridTrack } from './ui/navigation/tracks/publish-grid-track';
-import { NAV_TRACKS, NAV_PROCESSOR } from './ui/navigation/nav.service';
+import { NavTrack } from './services/navigation/interfaces';
+import { publishPostTrack } from './services/navigation/tracks/publish-post-track';
+import { publishGridTrack } from './services/navigation/tracks/publish-grid-track';
+import { NAV_TRACKS, NAV_PROCESSOR } from './services/navigation/nav.service';
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
 import { ValidatePuzzleComponent } from './ui/puzzle-editing/validate-puzzle/validate-puzzle.component';
-import { UIProcessService } from './ui/navigation/ui-process.service';
+import { UIProcessService } from './services/navigation/ui-process.service';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 import { HomeComponent } from './ui/app-general/home/home.component';
@@ -70,12 +70,12 @@ import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 import { ClueListItemComponent } from './ui/components/clue-list-item/clue-list-item.component';
-import { solveTrack } from './ui/navigation/tracks/solve-track';
-import { createPdfTrack } from './ui/navigation/tracks/create-pdf-track';
-import { createGridAndTextTrack } from './ui/navigation/tracks/create-grid-and-text-track';
-import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
-import { createTextTrack } from './ui/navigation/tracks/create-text-track';
-import { parseTrack } from './ui/navigation/tracks/parse-track';
+import { solveTrack } from './services/navigation/tracks/solve-track';
+import { createPdfTrack } from './services/navigation/tracks/create-pdf-track';
+import { createGridAndTextTrack } from './services/navigation/tracks/create-grid-and-text-track';
+import { createGridTrack } from './services/navigation/tracks/create-grid-track';
+import { createTextTrack } from './services/navigation/tracks/create-text-track';
+import { parseTrack } from './services/navigation/tracks/parse-track';
 
 const quillGlobalConfig = {
     modules: {

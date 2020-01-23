@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-login',

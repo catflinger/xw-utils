@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Subscription } from 'rxjs';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
-import { NavService } from '../../navigation/nav.service';
+import { NavService } from '../../../services/navigation/nav.service';
 
 @Component({
     selector: 'app-nav-error',

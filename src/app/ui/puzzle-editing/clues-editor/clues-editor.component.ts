@@ -8,8 +8,8 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-clues-editor',

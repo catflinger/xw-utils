@@ -4,8 +4,8 @@ import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
-import { NavService } from '../../navigation/nav.service';
-import { AppTrackData, EditorType } from '../../navigation/tracks/app-track-data';
+import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData, EditorType } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 
 @Component({

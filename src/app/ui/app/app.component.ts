@@ -4,8 +4,8 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
-import { NavService } from '../navigation/nav.service';
-import { AppTrackData } from '../navigation/tracks/app-track-data';
+import { NavService } from '../../services/navigation/nav.service';
+import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-root',
