@@ -1,11 +1,10 @@
 import { v4 as uuid } from "uuid";
 import { Clue } from '../../../model/clue';
-import { TokenGroup } from './tokeniser/tokeniser.service';
 import { QuillDelta } from 'src/app/model/interfaces';
 import { ClueBuffer } from './clue-buffer';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingWarning } from 'src/app/model/text-parsing-warning';
-import { Line } from './line';
+import { TokenGroup } from 'src/app/model/token-group';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 

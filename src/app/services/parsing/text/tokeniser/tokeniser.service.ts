@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Line } from '../line';
-import { ParseToken, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken, StartMarkerToken, NullToken } from './tokens';
+import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken, StartMarkerToken, NullToken } from './tokens';
 import { TextParsingOptions } from '../types';
-
-export class TokenGroup {
-    constructor(
-        public readonly previous: ParseToken,
-        public readonly current: ParseToken,
-        public readonly next: ParseToken
-    ) {}
-}
+import { TokenGroup } from 'src/app/model/token-group';
+import { IParseToken } from 'src/app/model/interfaces';
 
 export class TokenList {
-    constructor(private _tokens: ReadonlyArray<ParseToken>) {}
+    constructor(private _tokens: ReadonlyArray<IParseToken>) {}
 
-    public get tokens(): ReadonlyArray<ParseToken> {
+    public get tokens(): ReadonlyArray<IParseToken> {
         return this._tokens;
     }
 
@@ -24,19 +18,19 @@ export class TokenList {
 
         // set some defaults here so that if there are no lines to read the flow 
         // of control will fall through and return a TokenGroup with current=EOF
-        let previous: ParseToken = new NullToken();
-        let current: ParseToken = new StartMarkerToken();
-        let next: ParseToken = new EndMarkerToken();
+        let previous: IParseToken = new NullToken();
+        let current: IParseToken = new StartMarkerToken();
+        let next: IParseToken = new EndMarkerToken();
 
         for(let i = min; i <= max; i++) {
             previous = (i - 1 >= min) ? this._tokens[i - 1] : new NullToken();
             current = this._tokens[i];
             next = (i + 1 <= max) ? this._tokens[i + 1] : new NullToken();
 
-            yield(new TokenGroup(previous, current, next));
+            yield(new TokenGroup({previous, current, next}));
         }
 
-        return new TokenGroup(current, next, new NullToken());
+        return new TokenGroup({previous: current, current: next, next: new NullToken()});
     }
 }
 
@@ -48,7 +42,7 @@ export class TokeniserService {
     constructor() { }
 
     public parse(data: string, options: TextParsingOptions): TokenList {
-        let tokens: ParseToken[] = [];
+        let tokens: IParseToken[] = [];
 
         // make an array of lines from the source data
         let lines: Line[] = [];

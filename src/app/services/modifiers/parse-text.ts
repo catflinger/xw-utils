@@ -26,7 +26,7 @@ export class ParseText implements IPuzzleModifier {
         let parseData = new ParseData();
         parseData.clueDataType = "text";
         parseData.rawData = puzzle.provision.source;
-        parseData.grid = new Grid(puzzle.grid);
+        parseData.grid = puzzle.grid ? new Grid(puzzle.grid) : null;
 
         let parser = this.textParsingService.parser(parseData, this.getParsingOptions(puzzle.info.provider));
         let context = parser.next();
@@ -41,7 +41,7 @@ export class ParseText implements IPuzzleModifier {
         // 2) when the parsing will be abandoned and the puzzle update aborted
         // 2) when the errros will be recorded in the puzzle
 
-        if (!context.value.error) {
+        try {
             puzzle.clues = JSON.parse(JSON.stringify(context.value.clues));
 
             let error: TextParsingErrorM = JSON.parse(JSON.stringify(context.value.error));
@@ -80,8 +80,8 @@ export class ParseText implements IPuzzleModifier {
                 }
 
             }
-        } else {
-            throw new Error(`Failed to parse puzzle at line ${context.value.error.line} ${context.value.error.message}`);
+        } catch (error) {
+            throw new Error(`Failed to parse puzzle: ${error}`);
         }
     }
 

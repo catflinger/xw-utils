@@ -3,6 +3,7 @@ import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { AppService } from '../../services/app.service';
+import { UpdateInfo } from 'src/app/services/modifiers/update-info';
 
 @Component({
     selector: 'app-special',
@@ -14,6 +15,7 @@ export class SpecialComponent implements OnInit {
     constructor(
         private navService: NavService<AppTrackData>,
         private appService: AppService,
+        private puzzleManager: IPuzzleManager,
     ) { }
 
     ngOnInit() {
@@ -24,9 +26,7 @@ export class SpecialComponent implements OnInit {
     }
 
     public onText() {
-        this.appService.setOpenPuzzleParams({
-            provider: "text",
-        });
+        this.puzzleManager.newPuzzle("text", [new UpdateInfo({blogable: true})]);
         this.navService.beginTrack("createTextTrack", new AppTrackData());
     }
 

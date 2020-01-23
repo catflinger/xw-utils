@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Line } from '../line';
-import { ParseToken } from './tokens';
 import { TokenList, TokeniserService } from './tokeniser.service';
+import { IParseToken } from 'src/app/model/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class MockTokeniserService extends TokeniserService {
         return new TokenList(this.tokens);
     }
 
-    public setTestData(tokens: ParseToken[]) {
+    public setTestData(tokens: IParseToken[]) {
         this.tokens = tokens;
     }
 }

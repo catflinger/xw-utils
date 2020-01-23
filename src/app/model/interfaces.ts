@@ -188,10 +188,22 @@ export abstract class IGridSize {
     abstract readonly down: number;
 }
 
+export abstract class IParseToken {
+    abstract readonly text: string; 
+    abstract readonly lineNumber: number;
+    abstract readonly type: Symbol;
+}
+
+export abstract class ITokenGroup {
+        abstract readonly previous: IParseToken;
+        abstract readonly current: IParseToken;
+        abstract readonly next: IParseToken;
+}
+
+
 export abstract class ITextParsingError {
     public readonly code: TextParsingErrorCode;
-    public readonly line: number;
-    public readonly text: string;
+    public readonly tokens: ITokenGroup;
     public readonly message: string;
 }
 

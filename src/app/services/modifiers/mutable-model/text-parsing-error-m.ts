@@ -1,9 +1,8 @@
-import { ITextParsingError, TextParsingErrorCode } from 'src/app/model/interfaces';
+import { ITextParsingError, TextParsingErrorCode, ITokenGroup } from 'src/app/model/interfaces';
 
 export abstract class TextParsingErrorM implements ITextParsingError {
     public abstract code: TextParsingErrorCode;
-    public abstract line: number;
-    public abstract text: string;
+    public abstract tokens: ITokenGroup;
     public abstract message: string;
 
 }

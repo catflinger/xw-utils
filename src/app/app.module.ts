@@ -75,6 +75,7 @@ import { createPdfTrack } from './ui/navigation/tracks/create-pdf-track';
 import { createGridAndTextTrack } from './ui/navigation/tracks/create-grid-and-text-track';
 import { createGridTrack } from './ui/navigation/tracks/create-grid-track';
 import { createTextTrack } from './ui/navigation/tracks/create-text-track';
+import { parseTrack } from './ui/navigation/tracks/parse-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -92,11 +93,11 @@ const tracks: ReadonlyArray<NavTrack> = [
     createGridTrack,
     createGridAndTextTrack,
     createPdfTrack,
+    parseTrack,
     solveTrack,
     publishPostTrack,
     publishGridTrack,
 ];
-
 
 @NgModule({
     declarations: [

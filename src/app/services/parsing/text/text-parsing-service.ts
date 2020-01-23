@@ -98,15 +98,13 @@ export class TextParsingService {
             case "across":
                 throw new TextParsingError({
                     code: "acrossMarker_across",
-                    line: token.lineNumber, 
-                    test: token.text,
+                    tokens: context.tokenGroup,
                     message: "Found unexpected ACROSS marker"});
 
             case "down":
                 throw new TextParsingError({
                     code: "acrossMarker_down", 
-                    line: token.lineNumber, 
-                    text: token.text, 
+                    tokens: context.tokenGroup, 
                     message: "Found ACROSS marker in the down clues"});
 
             case "ended":
@@ -115,8 +113,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "acrossMarker_ended", 
-                        line: token.lineNumber, 
-                        text: token.text, 
+                        tokens: context.tokenGroup, 
                         message: "Found ACROSS marker after the end of the puzzle"});
                 }
                 break;
@@ -133,8 +130,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "downMarker_across", 
-                        line: token.lineNumber, 
-                        text: token.text, 
+                        tokens: context.tokenGroup, 
                         message: "Found DOWN marker when expecting end of a clue"});
                 }
                 break;
@@ -143,16 +139,14 @@ export class TextParsingService {
                 // even in preamble mode this is probably an error.  Answers to last weeks clues normally appear at the end of a puzzle
                 throw new TextParsingError({
                     code: "downMarker_null", 
-                    line: token.lineNumber, 
-                    text: token.text, 
+                    tokens: context.tokenGroup, 
                     message: "Found unexpected DOWN marker"});
 
             case "down":
                 // even in preamble mode this is probably an error.  Answers to last weeks clues don't normally start with a down marker
                 throw new TextParsingError({
                     code: "downMarker_down",
-                    line: token.lineNumber,
-                    text: token.text,
+                    tokens: context.tokenGroup,
                     message: "Found DOWN marker in the down clues"});
 
             case "ended":
@@ -161,8 +155,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "downMarker_ended", 
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "Found DOWN marker after the end of the puzzle"});
                 }
                 break;
@@ -176,16 +169,14 @@ export class TextParsingService {
             case null:
                 throw new TextParsingError({
                     code: "endMarker_null",
-                    line: token.lineNumber,
-                    text: token.text,
+                    tokens: context.tokenGroup,
                     message: "reached end of file and no clues found"});
 
             case "across":
                 case null:
                     throw new TextParsingError({
                         code: "endMarker_across",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "reached end of file and no down clues found"});
     
             case "down":
@@ -194,8 +185,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "endMarker_down",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "reached the end of the file with an unfinished clue."});
                 }
                 break;
@@ -210,16 +200,14 @@ export class TextParsingService {
                 // even in preamble mode this is probably an error, we don't expect to see a well formatted clue before the first across marker
                 throw new TextParsingError({
                     code: "clue_null",
-                    line: token.lineNumber,
-                    text: token.text,
+                    tokens: context.tokenGroup,
                     message: "Found start of clue before ACROSS or DOWN marker"});
 
             case "ended":
                 // we don't expect to se whole clues cropping up in the solutions
                 throw new TextParsingError({
                     code: "clue_ended",
-                    line: token.lineNumber,
-                    text: token.text,
+                    tokens: context.tokenGroup,
                     message: "Found clue after and of down clues"});
 
             case "across":
@@ -244,8 +232,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "clueStart_null",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "Found start of clue before ACROSS or DOWN marker"});
                 }
                 break;
@@ -267,8 +254,7 @@ export class TextParsingService {
             } else {
                 throw new TextParsingError({
                     code: "clueStart_ended",
-                    line: token.lineNumber,
-                    text: token.text,
+                    tokens: context.tokenGroup,
                     message: "Found clue start after end of down clues"});
             }
             break;
@@ -285,8 +271,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "clueEnd_null",
-                        line: token.lineNumber,
-                        test: token.text,
+                        tokens: context.tokenGroup,
                         message: "Found end of clue before ACROSS or DOWN marker"});
                 }
                 break;
@@ -304,8 +289,7 @@ export class TextParsingService {
 
                     throw new TextParsingError({
                         code: "clueStart_acrossdown",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "Found end of clue when no clue started"});
                 }
                 break;
@@ -318,8 +302,8 @@ export class TextParsingService {
                 } else {
                         throw new TextParsingError({
                             code: "clueEnd_ended",
-                            line: token.lineNumber,
                             text: token.text,
+                            tokens: context.tokenGroup,
                             message: "Found clue end after end of down clues"});
                 }
                 break;
@@ -336,8 +320,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "text_null",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "Found some text before the ACROSS or DOWN markers."});
                 }
                 break;
@@ -355,8 +338,7 @@ export class TextParsingService {
                 } else {
                     throw new TextParsingError({
                         code: "text_across",
-                        line: token.lineNumber,
-                        text: token.text,
+                        tokens: context.tokenGroup,
                         message: "Expected the start of a new clue but found unrecognised text: [" + token.text + "]"});
                 }
                 break;
@@ -372,8 +354,7 @@ export class TextParsingService {
                     } else {
                         throw new TextParsingError({
                             code: "text_down",
-                            line: token.lineNumber,
-                            text: token.text,
+                            tokens: context.tokenGroup,
                             message: "Expected the start of a new clue"});
                     }
                 }
@@ -427,8 +408,7 @@ export class TextParsingService {
         } else {
             throw new TextParsingError({
                 code: "clueStart_acrossdown",
-                line: token.lineNumber,
-                text: token.text,
+                tokens: context.tokenGroup,
                 message: "Found start of new clue when old clue not finished (3)"});
         }
     }

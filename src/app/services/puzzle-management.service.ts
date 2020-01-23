@@ -294,14 +294,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             },
             provision: {
                 source: null,
-                parseErrors: [
-                    {
-                        code: "unparsed",
-                        line: 0,
-                        text: "",
-                        message: "this puzzle has not been parsed yet",
-                    }
-                ],
+                parseErrors: [],
                 parseWarnings: [],
             },
         notes: {

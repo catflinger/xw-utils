@@ -7,17 +7,6 @@ import { TextParsingErrorCode } from 'src/app/model/interfaces';
     templateUrl: './parse-error-hint.component.html',
     styleUrls: ['./parse-error-hint.component.css']
 })
-export class ParseErrorHintComponent implements OnInit {
-    @Input() public error: TextParsingError;
-
-    public code: TextParsingErrorCode;
-
-    constructor() { }
-
-    ngOnInit() {
-        if (this.error) {
-            this.code = this.error.code;
-        }
-    }
-
+export class ParseErrorHintComponent {
+    @Input() public errorCode: TextParsingErrorCode;
 }

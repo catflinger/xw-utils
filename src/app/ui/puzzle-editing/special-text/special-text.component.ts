@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy, Provider } from '@angular/core';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
-import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { IParseContext } from 'src/app/services/parsing/text/text-parsing-context';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData } from '../../navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
-import { ProviderService } from 'src/app/services/provider.service';
+import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { ITextParsingError } from 'src/app/model/interfaces';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -22,7 +21,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     private subs: Subscription[] = [];
     public form: FormGroup;
-    public parseResult: IParseContext = null;
+    public parseError: ITextParsingError = null;
 
     constructor(
         private navService: NavService<AppTrackData>,
@@ -46,6 +45,11 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                             title: puzzle.info.title,
                             text: puzzle.provision.source,
                         });
+
+                        console.log("PUZZLE PROVISION: " + JSON.stringify(puzzle.provision));
+
+                        const errors = puzzle.provision.parseErrors;
+                        this.parseError = errors && errors.length > 0 ? errors[0] : null;
                     }
                 }
         ));
@@ -58,16 +62,10 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onParse() {
         this.appService.clear();
 
-        // try {
-        //     this.activePuzzle.update(
-        //         new UpdateInfo({ source: this.form.value.text }),
-        //         new ParseText(this.textParsingService, this.providerService));
-
-        //         this.navService.navigate("blog");
-
-        //     } catch(error) {
-        //     this.appService.setAlert("danger", "ERROR :" + error.message)
-        // }
+        this.activePuzzle.update(new UpdateInfo({
+            title: this.form.value.title,
+            source: this.form.value.text 
+        }));
         this.navService.navigate("parse");
     }
 
@@ -76,7 +74,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     }
 
     public onAmend() {
-        this.parseResult = null;
+        this.parseError = null;
     }
 
     public onKeyDown(event: KeyboardEvent) {

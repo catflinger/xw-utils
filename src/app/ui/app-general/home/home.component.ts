@@ -44,6 +44,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onOpenSaved(id: string) {
+
+
+
+        // TO DO: see if teh puzzle has parse errors and route accordingly
+
+        
+
+
+
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {

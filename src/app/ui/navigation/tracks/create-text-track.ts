@@ -8,7 +8,7 @@ Edit refers to the role of a crossword editor, both a commissioner and a modifie
 
 export const createTextTrack: NavTrack = {
     name: "createTextTrack",
-    start: "special",
+    start: "special-text",
     nodes: [
         {
             name: "special-text",
@@ -33,7 +33,9 @@ export const createTextTrack: NavTrack = {
             call: {
                 track: "parseTrack"
             },
-            actions: {}
+            actions: {
+                "error": "special-text",
+            }
         },
         {
             name: "abandon",

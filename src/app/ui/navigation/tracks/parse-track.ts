@@ -57,11 +57,9 @@ export const parseTrack: NavTrack = {
         },
         {
             name: "error",
-            type: "route",
-            route: "/nav-error",
-            actions: {
-                "continue": "abandon"
-            }
+            type: "return",
+            return: "error",
+            actions: {}
         },
         {
             name: "solve",

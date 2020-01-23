@@ -1,4 +1,5 @@
 import { Line } from '../line';
+import { IParseToken } from 'src/app/model/interfaces';
 
 export const parseTokenTypes = {
 
@@ -16,7 +17,7 @@ export const parseTokenTypes = {
     Null: Symbol("NullToken"),
 } 
 
-export abstract class ParseToken {
+abstract class ParseToken implements IParseToken {
     public readonly text: string; 
     public readonly lineNumber: number;
     public readonly type: Symbol;

@@ -1,9 +1,9 @@
-<ngb-alert type="warning" *ngIf="result && result.error">
-    <h5 *ngIf="result.tokenGroup.current.lineNumber">Failed to parse the text at line {{result.tokenGroup.current.lineNumber + 1}}</h5>
-    <h5 *ngIf="!result.tokenGroup.current.lineNumber">Failed to parse the text</h5>
+THIS IS AN ERROR MESSAGE
+<ngb-alert type="warning" *ngIf="result">
+    <h5 *ngIf="result.tokens.current">Failed to parse the text at line {{result.tokens.current.lineNumber + 1}}</h5>
+    <h5 *ngIf="!result.tokens.current">Failed to parse the text</h5>
     
-    <div class="mt-3">{{result.error.message}}</div>
-    <div class="mt-3" *ngIf="result.error">{{result.error.message}}</div>
+    <div class="mt-3">{{result.message}}</div>
 
     <table class="table table-sm mt-5">
         <thead>
@@ -14,20 +14,20 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{result.tokenGroup.previous.lineNumber + 1 | number}}</td>
-                <td>{{result.tokenGroup.previous.text}}</td>
+                <td>{{result.tokens.previous.lineNumber + 1 | number}}</td>
+                <td>{{result.tokens.previous.text}}</td>
             </tr>
             <tr>
-                <td>{{result.tokenGroup.current.lineNumber + 1 | number}}</td>
-                <td class="text-danger">{{result.tokenGroup.current.text}}</td>
+                <td>{{result.tokens.current.lineNumber + 1 | number}}</td>
+                <td class="text-danger">{{result.tokens.current.text}}</td>
             </tr>
             <tr>
-                <td>{{result.tokenGroup.next.lineNumber + 1 | number}}</td>
-                <td>{{result.tokenGroup.next.text}}</td>
+                <td>{{result.tokens.next.lineNumber + 1 | number}}</td>
+                <td>{{result.tokens.next.text}}</td>
             </tr>
         </tbody>
     </table>
 
-    <app-parse-error-hint [error]="result.error"></app-parse-error-hint>
+    <app-parse-error-hint [errorCode]="result.code"></app-parse-error-hint>
 
 </ngb-alert>

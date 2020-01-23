@@ -83,7 +83,13 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
         try {
             this.activePuzzle.update(new ParseText(this.textParsingService, this.providerService));
-            action = "ok";
+            const errors = this.activePuzzle.puzzle.provision.parseErrors;
+
+            if (errors && errors.length) {
+                action = "error";
+            } else {
+                action = "ok";
+            }
         } catch(error) {
             action = "error";
             this.appService.setAlert("danger", "Parsing Error :" + error);

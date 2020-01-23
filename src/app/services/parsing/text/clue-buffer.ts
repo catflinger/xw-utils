@@ -73,7 +73,7 @@ export class ClueBuffer {
     }
 
     private setLetterCount(): void {
-        let result = null;
+        let result = "";
 
         const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
 
