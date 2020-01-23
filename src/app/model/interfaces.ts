@@ -171,9 +171,9 @@ export abstract class IPuzzleInfo {
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
 
-    abstract readonly blogable: boolean;
-    abstract readonly solveable: boolean;
-    abstract readonly gridable: boolean;
+    // abstract readonly blogable: boolean;
+    // abstract readonly solveable: boolean;
+    // abstract readonly gridable: boolean;
 } 
 
 export abstract class IPublishOptions {
@@ -237,4 +237,9 @@ export abstract class IDiaryEntry {
     abstract readonly solveDate: DateTime;
     abstract readonly postDate: DateTime;
     abstract readonly solve: boolean;
+}
+
+export abstract class IPuzzleSummary {
+    abstract readonly info: IPuzzleInfo;
+    abstract readonly capability: IPuzzleCapability;
 }

@@ -38,7 +38,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
             this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
                 if (puzzle) {
-                    if (!puzzle.info.blogable) {
+                    if (!puzzle.capability.blogable) {
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;

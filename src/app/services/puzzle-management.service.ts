@@ -7,7 +7,7 @@ import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
-import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider } from '../model/interfaces';
+import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider, IPuzzleSummary } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
 import { AddPlaceholders } from './modifiers/add-placeholders';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
@@ -32,7 +32,7 @@ export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
     // at teh moment some of the name sound quite similar
     abstract newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): void;
-    abstract getPuzzleList(): Observable<PuzzleInfo[]>;
+    abstract getPuzzleList(): Observable<IPuzzleSummary[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
     abstract loadPuzzleFromPdf(pdf: Base64Encoded): Promise<string>;
@@ -44,14 +44,14 @@ export abstract class IPuzzleManager {
 @Injectable()
 export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
-    private bsList: BehaviorSubject<PuzzleInfo[]>;
+    private bsList: BehaviorSubject<IPuzzleSummary[]>;
     private bsActive: BehaviorSubject<Puzzle>;
 
     constructor(
         private localStorageService: LocalStorageService,
         private httpPuzzleService: HttpPuzzleSourceService,
     ) {
-        this.bsList = new BehaviorSubject<PuzzleInfo[]>([]);
+        this.bsList = new BehaviorSubject<IPuzzleSummary[]>([]);
         this.bsActive = new BehaviorSubject<Puzzle>(null);
         this.refreshPuzzleList();
     }
@@ -141,7 +141,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     //#region General Puzzle management
 
-    public getPuzzleList(): Observable<PuzzleInfo[]> {
+    public getPuzzleList(): Observable<IPuzzleSummary[]> {
         return this.bsList.asObservable();
     }
 

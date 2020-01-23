@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../model/puzzle';
-import { PuzzleInfo } from '../model/puzzle-info';
-import { IPuzzle } from '../model/interfaces';
+import { IPuzzle, IPuzzleSummary } from '../model/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -25,25 +24,28 @@ export class LocalStorageService {
         }
     }
 
-    // public getLastest(): Promise<Puzzle> {
-    //     let id = localStorage.getItem("xw-latest");
-    //     return this.getPuzzle(id);
-    // }
-
     public deletePuzzle(id: string): Promise<void> {
         localStorage.removeItem("xw-puzzle-" + id);
         return Promise.resolve();
     }
 
-    public listPuzzles(): PuzzleInfo[] {
-        let result: PuzzleInfo[] = [];
+    public listPuzzles(): IPuzzleSummary[] {
+        let result: IPuzzleSummary[] = [];
 
         for(let i = 0; i < localStorage.length; i++) {
             let key = localStorage.key(i);
 
             if (key.startsWith("xw-puzzle-")) {
-                let puzzle: any = JSON.parse(localStorage[key]);
-                result.push(new PuzzleInfo(puzzle.info))
+                let data: any = JSON.parse(localStorage[key]);
+                
+                // load as new puzzle to ensure backward-compatibity conversions are run
+                // TO DO: can remove this along with other backward compats once the app has been stable for a while
+                let puzzle = new Puzzle(data);
+
+                result.push({
+                    info: puzzle.info,
+                    capability: puzzle.capability
+                });
             }
         }
 

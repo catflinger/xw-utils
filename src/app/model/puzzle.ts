@@ -48,7 +48,7 @@ export class Puzzle implements IPuzzle {
         }
         // backwards compatibility
         if (data.capability === undefined) {
-            data.capabiity = {
+            data.capability = {
                 ready: true,
                 solveable: data.info.solveable,
                 blogable: data.info.blogable,

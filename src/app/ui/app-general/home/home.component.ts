@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { NavService } from '../../navigation/nav.service';
 import { AppTrackData, EditorType } from '../../navigation/tracks/app-track-data';
+import { IPuzzleSummary } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-home',
@@ -13,8 +14,8 @@ import { AppTrackData, EditorType } from '../../navigation/tracks/app-track-data
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-    public puzzleList: PuzzleInfo[] = [];
-    public gridList: PuzzleInfo[] = [];
+    public puzzleList: IPuzzleSummary[] = [];
+    public gridList: IPuzzleSummary[] = [];
     private subs: Subscription[] = [];
     public appStatus: AppStatus;
     public credentials: Credentials;
@@ -32,8 +33,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.puzzleManagement.getPuzzleList().subscribe(
             (list) => {
-                this.puzzleList = list.filter(p => (p.solveable || p.blogable));
-                this.gridList = list.filter(p => p.gridable && !(p.solveable || p.blogable));
+                this.puzzleList = list.filter(p => p.info.provider !== "grid");
+                this.gridList = list.filter(p => p.info.provider === "grid");
             },
             (error) => this.appService.setAlert("danger", error.toString())
         ));

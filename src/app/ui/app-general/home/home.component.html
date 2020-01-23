@@ -26,13 +26,13 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let info of puzzleList">
-                        <td>{{info.setter}}</td>
-                        <td>{{info.title}}</td>
-                        <td>{{info.puzzleDate | date : "fullDate"}}</td>
-                        <td>{{info.wordpressId | wordpressId}}</td>
-                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(info.id)">Open</button></td>
-                        <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
+                    <tr *ngFor="let item of puzzleList">
+                        <td>{{item.info.setter}}</td>
+                        <td>{{item.info.title}}</td>
+                        <td>{{item.info.puzzleDate | date : "fullDate"}}</td>
+                        <td>{{item.info.wordpressId | wordpressId}}</td>
+                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(item.info.id)">Open</button></td>
+                        <td><button type="button" class="btn btn-primary" (click)="onDelete(item.info.id)">Delete</button>
                     </tr>
 
                 </tbody>
@@ -59,12 +59,12 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let info of gridList">
-                        <td>{{info.title}}</td>
-                        <td>{{info.puzzleDate | date : "fullDate"}}</td>
-                        <td>{{info.wordpressId | wordpressId}}</td>
-                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSavedGrid(info.id)">Open</button></td>
-                        <td><button type="button" class="btn btn-primary" (click)="onDelete(info.id)">Delete</button>
+                    <tr *ngFor="let item of gridList">
+                        <td>{{item.info.title}}</td>
+                        <td>{{item.info.puzzleDate | date : "fullDate"}}</td>
+                        <td>{{item.info.wordpressId | wordpressId}}</td>
+                        <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSavedGrid(item.info.id)">Open</button></td>
+                        <td><button type="button" class="btn btn-primary" (click)="onDelete(item.info.id)">Delete</button>
                     </tr>
 
                 </tbody>
