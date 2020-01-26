@@ -27,6 +27,7 @@ import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
+import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 
 const routes: Routes = [
     // landing pages
@@ -56,6 +57,7 @@ const routes: Routes = [
     { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
+    { path: "clues-start", component: CluesStartComponent },
     { path: "clues-editor", component: CluesEditorComponent },
     { path: "nav-error", component: NavErrorComponent },
     { path: "link-error", component: LinkErrorComponent },

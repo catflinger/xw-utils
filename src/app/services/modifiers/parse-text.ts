@@ -8,6 +8,7 @@ import { TextParsingErrorM } from './mutable-model/text-parsing-error-m';
 import { AddPlaceholders } from './add-placeholders';
 import { ProviderService } from '../provider.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
+import { PuzzleProvision } from 'src/app/model/puzzle-provision';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -52,34 +53,50 @@ export class ParseText implements IPuzzleModifier {
         
             new AddPlaceholders().exec(puzzle);
 
-            if (!puzzle.info.title) {
-                const titleExpression = new RegExp(String.raw`(no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
+            for (let line of context.value.preamble) {
+                if (!puzzle.info.title) {
 
-                for (let line of context.value.preamble) {
-                    let match = titleExpression.exec(line,);
+                    // first look for an FT style title
+                    let titleExpression = new RegExp(String.raw`(no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
+
+                    let match = titleExpression.exec(line);
 
                     if (match) {
+                        // found an FT style title
                         let setter = match.groups["setter"].toString();
                         let serialNumber = match.groups["serialNumber"].toString();
+                        let provider = this.providerService.getProviderString(puzzle.info.provider);
                         
-                        puzzle.info.title = this.providerService.getProviderString(puzzle.info.provider);
-
-                        if (serialNumber) {
-                            puzzle.info.title += " " + serialNumber;
-                        }
-                        if (setter) {
-                            puzzle.info.title += " by " + setter;
-                            puzzle.info.setter = setter;
-                        }
-
-                        break;
+                        puzzle.info.title = `${provider} ${serialNumber} by ${setter}`;
+                        puzzle.info.setter = setter;
 
                     } else {
-                        puzzle.info.title = "untitled";
+                        // no FT style title found so look for an Azed style title
+                        titleExpression = new RegExp(String.raw`^\s*azed\s+no\.?\s+(?<serialNumber>\d,\d\d\d)(?<subtitle>.*)$`, "gi");
+
+                        let match: RegExpExecArray;
+                        
+                        while (match = titleExpression.exec(line)) {
+                            // Azed can also contains solutions to previous puzzles that look like a title line e.g.
+                            // "Azed No 2,123 solutions and notes" or "Azed No. 2,481, The Observer, 90 York Way, London N1 9GU.""
+                            // Only use if the title line does not contain the word "solution"
+                            let subtitle: string = match.groups["subtitle"] ? match.groups["subtitle"].toString().trim().toLowerCase() : null;
+
+                            if (!subtitle || !(subtitle.includes("solution") || subtitle.includes("observer"))) {
+                                puzzle.info.title = match[0].toString();
+                                puzzle.info.setter = "Azed";
+                            } 
+                        }
                     }
                 }
-
             }
+
+            // if we have still not found a title then add a default
+            if (!puzzle.info.title) {
+                puzzle.info.title = "untitled";
+                puzzle.info.setter = "anon";
+            }
+
         } catch (error) {
             throw new Error(`Failed to parse puzzle: ${error}`);
         }

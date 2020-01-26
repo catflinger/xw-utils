@@ -40,7 +40,6 @@ export const createGridAndTextTrack: NavTrack = {
             route: "/special-text",
             actions: {
                 "parse": "parser",
-                "continue": "solve",
             }
         },
         {
@@ -53,21 +52,11 @@ export const createGridAndTextTrack: NavTrack = {
             }
         },
         {
-            name: "login",
-            type: "route",
-            route: "/special-login",
-            actions: {
-                "ok": "pdf-extract",
-                "cancel": "abandon",
-                "back": "special-pdf",
-            }
-        },
-        {
             name: "make-clues",
             type: "process",
             process: "make-clues",
             actions: {
-                "ok": "linker",
+                "ok": "solver",
             }
         },
         {
@@ -85,8 +74,17 @@ export const createGridAndTextTrack: NavTrack = {
                 track: "parseTrack"
             },
             actions: {
+                "ok": "solver",
                 "error": "special-text",
             }
+        },
+        {
+            name: "solver",
+            type: "call",
+            call: {
+                track: "solveTrack"
+            },
+            actions: {}
         },
         {
             name: "abandon",

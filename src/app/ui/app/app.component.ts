@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Router, NavigationEnd, Event } from '@angular/router';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
@@ -39,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
         }));
+
     }
 
     public ngOnDestroy() {

@@ -76,6 +76,7 @@ import { createGridAndTextTrack } from './services/navigation/tracks/create-grid
 import { createGridTrack } from './services/navigation/tracks/create-grid-track';
 import { createTextTrack } from './services/navigation/tracks/create-text-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
+import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -154,6 +155,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         SpecialLoginComponent,
         NavErrorComponent,
         ClueListItemComponent,
+        NavLogComponent,
     ],
     imports: [
         BrowserModule,

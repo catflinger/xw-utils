@@ -1,6 +1,7 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 class _NavContext<T> implements NavContext {
     public track: NavTrack;
@@ -22,16 +23,18 @@ export class NavService<T> {
     private callStack: _NavContext<T>[] = [];
     private _appData: T;
 
-    private _log: string[] = [];
+    private _log: BehaviorSubject<string[]>;
 
     constructor(
         private router: Router,
         @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>,
         @Inject(NAV_PROCESSOR) private processor: NavProcessor<T>
-        ) { }
+        ) { 
+            this._log = new BehaviorSubject<string[]>([]);
+        }
 
-    public getNavHistory(): ReadonlyArray<string> {
-        return this._log;
+    public observe(): Observable<ReadonlyArray<string>> {
+        return this._log.asObservable();
     }
 
     public get appData(): T {
@@ -54,7 +57,7 @@ export class NavService<T> {
         this.abandonAll();
         this._appData = data;
 
-        this._log.push("BEGINNING TRACK " + track);
+        this.log("BEGINNING TRACK " + track);
         this.callTrack(track, start);
     }
 
@@ -92,7 +95,7 @@ export class NavService<T> {
                 this.goHome();
             }
         } catch (error) {
-            this._log.push("ERROR " + error.toString());
+            this.log("ERROR " + error.toString());
             result = Promise.reject();
         }
 
@@ -119,7 +122,7 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
     let result = Promise.resolve();
     let action: string;
 
-    this._log.push("INVOKING " + node.name);
+    this.log("INVOKING " + node.name);
 
     switch (node.type) {
         case "route":
@@ -174,7 +177,18 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
             while(this.callStack.length > 0) {
                 this.callStack.pop();
             }
-            this._log = [];
+            this.clearLog();
         } catch {}
     }
+
+    private log(msg: string): void {
+        let current = this._log.value;
+        current.push(msg);
+        this._log.next(current);
+    }
+
+    private clearLog(): void {
+        this._log.next([]);
+    }
+
 }

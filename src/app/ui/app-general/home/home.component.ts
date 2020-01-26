@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         if (puzzle.capability.ready) {
                             this.navService.beginTrack("solveTrack", new AppTrackData());
                         } else {
-                            this.navService.beginTrack("createGridAndTextTrack", new AppTrackData(), "parser");
+                            this.navService.beginTrack("createGridAndTextTrack", new AppTrackData(), "edit-grid");
                         }
                         break;
                     case "pdf":

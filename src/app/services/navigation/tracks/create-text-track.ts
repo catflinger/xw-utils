@@ -16,7 +16,6 @@ export const createTextTrack: NavTrack = {
             route: "/special-text",
             actions: {
                 "parse": "parser",
-                "continue": "solve",
             }
         },
         {

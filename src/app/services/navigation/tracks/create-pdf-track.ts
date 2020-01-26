@@ -73,9 +73,18 @@ export const createPdfTrack: NavTrack = {
             },
             actions: {
                 ok: "solver",
-                error: "error",
+                error: "special-text",
             }
         },
+        {
+            name: "special-text",
+            type: "route",
+            route: "/special-text",
+            actions: {
+                "parse": "parser",
+            }
+        },
+
         {
             name: "solver",
             type: "call",

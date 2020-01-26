@@ -218,7 +218,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 let grid = new Grid(result.grid)
                 reducers.push(new AddGrid({ grid }));
             }
-            this.newPuzzle("text", reducers);
+            this.newPuzzle("pdf", reducers);
 
             return "ok";
         })
