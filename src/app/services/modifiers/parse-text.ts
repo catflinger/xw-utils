@@ -78,7 +78,7 @@ export class ParseText implements IPuzzleModifier {
                         
                         while (match = titleExpression.exec(line)) {
                             // Azed can also contains solutions to previous puzzles that look like a title line e.g.
-                            // "Azed No 2,123 solutions and notes" or "Azed No. 2,481, The Observer, 90 York Way, London N1 9GU.""
+                            // "Azed No 2,123 solutions and notes" or "Azed No. 2,481, The Observer, 90 York Way, London N1 9GU."
                             // Only use if the title line does not contain the word "solution"
                             let subtitle: string = match.groups["subtitle"] ? match.groups["subtitle"].toString().trim().toLowerCase() : null;
 

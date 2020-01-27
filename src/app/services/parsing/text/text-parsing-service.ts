@@ -312,6 +312,7 @@ export class TextParsingService {
     
     private onTextToken(context: ParseContext, options: TextParsingOptions) {
         const token = context.tokenGroup.current as TextToken;
+        const azedExp = /^\s*(name|address|post\s*code)\s*$/i;
 
         switch (context.state) {
             case null:
@@ -326,7 +327,6 @@ export class TextParsingService {
                 break;
 
             case "across":
-                let azedExp = /^\s*(name|address|postcode|post code)\s*$/i;
 
                 if (context.hasContent) {
                     context.addClueText(token.text);
@@ -346,6 +346,11 @@ export class TextParsingService {
             case "down":
                 if (context.hasContent) {
                     context.addClueText(token.text);
+
+                } else if (options.azedFeatures && azedExp.test(token.text)) {
+                    // extracts from AZED pdfs somethimes mistakenly include address details in the across clues
+                    // ignore these lines
+                    
                 } else {
                     if (options.allowPostamble) {
                         // in postamble mode the down clues are over when a completed down clue is followed by
