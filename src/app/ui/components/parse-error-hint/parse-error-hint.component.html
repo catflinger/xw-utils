@@ -1,69 +1,69 @@
-<div *ngIf="code === 'endMarker_down'">
+<div *ngIf="errorCode === 'endMarker_down'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'acrossMarker_across'">
+<div *ngIf="errorCode === 'acrossMarker_across'">
     <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'acrossMarker_down'">
+<div *ngIf="errorCode === 'acrossMarker_down'">
     <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'acrossMarker_ended'">
+<div *ngIf="errorCode === 'acrossMarker_ended'">
     <ng-container *ngTemplateOutlet="invalidAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'downMarker_null'">
+<div *ngIf="errorCode === 'downMarker_null'">
     <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
 </div>
-<div *ngIf="code === 'downMarker_across'">
+<div *ngIf="errorCode === 'downMarker_across'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'downMarker_down'">
+<div *ngIf="errorCode === 'downMarker_down'">
     <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
 </div>
-<div *ngIf="code === 'downMarker_ended'">
+<div *ngIf="errorCode === 'downMarker_ended'">
     <ng-container *ngTemplateOutlet="invalidDownMarker"></ng-container>
 </div>
-<div *ngIf="code === 'endMarker_null'">
+<div *ngIf="errorCode === 'endMarker_null'">
     Could not find any clues in the puzzle!
 </div>
-<div *ngIf="code === 'endMarker_across'">
+<div *ngIf="errorCode === 'endMarker_across'">
     Could not find an "across" heading at the start of the clues.
 </div>
-<div *ngIf="code === 'endMarker_down'">
+<div *ngIf="errorCode === 'endMarker_down'">
     Could not find an "down" heading in the puzzle.
 </div>
-<div *ngIf="code === 'clue_null'">
+<div *ngIf="errorCode === 'clue_null'">
     <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'clue_acrossdown'">
+<div *ngIf="errorCode === 'clue_acrossdown'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'clue_ended'">
+<div *ngIf="errorCode === 'clue_ended'">
     <ng-container *ngTemplateOutlet="contentAfterEnd"></ng-container>
 </div>
-<div *ngIf="code === 'clueStart_null'">
+<div *ngIf="errorCode === 'clueStart_null'">
     <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'clueStart_ended'">
+<div *ngIf="errorCode === 'clueStart_ended'">
     <ng-container *ngTemplateOutlet="contentAfterEnd"></ng-container>
 </div>
-<div *ngIf="code === 'clueStart_acrossdown'">
+<div *ngIf="errorCode === 'clueStart_acrossdown'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'clueEnd_acrossdown'">
+<div *ngIf="errorCode === 'clueEnd_acrossdown'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'clueEnd_null'">
+<div *ngIf="errorCode === 'clueEnd_null'">
     <!-- is this really an error ? -->
 </div>
-<div *ngIf="code === 'clueEnd_ended'">
+<div *ngIf="errorCode === 'clueEnd_ended'">
 </div>
-<div *ngIf="code === 'text_null'">
+<div *ngIf="errorCode === 'text_null'">
     <ng-container *ngTemplateOutlet="contentBeforeAcrossMarker"></ng-container>
 </div>
-<div *ngIf="code === 'text_across'">
+<div *ngIf="errorCode === 'text_across'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
-<div *ngIf="code === 'text_down'">
+<div *ngIf="errorCode === 'text_down'">
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
 

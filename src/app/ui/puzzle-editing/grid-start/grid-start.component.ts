@@ -23,7 +23,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
     public readonly maxCellsAcross = 25;
     public readonly maxCellsDown = 25;   
 
-    private form: FormGroup;
+    public form: FormGroup;
 
     private subs: Subscription[] = [];
 
