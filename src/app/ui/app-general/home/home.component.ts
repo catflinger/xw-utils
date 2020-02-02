@@ -1,11 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
-import { PuzzleInfo } from 'src/app/model/puzzle-info';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
-import { AppTrackData, EditorType } from '../../../services/navigation/tracks/app-track-data';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 
 @Component({
@@ -57,28 +56,28 @@ export class HomeComponent implements OnInit, OnDestroy {
                     //     break;
                     case "text":
                         if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                            this.navService.beginTrack("solveTrack", {});
                         } else {
-                            this.navService.beginTrack("createTextTrack", new AppTrackData(), "parser");
+                            this.navService.beginTrack("createTextTrack", {}, "parser");
                         }
                         break;
                     case "grid-text":
                         if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                            this.navService.beginTrack("solveTrack", {});
                         } else {
-                            this.navService.beginTrack("createGridAndTextTrack", new AppTrackData(), "edit-grid");
+                            this.navService.beginTrack("createGridAndTextTrack", {}, "edit-grid");
                         }
                         break;
                     case "pdf":
                         if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", new AppTrackData());
+                            this.navService.beginTrack("solveTrack", {});
                         } else {
-                            this.navService.beginTrack("createPdfTrack", new AppTrackData(), "parser");
+                            this.navService.beginTrack("createPdfTrack", {}, "parser");
                         }
                         break;
                     default:
                         // TO DO: think about what happens to a downlaoded puzzle that fails to parse
-                        this.navService.beginTrack("solveTrack", new AppTrackData());
+                        this.navService.beginTrack("solveTrack", {});
                         break;
                 }
 
@@ -90,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.navService.beginTrack("createGridTrack", new AppTrackData(), "edit-grid");
+                this.navService.beginTrack("createGridTrack", {}, "edit-grid");
             }
         });
     }

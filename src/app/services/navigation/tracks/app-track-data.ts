@@ -1,7 +1,7 @@
+import { PuzzleProvider } from 'src/app/model/interfaces';
+
 export type EditorType = "blogger" | "solver";
 
-export class AppTrackData {
-    constructor(
-        //public editor?: EditorType,
-    ) {}
+export interface AppTrackData {
+    provider?: PuzzleProvider;
 }

@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.appService.setOpenPuzzleParams({
             provider: "grid",
         });
-        this.navService.beginTrack("createGridTrack", new AppTrackData());
+        this.navService.beginTrack("createGridTrack", {});
     }
 
     public onHome() {

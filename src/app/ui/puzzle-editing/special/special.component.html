@@ -21,7 +21,7 @@
         <button class="btn btn-primary mt-3" (click)="onPdf()">Open PDF</button>
 
         <div class="mt-5">Create a grid and enter the clues</div>
-        <button disabled="true" class="btn btn-primary mt-3" (click)="onGridText()">Grid and clues</button>
+        <button [disabled]="false" class="btn btn-primary mt-3" (click)="onGridText()">Grid and clues</button>
 
         <div class="mt-5">Enter the clues only</div>
         <button class="btn btn-primary mt-3" (click)="onText()">Clues only</button>

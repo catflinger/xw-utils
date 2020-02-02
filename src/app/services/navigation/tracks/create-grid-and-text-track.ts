@@ -35,6 +35,22 @@ export const createGridAndTextTrack: NavTrack = {
             }
         },
         {
+            name: "make-clues",
+            type: "process",
+            process: "make-clues",
+            actions: {
+                "ok": "clues-editor",
+            }
+        },
+        {
+            name: "clues-editor",
+            type: "route",
+            route: "clues-editor",
+            actions: {
+                "continue": "solver",
+            }
+        },
+        {
             name: "special-text",
             type: "route",
             route: "/special-text",
@@ -49,14 +65,6 @@ export const createGridAndTextTrack: NavTrack = {
             actions: {
                 "ok": "parser",
                 "error": "error",
-            }
-        },
-        {
-            name: "make-clues",
-            type: "process",
-            process: "make-clues",
-            actions: {
-                "ok": "solver",
             }
         },
         {

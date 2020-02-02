@@ -22,18 +22,18 @@ export class SpecialComponent implements OnInit {
     }
 
     public onPdf() {
-        this.navService.beginTrack("createPdfTrack", new AppTrackData());
+        this.navService.beginTrack("createPdfTrack", {});
     }
 
     public onText() {
         this.puzzleManager.newPuzzle("text", [new UpdateInfo({blogable: true})]);
-        this.navService.beginTrack("createTextTrack", new AppTrackData());
+        this.navService.beginTrack("createTextTrack", { provider: "text"});
     }
 
     public onGridText() {
         this.appService.setOpenPuzzleParams({
-            provider: "text",
+            provider: "grid-text",
         });
-        this.navService.beginTrack("createGridAndTextTrack", new AppTrackData());
+        this.navService.beginTrack("createGridAndTextTrack", { provider: "grid-text"});
     }
 }

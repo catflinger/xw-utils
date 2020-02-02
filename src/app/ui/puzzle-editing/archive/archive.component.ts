@@ -82,7 +82,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         this.appService.clearBusy();
         this.appService.clearAlerts();
         
-        this.navService.beginTrack("createPdfTrack", new AppTrackData(), "open-puzzle");
+        this.navService.beginTrack("createPdfTrack", {}, "open-puzzle");
     }
 
     public get latest(): ArchiveItem {

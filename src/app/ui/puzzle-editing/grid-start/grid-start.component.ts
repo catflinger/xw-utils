@@ -87,7 +87,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
             symmetrical: this.form.value.symmetrical,
         });
 
-        this.puzzleManager.newPuzzle("grid", [
+        this.puzzleManager.newPuzzle(this.navService.appData.provider, [
             new AddGrid({ grid }), 
             new UpdateInfo({ 
                 title: this.form.value.title,
