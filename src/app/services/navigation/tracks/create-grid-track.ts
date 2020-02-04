@@ -36,8 +36,8 @@ export const createGridTrack: NavTrack = {
         },
         {
             name: "publish",
-            type: "call",
-            call: {
+            type: "switch",
+            switch: {
                 track: "publishGridTrack",
                 start: "publish",
             },

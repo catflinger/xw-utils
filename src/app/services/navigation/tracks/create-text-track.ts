@@ -1,11 +1,5 @@
 import { NavTrack } from '../interfaces';
 
-/*
-This track is for creating a new puzzle or amending an existing puzzle
-
-Edit refers to the role of a crossword editor, both a commissioner and a modifier of puzzles
-*/
-
 export const createTextTrack: NavTrack = {
     name: "createTextTrack",
     start: "special-text",
@@ -39,8 +33,8 @@ export const createTextTrack: NavTrack = {
         },
         {
             name: "solve",
-            type: "call",
-            call: {
+            type: "switch",
+            switch: {
                 track: "solveTrack"
             },
             actions: {}

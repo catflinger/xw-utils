@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from '../../components/clue-editor/clue-editor.component';
+import { ClueAnnotationComponent } from '../../components/clue-annotator/clue-annotator.component';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
@@ -10,6 +10,7 @@ import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell
 import { Clear } from 'src/app/services/modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { SelectClue } from 'src/app/services/modifiers/select-clue';
 
 @Component({
     selector: 'app-clues-editor',
@@ -19,6 +20,8 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 export class CluesEditorComponent implements OnInit, OnDestroy {
     private modalRef: NgbModalRef = null;
     public puzzle: Puzzle = null;
+    public acrossClues: ReadonlyArray<Clue> = [];
+    public downClues: ReadonlyArray<Clue> = [];
     private subs: Subscription[] = [];
 
     constructor(
@@ -40,6 +43,8 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
                                 this.navService.goHome();
                             }
                             this.puzzle = puzzle;
+                            this.acrossClues = puzzle.clues.filter(c => c.group === "across");
+                            this.downClues = puzzle.clues.filter(c => c.group === "down");
                             //console.log("CLUES_EDITOR " + JSON.stringify(puzzle));
                         }
                     }
@@ -57,6 +62,9 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     }
 
     onClueClick(clue: Clue) {
+        if (!clue.highlight) {
+            this.activePuzzle.update(new SelectClue(clue.id));
+        }
         //this.openEditor(clue, null);
     }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from '../../components/clue-editor/clue-editor.component';
+import { ClueAnnotationComponent } from '../../components/clue-annotator/clue-annotator.component';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
@@ -81,6 +81,11 @@ export class SolverComponent implements OnInit, OnDestroy {
         this.navService.navigate("back");
     }
 
+    onEdit() {
+        this.activePuzzle.update(new Clear());
+        this.navService.navigate("edit");
+    }
+
     onBlogger() {
         this.navService.navigate("blog");
     }
@@ -106,7 +111,7 @@ export class SolverComponent implements OnInit, OnDestroy {
         if (!clue.redirect) {
             setTimeout(
                 () => {
-                    this.modalRef = this.modalService.open(ClueEditorComponent, { backdrop: "static"});
+                    this.modalRef = this.modalService.open(ClueAnnotationComponent, { backdrop: "static"});
                     this.modalRef.componentInstance.clueId = clue.id;
                     this.modalRef.componentInstance.starterText = starterText;
                     this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {

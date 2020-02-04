@@ -21,6 +21,7 @@ export const solveTrack: NavTrack = {
                 "continue": "publish",
                 "blog": "blogger",
                 "back": "exit",
+                "edit": "edit-puzzle",
             }
         },
         {
@@ -30,14 +31,14 @@ export const solveTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "solve": "solver",
-                "edit": "edit-clues",
+                "edit": "edit-puzzle",
                 "back": "exit",
             }
         },
         {
             name: "publish",
-            type: "call",
-            call: {
+            type: "switch",
+            switch: {
                 track: "publishPostTrack",
             },
             actions: {
@@ -45,11 +46,11 @@ export const solveTrack: NavTrack = {
             }
         },
         {
-            name: "edit-clues",
+            name: "edit-puzzle",
             type: "call",
             call: {
-                track: "create",
-                start: "edit-clues"
+                track: "editPuzzleTrack",
+                start: "clues-editor",
             },
             actions: {}
         },

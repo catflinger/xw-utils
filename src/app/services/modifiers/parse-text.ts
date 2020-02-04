@@ -5,7 +5,7 @@ import { TextParsingService } from '../parsing/text/text-parsing-service';
 import { Grid } from 'src/app/model/grid';
 import { TextParsingOptions } from '../parsing/text/types';
 import { TextParsingErrorM } from './mutable-model/text-parsing-error-m';
-import { AddPlaceholders } from './add-placeholders';
+import { InitAnnotationWarnings } from './init-annotation-warnings';
 import { ProviderService } from '../provider.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { PuzzleProvision } from 'src/app/model/puzzle-provision';
@@ -51,7 +51,7 @@ export class ParseText implements IPuzzleModifier {
 
             puzzle.linked = false;
         
-            new AddPlaceholders().exec(puzzle);
+            new InitAnnotationWarnings().exec(puzzle);
 
             for (let line of context.value.preamble) {
                 if (!puzzle.info.title) {

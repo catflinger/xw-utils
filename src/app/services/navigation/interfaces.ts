@@ -1,4 +1,4 @@
-export type NavNodeType = "route" | "call" | "return" | "exit" | "process";
+export type NavNodeType = "route" | "switch" | "call" | "return" | "exit" | "process";
 
 // Nav  action is a map from the actions names (object keys) to the target ndoe names (object values)
 export type NavAction = { [key: string]: string }
@@ -7,7 +7,7 @@ export interface NavProcessor<T> {
     exec(processName: string, appData: T): Promise<string>;
 }
 
-export type TrackCallParamters = { 
+export type TrackCallParameters = { 
     track: string;
     start?: string;
  }
@@ -18,7 +18,8 @@ export interface NavTrackNode {
     actions: NavAction;
 
     route?: string;
-    call?: TrackCallParamters;
+    switch?: TrackCallParameters;
+    call?: TrackCallParameters;
     return?: string;
     process?: string;
 }

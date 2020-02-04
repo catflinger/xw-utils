@@ -25,3 +25,9 @@
         <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
     </div>
 </div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-link" (click)="onEdit()">Edit the clues</button>
+    </div>
+</div>

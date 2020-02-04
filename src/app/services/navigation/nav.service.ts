@@ -129,6 +129,10 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
             context.currentNode = node;
             this.router.navigate([node.route]);
             break;
+        case "switch":
+            context.currentNode = node;
+            this.switchTrack(node.switch.track, node.switch.start);
+            break;
         case "call":
             context.currentNode = node;
             this.callTrack(node.call.track, node.call.start);
@@ -150,6 +154,27 @@ public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<vo
     return result;
 }
 
+private switchTrack(trackName: string, start: string) {
+        let track = this.tracks.find(t => t.name === trackName);
+
+        if (track) {
+            const nodeName = start || track.start;
+            let startNode = track.nodes.find(n => n.name === nodeName);
+
+            if (startNode) {
+                let context = new _NavContext();
+                context.track = track;
+                context.currentNode = startNode;
+                this.callStack.pop();
+                this.callStack.push(context);
+                this.invokeNode(startNode, context);
+            } else {
+                throw "Navigation Error - could not find start node";
+            }
+        } else {
+                throw "Navigation Error - could not find track with name " + trackName;
+        }
+}
     private callTrack(trackName: string, start: string) {
 
         let track = this.tracks.find(t => t.name === trackName);

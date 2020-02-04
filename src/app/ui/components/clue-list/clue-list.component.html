@@ -5,7 +5,7 @@
     <table>
         <tbody>
             <tr *ngFor="let clue of clues" (click)="onClueClick(clue)">
-                <app-clue-list-item [clue]="clue"></app-clue-list-item>
+                <app-clue-list-item [clue]="clue" [options]="{showSolved: true}"></app-clue-list-item>
             </tr>
         </tbody>
     </table>

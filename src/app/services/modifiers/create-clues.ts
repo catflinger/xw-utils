@@ -31,17 +31,20 @@ export class CreateClues implements IPuzzleModifier {
 
     private makeClues(puzzle: PuzzleM, grid: Grid, group: ClueGroup) {
         let clueNumber = 1;
-        let cells: GridCell[] = null;
+        let cells: ReadonlyArray<GridCell> = null;
+        let maxCaption = grid.getMaxCaption();
         
-        while ((cells = grid.getGridEntryForCaption(clueNumber.toString(), group)).length > 0) {
-            let clue = this.makeClue(group, clueNumber, cells);
-            //console.log("ADDING CLUE " + JSON.stringify(clue));
-            puzzle.clues.push(clue);
+        for (let n = 1; n <= maxCaption; n++) {
+            cells = grid.getGridEntryForCaption(clueNumber.toString(), group);
+            if (cells && cells.length) {
+                let clue = this.makeClue(group, clueNumber, cells);
+                puzzle.clues.push(clue);
+                }
             clueNumber++;
         };
     }
 
-    private makeClue(clueGroup: ClueGroup, clueNumber: number, cells: GridCell[]): ClueM {
+    private makeClue(clueGroup: ClueGroup, clueNumber: number, cells: ReadonlyArray<GridCell>): ClueM {
         let entry: string[] = [];
         let text = "Clue text...";
 

@@ -1,0 +1,9 @@
+.highlight {
+    background-color: burlywood;
+}
+.caption {
+    font-weight: bold;
+}
+td {
+    vertical-align: top;
+}

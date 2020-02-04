@@ -108,13 +108,25 @@ export class Grid implements IGrid {
         return entry;
     }
 
-    public getGridEntryForCaption(caption: string, group: ClueGroup): GridCell[] {
-        let entry: GridCell[] = [];
+    public getMaxCaption(): number {
+        const cells = this.cells
+            .filter(cell => cell.caption)
+            .map(cell => parseInt(cell.caption))
+            .sort((a, b) => b - a);
+
+        return cells.length > 0 ? cells[0] : 0;
+    }
+
+    public getGridEntryForCaption(caption: string, group: ClueGroup): ReadonlyArray<GridCell> {
+        let entry: ReadonlyArray<GridCell> = null;
 
         let startCell = this.cells.find(c => c.caption === caption);
 
         if (startCell) {
-            entry = this.getEntry(startCell, group);
+            let cells = this.getEntry(startCell, group);
+            if (cells.length > 0 && cells[0].caption === caption) {
+                entry = cells;
+            }
         }
 
         return entry;

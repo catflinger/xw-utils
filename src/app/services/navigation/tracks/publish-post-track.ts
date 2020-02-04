@@ -6,8 +6,7 @@ export const publishPostTrack: NavTrack = {
     nodes: [
         {
             name: "exit",
-            type: "return",
-            return: "edit",
+            type: "exit",
             actions: {}
         },
         {

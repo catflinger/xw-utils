@@ -44,8 +44,17 @@ export const createArchiveTrack: NavTrack = {
                 track: "parseTrack"
             },
             actions: {
+                ok: "solver",
                 error: "error"
             }
+        },
+        {
+            name: "solver",
+            type: "switch",
+            switch: {
+                track: "solveTrack"
+            },
+            actions: {}
         },
         {
             name: "abandon",

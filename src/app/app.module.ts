@@ -16,7 +16,7 @@ import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complet
 import { PublishPreambleComponent } from './ui/puzzle-publishing/publish-preamble/publish-preamble.component';
 import { ClueListComponent } from './ui/components/clue-list/clue-list.component';
 import { SolverComponent } from './ui/puzzle-solving/solver/solver.component';
-import { ClueEditorComponent } from './ui/components/clue-editor/clue-editor.component';
+import { ClueAnnotationComponent } from './ui/components/clue-annotator/clue-annotator.component';
 import { ClueTextChunkComponent } from './ui/components/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/components/grid/grid.component';
 
@@ -77,6 +77,7 @@ import { createGridTrack } from './services/navigation/tracks/create-grid-track'
 import { createTextTrack } from './services/navigation/tracks/create-text-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
+import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -96,6 +97,7 @@ const tracks: ReadonlyArray<NavTrack> = [
     createPdfTrack,
     parseTrack,
     solveTrack,
+    editPuzzleTrack,
     publishPostTrack,
     publishGridTrack,
 ];
@@ -108,7 +110,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridComponent,
         ClueListComponent,
         SolverComponent,
-        ClueEditorComponent,
+        ClueAnnotationComponent,
         ClueTextControlComponent,
         ClueTextChunkComponent,
         HomeComponent,
@@ -178,7 +180,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         {provide: NAV_PROCESSOR, useClass: UIProcessService},
     ],
     entryComponents: [
-        ClueEditorComponent,
+        ClueAnnotationComponent,
         ConfirmModalComponent,
     ],
     bootstrap: [AppComponent]

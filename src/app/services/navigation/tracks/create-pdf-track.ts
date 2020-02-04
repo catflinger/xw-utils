@@ -87,8 +87,8 @@ export const createPdfTrack: NavTrack = {
 
         {
             name: "solver",
-            type: "call",
-            call: {
+            type: "switch",
+            switch: {
                 track: "solveTrack"
             },
             actions: {}

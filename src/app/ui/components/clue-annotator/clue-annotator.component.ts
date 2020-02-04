@@ -30,11 +30,11 @@ class AnswerTextChunk {
 }
 
 @Component({
-    selector: 'app-clue-editor',
-    templateUrl: './clue-editor.component.html',
-    styleUrls: ['./clue-editor.component.css']
+    selector: 'app-clue-annotator',
+    templateUrl: './clue-annotator.component.html',
+    styleUrls: ['./clue-annotator.component.css']
 })
-export class ClueEditorComponent implements OnInit, OnDestroy {
+export class ClueAnnotationComponent implements OnInit, OnDestroy {
     @Input() clueId: string;
     @Input() starterText: string;
 

@@ -9,6 +9,7 @@ import { RenumberGid } from 'src/app/services/modifiers/renumber-grid';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
 import { ProviderService } from 'src/app/services/provider.service';
 import { CreateClues } from '../modifiers/create-clues';
+import { InitAnnotationWarnings } from '../modifiers/init-annotation-warnings';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
             case "make-clues":
                 // TO DO: work out what to do if puzzle aready has clues
-                this.activePuzzle.update(new CreateClues());
+                this.activePuzzle.update(new CreateClues(), new InitAnnotationWarnings());
                 action = Promise.resolve("ok");
                 break;
 

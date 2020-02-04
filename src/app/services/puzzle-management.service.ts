@@ -9,7 +9,7 @@ import { Clear } from './modifiers/clear';
 import { IPuzzleModifier } from './modifiers/puzzle-modifier';
 import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider, IPuzzleSummary } from '../model/interfaces';
 import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
-import { AddPlaceholders } from './modifiers/add-placeholders';
+import { InitAnnotationWarnings } from './modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
 import { ApiSymbols } from './common';
 import { UpdateInfo } from './modifiers/update-info';
@@ -182,7 +182,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
                 // add some defaults
                 let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
-                new AddPlaceholders().exec(puzzleM);
+                new InitAnnotationWarnings().exec(puzzleM);
 
                 this.localStorageService.putPuzzle(puzzleM);
                 this.usePuzzle(puzzleM);
