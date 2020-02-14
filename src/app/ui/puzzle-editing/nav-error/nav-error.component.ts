@@ -3,6 +3,7 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Subscription } from 'rxjs';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { NavService } from '../../../services/navigation/nav.service';
+import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-nav-error',
@@ -13,6 +14,8 @@ export class NavErrorComponent implements OnInit, OnDestroy {
     public localError: string = null;
     public provisionError: string = null;
     public navHistory: ReadonlyArray<string> = [];
+    public appData: AppTrackData;
+
     private subs: Subscription[] = [];
 
     constructor(
@@ -22,6 +25,8 @@ export class NavErrorComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         try {
+            this.appData = this.navService.appData;
+
             this.subs.push(this.navService.observe().subscribe(log => this.navHistory = log));
             this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
                 try {

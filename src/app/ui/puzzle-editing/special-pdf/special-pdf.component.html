@@ -6,12 +6,33 @@
 
 <div class="row">
     <div class="col">
-        <div class="form-group">
-            <input #file class="form-control-file" type="file" accept=".pdf" (change)="onFileChange(file.files)">
-        </div>
+        <form [formGroup]="form">
+            <div class="form-group">
+                <input #file class="form-control-file" type="file" accept=".pdf" (change)="onFileChange(file.files)">
+            </div>
 
-        <div class="form-group">
-            <button class="btn btn-primary" type="button" (click)="onOpenPdf()">Open PDF</button>
-        </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" formControlName="advancedOptions">
+                    show advanced options
+                </label>
+            </div>
+
+            <div [ngStyle]="{display: (form.value.advancedOptions ? 'block' : 'none')}">
+                <div class="form-group">
+                    <label for="gridPage" class="form-label">Grid will be found on page number</label>
+                    <input id="gridPage" class="form-control" type="number" min="1" max="100" step="1" formControlName="gridPage">
+                </div>
+    
+                <div class="form-group">
+                    <label for="textPage" class="form-label">Text for the clues will be found on page number</label>
+                    <input id="textPage" class="form-control" type="number" min="1" max="100" step="1" formControlName="textPage">
+                </div>
+                </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary" type="button" (click)="onOpenPdf()">Open PDF</button>
+            </div>
+        </form>
     </div>
 </div>

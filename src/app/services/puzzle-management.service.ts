@@ -35,7 +35,7 @@ export abstract class IPuzzleManager {
     abstract getPuzzleList(): Observable<IPuzzleSummary[]>;
     abstract openPuzzle(id: string): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
-    abstract loadPuzzleFromPdf(pdf: Base64Encoded): Promise<string>;
+    abstract loadPuzzleFromPdf(params: OpenPuzzleParamters): Promise<string>;
 
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
@@ -206,9 +206,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             });
     }
 
-    public loadPuzzleFromPdf(pdf: Base64Encoded): Promise<string> {
+    public loadPuzzleFromPdf(params: OpenPuzzleParamters): Promise<string> {
 
-        return this.httpPuzzleService.getPdfExtract(pdf)
+        return this.httpPuzzleService.getPdfExtract(params.sourceDataB64, params.gridPage, params.textPage)
         .then((result) => {
             let reducers = [];
 
@@ -226,7 +226,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             if (error === ApiSymbols.AuthorizationFailure) {
                 return "authenticate";
             } else {
-                return "error";
+                throw error;
             }
         });
     }

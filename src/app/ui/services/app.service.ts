@@ -28,6 +28,8 @@ export interface OpenPuzzleParamters {
     serialNumber?: number,
     date?: Date,
     setter?: string,
+    gridPage?: number,
+    textPage?: number,
 }
 
 class ActivityMonitor {

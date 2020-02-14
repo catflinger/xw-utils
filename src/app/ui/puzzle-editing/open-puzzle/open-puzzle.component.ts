@@ -6,7 +6,7 @@ import { PuzzleManagementService } from 'src/app/services/puzzle-management.serv
 import { ApiSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
 import { NavService } from '../../../services/navigation/nav.service';
-import { AppTrackData, EditorType } from '../../../services/navigation/tracks/app-track-data';
+import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
 @Component({
   selector: 'app-open-puzzle',

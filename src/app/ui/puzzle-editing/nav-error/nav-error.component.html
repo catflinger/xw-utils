@@ -5,6 +5,11 @@
     <div>{{provisionError}}</div>
 </div>
 
+<div *ngIf="appData && appData.error">
+    <div>Navigation App Data Error</div>
+    <div>{{appData.error}}</div>
+</div>
+
 <div *ngIf="localError">
     <div>Error attempting to load error data</div>
     <div>{{localError}}</div>

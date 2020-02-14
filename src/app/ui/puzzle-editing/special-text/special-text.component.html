@@ -70,6 +70,10 @@
     
         <div *ngIf="parseError">
             <app-parse-result [result]="parseError"></app-parse-result>
+
+            <label><input type="checkbox" #showText [checked]="false"> Show the full text</label>
+
+            <pre *ngIf="showText.checked">{{puzzle.provision.source}}</pre>
         </div>
     
         <div class="row" *ngIf="!parseError">

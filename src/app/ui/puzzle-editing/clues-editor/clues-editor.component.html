@@ -31,7 +31,9 @@
         </div>    </div>
 
     <div class="col">
-        <app-clue-list direction="down" (clueClick)="onClueClick($event)"></app-clue-list>
+        <tr *ngFor="let clue of downClues" (click)="onClueClick(clue)">
+            <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}"></app-clue-list-item>
+        </tr>
     </div>
 </div>
 

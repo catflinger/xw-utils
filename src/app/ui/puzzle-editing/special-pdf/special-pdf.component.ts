@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { AppService, OpenPuzzleParamters } from '../../services/app.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
@@ -17,10 +17,16 @@ export class SpecialPdfComponent implements OnInit {
     constructor(
         private navService: NavService<AppTrackData>,
         private appService: AppService,
+        private formBuilder: FormBuilder,
     ) { }
 
     public ngOnInit() {
         this.appService.clear();
+        this.form = this.formBuilder.group({
+            gridPage: [1, Validators.required],
+            textPage: [1, Validators.required],
+            advancedOptions: false,
+        });
     }
 
     public onFileChange(files: any[]) {
@@ -45,7 +51,12 @@ export class SpecialPdfComponent implements OnInit {
 
     public onOpenPdf() {
         this.appService.clear();
-        this.appService.setOpenPuzzleParams({ provider: "pdf", sourceDataB64: this.content })
+        this.appService.setOpenPuzzleParams({ 
+            provider: "pdf", 
+            sourceDataB64: this.content,
+            gridPage: parseInt(this.form.value.gridPage),
+            textPage: parseInt(this.form.value.textPage),
+         })
         this.navService.navigate("continue");
     }
 }

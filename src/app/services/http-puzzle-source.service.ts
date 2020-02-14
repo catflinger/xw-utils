@@ -43,7 +43,7 @@ export class HttpPuzzleSourceService {
 
         public providePuzzle(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
             const credentials = this.authService.getCredentials();
-    
+
             if (!credentials.authenticated) {
                 return Promise.reject(ApiSymbols.AuthorizationFailure);
             }
@@ -63,7 +63,7 @@ export class HttpPuzzleSourceService {
                 }
             });
         }
-    
+
         public getPuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
@@ -87,7 +87,7 @@ export class HttpPuzzleSourceService {
         });
     }
 
-    public getPdfExtract(pdf: Base64Encoded): Promise<PdfExtractResponse> {
+    public getPdfExtract(pdf: Base64Encoded, gridPage: number, textPage: number): Promise<PdfExtractResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
@@ -98,6 +98,8 @@ export class HttpPuzzleSourceService {
             username: credentials.username,
             password: credentials.password,
             sourceDataB64: pdf,
+            gridPage,
+            textPage,
         }
 
         return this.http.post(environment.apiRoot + "pdfextract/", params)

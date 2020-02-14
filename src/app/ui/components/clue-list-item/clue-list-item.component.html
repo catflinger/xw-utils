@@ -1,2 +1,7 @@
 <td class="caption">{{clue.caption}}</td>
 <td [ngClass]="klasses">{{clue.text}}</td>
+<td>
+    <button class="btn border" *ngIf="clue.highlight && options.showEditButtons"><i class="fa fa-edit" title="Edit the clue text"></i></button>
+    <button class="btn border" *ngIf="clue.highlight && options.showEditButtons"><i class="fa fa-link" title="Link the clue to an entry in the grid"></i></button>
+    <button class="btn border" *ngIf="clue.highlight && options.showEditButtons"><i class="fa fa-times" title="Delete this clue"></i></button>
+</td>

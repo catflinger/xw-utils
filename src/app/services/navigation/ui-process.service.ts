@@ -40,7 +40,14 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
 
             case "pdf-extract":
-                action = this.puzzleManager.loadPuzzleFromPdf(this.appService.openPuzzleParameters.sourceDataB64);
+                try {
+                    action = this.puzzleManager.loadPuzzleFromPdf(this.appService.openPuzzleParameters);
+                } catch (error){
+                    if (appData) {
+                        appData.errorMessage = error.toString();
+                    }
+                    action = error;
+                }
                 break; 
 
             case "grid-captions":
