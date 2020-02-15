@@ -3,7 +3,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { GridParameters, GridControlOptions } from '../../common';
+import { GridParameters, GridControlOptions, GridParametersSmall, GridParametersLarge } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
 import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 
@@ -78,7 +78,9 @@ export class GridComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.gridParams = new GridParameters();
+        this.gridParams = this.options && this.options.size === "small" ?
+            new GridParametersSmall() :
+            new GridParametersLarge();
 
         this.subs.push(
             this.activePuzzle.observe().subscribe(

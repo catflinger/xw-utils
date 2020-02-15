@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GridParameters, GridControlOptions } from '../common';
+import { GridParameters, GridControlOptions, GridParametersSmall } from '../common';
 import { Grid } from 'src/app/model/grid';
 import { GridCell } from 'src/app/model/grid-cell';
 
@@ -16,7 +16,7 @@ export class GridDisplayInfo {
 })
 export class GridPainterService {
 
-    private gridParams: GridParameters = new GridParameters();
+    private gridParams: GridParameters = new GridParametersSmall();
 
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
