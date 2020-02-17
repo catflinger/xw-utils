@@ -5,6 +5,8 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/auth.service';
 import { NavService } from '../../services/navigation/nav.service';
 import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
+import { Router, NavigationStart } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-root',
@@ -19,6 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
+        private router: Router,
+        private modalService: NgbModal,
         private navService: NavService<AppTrackData>,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
@@ -37,6 +41,12 @@ export class AppComponent implements OnInit, OnDestroy {
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
+        }));
+
+        this.subs.push(this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.modalService.dismissAll();
+            }
         }));
 
     }

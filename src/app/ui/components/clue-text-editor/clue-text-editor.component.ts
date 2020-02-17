@@ -4,7 +4,6 @@ import { Clue } from 'src/app/model/clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
-import { ClueListAction } from '../clue-list-item/clue-list-item.component';
 
 @Component({
     selector: 'app-clue-text-editor',

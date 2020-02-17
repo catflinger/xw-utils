@@ -1,12 +1,9 @@
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueAnnotationComponent } from '../../components/clue-annotator/clue-annotator.component';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
-import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -47,7 +44,6 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
                             this.puzzle = puzzle;
                             this.acrossClues = puzzle.clues.filter(c => c.group === "across");
                             this.downClues = puzzle.clues.filter(c => c.group === "down");
-                            //console.log("CLUES_EDITOR " + JSON.stringify(puzzle));
                         }
                     }
                 ));
@@ -70,7 +66,6 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     }
 
     public onAction(clue: Clue, action: ClueListAction) {
-        console.log(`CLICKED ${clue.caption} action=${action}`)
         if (action === "edit") {
             this.openEditor(clue);
         }
@@ -91,7 +86,6 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
                     this.modalRef.close();
                     this.modalRef = null;
                 }));
-                // this.modalRef.result.finally(() => this.modalRef = null);
             },
             0
         );

@@ -93,6 +93,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             this.appSettingsService.observe().subscribe(settings => {
                 this.appSettings = settings;
             }));
+
     }
 
     ngOnDestroy() {
