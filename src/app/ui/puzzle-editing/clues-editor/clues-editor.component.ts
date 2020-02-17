@@ -11,6 +11,8 @@ import { Clear } from 'src/app/services/modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
+import { ClueListAction } from '../../components/clue-list-item/clue-list-item.component';
+import { ClueTextEditorComponent } from '../../components/clue-text-editor/clue-text-editor.component';
 
 @Component({
     selector: 'app-clues-editor',
@@ -30,7 +32,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
         private modalService: NgbModal,
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
@@ -52,38 +54,49 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    onContinue() {
+    public onContinue() {
         this.activePuzzle.update(new Clear());
         this.navService.navigate("continue");
     }
 
-    onClueClick(clue: Clue) {
+    public onClueClick(clue: Clue) {
         if (!clue.highlight) {
             this.activePuzzle.update(new SelectClue(clue.id));
         }
-        //this.openEditor(clue, null);
     }
 
-    // private openEditor(clue, starterText: string) {
-    //     if (!clue.redirect) {
-    //         setTimeout(
-    //             () => {
-    //                 this.modalRef = this.modalService.open(ClueEditorComponent, { backdrop: "static" });
-    //                 this.modalRef.componentInstance.clueId = clue.id;
-    //                 this.modalRef.componentInstance.starterText = starterText;
-    //                 this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
-    //                     this.modalRef.close();
-    //                     this.modalRef = null;
-    //                 }));
-    //                 // this.modalRef.result.finally(() => this.modalRef = null);
-    //             },
-    //             0
-    //         );
-    //     }
-    // }
+    public onAction(clue: Clue, action: ClueListAction) {
+        console.log(`CLICKED ${clue.caption} action=${action}`)
+        if (action === "edit") {
+            this.openEditor(clue);
+        }
+    }
+
+    public onEditorClose() {
+        if (this.modalRef) {
+            this.modalRef.close();
+        }
+    }
+
+    private openEditor(clue) {
+        setTimeout(
+            () => {
+                this.modalRef = this.modalService.open(ClueTextEditorComponent, { backdrop: "static" });
+                this.modalRef.componentInstance.clue = clue;
+                this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
+                    this.modalRef.close();
+                    this.modalRef = null;
+                }));
+                // this.modalRef.result.finally(() => this.modalRef = null);
+            },
+            0
+        );
+    }
+
+
 }
 

@@ -1,0 +1,19 @@
+<p>Edit the clue text</p>
+<form [formGroup]="form">
+    <div class="form-group">
+        <label class="form-label" for="caption">Clue number</label>
+        <input id="caption" type="text" class="form-control" formControlName="caption">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="text">Text</label>
+        <input id="text" type="text" class="form-control" formControlName="text">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="letterCount">Letter count</label>
+        <input id="letterCount" type="text" class="form-control" formControlName="letterCount">
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" (click)="onSave()">Save</button>
+        <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+    </div>
+</form>

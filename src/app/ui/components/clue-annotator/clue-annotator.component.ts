@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
-import { UpdateClue } from 'src/app/services/modifiers/update-clue';
+import { AnnotateClue } from 'src/app/services/modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
@@ -195,7 +195,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private closeEditor(save: boolean) {
         if (save) {
-            this.activePuzzle.update(new UpdateClue(
+            this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
                 this.form.value.answer,
                 this.form.value.comment,

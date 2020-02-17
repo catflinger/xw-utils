@@ -78,6 +78,7 @@ import { createTextTrack } from './services/navigation/tracks/create-text-track'
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
+import { ClueTextEditorComponent } from './ui/components/clue-text-editor/clue-text-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -158,6 +159,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         NavErrorComponent,
         ClueListItemComponent,
         NavLogComponent,
+        ClueTextEditorComponent,
     ],
     imports: [
         BrowserModule,
@@ -182,6 +184,7 @@ const tracks: ReadonlyArray<NavTrack> = [
     entryComponents: [
         ClueAnnotationComponent,
         ConfirmModalComponent,
+        ClueTextEditorComponent,
     ],
     bootstrap: [AppComponent]
 })

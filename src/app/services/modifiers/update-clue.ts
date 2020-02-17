@@ -6,48 +6,18 @@ import { PuzzleM } from './mutable-model/puzzle-m';
 export class UpdateClue implements IPuzzleModifier {
     constructor(
         private id: string,
-        private answer: string,
-        private comment: QuillDelta,
-        private chunks: TextChunk[],
-        private warnings: ClueValidationWarning[]) { }
+        private caption: string,
+        private text: string,
+    ) { }
 
     exec(puzzle: PuzzleM) {
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {
+            clue.caption = this.caption;
+            clue.text = this.text;
 
-            // commit the change
-            clue.answer = this.answer.trim().toUpperCase();
-            clue.comment = this.comment;
-            clue.chunks = this.chunks;
-            clue.warnings = this.warnings || [];
-
-            this.updateGridText(puzzle);
+            // TO DO: refresh/reset the dependent fields
         }
-    }
-
-    private updateGridText(puzzle: PuzzleM) {
-        if (!puzzle.grid) {
-            return;
-        }
-        // clear the grid
-        puzzle.grid.cells.forEach(cell => cell.content = "");
-
-        puzzle.clues.forEach((clue) => {
-            let answer = clue.answer.toUpperCase().replace(/[^A-Z]/g, "");
-            let index = 0;
-
-            if (answer) {
-                clue.entries.forEach((entry) => {
-                    entry.cellIds.forEach((id) => {
-                        let cell = puzzle.grid.cells.find(c => c.id === id);
-                        if (index < answer.length) {
-                            cell.content = answer.charAt(index);
-                        }
-                        index++;
-                    });
-                });
-            }
-        });
     }
 }

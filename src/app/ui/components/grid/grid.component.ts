@@ -199,7 +199,7 @@ export class GridComponent implements OnInit, AfterViewInit {
     public getDataUrl(): string {
         const canvas: HTMLCanvasElement = this.canvas.nativeElement;
         const context = canvas.getContext('2d');
-        this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
+        this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, this.gridParams);
 
         return canvas.toDataURL();
     }
@@ -209,7 +209,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
-            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options);
+            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, this.gridParams);
         }
     }
 
@@ -217,7 +217,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
         const context = canvasEl.getContext('2d');
 
-        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, cell.id);
+        let cellInfo = this.gridPainter.getCellInfo(context, this.puzzle.grid, cell.id, this.gridParams);
 
         let top = cellInfo.top - editBorderWidth;
         let left = cellInfo.left - editBorderWidth;

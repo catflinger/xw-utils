@@ -20,20 +20,27 @@
     <div class="col">
         <div *ngIf="acrossClues.length">
             <h3>Across</h3>
-
             <table>
                 <tbody>
                     <tr *ngFor="let clue of acrossClues" (click)="onClueClick(clue)">
-                        <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}"></app-clue-list-item>
+                        <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)" (close)="onEditorClose()">
+                        </app-clue-list-item>
                     </tr>
                 </tbody>
             </table>
-        </div>    </div>
+        </div>
+    </div>
 
     <div class="col">
-        <tr *ngFor="let clue of downClues" (click)="onClueClick(clue)">
-            <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}"></app-clue-list-item>
-        </tr>
+        <h3>Across</h3>
+        <table>
+            <tbody>
+                <tr *ngFor="let clue of downClues" (click)="onClueClick(clue)">
+                    <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)" (close)="onEditorClose()">
+                    </app-clue-list-item>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

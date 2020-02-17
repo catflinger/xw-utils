@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Clue } from 'src/app/model/clue';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { Subscription } from 'rxjs';
@@ -8,17 +8,21 @@ export interface ClueListItemOptions {
     showEditButtons?: boolean;
 }
 
+export type ClueListAction = "edit" | "link" | "delete";
+
 @Component({
     selector: 'app-clue-list-item',
     templateUrl: './clue-list-item.component.html',
     styleUrls: ['./clue-list-item.component.css']
 })
 export class ClueListItemComponent implements OnInit, OnDestroy {
+    private subs: Subscription[] = [];
 
     @Input() public clue: Clue;
     @Input() public options: ClueListItemOptions;
+    @Output() public action = new EventEmitter<ClueListAction>();
+
     public klasses: string[];
-    private subs: Subscription[] = [];
 
     constructor(private appSettings: AppSettingsService) { }
 
@@ -49,7 +53,11 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
         }));
     }
 
-    ngOnDestroy(){
+    public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
     }
+
+    public onAction(action: ClueListAction) {
+        this.action.emit(action);
+    } 
 }

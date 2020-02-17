@@ -16,7 +16,7 @@ export class GridDisplayInfo {
 })
 export class GridPainterService {
 
-    private gridParams: GridParameters = new GridParametersSmall();
+    //private gridParams: GridParameters = new GridParametersSmall();
 
     // TO DO: IMPORTANT!
     // review this component for XSS vunerabilities
@@ -36,7 +36,7 @@ export class GridPainterService {
     //     }
     // }
 
-    public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, cellId: string): GridDisplayInfo {
+    public getCellInfo(context: CanvasRenderingContext2D, grid: Grid, cellId: string, gridParams: GridParameters): GridDisplayInfo {
         let cell = grid.cells.find(c => c.id === cellId);
 
         if (!cell) {
@@ -44,9 +44,9 @@ export class GridPainterService {
         } else {
             // TO DO: this calculation is duplicated when drawing the grid
             // make this a common function
-            const top = this.gridParams.gridPadding - this.gridParams.borderWidth + cell.y * this.gridParams.cellSize;
-            const left = this.gridParams.gridPadding - this.gridParams.borderWidth + cell.x * this.gridParams.cellSize;
-            const size = this.gridParams.cellSize + 2 * this.gridParams.borderWidth;
+            const top = gridParams.gridPadding - gridParams.borderWidth + cell.y * gridParams.cellSize;
+            const left = gridParams.gridPadding - gridParams.borderWidth + cell.x * gridParams.cellSize;
+            const size = gridParams.cellSize + 2 * gridParams.borderWidth;
 
             return {
                 top,
@@ -58,35 +58,35 @@ export class GridPainterService {
         }
     }
 
-    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridControlOptions): void {
+    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridControlOptions, gridParams: GridParameters): void {
 
         context.setTransform(1, 0, 0, 1, 0, 0);
         context.fillStyle = "white";
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
-        context.translate(this.gridParams.gridPadding, this.gridParams.gridPadding);
+        context.translate(gridParams.gridPadding, gridParams.gridPadding);
 
         grid.cells.forEach((cell) => {
-            this.drawCell(context, cell, options);
+            this.drawCell(context, cell, options, gridParams);
         });
     }
 
-    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions) {
-        const top = cell.y * this.gridParams.cellSize;
-        const left = cell.x * this.gridParams.cellSize;
-        const size = this.gridParams.cellSize;
+    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions, gridParams: GridParameters) {
+        const top = cell.y * gridParams.cellSize;
+        const left = cell.x * gridParams.cellSize;
+        const size = gridParams.cellSize;
 
         if (!cell.light) {
             // blank-out  the cells that can't hold content
-            this.fillCell(context, left, top, this.gridParams.gridColor);
+            this.fillCell(context, left, top, gridParams.gridColor, gridParams);
 
         } else {
 
             // highlight cells that are in focus
             if (cell.highlight) {
-                this.fillCell(context, left, top, this.gridParams.highlightColor);
+                this.fillCell(context, left, top, gridParams.highlightColor, gridParams);
             } else if (options && options.showShading && cell.shading)  {
-                this.fillCell(context, left, top, cell.shading);
+                this.fillCell(context, left, top, cell.shading, gridParams);
             }
 
             // draw the caption
@@ -95,7 +95,8 @@ export class GridPainterService {
                     context,
                     left,
                     top,
-                    cell.caption.trim());
+                    cell.caption.trim(),
+                    gridParams);
             }
 
             // draw the cell context
@@ -104,26 +105,27 @@ export class GridPainterService {
                     context,
                     left,
                     top,
-                    cell.content.trim());
+                    cell.content.trim(),
+                    gridParams);
             }
 
             // draw in bars
             if (cell.rightBar) {
                 this.drawLine(
                     context,
-                    [left + size - this.gridParams.barWidth + 1, top],
-                    [left + size - this.gridParams.barWidth + 1, top + size],
-                    this.gridParams.barWidth,
-                    this.gridParams.gridColor);
+                    [left + size - gridParams.barWidth + 1, top],
+                    [left + size - gridParams.barWidth + 1, top + size],
+                    gridParams.barWidth,
+                    gridParams.gridColor);
             }
 
             if (cell.bottomBar) {
                 this.drawLine(
                     context,
-                    [left, top + size - this.gridParams.barWidth + 1],
-                    [left + size, top + size - this.gridParams.barWidth + 1],
-                    this.gridParams.barWidth,
-                    this.gridParams.gridColor);
+                    [left, top + size - gridParams.barWidth + 1],
+                    [left + size, top + size - gridParams.barWidth + 1],
+                    gridParams.barWidth,
+                    gridParams.gridColor);
             }
         }
 
@@ -135,8 +137,8 @@ export class GridPainterService {
                 context,
                 [left, top - 0.5],
                 [left + size, top - 0.5],
-                this.gridParams.borderWidth,
-                this.gridParams.gridColor);
+                gridParams.borderWidth,
+                gridParams.gridColor);
         }
 
         // draw left border for cells at the left of the grid
@@ -145,8 +147,8 @@ export class GridPainterService {
                 context,
                 [left - 0.5, top],
                 [left - 0.5, top + size],
-                this.gridParams.borderWidth,
-                this.gridParams.gridColor);
+                gridParams.borderWidth,
+                gridParams.gridColor);
         }
 
         // draw right border for all cells
@@ -154,27 +156,27 @@ export class GridPainterService {
             context,
             [left + size - 0.5, top],
             [left + size - 0.5, top + size],
-            this.gridParams.borderWidth,
-            this.gridParams.gridColor);
+            gridParams.borderWidth,
+            gridParams.gridColor);
 
         // draw bottom border for all cells
         this.drawLine(
             context,
             [left, top + size - 0.5],
             [left + size, top + size - 0.5],
-            this.gridParams.borderWidth,
-            this.gridParams.gridColor);
+            gridParams.borderWidth,
+            gridParams.gridColor);
     }
 
-    private fillCell(context: CanvasRenderingContext2D, left: number, top: number, color: string) {
+    private fillCell(context: CanvasRenderingContext2D, left: number, top: number, color: string, gridParams: GridParameters) {
         context.beginPath();
         context.fillStyle = color;
 
         context.rect(
-            left - 1 + this.gridParams.borderWidth,
-            top - 1 + this.gridParams.borderWidth,
-            this.gridParams.cellSize - this.gridParams.borderWidth * 2 + 1,
-            this.gridParams.cellSize - this.gridParams.borderWidth * 2 + 1);
+            left - 1 + gridParams.borderWidth,
+            top - 1 + gridParams.borderWidth,
+            gridParams.cellSize - gridParams.borderWidth * 2 + 1,
+            gridParams.cellSize - gridParams.borderWidth * 2 + 1);
 
         context.fill();
     }
@@ -188,30 +190,30 @@ export class GridPainterService {
         context.stroke();
     }
 
-    private drawCaption(context: CanvasRenderingContext2D, left: number, top: number, caption: string) {
-        context.font = this.gridParams.captionFont;
+    private drawCaption(context: CanvasRenderingContext2D, left: number, top: number, caption: string, gridParams: GridParameters) {
+        context.font = gridParams.captionFont;
         context.textAlign = "start";
         context.textBaseline = "hanging";
         context.direction = "ltr";
-        context.fillStyle = this.gridParams.gridColor;
+        context.fillStyle = gridParams.gridColor;
 
         context.fillText(
             caption,
-            left + this.gridParams.cellPadding,
-            top + this.gridParams.cellPadding);
+            left + gridParams.cellPadding,
+            top + gridParams.cellPadding);
     }
 
-    private drawContent(context: CanvasRenderingContext2D, left: number, top: number, content: string) {
-        context.font = this.gridParams.textFont;
+    private drawContent(context: CanvasRenderingContext2D, left: number, top: number, content: string, gridParams: GridParameters) {
+        context.font = gridParams.textFont;
         context.textAlign = "center";
         context.textBaseline = "middle";
         context.direction = "ltr";
-        context.fillStyle = this.gridParams.gridColor;
+        context.fillStyle = gridParams.gridColor;
 
         context.fillText(
             content,
-            left + this.gridParams.cellSize / 2,
-            top + this.gridParams.cellSize / 2);
+            left + gridParams.cellSize / 2,
+            top + gridParams.cellSize / 2);
     }
 
 }
