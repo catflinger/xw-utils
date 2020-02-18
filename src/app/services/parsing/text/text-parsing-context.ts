@@ -65,81 +65,52 @@ export class ParseContext implements IParseContext {
 
     public save() {
 
-        // TO DO: fill in the missing properties on teh clue: letterCount for example
-        //compileError - start again here
-
-        //let line: Line = new Line(this._clueBuffer, lineNumber);
-        //let parts: ClueTextParts = this.readCaption(this._clueBuffer);
-        //let letterCount = this.readLetterCount(this._clueBuffer);
-        let format = this.makeAnswerFormat(this._clueBuffer.letterCount);
-
-        this._clues.push(new Clue({
-            id: uuid(),
-            group: this.state,
-            caption: this._clueBuffer.caption,
-            text: this._clueBuffer.clue,
-            letterCount: this._clueBuffer.letterCount,
-            answer: "",
-            solution: "",
-            annotation: null,
-            redirect: false,
-            format,
-            comment: new QuillDelta(),
-            highlight: false,
-            entries: [],
-            warnings: [],
-            gridRefs: this._clueBuffer.gridRefs,
-            chunks: [
-                {
-                    text: this._clueBuffer.clue,
-                    isDefinition: false,
-                }
-            ],
-        }));
+        if (this._state === "across" || this._state === "down") {
+            this._clues.push(Clue.makeClue(this._clueBuffer, this._state));
+        }
         this._clueBuffer = null;
     }
 
+    // private makeAnswerFormat(letterCount: string): string {
+    //     let result: string = "";
 
-    private makeAnswerFormat(letterCount: string): string {
-        let result: string = "";
+    //     const startMarker = new RegExp(String.raw`^\(`);
+    //     const endMarker = new RegExp(String.raw`\d words\)$`);
 
-        const startMarker = new RegExp(String.raw`^\(`);
-        const endMarker = new RegExp(String.raw`\d words\)$`);
+    //     let parts: string[] = letterCount
+    //         .trim()
+    //         .replace(startMarker, "")
+    //         .trim()
+    //         .replace(endMarker, "")
+    //         .trim()
+    //         .replace(")", "")
+    //         .trim()
+    //         .split(",");
 
-        let parts: string[] = letterCount
-            .trim()
-            .replace(startMarker, "")
-            .trim()
-            .replace(endMarker, "")
-            .trim()
-            .replace(")", "")
-            .trim()
-            .split(",");
+    //     parts.forEach((part) => {
+    //         let exp = new RegExp(/(\d{1,2})|([^0-9 ])/g);
+    //         let match;
 
-        parts.forEach((part) => {
-            let exp = new RegExp(/(\d{1,2})|([^0-9 ])/g);
-            let match;
+    //         if (part.trim().length > 0) {
+    //             let partResult = "";
 
-            if (part.trim().length > 0) {
-                let partResult = "";
+    //             while ((match = exp.exec(part)) !== null) {
+    //                 if (match[1] !== null && match[1] !== undefined ) {
+    //                     let count = parseInt(match[1]);
+    //                     partResult += ",".repeat(count);
+    //                 } else {
+    //                     partResult += match[2];
+    //                 }
+    //             };
 
-                while ((match = exp.exec(part)) !== null) {
-                    if (match[1] !== null && match[1] !== undefined ) {
-                        let count = parseInt(match[1]);
-                        partResult += ",".repeat(count);
-                    } else {
-                        partResult += match[2];
-                    }
-                };
+    //             if (partResult && result) {
+    //                 result += "/";
+    //             }
+    //             result += partResult;
 
-                if (partResult && result) {
-                    result += "/";
-                }
-                result += partResult;
+    //         }
+    //     });
 
-            }
-        });
-
-        return result;
-    }
+    //     return result;
+    // }
 }

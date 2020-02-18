@@ -1,8 +1,11 @@
+import { v4 as uuid } from "uuid";
 import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
 import { GridReference } from './grid-reference';
+import { ClueM } from '../services/modifiers/mutable-model/clue-m';
+import { ClueBuffer } from '../services/parsing/text/clue-buffer';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -76,8 +79,12 @@ export class Clue implements IClue {
     }
 
     public get answerFormat(): string {
+        return Clue.makeAnswerFormat(this.letterCount);
+    }
+     
+    public static makeAnswerFormat(letterCount: string): string {
         let result = "";
-        let groups = this.letterCount.split(",");
+        let groups = letterCount.split(",");
 
         groups.forEach((group, index ) => {
             result += this.parseGroup(group);
@@ -90,7 +97,7 @@ export class Clue implements IClue {
         return result;
     }
 
-    private parseGroup(group): string {
+    private static parseGroup(group): string {
         let result = "";
         let match = null;
 
@@ -107,7 +114,37 @@ export class Clue implements IClue {
             }
         }
 
-    return result;
-}
+        return result;
+    }
+
+    public static makeClue(buffer: ClueBuffer, group: ClueGroup): Clue {
+        return new Clue({
+            id: uuid(),
+            group,
+            caption: buffer.caption,
+            text: buffer.clue,
+            letterCount: buffer.letterCount,
+            answer: "",
+            solution: "",
+            annotation: null,
+            redirect: false,
+            format: Clue.makeAnswerFormat(buffer.letterCount),
+            comment: new QuillDelta(),
+            highlight: false,
+            entries: [],
+            warnings: [],
+            gridRefs: buffer.gridRefs,
+            chunks: [
+                {
+                    text: buffer.clue,
+                    isDefinition: false,
+                }
+            ],
+        });
+    }
+
+    public toMutable(): ClueM {
+        return JSON.parse(JSON.stringify(this));
+    }
 
 }

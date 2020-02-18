@@ -1,5 +1,6 @@
 import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
+import { ClueEditModel } from '../ui/components/clue-text-editor/clue-text-editor.component';
 
 export type Base64Encoded = string;
 
@@ -80,7 +81,7 @@ export abstract class IGridReference {
     abstract readonly clueGroup: ClueGroup; 
 }
 
-export abstract class IClue {
+export abstract class IClue implements ClueEditModel {
     abstract readonly id: string;
     abstract readonly group: ClueGroup;
     abstract readonly caption: string;        // "1 across, 2 down"

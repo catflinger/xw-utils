@@ -77,6 +77,10 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onAddClue() {
+        
+    }
+
     private openEditor(clue) {
         setTimeout(
             () => {

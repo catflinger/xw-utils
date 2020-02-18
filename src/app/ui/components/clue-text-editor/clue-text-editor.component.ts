@@ -1,21 +1,32 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';
+import { ClueGroup } from 'src/app/model/interfaces';
+import { AddClue } from 'src/app/services/modifiers/add-clue';
+
+export interface ClueEditModel {
+    id: string;
+    caption: string;
+    group: ClueGroup;
+    text: string;
+}
 
 @Component({
     selector: 'app-clue-text-editor',
     templateUrl: './clue-text-editor.component.html',
     styleUrls: ['./clue-text-editor.component.css']
 })
-export class ClueTextEditorComponent implements OnInit, OnDestroy {
+export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     public form: FormGroup;
     private subs: Subscription[] = [];
 
-    @Input() clue: Clue;
+    @Input() clue: ClueEditModel;
     @Output() close = new EventEmitter<void>();
+    
+    @ViewChild("text", { static: true }) textInput: ElementRef;
 
     constructor(
         private activePuzzle:IActivePuzzle,
@@ -26,8 +37,12 @@ export class ClueTextEditorComponent implements OnInit, OnDestroy {
         this.form = this.formBuilder.group({
             caption: [this.clue.caption, Validators.required],
             text: [this.clue.text, Validators.required],
-            letterCount: [this.clue.letterCount, Validators.required],
+            group: [this.clue.group, Validators.required],
         });
+    }
+
+    public ngAfterViewInit() {
+        this.textInput.nativeElement.focus();
     }
 
     public ngOnDestroy() {
@@ -35,11 +50,20 @@ export class ClueTextEditorComponent implements OnInit, OnDestroy {
     }
 
     public onSave() {
-        this.activePuzzle.update(new UpdateClue(
-            this.clue.id, 
-            this.form.value.caption,
-            this.form.value.text,
-        ));
+        if (this.clue.id) {
+            this.activePuzzle.update(new UpdateClue(
+                this.clue.id, 
+                this.form.value.caption,
+                this.form.value.group,
+                this.form.value.text,
+            ));
+        } else {
+            this.activePuzzle.update(new AddClue(
+                this.form.value.caption,
+                this.form.value.group,
+                this.form.value.text,
+            ));
+        }
         this.close.emit();
     }
 

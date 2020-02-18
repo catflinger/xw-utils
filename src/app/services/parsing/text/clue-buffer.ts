@@ -1,5 +1,4 @@
 import { ClueGroup } from 'src/app/model/interfaces';
-import { Line } from './line';
 import { GridReference } from 'src/app/model/grid-reference';
 
 export class ClueBuffer {
