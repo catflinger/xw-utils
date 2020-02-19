@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Clue } from 'src/app/model/clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app/services/modifiers/update-clue';

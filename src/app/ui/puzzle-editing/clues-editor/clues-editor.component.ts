@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
@@ -24,7 +24,17 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     public downClues: ReadonlyArray<Clue> = [];
     private subs: Subscription[] = [];
 
-    constructor(
+    @ViewChild('confirmation', { static: true}) confirmation: ElementRef;
+    
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key === "Escape") {
+            event.stopPropagation();
+            this.activePuzzle.update(new Clear());
+        }
+    }
+
+   constructor(
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private modalService: NgbModal,
@@ -71,13 +81,22 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
             this.openEditor(clue);
         } else if (action === "delete") {
             // TO DO: prompt for confirmation first...
-            this.activePuzzle.update(new DeleteClue(clue.id));
+
+            this.modalService.open(this.confirmation, {}).result.then(
+                (result) => {
+                    if (result === "delete") {
+                        this.activePuzzle.update(new DeleteClue(clue.id));
+                    }
+                }, 
+                (reason) => {}
+            );
         }
     }
 
     public onEditorClose() {
         if (this.modalRef) {
             this.modalRef.close();
+            this.modalRef = null;
         }
     }
 

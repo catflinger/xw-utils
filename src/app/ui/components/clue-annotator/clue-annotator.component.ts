@@ -107,7 +107,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         this.form.patchValue({
             chunks: [new ClueTextChunk(0, this.clue.text, false)]
         });
-        this.warnings = this.validate();
+        this.validate();
     }
 
     public hasDefinition(): boolean {
@@ -162,7 +162,8 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         this.form.patchValue({
             answer: this.clue.solution,
         });
-        this.warnings = this.validate();
+
+        this.validate();
         this.setLatestAnswer();
     }
 
@@ -171,7 +172,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     }
 
     public onChange() {
-        this.warnings = this.validate();
+        this.validate();
         this.setLatestAnswer();
     }
 
@@ -208,48 +209,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         this.close.emit(save? "save" : "cancel");
     }
 
-    private validate(): ClueValidationWarning[] {
-        let warnings: ClueValidationWarning[] = [];
 
-        let answer: string = this.form.value.answer;
-        let comment: QuillDelta = this.form.value.comment;
-        let chunks: readonly TextChunk[] = this.form.value.chunks;
-
-        if (!answer || answer.trim().length === 0) {
-            warnings.push("missing answer");
-        }
-
-        let commentOK = false;
-
-        if (comment && comment.ops && Array.isArray(comment.ops)) {
-            let text = "";
-
-            comment.ops.forEach(op => {
-                if (op.insert) {
-                    text += op.insert;
-                }
-            });
-            commentOK = text.trim().length > 0;
-        }
-
-        if (!commentOK) {
-            warnings.push("missing comment");
-        }
-
-
-        let definitionCount = 0;
-        chunks.forEach(chunk => {
-            if (chunk.isDefinition) {
-                definitionCount++;
-            }
-        })
-
-        if (definitionCount === 0) {
-            warnings.push("missing definition");
-        }
-
-        return warnings;
-    }
 
     private clean(answer: string): string {
         return answer ?
@@ -362,5 +322,13 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         }
 
         return new Puzzle(puzzle);
+    }
+
+    private validate() {
+        this.warnings = Clue.validateAnnotation(
+            this.form.value.answer,
+            this.form.value.comment,
+            this.form.value.chunks,
+        );
     }
 }

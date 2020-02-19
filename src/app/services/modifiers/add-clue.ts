@@ -17,8 +17,10 @@ export class AddClue implements IPuzzleModifier {
             let fullText = this.caption + " " + this.text;
             const cb: ClueBuffer = new ClueBuffer(fullText, this.group);
 
-            const clue = Clue.makeClue(cb, this.group);
-            puzzle.clues.push(clue.toMutable());
+            const clue = Clue.makeClue(cb, this.group).toMutable();
+            clue.warnings = Clue.validateAnnotation(clue.answer, clue.comment, clue.chunks);
+
+            puzzle.clues.push(clue);
             new SortClues().exec(puzzle);
         }
     }

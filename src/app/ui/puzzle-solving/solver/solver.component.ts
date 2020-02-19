@@ -10,6 +10,7 @@ import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell
 import { Clear } from 'src/app/services/modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { ClearShading } from 'src/app/services/modifiers/clear-shading';
 
 @Component({
     selector: 'app-solver',
@@ -52,7 +53,7 @@ export class SolverComponent implements OnInit, OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    @HostListener('document:keypress', ['$event'])
+    @HostListener('window:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) {
         if (this.puzzle && !this.modalRef) {
             if (event.key === "Enter") {
@@ -61,6 +62,9 @@ export class SolverComponent implements OnInit, OnDestroy {
                 if (clue) { 
                     this.openEditor(clue, null);
                 }
+            } else if (event.key === "Escape") {
+                event.stopPropagation();
+                this.activePuzzle.update(new Clear());
             } else if (/[a-zA-Z]/.test(event.key)) {
                 event.stopPropagation();
                 let clue = this.puzzle.getSelectedClue();

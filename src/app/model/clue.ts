@@ -78,6 +78,45 @@ export class Clue implements IClue {
         return count;
     }
 
+    public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
+        let warnings: ClueValidationWarning[] = [];
+
+        if (!answer || answer.trim().length === 0) {
+            warnings.push("missing answer");
+        }
+
+        let commentOK = false;
+
+        if (comment && comment.ops && Array.isArray(comment.ops)) {
+            let text = "";
+
+            comment.ops.forEach(op => {
+                if (op.insert) {
+                    text += op.insert;
+                }
+            });
+            commentOK = text.trim().length > 0;
+        }
+
+        if (!commentOK) {
+            warnings.push("missing comment");
+        }
+
+
+        let definitionCount = 0;
+        chunks.forEach(chunk => {
+            if (chunk.isDefinition) {
+                definitionCount++;
+            }
+        })
+
+        if (definitionCount === 0) {
+            warnings.push("missing definition");
+        }
+
+        return warnings;
+    }
+
     public static getLetterCount(text: string): string {
         let result = "";
 
