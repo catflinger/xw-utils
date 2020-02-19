@@ -26,7 +26,6 @@ export class UpdateClue implements IPuzzleModifier {
                     text: this.text,
                     isDefinition: false,
                 }];
-                clue.
             }
         }
     }
