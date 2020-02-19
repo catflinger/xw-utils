@@ -1,5 +1,6 @@
 import { ClueGroup } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/grid-reference';
+import { Clue } from 'src/app/model/clue';
 
 export class ClueBuffer {
     private _rawText: string;
@@ -41,7 +42,7 @@ export class ClueBuffer {
     private updateAll(): void {
         // TO DO: ...
         this.setCaption();
-        this.setLetterCount();
+        this._letterCount = Clue.getLetterCount(this.rawText);
         this.setGridReferences();
     }
 
@@ -69,21 +70,6 @@ export class ClueBuffer {
 
         this._caption = match.groups.caption.trim();
         this._clue = match.groups.clue.trim();
-    }
-
-    private setLetterCount(): void {
-        let result = "";
-
-        const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
-
-        const regExp = new RegExp(expression);
-        const match = regExp.exec(this._rawText);
-
-        if (match && match.groups["letterCount"]) {
-            result = match.groups["letterCount"].trim();
-        }
-
-        this._letterCount = result;
     }
 
     private setGridReferences(): void {

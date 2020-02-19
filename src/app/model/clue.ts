@@ -78,19 +78,38 @@ export class Clue implements IClue {
         return count;
     }
 
-    public get answerFormat(): string {
-        return Clue.makeAnswerFormat(this.letterCount);
+    public static getLetterCount(text: string): string {
+        let result = "";
+
+        const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
+
+        const regExp = new RegExp(expression);
+        const match = regExp.exec(text);
+
+        if (match && match.groups["letterCount"]) {
+           
+            result = match.groups["letterCount"].trim();
+            result = result.substring(1, result.length - 1);
+        }
+
+        return result.trim();
     }
-     
-    public static makeAnswerFormat(letterCount: string): string {
+
+
+    public static getAnswerFormat(letterCount: string): string {
         let result = "";
         let groups = letterCount.split(",");
 
         groups.forEach((group, index ) => {
-            result += this.parseGroup(group);
 
-            if (index < groups.length - 1) {
-                result += "/";
+            // ignore barred grid "2 words" annotations
+            if (!/^\s*\d\s+words\s*$/i.test(group)) {
+
+                if (index > 0) {
+                    result += "/";
+                }
+                result += this.parseGroup(group);
+
             }
         });
 
@@ -128,7 +147,7 @@ export class Clue implements IClue {
             solution: "",
             annotation: null,
             redirect: false,
-            format: Clue.makeAnswerFormat(buffer.letterCount),
+            format: Clue.getAnswerFormat(buffer.letterCount),
             comment: new QuillDelta(),
             highlight: false,
             entries: [],

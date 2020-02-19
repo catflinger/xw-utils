@@ -2,6 +2,7 @@ import { IPuzzleModifier } from './puzzle-modifier';
 import { QuillDelta, ClueValidationWarning, ClueGroup } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { PuzzleM } from './mutable-model/puzzle-m';
+import { Clue } from 'src/app/model/clue';
 
 export class UpdateClue implements IPuzzleModifier {
     constructor(
@@ -19,8 +20,13 @@ export class UpdateClue implements IPuzzleModifier {
                 clue.caption = this.caption;
                 clue.group = this.group,
                 clue.text = this.text;
-    
-                // TO DO: refresh/reset the dependent fields
+                clue.letterCount = Clue.getLetterCount(this.text);
+                clue.format = Clue.getAnswerFormat(clue.letterCount);
+                clue.chunks = [{
+                    text: this.text,
+                    isDefinition: false,
+                }];
+                clue.
             }
         }
     }
