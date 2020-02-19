@@ -20,8 +20,10 @@ export interface ClueEditModel {
     styleUrls: ['./clue-text-editor.component.css']
 })
 export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy {
-    public form: FormGroup;
     private subs: Subscription[] = [];
+
+    public form: FormGroup;
+    public title = "";
 
     @Input() clue: ClueEditModel;
     @Output() close = new EventEmitter<void>();
@@ -34,10 +36,12 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     ) { }
 
     public ngOnInit() {
+        this.title = this.clue ? "new clue" : "edit clue";
+
         this.form = this.formBuilder.group({
-            caption: [this.clue.caption, Validators.required],
-            text: [this.clue.text, Validators.required],
-            group: [this.clue.group, Validators.required],
+            caption: [this.clue ? this.clue.caption : "", Validators.required],
+            text: [this.clue ? this.clue.text : "", Validators.required],
+            group: [this.clue ? this.clue.group : "", Validators.required],
         });
     }
 
@@ -50,7 +54,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public onSave() {
-        if (this.clue.id) {
+        if (this.clue) {
             this.activePuzzle.update(new UpdateClue(
                 this.clue.id, 
                 this.form.value.caption,

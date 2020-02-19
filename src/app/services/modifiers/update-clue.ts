@@ -1,6 +1,5 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { QuillDelta, ClueValidationWarning, ClueGroup } from 'src/app/model/interfaces';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { ClueGroup } from 'src/app/model/interfaces';
 import { PuzzleM } from './mutable-model/puzzle-m';
 import { Clue } from 'src/app/model/clue';
 

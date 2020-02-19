@@ -10,6 +10,7 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 import { SelectClue } from 'src/app/services/modifiers/select-clue';
 import { ClueListAction } from '../../components/clue-list-item/clue-list-item.component';
 import { ClueTextEditorComponent } from '../../components/clue-text-editor/clue-text-editor.component';
+import { DeleteClue } from 'src/app/services/modifiers/delete-clue';
 
 @Component({
     selector: 'app-clues-editor',
@@ -68,6 +69,9 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     public onAction(clue: Clue, action: ClueListAction) {
         if (action === "edit") {
             this.openEditor(clue);
+        } else if (action === "delete") {
+            // TO DO: prompt for confirmation first...
+            this.activePuzzle.update(new DeleteClue(clue.id));
         }
     }
 
@@ -78,7 +82,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     }
 
     public onAddClue() {
-        
+        this.openEditor(null);
     }
 
     private openEditor(clue) {
