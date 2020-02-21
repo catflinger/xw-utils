@@ -8,6 +8,7 @@ export class AnnotateClue implements IPuzzleModifier {
     constructor(
         private id: string,
         private answer: string,
+        private answerAlt: string,
         private comment: QuillDelta,
         private chunks: TextChunk[],
         private warnings: ClueValidationWarning[]) { }
@@ -17,6 +18,7 @@ export class AnnotateClue implements IPuzzleModifier {
 
         if (clue) {
             clue.answer = this.answer.trim().toUpperCase();
+            clue.answerAlt = this.answerAlt.trim().toUpperCase();
             clue.comment = this.comment;
             clue.chunks = this.chunks;
             clue.warnings = this.warnings || [];

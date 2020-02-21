@@ -18,8 +18,9 @@ import { ClearShading } from 'src/app/services/modifiers/clear-shading';
     styleUrls: ['./solver.component.css']
 })
 export class SolverComponent implements OnInit, OnDestroy {
-    private modalRef: NgbModalRef = null;
     public puzzle: Puzzle = null;
+
+    private modalRef: NgbModalRef = null;
     private subs: Subscription[] = [];
 
     constructor(
@@ -118,6 +119,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                     this.modalRef = this.modalService.open(ClueAnnotationComponent, { backdrop: "static"});
                     this.modalRef.componentInstance.clueId = clue.id;
                     this.modalRef.componentInstance.starterText = starterText;
+                    this.modalRef.componentInstance.options = { modifyAnswers: this.puzzle.publishOptions.modifyAnswers};
                     this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
                         this.modalRef.close();
                         this.modalRef = null;

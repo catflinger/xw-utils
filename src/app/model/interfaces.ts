@@ -12,7 +12,7 @@ export type ClueValidationWarning = "missing answer" | "missing comment" | "miss
 export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quiptic" | "ft" | "independent" | "ios" | "pdf" | "text" | "grid" | "grid-text";  
 
 export type Layouts = "table" | "list";
-export type Spacings = "small" | "medium" | "large";
+export type Spacing = "small" | "medium" | "large";
 
 export type GridNavigation = "left" | "right" | "up" | "down" | "absolute" | null;
 export type WritingDirection = "static" | "forward" | "backward";
@@ -87,7 +87,8 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly caption: string;        // "1 across, 2 down"
     abstract readonly text: string;           // "How to train a dragon (5, 4)"
     abstract readonly letterCount: string;    // "(5, 4)"
-    abstract readonly answer: string;
+    abstract readonly answer: string;         // the answer entered int the grid
+    abstract readonly answerAlt: string;      // the answer displayed in the blog (optional)
     abstract readonly solution: string;
     abstract readonly annotation: string;
     abstract readonly redirect: boolean;
@@ -183,7 +184,8 @@ export abstract class IPublishOptions {
     abstract readonly clueStyle: ITextStyle;
     abstract readonly definitionStyle: ITextStyle;
     abstract readonly includeGrid: boolean;
-    abstract readonly spacing: Spacings;
+    abstract readonly spacing: Spacing;
+    abstract readonly modifyAnswers: boolean;
 }
 
 export abstract class ITextStyle {

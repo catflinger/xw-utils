@@ -1,0 +1,34 @@
+<div class="row" *ngIf="!showOptions">
+    <div class="col text-right">
+        <button type="button" class="btn btn-link" (click)="onPuzzleOptions()">
+            <i class="fas fa-cog"></i> Show options
+        </button>
+    </div>
+</div>
+
+<div *ngIf="showOptions">
+    <div class="row">
+        <div class="col">
+
+            <div class="card w-100pc mb-5">
+                <div class="card-header">
+                    <h5 class="float-left">Puzzle Options</h5>
+                    <button type="button" class="btn btn-link float-right" (click)="onPuzzleOptions()">
+                        Hide options
+                    </button>
+        
+                </div>
+                <div class="card-body">
+                    <div class="form-check mt-3">
+                        <input type="checkbox" class="form-check-input" (change)="onAnswerModificationChange()" [(ngModel)]="modifyAnswers">
+                        <label class="form-check-label">Answers require modification before entry in the grid </label>
+                    </div>
+                    <div class="form-group mt-3">
+                        There is a mistake in the clue text <button type="button" class="btn btn-link" (click)="onEdit()">Edit the clues</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

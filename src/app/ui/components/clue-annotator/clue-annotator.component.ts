@@ -29,6 +29,10 @@ class AnswerTextChunk {
     }
 }
 
+export interface ClueAnnotatorOptions {
+    modifyAnswers?: boolean;
+}
+
 @Component({
     selector: 'app-clue-annotator',
     templateUrl: './clue-annotator.component.html',
@@ -37,6 +41,7 @@ class AnswerTextChunk {
 export class ClueAnnotationComponent implements OnInit, OnDestroy {
     @Input() clueId: string;
     @Input() starterText: string;
+    @Input() options: ClueAnnotatorOptions;
 
     @Output() close = new EventEmitter<string>();
 
@@ -63,6 +68,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.form = this.formBuilder.group({
             answer: [""],
+            answerAlt: [""],
             comment: [""],
             chunks: [[]],
         });
@@ -78,6 +84,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
                         this.form.patchValue({
                             comment: this.clue.comment,
                             answer: this.starterText ? this.starterText : this.clue.answer,
+                            answerAlt: this.clue.answerAlt,
                             chunks: this.clue.chunks,
                         });
                         this.warnings = [];
@@ -199,6 +206,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         if (save) {
             this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
+                this.form.value.answer,
                 this.form.value.answer,
                 this.form.value.comment,
                 this.form.value.chunks,
