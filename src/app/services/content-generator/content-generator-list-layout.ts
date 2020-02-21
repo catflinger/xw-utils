@@ -63,17 +63,23 @@ export class ContentGeneratorListLayout implements ContentGenerator {
         return markup;
     }
 
-    private writeClue(clue: Clue, publishOptions: PublishOptions) {
+    private writeClueItem(content: string) {
         const markup = `
         <div style="margin-top:${this.marginSize}">
-            ${this.writeText(clue.caption, publishOptions.clueStyle)} ${this.writeClueText(clue.chunks, publishOptions)}
+            ${content}
         </div>
-        <div style="margin-top:${this.marginSize}">
-            ${this.writeText(clue.answer, publishOptions.answerStyle)}
-        </div>
-        <div style="margin-top:${this.marginSize}">
-            ${this.writeQuillDelta(clue.comment)}
-        </div>`;
+        `;
+        return markup;
+    }
+
+    private writeClue(clue: Clue, publishOptions: PublishOptions) {
+        let markup = this.writeClueItem(this.writeText(clue.caption, publishOptions.clueStyle) + this.writeClueText(clue.chunks, publishOptions));
+        if (publishOptions.modifyAnswers && clue.answerAlt) {
+            markup += this.writeClueItem("Answer: " + this.writeText(clue.answerAlt, publishOptions.answerStyle));
+        }
+        let caption = publishOptions.modifyAnswers ? "Grid entry: " : "";
+        markup += this.writeClueItem(caption + this.writeText(clue.answer, publishOptions.answerStyle));
+        markup += this.writeClueItem(this.writeQuillDelta(clue.comment));
 
         return markup;
     }

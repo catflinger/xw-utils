@@ -29,51 +29,44 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
     public getContent(puzzle: Puzzle, gridUrl: string): string {
         this.tdPadding = paddingSizes[puzzle.publishOptions.spacing];
 
-        this.addHtml("<div>");
-        this.addQuillDelta(puzzle.notes.header);
-        this.addHtml("<!-- MORE -->");
-        this.addQuillDelta(puzzle.notes.body);
+        this.addHtml("<div>").newline();
+        this.addQuillDelta(puzzle.notes.header).newline();
+        this.addHtml("<!-- MORE -->").newline();
+        this.addQuillDelta(puzzle.notes.body).newline();
 
         if (gridUrl) {
-            this.addHtml("<div>");
+            this.addHtml("<div>").newline();
             this.addHtml(`<img src="${gridUrl}" alt="image of grid">`);
-            this.addHtml("</div>");
+            this.addHtml("</div>").newline();
         }
 
-        this.addHtml("<table>")
-        this.addHtml("<tbody>")
+        this.addHtml("<table style='border-collapse: collapse'>").newline()
+        this.addHtml("<tbody>").newline()
 
-        this.addHtml("<tr>");
-        this.openTD(3);
-        this.addText("ACROSS");
-        this.closeTD();
-        this.addHtml("</tr>");
+        this.addClues(puzzle.clues.filter(c => c.group === "across"), puzzle.publishOptions, "ACROSS");
+        this.addClues(puzzle.clues.filter(c => c.group === "down"), puzzle.publishOptions, "DOWN");
 
-        this.addClues(puzzle.clues.filter(c => c.group === "across"), puzzle.publishOptions);
-
-        this.addHtml("<tr>");
-        this.openTD(3);
-        this.addText("DOWN");
-        this.closeTD();
-        this.addHtml("</tr>");
-
-        this.addClues(puzzle.clues.filter(c => c.group === "down"), puzzle.publishOptions);
-
-        this.addHtml("</tbody>")
-        this.addHtml("</table>")
+        this.addHtml("</tbody>").newline()
+        this.addHtml("</table>").newline()
 
         this.addQuillDelta(puzzle.notes.footer);
-        this.addHtml("</div>");
+        this.addHtml("</div>").newline();
 
         return this.buffer;
 
     }
 
-    private addHtml(html: string) {
-        this.buffer = this.buffer.concat(html);
+    private newline(): ContentGeneratorTableLayout {
+        this.buffer = this.buffer.concat("\n");
+        return this;
     }
 
-    private addText(text: string, textStyle?: TextStyle) {
+    private addHtml(html: string): ContentGeneratorTableLayout {
+        this.buffer = this.buffer.concat(html);
+        return this;
+    }
+
+    private addText(text: string, textStyle?: TextStyle): ContentGeneratorTableLayout {
         let formattedText: string = "";
 
         if (textStyle) {
@@ -82,9 +75,10 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
             formattedText = escape(text);
         }
         this.buffer = this.buffer.concat(formattedText);
+        return this;
     }
 
-    private addQuillDelta(delta: QuillDelta) {
+    private addQuillDelta(delta: QuillDelta): ContentGeneratorTableLayout {
 
         if (delta && delta.ops && delta.ops.length) {
             const converter = new QuillDeltaToHtmlConverter(
@@ -93,47 +87,74 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
 
             this.buffer = this.buffer.concat(converter.convert());
         }
+        return this;
     }
 
-    private addClues(clues: Clue[], publishOptions: PublishOptions) {
+    private addClues(clues: Clue[], publishOptions: PublishOptions, label: string): ContentGeneratorTableLayout {
+
+        if (publishOptions.modifyAnswers) {
+            this.addHtml("<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'>").newline();
+            this.openTD().addText(label).closeTD();
+            this.openTD().addText("answer").closeTD();
+            this.openTD().addText("entry").closeTD();
+            this.openTD().addText("annotation").closeTD();
+            this.addHtml("</tr>").newline();
+        } else {
+            this.addHtml("<tr>").newline();
+            this.openTD(3).addText(label).closeTD();
+            this.addHtml("</tr>").newline();
+        }
+
+
+
         clues.forEach(clue => this.addClue(clue, publishOptions));
+        return this;
     }
 
     private addClue(clue: Clue, publishOptions: PublishOptions) {
 
         // add a row for the clue and answer
-        this.addHtml("<tr>");
+        this.addHtml("<tr>").newline();
 
         this.openTD();
         this.addText(clue.caption, publishOptions.answerStyle);
-        this.closeTD();
+        this.closeTD().newline();
+
+        if (publishOptions.modifyAnswers) {
+            this.openTD();
+            this.addText(clue.answerAlt, publishOptions.answerStyle);
+            this.closeTD().newline();
+        }
 
         this.openTD();
         this.addText(clue.answer, publishOptions.answerStyle);
-        this.closeTD();
+        this.closeTD().newline();
 
         this.openTD();
         this.addClueText(clue.chunks, publishOptions);
-        this.closeTD();
+        this.closeTD().newline();
 
-        this.addHtml("</tr>");
+        this.addHtml("</tr>").newline();
 
         // add a row for the comments
-        this.addHtml("<tr>");
+        this.addHtml("<tr>").newline();
 
-        this.openTD(2);
+        const colspan = publishOptions.modifyAnswers ? 3 : 2;
+
+        this.openTD(colspan);
         this.addHtml("&nbsp;")
-        this.closeTD();
+        this.closeTD().newline();
 
         this.openTD();
         this.addQuillDelta(clue.comment);
-        this.closeTD();
+        this.closeTD().newline();
 
-        this.addHtml("</tr>");
+        this.addHtml("</tr>").newline();
 
+        return this;
     }
 
-    private addClueText(chunks: readonly TextChunk[], publishOptions: PublishOptions) {
+    private addClueText(chunks: readonly TextChunk[], publishOptions: PublishOptions): ContentGeneratorTableLayout {
 
         chunks.forEach(chunk => {
             let textStyle = chunk.isDefinition ?
@@ -142,16 +163,17 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
 
             this.addHtml(`<span style="${textStyle.toCssStyleString()}">${chunk.text}</span>`);
         });
+        return this;
     }
 
-    private openTD(colspan?: number) {
+    private openTD(colspan?: number): ContentGeneratorTableLayout {
         const attr = colspan ? `colspan="${colspan}"` : "";
         this.buffer = this.buffer.concat(`<td ${attr} style='padding: ${this.tdPadding};'>`);
+        return this;
     }
 
-    private closeTD() {
+    private closeTD(): ContentGeneratorTableLayout {
         this.buffer = this.buffer.concat("</td>");
+        return this;
     }
-
-
 }

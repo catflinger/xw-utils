@@ -5,12 +5,14 @@ import { PublicationService, PublishGridResult } from 'src/app/services/publicat
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Puzzle } from 'src/app/model/puzzle';
-import { ApiSymbols, PublishStatus } from 'src/app/services/common';
+import { ApiSymbols, PublishStatus, ContentGenerator } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { ContentGeneratorListLayout } from 'src/app/services/content-generator/content-generator-list-layout';
+import { ContentGeneratorTableLayout } from 'src/app/services/content-generator/content-generator-table-layout';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -25,6 +27,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public alreadyPublished = false;
     public gridOnly = false;
     public action: PublishActions = "nothing";
+    public debugContent: string ="";
 
     private subs: Subscription[] = [];
 
@@ -67,6 +70,8 @@ export class PublishComponent implements OnInit, OnDestroy {
                             if (this.gridOnly) {
                                 this.action = "copy-grid";
                             }
+
+                            this.debugContent = this.getContentForDebug(puzzle, "http://aplace/aresource");
                         }
                     }
                 )
@@ -187,4 +192,13 @@ export class PublishComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    private getContentForDebug(puzzle: Puzzle, gridUrl: string) {
+        let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
+            new ContentGeneratorListLayout():
+            new ContentGeneratorTableLayout();
+
+            return generator.getContent(puzzle, gridUrl);
+    }
+
 }

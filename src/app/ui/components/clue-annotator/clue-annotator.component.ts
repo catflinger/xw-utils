@@ -207,7 +207,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
                 this.form.value.answer,
-                this.form.value.answer,
+                this.form.value.answerAlt,
                 this.form.value.comment,
                 this.form.value.chunks,
                 this.warnings,
