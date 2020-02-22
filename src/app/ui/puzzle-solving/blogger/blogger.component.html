@@ -10,6 +10,9 @@
                         <td class="font-weight-bold">
                             {{clue.answer}}
                         </td>
+                        <td class="font-weight-bold" *ngIf="puzzle.publishOptions.modifyAnswers">
+                            {{clue.answerAlt}}
+                        </td>
                         <td>
                             <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
                         </td>
@@ -24,9 +27,14 @@
                     </tr>
 
                     <tr *ngIf="clue.highlight">
-                        <td colspan="5">
+                        <td [attr.colspan]="puzzle.publishOptions.modifyAnswers ? 6 : 5">
                             <div class="border rounded">
-                                <app-clue-annotator [clueId]="clue.id" (close)="onEditorClose(clue, $event)"></app-clue-annotator>
+                                <app-clue-annotator 
+                                    [clueId]="clue.id" 
+                                    (close)="onEditorClose(clue, $event)"
+                                    [options] = "{modifyAnswers: this.puzzle.publishOptions.modifyAnswers}"
+                                    >
+                                </app-clue-annotator>
                             </div>
                         </td>
                     </tr>
