@@ -92,21 +92,13 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
 
     private addClues(clues: Clue[], publishOptions: PublishOptions, label: string): ContentGeneratorTableLayout {
 
-        if (publishOptions.modifyAnswers) {
-            this.addHtml("<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'>").newline();
-            this.openTD().addText(label).closeTD();
-            this.openTD().addText("answer").closeTD();
-            this.openTD().addText("entry").closeTD();
-            this.openTD().addText("annotation").closeTD();
-            this.addHtml("</tr>").newline();
-        } else {
-            this.addHtml("<tr>").newline();
-            this.openTD(3).addText(label).closeTD();
-            this.addHtml("</tr>").newline();
-        }
+        // add an ACROSS / DOWN heading
+        let colspan = publishOptions.textCols.length + 2;
+        this.addHtml("<tr>").newline();
+        this.openTD(colspan).addText(label).closeTD();
+        this.addHtml("</tr>").newline();
 
-
-
+        // add the rows for each clue
         clues.forEach(clue => this.addClue(clue, publishOptions));
         return this;
     }
@@ -120,15 +112,21 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
         this.addText(clue.caption, publishOptions.answerStyle);
         this.closeTD().newline();
 
-        if (publishOptions.modifyAnswers) {
-            this.openTD();
-            this.addText(clue.answerAlt, publishOptions.answerStyle);
-            this.closeTD().newline();
-        }
+        // if (publishOptions.modifyAnswers) {
+        //     this.openTD();
+        //     this.addText(clue.answerAlt, publishOptions.answerStyle);
+        //     this.closeTD().newline();
+        // }
 
-        this.openTD();
-        this.addText(clue.answer, publishOptions.answerStyle);
-        this.closeTD().newline();
+        // this.openTD();
+        // this.addText(clue.answer, publishOptions.answerStyle);
+        // this.closeTD().newline();
+
+        publishOptions.textCols.forEach((col, index) => {
+            this.openTD();
+            this.addText(clue.answers[index] || "", publishOptions.answerStyle);
+            this.closeTD().newline();
+        });
 
         this.openTD();
         this.addClueText(clue.chunks, publishOptions);
@@ -139,7 +137,7 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
         // add a row for the comments
         this.addHtml("<tr>").newline();
 
-        const colspan = publishOptions.modifyAnswers ? 3 : 2;
+        const colspan = publishOptions.textCols.length + 1;
 
         this.openTD(colspan);
         this.addHtml("&nbsp;")

@@ -15,6 +15,7 @@ import { ApiSymbols } from './common';
 import { UpdateInfo } from './modifiers/update-info';
 import { Grid } from '../model/grid';
 import { AddGrid } from './modifiers/add-grid';
+import { TextColumnM } from './modifiers/mutable-model/text-column-m';
 
 
 // Note: using abstract classes rather than interfaces to enable them to be used
@@ -306,28 +307,38 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 footer: new QuillDelta(),
             },
             publishOptions: {
-                clueStyle: {
-                    color: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                },
-                answerStyle: {
-                    color: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                },
-                definitionStyle: {
-                    color: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                },
+                textStyles: [
+                    {
+                        name: "answer",
+                        color: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                    },
+                    {
+                        name: "clue",
+                        color: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                    },
+                    {
+                        name: "definition",
+                        color: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                    },
+                ],
+                textCols: [
+                    {
+                        caption: "",
+                        style: "answer",
+                    }
+                ],
                 includeGrid: false,
                 layout: "table",
                 spacing: "small",
-                modifyAnswers: false,
             },
         };
     }

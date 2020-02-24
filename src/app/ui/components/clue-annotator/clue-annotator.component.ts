@@ -9,12 +9,12 @@ import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { TipInstance, TipStatus } from '../tip/tip-instance';
 import { Clear } from 'src/app/services/modifiers/clear';
 import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app/services/modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
+import { TextColumn } from 'src/app/model/text-column';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -30,7 +30,7 @@ class AnswerTextChunk {
 }
 
 export interface ClueAnnotatorOptions {
-    modifyAnswers?: boolean;
+    textCols?: ReadonlyArray<TextColumn>;
 }
 
 @Component({
@@ -68,7 +68,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.form = this.formBuilder.group({
             answer: [""],
-            answerAlt: [""],
             comment: [""],
             chunks: [[]],
         });
@@ -83,8 +82,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
                         this.form.patchValue({
                             comment: this.clue.comment,
-                            answer: this.starterText ? this.starterText : this.clue.answer,
-                            answerAlt: this.clue.answerAlt,
+                            answer: this.starterText ? this.starterText : this.clue.answers[0],
                             chunks: this.clue.chunks,
                         });
                         this.warnings = [];
@@ -207,7 +205,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
                 this.form.value.answer,
-                this.form.value.answerAlt,
                 this.form.value.comment,
                 this.form.value.chunks,
                 this.warnings,
@@ -312,7 +309,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
                 let index = 0;
 
                 if (clue.id !== clueId) {
-                    answer = clue.answer.toUpperCase().replace(/[^A-Z]/g, "");
+                    answer = clue.answers[0].toUpperCase().replace(/[^A-Z]/g, "");
                 }
 
                 if (answer) {

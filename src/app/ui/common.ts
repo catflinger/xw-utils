@@ -1,6 +1,6 @@
 export type AlertType = "info" | "danger";
 
-export type TextStyleName = "answerStyle" | "clueStyle" | "definitionStyle";
+//export type TextStyleName = "answerStyle" | "clueStyle" | "definitionStyle";
 
 export type NavAction = "solve" | "login";
 

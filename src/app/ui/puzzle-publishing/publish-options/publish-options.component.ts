@@ -6,7 +6,7 @@ import { TextStyle } from 'src/app/model/text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
-import { UpdatePublsihOptions } from 'src/app/services/modifiers/update-publish-options';
+import { UpdatePublsihOptions, PublishOptionsUpdate } from 'src/app/services/modifiers/update-publish-options';
 import { PublishOptionsM } from 'src/app/services/modifiers/mutable-model/publish-options-m';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -20,7 +20,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public sample: Clue[];
-    public publishOptions: PublishOptionsM = null;
+    public publishOptions: PublishOptionsUpdate = null;
     
     private subs: Subscription[] = [];
 

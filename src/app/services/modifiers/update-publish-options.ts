@@ -1,12 +1,15 @@
 import { IPuzzleModifier } from './puzzle-modifier';
 import { PuzzleM } from './mutable-model/puzzle-m';
 import { Layouts, Spacing } from 'src/app/model/interfaces';
+import { TextStyle } from 'src/app/model/text-style';
+import { TextColumn } from 'src/app/model/text-column';
 
 export type PublishOptionsUpdate = { 
     includeGrid?: boolean; 
     layout?: Layouts; 
     spacing?: Spacing;
-    modifyAnswers?: boolean;
+    textStyles?: ReadonlyArray<TextStyle>;
+    textCols?: ReadonlyArray<TextColumn>;
 };
 
 export class UpdatePublsihOptions implements IPuzzleModifier {
@@ -29,8 +32,12 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
             puzzle.publishOptions.spacing = this.options.spacing;
         }
 
-        if (typeof this.options.modifyAnswers === "boolean") {
-            puzzle.publishOptions.modifyAnswers = this.options.modifyAnswers;
+        if (typeof this.options.textStyles !== "undefined") {
+            puzzle.publishOptions.textStyles = JSON.parse(JSON.stringify(this.options.textStyles));
+        }
+
+        if (typeof this.options.textCols !== "undefined") {
+            puzzle.publishOptions.textCols = JSON.parse(JSON.stringify(this.options.textCols));
         }
 
     }

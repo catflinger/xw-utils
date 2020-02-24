@@ -19,7 +19,7 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     constructor(private activePuzzle: IActivePuzzle) { }
 
     public ngOnInit() {
-        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => this.modifyAnswers = puzzle.publishOptions.modifyAnswers));
+        //this.subs.push(this.activePuzzle.observe().subscribe(puzzle => this.modifyAnswers = puzzle.publishOptions.modifyAnswers));
     }
 
     public  ngOnDestroy() {
@@ -35,6 +35,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     }
 
     public onAnswerModificationChange(){
-        this.activePuzzle.update(new UpdatePublsihOptions({modifyAnswers: this.modifyAnswers}))
+        //this.activePuzzle.update(new UpdatePublsihOptions({modifyAnswers: this.modifyAnswers}))
     }
 }

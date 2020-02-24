@@ -17,11 +17,8 @@
                 <td [ngClass]="tdClass">
                     <span class="text-nowrap" [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
                 </td>
-                <td [ngClass]="tdClass" *ngIf="publishOptions.modifyAnswers">
-                    <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answerAlt}} </span>
-                </td>
                 <td [ngClass]="tdClass">
-                    <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answer}} </span>
+                    <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answers[0]}} </span>
                 </td>
                 <td [ngClass]="tdClass">
                     <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
@@ -44,13 +41,8 @@
         <div [ngStyle]="makeClueStyle()" [ngClass]="tdClass">
             <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
         </div>
-        <div class="text-nowrap" [ngClass]="tdClass" *ngIf="publishOptions.modifyAnswers && clue.answerAlt">
-            <span>Answer: </span>
-            <span [ngStyle]="makeAnswerStyle()">{{clue.answerAlt}}</span>
-        </div>
         <div class="text-nowrap" [ngClass]="tdClass">
-            <span *ngIf="publishOptions.modifyAnswers">Entry: </span>
-            <span [ngStyle]="makeAnswerStyle()">{{clue.answer}}</span>
+            <span [ngStyle]="makeAnswerStyle()">{{clue.answers[0]}}</span>
         </div>
         <div [ngClass]="tdClass">
             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>

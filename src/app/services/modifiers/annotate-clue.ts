@@ -7,8 +7,7 @@ import { SyncGridContent } from './sync-grid-content';
 export class AnnotateClue implements IPuzzleModifier {
     constructor(
         private id: string,
-        private answer: string,
-        private answerAlt: string,
+        private answers: ReadonlyArray<string>,
         private comment: QuillDelta,
         private chunks: TextChunk[],
         private warnings: ClueValidationWarning[]) { }
@@ -17,8 +16,13 @@ export class AnnotateClue implements IPuzzleModifier {
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {
-            clue.answer = this.answer.trim().toUpperCase();
-            clue.answerAlt = this.answerAlt.trim().toUpperCase();
+
+            clue.answers.forEach((answer, index) => {
+                clue.answers = [];
+                let ans = index === 0 ? answer.trim().toUpperCase() : answer.trim();
+                clue.answers.push(ans);
+            });
+            
             clue.comment = this.comment;
             clue.chunks = this.chunks;
             clue.warnings = this.warnings || [];

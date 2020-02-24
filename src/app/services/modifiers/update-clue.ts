@@ -26,7 +26,7 @@ export class UpdateClue implements IPuzzleModifier {
                     isDefinition: false,
                 }];
 
-                clue.warnings = Clue.validateAnnotation(clue.answer, clue.comment, clue.chunks);
+                clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
             }
         }
     }

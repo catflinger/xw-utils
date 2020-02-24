@@ -44,7 +44,7 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
             if (validationRequired) {
                 let isSolved = detailsRequired ? 
                     this.clue.warnings.length === 0 :
-                    this.clue.answer.length > 0;
+                    this.clue.answers[0].length > 0;
     
                 if (isSolved && this.options.showSolved) {
                     this.klasses.push("solved");

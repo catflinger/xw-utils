@@ -13,8 +13,8 @@ export class Clue implements IClue {
     public readonly caption: string;        // "1 across, 2 down"
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
-    public readonly answer: string;
-    public readonly answerAlt: string;
+    public readonly answers: ReadonlyArray<string>;
+    //public readonly answerAlt: string;
     public readonly solution: string;
     public readonly annotation: string;
     public readonly redirect: boolean;
@@ -31,13 +31,21 @@ export class Clue implements IClue {
         this.caption = data.caption;
         this.text = data.text;
         this.letterCount = data.letterCount;
-        this.answer = data.answer;
-        this.answerAlt = data.answerAlt || "";
         this.solution = data.solution;
         this.annotation = data.annotation;
         this.format = data.format;
         this.comment = data.comment;
         this.highlight = data.highlight;
+
+        if (data.answers) {
+            let answers = [];
+            data.answers.forEach(a => answers.push(a));
+            this.answers = answers;
+        } else if (data.answer) {
+            this.answers = [data.answer];
+        } else {
+            this.answers = [""];
+        };
 
         if (typeof data.group === "string" && (data.group === "across" || data.group === "down")) {
             this.group = data.group;

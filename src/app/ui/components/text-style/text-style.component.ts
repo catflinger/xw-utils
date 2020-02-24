@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TextStyleName } from '../../common';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Puzzle } from 'src/app/model/puzzle';
 import { UpdatePublsihOptionTextStyle } from 'src/app/services/modifiers/update-publish-option-text-style';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { TextStyleName } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-text-style',

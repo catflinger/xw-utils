@@ -1,7 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
-import { TextStyleName } from 'src/app/ui/common';
 import { PuzzleM } from './mutable-model/puzzle-m';
+import { TextStyleName } from 'src/app/model/interfaces';
 
 export class UpdatePublsihOptionTextStyle implements IPuzzleModifier {
     constructor(

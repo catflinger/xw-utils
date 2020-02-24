@@ -1,12 +1,14 @@
-import { ITextStyle } from './interfaces';
+import { ITextStyle, TextStyleName } from './interfaces';
 
 export class TextStyle implements ITextStyle {
+        public readonly name: TextStyleName;
         public readonly color: string;
         public readonly bold: boolean;
         public readonly italic: boolean;
         public readonly underline: boolean;
 
         constructor(data) {
+            this.name = data.name;
             this.color = data.color;
             this.bold = data.bold;
             this.italic = data.italic;

@@ -13,6 +13,7 @@ export type PuzzleProvider = "cryptic" | "prize" | "azed" | "everyman" | "quipti
 
 export type Layouts = "table" | "list";
 export type Spacing = "small" | "medium" | "large";
+export type TextStyleName = "answer" | "clue" | "definition";
 
 export type GridNavigation = "left" | "right" | "up" | "down" | "absolute" | null;
 export type WritingDirection = "static" | "forward" | "backward";
@@ -87,8 +88,8 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly caption: string;        // "1 across, 2 down"
     abstract readonly text: string;           // "How to train a dragon (5, 4)"
     abstract readonly letterCount: string;    // "(5, 4)"
-    abstract readonly answer: string;         // the answer entered int the grid
-    abstract readonly answerAlt: string;      // the answer displayed in the blog (optional)
+    //abstract readonly answer: string;         // the answer entered int the grid
+    abstract readonly answers: ReadonlyArray<string>;  // additional columns displayed in the blog (optional)
     abstract readonly solution: string;
     abstract readonly annotation: string;
     abstract readonly redirect: boolean;
@@ -180,20 +181,31 @@ export abstract class IPuzzleInfo {
 
 export abstract class IPublishOptions {
     abstract readonly layout: Layouts;
-    abstract readonly answerStyle: ITextStyle;
-    abstract readonly clueStyle: ITextStyle;
-    abstract readonly definitionStyle: ITextStyle;
+    abstract readonly textCols: ReadonlyArray<ITextColumn>;
+    abstract readonly textStyles: ReadonlyArray<ITextStyle>;
+    
+    // abstract readonly answerStyle: ITextStyle;
+    // abstract readonly clueStyle: ITextStyle;
+    // abstract readonly definitionStyle: ITextStyle;
+    
     abstract readonly includeGrid: boolean;
     abstract readonly spacing: Spacing;
-    abstract readonly modifyAnswers: boolean;
+
+    //abstract readonly modifyAnswers: boolean;
 }
 
 export abstract class ITextStyle {
+    abstract readonly name: TextStyleName; 
     abstract readonly color: string;
     abstract readonly bold: boolean;
     abstract readonly italic: boolean;
     abstract readonly underline: boolean;
 }
+
+export abstract class ITextColumn {
+    abstract readonly caption: string;
+    abstract readonly style: TextStyleName;
+} 
 
 export abstract class IPuzzleAnnotation {
     abstract readonly header: ReadonlyQuillDelta;
