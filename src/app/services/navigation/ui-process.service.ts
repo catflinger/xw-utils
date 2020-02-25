@@ -3,13 +3,13 @@ import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../../ui/services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
-import { LinkCluesToGrid } from 'src/app/services/modifiers/clue-modifiers/link-clues-to-grid';
-import { ParseText } from 'src/app/services/modifiers/parsing-modifiers/parse-text';
-import { RenumberGid } from 'src/app/services/modifiers/grid-modifiers/renumber-grid';
+import { LinkCluesToGrid } from 'src/app//modifiers/clue-modifiers/link-clues-to-grid';
+import { ParseText } from 'src/app//modifiers/parsing-modifiers/parse-text';
+import { RenumberGid } from 'src/app//modifiers/grid-modifiers/renumber-grid';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
 import { ProviderService } from 'src/app/services/provider.service';
-import { CreateClues } from '../modifiers/clue-modifiers/create-clues';
-import { InitAnnotationWarnings } from '../modifiers/puzzle-modifiers/init-annotation-warnings';
+import { CreateClues } from 'src/app/modifiers/clue-modifiers/create-clues';
+import { InitAnnotationWarnings } from 'src/app/modifiers/puzzle-modifiers/init-annotation-warnings';
 
 @Injectable({
     providedIn: 'root'

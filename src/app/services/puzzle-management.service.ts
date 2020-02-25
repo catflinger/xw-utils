@@ -5,17 +5,16 @@ import { PuzzleInfo } from '../model/puzzle-info';
 import { LocalStorageService } from './local-storage.service';
 import { Puzzle } from '../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
-import { Clear } from './modifiers/puzzle-modifiers/clear';
-import { IPuzzleModifier } from './modifiers/puzzle-modifiers/puzzle-modifier';
+import { Clear } from '../modifiers/puzzle-modifiers/clear';
+import { IPuzzleModifier } from '../modifiers/puzzle-modifiers/puzzle-modifier';
 import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider, IPuzzleSummary } from '../model/interfaces';
-import { PuzzleM } from './modifiers/mutable-model/puzzle-m';
-import { InitAnnotationWarnings } from './modifiers/puzzle-modifiers/init-annotation-warnings';
+import { PuzzleM } from '../modifiers/mutable-model/puzzle-m';
+import { InitAnnotationWarnings } from '../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../ui/services/app.service';
 import { ApiSymbols } from './common';
-import { UpdateInfo } from './modifiers/puzzle-modifiers/update-info';
+import { UpdateInfo } from '../modifiers/puzzle-modifiers/update-info';
 import { Grid } from '../model/grid';
-import { AddGrid } from './modifiers/grid-modifiers/add-grid';
-import { TextColumnM } from './modifiers/mutable-model/text-column-m';
+import { AddGrid } from '../modifiers/grid-modifiers/add-grid';
 
 
 // Note: using abstract classes rather than interfaces to enable them to be used

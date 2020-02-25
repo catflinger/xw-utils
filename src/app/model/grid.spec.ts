@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { GridM } from '../services/modifiers/mutable-model/grid-m';
-import { GridCellM } from '../services/modifiers/mutable-model/grid-cell-m';
+import { GridM } from '..//modifiers/mutable-model/grid-m';
+import { GridCellM } from '..//modifiers/mutable-model/grid-cell-m';
 import { Grid } from './grid';
 
 describe('Grid', () => {

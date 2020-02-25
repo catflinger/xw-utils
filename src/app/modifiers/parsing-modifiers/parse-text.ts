@@ -1,14 +1,13 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { PuzzleM } from '../mutable-model/puzzle-m';
-import { ParseData } from '../../parsing/text/parse-data';
-import { TextParsingService } from '../../parsing/text/text-parsing-service';
 import { Grid } from 'src/app/model/grid';
-import { TextParsingOptions } from '../../parsing/text/types';
 import { TextParsingErrorM } from '../mutable-model/text-parsing-error-m';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
-import { ProviderService } from '../../provider.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
-import { PuzzleProvision } from 'src/app/model/puzzle-provision';
+import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
+import { ProviderService } from 'src/app/services/provider.service';
+import { ParseData } from 'src/app/services/parsing/text/parse-data';
+import { TextParsingOptions } from 'src/app/services/parsing/text/types';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across

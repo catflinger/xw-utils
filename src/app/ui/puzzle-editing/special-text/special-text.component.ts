@@ -7,7 +7,7 @@ import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
-import { UpdateInfo } from 'src/app/services/modifiers/puzzle-modifiers/update-info';
+import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ITextParsingError } from 'src/app/model/interfaces';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";

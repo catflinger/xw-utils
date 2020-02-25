@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { UpdatePublsihOptions } from 'src/app/services/modifiers/publish-options-modifiers/update-publish-options';
+import { UpdatePublsihOptions } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { TextColumn } from 'src/app/model/text-column';
-import { AddTextColumn } from 'src/app/services/modifiers/publish-options-modifiers/add-text-column';
-import { DeleteTextColumn } from 'src/app/services/modifiers/publish-options-modifiers/delete-text-column';
+import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
+import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 
 @Component({
     selector: 'app-puzzle-options',

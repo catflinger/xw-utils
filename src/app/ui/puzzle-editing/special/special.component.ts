@@ -3,7 +3,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { AppService } from '../../services/app.service';
-import { UpdateInfo } from 'src/app/services/modifiers/puzzle-modifiers/update-info';
+import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 
 @Component({
     selector: 'app-special',

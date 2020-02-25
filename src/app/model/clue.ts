@@ -4,7 +4,7 @@ import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
 import { GridReference } from './grid-reference';
-import { ClueM } from '../services/modifiers/mutable-model/clue-m';
+import { ClueM } from '..//modifiers/mutable-model/clue-m';
 import { ClueBuffer } from '../services/parsing/text/clue-buffer';
 
 export class Clue implements IClue {

@@ -6,11 +6,11 @@ import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { SelectClueByCell } from 'src/app/services/modifiers/clue-modifiers/select-clue-by-cell';
-import { Clear } from 'src/app/services/modifiers/puzzle-modifiers/clear';
+import { SelectClueByCell } from 'src/app//modifiers/clue-modifiers/select-clue-by-cell';
+import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClearShading } from 'src/app/services/modifiers/grid-modifiers/clear-shading';
+import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
 
 @Component({
     selector: 'app-solver',

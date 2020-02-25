@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
-import { UpdatePreamble } from 'src/app/services/modifiers/publish-options-modifiers/update-preamble';
+import { UpdatePreamble } from 'src/app//modifiers/publish-options-modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { AuthService } from 'src/app/services/auth.service';
