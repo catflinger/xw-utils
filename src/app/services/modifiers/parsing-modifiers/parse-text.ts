@@ -1,12 +1,12 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
-import { ParseData } from '../parsing/text/parse-data';
-import { TextParsingService } from '../parsing/text/text-parsing-service';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
+import { ParseData } from '../../parsing/text/parse-data';
+import { TextParsingService } from '../../parsing/text/text-parsing-service';
 import { Grid } from 'src/app/model/grid';
-import { TextParsingOptions } from '../parsing/text/types';
-import { TextParsingErrorM } from './mutable-model/text-parsing-error-m';
-import { InitAnnotationWarnings } from './init-annotation-warnings';
-import { ProviderService } from '../provider.service';
+import { TextParsingOptions } from '../../parsing/text/types';
+import { TextParsingErrorM } from '../mutable-model/text-parsing-error-m';
+import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
+import { ProviderService } from '../../provider.service';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { PuzzleProvision } from 'src/app/model/puzzle-provision';
 

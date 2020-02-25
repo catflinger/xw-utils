@@ -1,7 +1,12 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { UpdatePublsihOptions } from 'src/app/services/modifiers/update-publish-options';
+import { UpdatePublsihOptions } from 'src/app/services/modifiers/publish-options-modifiers/update-publish-options';
 import { Subscription } from 'rxjs';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { PublishOptions } from 'src/app/model/publish-options';
+import { TextColumn } from 'src/app/model/text-column';
+import { AddTextColumn } from 'src/app/services/modifiers/publish-options-modifiers/add-text-column';
+import { DeleteTextColumn } from 'src/app/services/modifiers/publish-options-modifiers/delete-text-column';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -10,16 +15,49 @@ import { Subscription } from 'rxjs';
 })
 export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     public showOptions = false;
-    public modifyAnswers;
+    public colCount = 0;
+    public form: FormGroup;
 
     @Output() public edit = new EventEmitter<void>();
 
     private subs: Subscription[] = [];
 
-    constructor(private activePuzzle: IActivePuzzle) { }
+    constructor(
+        private activePuzzle: IActivePuzzle,
+    ) { }
 
     public ngOnInit() {
-        //this.subs.push(this.activePuzzle.observe().subscribe(puzzle => this.modifyAnswers = puzzle.publishOptions.modifyAnswers));
+        this.form = new FormGroup({
+            "answerCols": new FormArray([]),
+            "showCols": new FormControl(false),
+        });
+
+        let items = this.form.get("answerCols") as FormArray;
+        items.clear();
+
+        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            this.colCount = puzzle.publishOptions.textCols.length;
+
+            this.form.patchValue({"showCols": this.colCount > 1});
+
+            let array = this.form.get("answerCols") as FormArray;
+            array.clear();
+            this.makeControls(puzzle.publishOptions).forEach(control => items.push(control));
+        }));
+    }
+
+    private makeControls(publishOptions: PublishOptions): FormGroup[] {
+        let controls: FormGroup[] = [];
+
+        publishOptions.textCols.forEach(col => {
+            //console.log("ADDING CONTROL " + col.caption);
+            controls.push(new FormGroup({
+                "caption": new FormControl(col.caption),
+                "textStyle": new FormControl(col.style),
+            }));
+        });
+
+        return controls;
     }
 
     public  ngOnDestroy() {
@@ -34,7 +72,15 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
         this.edit.emit();
     }
 
-    public onAnswerModificationChange(){
-        //this.activePuzzle.update(new UpdatePublsihOptions({modifyAnswers: this.modifyAnswers}))
+    public onAddColumn() {
+        this.activePuzzle.update(new AddTextColumn());
+    }
+
+    public onDeleteColumn(index: number) {
+        this.activePuzzle.update(new DeleteTextColumn(index));
+    }
+    
+    public onSaveColumn(index: number) {
+        //this.activePuzzle.update(new UpdatePublsihOptions({ modifyAnswers: this.modifyAnswers}))
     }
 }

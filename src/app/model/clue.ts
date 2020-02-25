@@ -88,6 +88,10 @@ export class Clue implements IClue {
         return count;
     }
 
+    // public get entry(): string {
+    //     return this.answers[0].toUpperCase().replace(/[^A-Z]/g, "");
+    // }
+
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];
 
@@ -192,7 +196,7 @@ export class Clue implements IClue {
             caption: buffer.caption,
             text: buffer.clue,
             letterCount: buffer.letterCount,
-            answer: "",
+            answers: [""],
             solution: "",
             annotation: null,
             redirect: false,

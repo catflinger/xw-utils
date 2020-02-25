@@ -1,5 +1,5 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 
 export class SortClues implements IPuzzleModifier {
     constructor() { }

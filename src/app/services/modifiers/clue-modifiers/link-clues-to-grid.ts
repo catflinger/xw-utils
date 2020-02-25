@@ -1,11 +1,11 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
-import { GridEntryM } from './mutable-model/grid-entry-m';
+import { GridEntryM } from '../mutable-model/grid-entry-m';
 import { Direction, ClueGroup } from 'src/app/model/interfaces';
-import { RenumberGid } from './renumber-grid';
+import { RenumberGid } from '../grid-modifiers/renumber-grid';
 import { Clue } from 'src/app/model/clue';
-import { ClueM } from './mutable-model/clue-m';
+import { ClueM } from '../mutable-model/clue-m';
 
 
 export class LinkCluesToGrid implements IPuzzleModifier {

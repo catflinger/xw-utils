@@ -44,7 +44,7 @@
         <div class="modal-body">
             <app-tip group="none" [suppressable]="false" *ngIf="showAnnotation">{{clue.annotation}}</app-tip>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="float-left">
                     <label for="answer">
                         <span *ngIf="options && options.modifyAnswers">Entry in grid</span>
@@ -63,9 +63,16 @@
             <div class="form-group" *ngIf="options && options.modifyAnswers">
                 <div class="float-left"><label for="answerAlt">Unmodified answer</label></div>
                 <input id="answerAlt" name="answer" class="form-control" formControlName="answerAlt" (input)="onChange()">
-            </div>
+            </div> -->
 
-            <div class="form-group mb-0">
+            <ng-container formArrayName="answers">
+                    <div class="form-group" *ngFor="let item of answerItems; let i = index;">
+                    <div class="float-left"><label [for]="item.id">{{item.caption}}</label></div>
+                    <input [id]="item.id" class="form-control" [formControlName]="item.index" (input)="onChange()">
+                </div>
+            </ng-container>
+
+        <div class="form-group mb-0">
                 <div class="clearfix">
                     <label class="inline-block float-left" [ngClass]="{ 'hidden': !appSettings.general.showCommentEditor.enabled }" for="comment">Comment</label>
 

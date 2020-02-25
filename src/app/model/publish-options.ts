@@ -53,7 +53,7 @@ export class PublishOptions implements IPublishOptions {
         } else {
             // backward compatibility Feb 2020
             this.textCols = [new TextColumn({
-                caption: "",
+                caption: "Entry",
                 style: "answer",
             })];
         }

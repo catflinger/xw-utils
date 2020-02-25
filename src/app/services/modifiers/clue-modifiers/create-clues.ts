@@ -1,11 +1,11 @@
 import { v4 as uuid } from "uuid";
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
 import { ClueGroup, QuillDelta } from 'src/app/model/interfaces';
 import { GridCell } from 'src/app/model/grid-cell';
-import { ClueM } from './mutable-model/clue-m';
-import { RenumberGid } from './renumber-grid';
+import { ClueM } from '../mutable-model/clue-m';
+import { RenumberGid } from '../grid-modifiers/renumber-grid';
 
 export class CreateClues implements IPuzzleModifier {
     constructor() { }

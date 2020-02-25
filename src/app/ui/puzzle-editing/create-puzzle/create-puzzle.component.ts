@@ -5,7 +5,7 @@ import { AppService } from '../../services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { UpdateInfo } from 'src/app/services/modifiers/puzzle-modifiers/update-info';
 
 @Component({
     selector: 'app-create-puzzle',

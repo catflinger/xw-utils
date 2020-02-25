@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, E
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UpdateClue } from 'src/app/services/modifiers/update-clue';
+import { UpdateClue } from 'src/app/services/modifiers/clue-modifiers/update-clue';
 import { ClueGroup } from 'src/app/model/interfaces';
-import { AddClue } from 'src/app/services/modifiers/add-clue';
+import { AddClue } from 'src/app/services/modifiers/clue-modifiers/add-clue';
 
 export interface ClueEditModel {
     id: string;

@@ -4,13 +4,13 @@ import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { Clear } from 'src/app/services/modifiers/clear';
+import { Clear } from 'src/app/services/modifiers/puzzle-modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { SelectClue } from 'src/app/services/modifiers/select-clue';
+import { SelectClue } from 'src/app/services/modifiers/clue-modifiers/select-clue';
 import { ClueListAction } from '../../components/clue-list-item/clue-list-item.component';
 import { ClueTextEditorComponent } from '../../components/clue-text-editor/clue-text-editor.component';
-import { DeleteClue } from 'src/app/services/modifiers/delete-clue';
+import { DeleteClue } from 'src/app/services/modifiers/clue-modifiers/delete-clue';
 
 @Component({
     selector: 'app-clues-editor',

@@ -1,6 +1,6 @@
-import { IPuzzleModifier } from './puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { ClueGroup } from 'src/app/model/interfaces';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Clue } from 'src/app/model/clue';
 
 export class UpdateClue implements IPuzzleModifier {

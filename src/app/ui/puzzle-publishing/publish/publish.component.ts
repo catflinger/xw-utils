@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { UpdateInfo } from 'src/app/services/modifiers/update-info';
+import { UpdateInfo } from 'src/app/services/modifiers/puzzle-modifiers/update-info';
 import { ContentGeneratorListLayout } from 'src/app/services/content-generator/content-generator-list-layout';
 import { ContentGeneratorTableLayout } from 'src/app/services/content-generator/content-generator-table-layout';
 

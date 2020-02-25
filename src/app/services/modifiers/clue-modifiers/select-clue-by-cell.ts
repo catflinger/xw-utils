@@ -1,9 +1,9 @@
-import { IPuzzleModifier } from './puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { IPuzzle, IClue } from 'src/app/model/interfaces';
-import { Clear } from './clear';
+import { Clear } from '../puzzle-modifiers/clear';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from './select-clue';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { GridCell } from 'src/app/model/grid-cell';
 
 export class SelectClueByCell implements IPuzzleModifier {

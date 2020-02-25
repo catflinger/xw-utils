@@ -1,6 +1,6 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
-import { GridM } from './mutable-model/grid-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
+import { GridM } from '../mutable-model/grid-m';
 import { Grid } from 'src/app/model/grid';
 
 export class AddGrid implements IPuzzleModifier {

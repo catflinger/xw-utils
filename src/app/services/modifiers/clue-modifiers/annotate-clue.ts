@@ -1,8 +1,8 @@
-import { IPuzzleModifier } from './puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { QuillDelta, ClueValidationWarning } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { PuzzleM } from './mutable-model/puzzle-m';
-import { SyncGridContent } from './sync-grid-content';
+import { PuzzleM } from '../mutable-model/puzzle-m';
+import { SyncGridContent } from '../grid-modifiers/sync-grid-content';
 
 export class AnnotateClue implements IPuzzleModifier {
     constructor(
@@ -16,13 +16,19 @@ export class AnnotateClue implements IPuzzleModifier {
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {
+            let answers: string[] = [];
 
-            clue.answers.forEach((answer, index) => {
-                clue.answers = [];
+            // update/add any existing answers
+            this.answers.forEach((answer, index) => {
                 let ans = index === 0 ? answer.trim().toUpperCase() : answer.trim();
-                clue.answers.push(ans);
+                answers.push(ans);
             });
-            
+            // keep any existing answers (in the case number of columns has decreased since last edit)
+            for (let i = answers.length; i < clue.answers.length; i++) {
+                answers.push(clue.answers[i]);
+            }
+
+            clue.answers = answers;
             clue.comment = this.comment;
             clue.chunks = this.chunks;
             clue.warnings = this.warnings || [];

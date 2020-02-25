@@ -32,7 +32,7 @@
                                 <app-clue-annotator 
                                     [clueId]="clue.id" 
                                     (close)="onEditorClose(clue, $event)"
-                                    [options] = "{modifyAnswers: this.puzzle.publishOptions.modifyAnswers}"
+                                    [publishOptions] = "this.puzzle.publishOptions"
                                     >
                                 </app-clue-annotator>
                             </div>

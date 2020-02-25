@@ -6,11 +6,11 @@ import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { SelectClueByCell } from 'src/app/services/modifiers/select-clue-by-cell';
-import { Clear } from 'src/app/services/modifiers/clear';
+import { SelectClueByCell } from 'src/app/services/modifiers/clue-modifiers/select-clue-by-cell';
+import { Clear } from 'src/app/services/modifiers/puzzle-modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClearShading } from 'src/app/services/modifiers/clear-shading';
+import { ClearShading } from 'src/app/services/modifiers/grid-modifiers/clear-shading';
 
 @Component({
     selector: 'app-solver',
@@ -119,7 +119,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                     this.modalRef = this.modalService.open(ClueAnnotationComponent, { backdrop: "static"});
                     this.modalRef.componentInstance.clueId = clue.id;
                     this.modalRef.componentInstance.starterText = starterText;
-                    this.modalRef.componentInstance.options = { textCols: this.puzzle.publishOptions.textCols};
+                    this.modalRef.componentInstance.publishOptions = this.puzzle.publishOptions;
                     this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
                         this.modalRef.close();
                         this.modalRef = null;

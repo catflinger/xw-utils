@@ -1,12 +1,12 @@
 import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
 import { LinkCluesToGrid } from './link-clues-to-grid';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { QuillDelta, ClueGroup, IGridReference } from 'src/app/model/interfaces';
-import { GridM } from './mutable-model/grid-m';
+import { GridM } from '../mutable-model/grid-m';
 import { GridCell } from 'src/app/model/grid-cell';
-import { ClueM } from './mutable-model/clue-m';
-import { GridCellM } from './mutable-model/grid-cell-m';
+import { ClueM } from '../mutable-model/clue-m';
+import { GridCellM } from '../mutable-model/grid-cell-m';
 
 describe('LinkCLuesToGrid modifier', () => {
 

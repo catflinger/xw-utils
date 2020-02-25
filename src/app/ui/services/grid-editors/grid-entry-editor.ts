@@ -1,12 +1,12 @@
 import { WritingDirection, GridNavigation, Direction } from 'src/app/model/interfaces';
 import { Puzzle } from 'src/app/model/puzzle';
-import { IPuzzleModifier } from 'src/app/services/modifiers/puzzle-modifier';
-import { UpdateCell } from 'src/app/services/modifiers/update-cell';
+import { IPuzzleModifier } from 'src/app/services/modifiers/puzzle-modifiers/puzzle-modifier';
+import { UpdateCell } from 'src/app/services/modifiers/grid-modifiers/update-cell';
 import { GridCell } from 'src/app/model/grid-cell';
 import { GridEditor, EditContext } from './grid-editor';
-import { Clear } from 'src/app/services/modifiers/clear';
-import { SelectCellsForEdit } from 'src/app/services/modifiers/select-cells-for-edit';
-import { MakeCellEditable } from 'src/app/services/modifiers/make-cell-editable';
+import { Clear } from 'src/app/services/modifiers/puzzle-modifiers/clear';
+import { SelectCellsForEdit } from 'src/app/services/modifiers/grid-modifiers/select-cells-for-edit';
+import { MakeCellEditable } from 'src/app/services/modifiers/grid-modifiers/make-cell-editable';
 
 export class GridEntryEditor extends GridEditor {
 

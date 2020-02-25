@@ -1,5 +1,5 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 import { GridProperties } from 'src/app/model/grid-properties';
 import { GridStyle } from 'src/app/model/interfaces';
 import { GridSize } from 'src/app/model/grid-size';

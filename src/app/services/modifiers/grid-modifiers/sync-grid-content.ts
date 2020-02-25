@@ -1,7 +1,5 @@
-import { IPuzzleModifier } from './puzzle-modifier';
-import { QuillDelta, ClueValidationWarning } from 'src/app/model/interfaces';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { PuzzleM } from './mutable-model/puzzle-m';
+import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { PuzzleM } from '../mutable-model/puzzle-m';
 
 export class SyncGridContent implements IPuzzleModifier {
     constructor() { }
