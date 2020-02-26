@@ -7,6 +7,7 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { TextColumn } from 'src/app/model/text-column';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
+import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -81,6 +82,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     }
     
     public onSaveColumn(index: number) {
-        //this.activePuzzle.update(new UpdatePublsihOptions({ modifyAnswers: this.modifyAnswers}))
+        this.activePuzzle.update(new UpdateTextColumn(index, this.form.value.answerCols[index].caption))
     }
 }

@@ -26,6 +26,7 @@ export class UpdateClue implements IPuzzleModifier {
                     isDefinition: false,
                 }];
 
+                // TO DO: is this necessary?  Can the validation outcome change as a result of this modification?
                 clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
             }
         }

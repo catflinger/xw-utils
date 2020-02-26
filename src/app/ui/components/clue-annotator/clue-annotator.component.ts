@@ -158,6 +158,8 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     public onSave() {
 
+        //console.log("FORM " + JSON.stringify(this.form.value));
+
         if (this.appSettings.general.showCommentEditor.enabled &&
             this.appSettings.tips.definitionWarning.enabled &&
             !this.tipStatus.show &&
@@ -166,7 +168,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             this.tipInstance.activated = true;
 
         } else {
-            let answer = this.clean(this.form.value.answers[0].value);
+            let answer = this.clean(this.form.value.answers[0]);
 
             if (answer && answer.length !== this.clue.lengthAvailable) {
                 this.showSaveWarning("Warning: the answer does not fit the space available");
@@ -236,7 +238,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             console.log("FORM " + JSON.stringify(this.form.get("answers").value));
             this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
-                this.form.get("answers").value,
+                this.form.value.answers,
                 this.form.value.comment,
                 this.form.value.chunks,
                 this.warnings,
@@ -285,7 +287,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private getLatestAnswer(): AnswerTextChunk[] {
         let result: AnswerTextChunk[] = [];
-        let answer = this.clean(this.form.value.answer);
+        let answer = this.clean(this.form.value.answers[0]);
         let index = 0;
 
         this.clue.entries.forEach((entry) => {
@@ -363,7 +365,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private validate() {
         this.warnings = Clue.validateAnnotation(
-            this.form.value.answer,
+            this.form.value.answers[0],
             this.form.value.comment,
             this.form.value.chunks,
         );

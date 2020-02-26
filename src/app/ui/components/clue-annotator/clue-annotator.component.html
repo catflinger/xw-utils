@@ -44,31 +44,17 @@
         <div class="modal-body">
             <app-tip group="none" [suppressable]="false" *ngIf="showAnnotation">{{clue.annotation}}</app-tip>
 
-            <!-- <div class="form-group">
-                <div class="float-left">
-                    <label for="answer">
-                        <span *ngIf="options && options.modifyAnswers">Entry in grid</span>
-                        <span *ngIf="!(options && options.modifyAnswers)">Answer</span>
-                    </label>
-                </div>
-                
-                <div class="float-right" *ngIf="clue.solution && appSettings.general.showCheat.enabled">
-                    <button type="button" class="btn btn-link" *ngIf="!(options && options.modifyAnswers)" (click)="onCheat()">cheat</button>
-                    <button type="button" class="btn btn-link" (click)="onAnnotation()" *ngIf="clue.annotation">annotation</button>
-                </div>
-
-                <input id="answer" name="answer" class="form-control" ngbAutofocus formControlName="answer" (input)="onChange()">
-            </div>
-
-            <div class="form-group" *ngIf="options && options.modifyAnswers">
-                <div class="float-left"><label for="answerAlt">Unmodified answer</label></div>
-                <input id="answerAlt" name="answer" class="form-control" formControlName="answerAlt" (input)="onChange()">
-            </div> -->
-
             <ng-container formArrayName="answers">
-                    <div class="form-group" *ngFor="let item of answerItems; let i = index;">
+                <div class="form-group" *ngFor="let item of answerItems; let i = index;">
+
                     <div class="float-left"><label [for]="item.id">{{item.caption}}</label></div>
-                    <input [id]="item.id" class="form-control" [formControlName]="item.index" (input)="onChange()">
+
+                    <div class="float-right" *ngIf="i === 0 && clue.solution && appSettings.general.showCheat.enabled">
+                        <button type="button" class="btn btn-link" *ngIf="!(options && options.modifyAnswers)" (click)="onCheat()">cheat</button>
+                        <button type="button" class="btn btn-link" (click)="onAnnotation()" *ngIf="clue.annotation">annotation</button>
+                    </div>
+
+                    <input [id]="item.id" class="form-control" [attr.ngbautofocus]="index ? null : ''" [formControlName]="item.index" (input)="!i && onChange()">
                 </div>
             </ng-container>
 

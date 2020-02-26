@@ -3,6 +3,7 @@ import { QuillDelta, ClueValidationWarning } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { PuzzleM } from '../mutable-model/puzzle-m';
 import { SyncGridContent } from '../grid-modifiers/sync-grid-content';
+import { Clue } from 'src/app/model/clue';
 
 export class AnnotateClue implements IPuzzleModifier {
     constructor(
@@ -34,6 +35,8 @@ export class AnnotateClue implements IPuzzleModifier {
             clue.warnings = this.warnings || [];
 
             new SyncGridContent().exec(puzzle);
+
+            clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
         }
     }
 }
