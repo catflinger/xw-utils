@@ -37,20 +37,20 @@ export class CluesPreviewComponent implements OnInit {
     }
 
     public get tdClass(): string[] {
-        let result: any = ["nopad"];
+        let result: string[] = [];
 
         switch (this.publishOptions.spacing) {
             case "small":
-                result.push("pt-0");
-                result.push("pb-0");
+                result.push("py-0");
+                result.push("px-1");
                 break;
             case "medium":
                 result.push("pt-1");
-                result.push("pb-1");
+                result.push("px-2");
                 break;
             case "large":
                 result.push("pt-2");
-                result.push("pb-2");
+                result.push("px-2");
                 break;
             default:
                 result.push("py-1");

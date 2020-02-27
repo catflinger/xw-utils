@@ -331,7 +331,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 ],
                 textCols: [
                     {
-                        caption: "",
+                        caption: "Entry",
                         style: "answer",
                     }
                 ],

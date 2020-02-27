@@ -173,10 +173,6 @@ export abstract class IPuzzleInfo {
     abstract readonly provider: PuzzleProvider;
     abstract readonly setter: string;
     abstract readonly wordpressId: number;
-
-    // abstract readonly blogable: boolean;
-    // abstract readonly solveable: boolean;
-    // abstract readonly gridable: boolean;
 } 
 
 export abstract class IPublishOptions {
@@ -184,14 +180,8 @@ export abstract class IPublishOptions {
     abstract readonly textCols: ReadonlyArray<ITextColumn>;
     abstract readonly textStyles: ReadonlyArray<ITextStyle>;
     
-    // abstract readonly answerStyle: ITextStyle;
-    // abstract readonly clueStyle: ITextStyle;
-    // abstract readonly definitionStyle: ITextStyle;
-    
     abstract readonly includeGrid: boolean;
     abstract readonly spacing: Spacing;
-
-    //abstract readonly modifyAnswers: boolean;
 }
 
 export abstract class ITextStyle {

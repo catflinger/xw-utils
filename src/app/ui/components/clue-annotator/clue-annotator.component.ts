@@ -14,7 +14,6 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
-import { TextColumn } from 'src/app/model/text-column';
 import { PublishOptions } from 'src/app/model/publish-options';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
@@ -89,16 +88,21 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
                         this.answerItems = [];
 
                         puzzle.publishOptions.textCols.forEach((col, index) => {
-                            let starter = "";
+                            let answerText = "";
+                            
                             if (index === 0) {
-                                starter = this.starterText ? this.starterText : this.clue.answers[0];
+                                answerText = this.starterText || this.clue.answers[0];
+                            } else if (index < this.clue.answers.length){
+                                answerText = this.clue.answers[index];
+                            } else {
+                                answerText = "";
                             }
-                        
+
                             this.answerItems.push({
                                 index,
                                 id: "answer" + index,
                                 caption: col.caption,
-                                answer: this.clue.answers.length > index ? this.clue.answers[index] : starter,
+                                answer:  answerText,
                             });
                         });
 
@@ -197,9 +201,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     }
 
     public onCheat() {
-        this.form.patchValue({
-            answer: this.clue.solution,
-        });
+        let answers = this.form.get("answers").patchValue([this.clue.solution]);
 
         this.validate();
         this.setLatestAnswer();
@@ -235,7 +237,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private closeEditor(save: boolean) {
         if (save) {
-            console.log("FORM " + JSON.stringify(this.form.get("answers").value));
             this.activePuzzle.update(new AnnotateClue(
                 this.clueId,
                 this.form.value.answers,
@@ -247,8 +248,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         this.activePuzzle.update(new Clear());
         this.close.emit(save? "save" : "cancel");
     }
-
-
 
     private clean(answer: string): string {
         return answer ?

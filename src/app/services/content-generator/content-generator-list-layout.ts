@@ -81,12 +81,16 @@ export class ContentGeneratorListLayout implements ContentGenerator {
         
         // markup += this.writeClueItem(caption + this.writeText(clue.answer, publishOptions.answerStyle));
         
-        publishOptions.textCols.forEach((col, index) => {
-            let caption = col.caption || "";
-            let text = clue.answers[index] || "";
-            markup += this.writeClueItem(caption + this.writeText(text, publishOptions.answerStyle));
-        })
-        
+        if (publishOptions.textCols.length === 1) {
+            let text = clue.answers[0] || "";
+            markup += this.writeClueItem(this.writeText(text, publishOptions.answerStyle));
+        } else {
+            publishOptions.textCols.forEach((col, index) => {
+                let caption = col.caption || "";
+                let text = clue.answers[index] || "";
+                markup += this.writeClueItem(caption + this.writeText(text, publishOptions.answerStyle));
+            });
+        }        
         markup += this.writeClueItem(this.writeQuillDelta(clue.comment));
 
         return markup;

@@ -1,7 +1,5 @@
 export type AlertType = "info" | "danger";
 
-//export type TextStyleName = "answerStyle" | "clueStyle" | "definitionStyle";
-
 export type NavAction = "solve" | "login";
 
 export type UIResult = "ok" | "cancel" | "back";

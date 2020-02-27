@@ -40,8 +40,9 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
             this.addHtml("</div>").newline();
         }
 
-        this.addHtml("<table style='border-collapse: collapse'>").newline()
-        this.addHtml("<tbody>").newline()
+        this.addHtml("<table style='border-collapse: collapse'>").newline();
+        this.addTableHeader(puzzle.publishOptions).newline();
+        this.addHtml("<tbody>").newline();
 
         this.addClues(puzzle.clues.filter(c => c.group === "across"), puzzle.publishOptions, "ACROSS");
         this.addClues(puzzle.clues.filter(c => c.group === "down"), puzzle.publishOptions, "DOWN");
@@ -54,6 +55,19 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
 
         return this.buffer;
 
+    }
+
+    private addTableHeader(publishOptions: PublishOptions): ContentGeneratorTableLayout {
+        if (publishOptions.textCols.length > 1) {
+            this.addHtml("<thead>").newline();
+            this.addHtml("<tr>").newline();
+            this.addHtml("<th>No.</th>").newline();
+            this.addAnswerColumnHeaders(publishOptions).newline();
+            this.addHtml("<th>Comment</th>").newline();
+            this.addHtml("<tr>").newline();
+            this.addHtml("</thead>").newline();
+        }
+        return this;
     }
 
     private newline(): ContentGeneratorTableLayout {
@@ -87,6 +101,16 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
 
             this.buffer = this.buffer.concat(converter.convert());
         }
+        return this;
+    }
+
+    private addAnswerColumnHeaders(publishOptions: PublishOptions): ContentGeneratorTableLayout {
+        publishOptions.textCols.forEach((tc => {
+            this.addHtml("<th>")
+            .addHtml(escape(tc.caption))
+            .addHtml("</th>")
+            .newline();
+        }));
         return this;
     }
 

@@ -62,7 +62,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
                     this.form.enable({emitEvent: false});
                 }
 
-                let ts = this.puzzle.publishOptions[this.textStyleName];
+                let ts = this.puzzle.publishOptions.getStyle(this.textStyleName);
 
                 this.form.controls["bold"].patchValue(ts.bold, { emitEvent: false});
                 this.form.controls["italic"].patchValue(ts.italic, { emitEvent: false});

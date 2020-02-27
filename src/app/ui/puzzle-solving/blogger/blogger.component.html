@@ -1,25 +1,29 @@
 <div class="row">
     <div class="col">
         <table class="table w-100" *ngIf="puzzle">
+            <thead *ngIf="puzzle.publishOptions.textCols.length">
+                <th>No.</th>
+                <th *ngFor="let textCol of puzzle.publishOptions.textCols">{{textCol.caption}}</th>
+                <th>Clue</th>
+                <th>Comment</th>
+                <th></th>
+            </thead>
             <tbody>
                 <ng-container *ngFor="let clue of puzzle.clues">
                     <tr class="border-top bg-light" (click)="onRowClick(clue)" *ngIf="!clue.highlight">
-                        <td>
+                        <td class="py-0">
                             {{clue.caption}}
                         </td>
-                        <td class="font-weight-bold">
-                            {{clue.answer}}
+                        <td class="font-weight-bold py-0" *ngFor="let textCol of puzzle.publishOptions.textCols; let i = index;">
+                            {{ clue.answers[i] }}
                         </td>
-                        <td class="font-weight-bold" *ngIf="puzzle.publishOptions.modifyAnswers">
-                            {{clue.answerAlt}}
-                        </td>
-                        <td>
+                        <td class="py-0">
                             <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
                         </td>
-                        <td>
+                        <td class="py-0">
                             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
                         </td>
-                        <td>
+                        <td class="py-0">
                             <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length && !clue.redirect">
                                 <span class="text-warning"> {{clue.warnings[0]}}</span>
                             </ng-container>
@@ -27,7 +31,7 @@
                     </tr>
 
                     <tr *ngIf="clue.highlight">
-                        <td [attr.colspan]="puzzle.publishOptions.modifyAnswers ? 6 : 5">
+                        <td class="p-0" [attr.colspan]="puzzle.publishOptions.textCols.length + 4">
                             <div class="border rounded">
                                 <app-clue-annotator 
                                     [clueId]="clue.id" 

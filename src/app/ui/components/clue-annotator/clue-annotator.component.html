@@ -54,7 +54,7 @@
                         <button type="button" class="btn btn-link" (click)="onAnnotation()" *ngIf="clue.annotation">annotation</button>
                     </div>
 
-                    <input [id]="item.id" class="form-control" [attr.ngbautofocus]="index ? null : ''" [formControlName]="item.index" (input)="!i && onChange()">
+                    <input [id]="item.id" class="form-control" [ngClass]="{'text-uppercase': !i}" [attr.ngbautofocus]="i ? null : ''" [formControlName]="item.index" (input)="!i && onChange()">
                 </div>
             </ng-container>
 

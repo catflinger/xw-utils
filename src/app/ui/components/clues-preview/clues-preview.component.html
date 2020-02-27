@@ -3,12 +3,11 @@
 </div>
 
 <table *ngIf="clues && publishOptions.layout === 'table'">
-    <thead *ngIf="publishOptions.modifyAnswers">
+    <thead *ngIf="publishOptions.textCols.length">
         <tr class="border-top border-bottom">
-            <td></td>
-            <td>answer</td>
-            <td>entry</td>
-            <td></td>
+            <td>No.</td>
+            <td  *ngFor="let textCol of publishOptions.textCols">{{textCol.caption}}</td>
+            <td>Comment</td>
         </tr>
     </thead>
     <tbody>
@@ -17,16 +16,15 @@
                 <td [ngClass]="tdClass">
                     <span class="text-nowrap" [ngStyle]="makeClueStyle()">{{clue.caption}} </span>
                 </td>
-                <td [ngClass]="tdClass">
-                    <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answers[0]}} </span>
+                <td [ngClass]="tdClass" *ngFor="let textCol of publishOptions.textCols; let i = index;">
+                    <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answers[i]}} </span>
                 </td>
                 <td [ngClass]="tdClass">
                     <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
                 </td>
             </tr>
             <tr>
-                <td [ngClass]="tdClass"></td>
-                <td [ngClass]="tdClass"></td>
+                <td [ngClass]="tdClass" [attr.colspan]="publishOptions.textCols.length + 1"></td>
                 <td [ngClass]="tdClass">
                         <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
                 </td>
@@ -37,12 +35,27 @@
 
 <div *ngIf="clues && publishOptions.layout === 'list'">
     <ng-container *ngFor="let clue of clues">
+
         <div [ngStyle]="makeClueStyle()" [ngClass]="tdClass">
             <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
         </div>
-        <div class="text-nowrap" [ngClass]="tdClass">
-            <span [ngStyle]="makeAnswerStyle()">{{clue.answers[0]}}</span>
-        </div>
+
+        <ng-container *ngIf="publishOptions.textCols.length > 1; then multiRow; else singleRow"></ng-container>
+
+        <ng-template #singleRow>
+            <div class="text-nowrap" [ngClass]="tdClass">
+                <span [ngStyle]="makeAnswerStyle()">{{clue.answers[0]}}</span>
+            </div>
+        </ng-template>
+        
+        <ng-template #multiRow>
+            <ng-container *ngFor="let textCol of publishOptions.textCols; let i = index;">
+                <div class="text-nowrap" [ngClass]="tdClass" *ngIf="clue.answers[i]">
+                    <span>{{textCol.caption}}: </span> <span [ngStyle]="makeAnswerStyle()">{{clue.answers[i]}}</span>
+                </div>
+            </ng-container>
+        </ng-template>
+
         <div [ngClass]="tdClass">
             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>
         </div>

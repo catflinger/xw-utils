@@ -11,7 +11,7 @@ export class UpdatePublsihOptionTextStyle implements IPuzzleModifier {
         private underline: boolean) { }
 
     exec(puzzle: PuzzleM) {
-        let ts = puzzle.publishOptions[this.textStyleName];
+        let ts = puzzle.publishOptions.textStyles.find(ts => ts.name === this.textStyleName);
         ts.color = this.color;
         ts.bold = this.bold;
         ts.italic = this.italic;
