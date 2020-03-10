@@ -99,7 +99,7 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly entries: ReadonlyArray<IGridEntry>;
     abstract readonly chunks: ReadonlyArray<ITextChunk>;
     abstract readonly warnings: ReadonlyArray<ClueValidationWarning>;
-    abstract readonly gridRefs: ReadonlyArray<IGridReference>;
+    //abstract readonly gridRefs: ReadonlyArray<IGridReference>;
 }
 
 export abstract class IGridEntry {

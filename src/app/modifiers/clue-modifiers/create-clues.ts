@@ -67,10 +67,10 @@ export class CreateClues implements IPuzzleModifier {
                  cellIds: entry
             }],
             warnings: [],
-            gridRefs: [{
-                clueNumber, 
-                clueGroup
-            }],
+            // gridRefs: [{
+            //     clueNumber, 
+            //     clueGroup
+            // }],
             chunks: [
                 {
                     text,

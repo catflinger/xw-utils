@@ -134,9 +134,6 @@ function addTestClues(puzzle: PuzzleM) {
         "1", 
         "across", 
         "This is one across (5)",
-        [
-            { clueNumber: 1, clueGroup: "across" }
-        ]
     ));
 
     // add 2 down
@@ -144,9 +141,6 @@ function addTestClues(puzzle: PuzzleM) {
         "2", 
         "down", 
         "This is 2 down (5)",
-        [
-            { clueNumber: 2, clueGroup: "down", }
-        ]
     ));
 
     // add 5 across
@@ -154,14 +148,10 @@ function addTestClues(puzzle: PuzzleM) {
         "5, 3 down", 
         "across", 
         "This has two grid entries (5, 5)",
-        [
-            { clueNumber: 5, clueGroup: "across" },
-            { clueNumber: 3, clueGroup: "down" }
-        ]
     ));
 }
 
-function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGridReference[]): ClueM {
+function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
     return {
         id: "",
         group,
@@ -178,7 +168,7 @@ function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGr
         entries: [],
         chunks: [],
         warnings: [],
-        gridRefs,
+        //gridRefs,
     };
 }
 

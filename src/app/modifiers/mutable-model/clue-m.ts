@@ -19,6 +19,6 @@ export abstract class ClueM implements IClue {
     public abstract entries: GridEntryM[];
     public abstract chunks: TextChunkM[];
     public abstract warnings: ClueValidationWarning[];
-    public abstract gridRefs: GridReference[];
+    //public abstract gridRefs: GridReference[];
 }
 

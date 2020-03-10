@@ -2,10 +2,10 @@ import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
 import { GridEntryM } from '../mutable-model/grid-entry-m';
-import { Direction, ClueGroup } from 'src/app/model/interfaces';
 import { RenumberGid } from '../grid-modifiers/renumber-grid';
-import { Clue } from 'src/app/model/clue';
 import { ClueM } from '../mutable-model/clue-m';
+import { GridReference } from 'src/app/model/grid-reference';
+import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
 
 
 export class LinkCluesToGrid implements IPuzzleModifier {
@@ -37,9 +37,10 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
     private makeGridEntries(grid: Grid, clue: ClueM): GridEntryM[] {
         let result: GridEntryM[] = [];
+        let gridRefs: ReadonlyArray<GridReference> = ClueBuffer.makeGridReferences(clue.caption, clue.group);
 
-        if (clue.gridRefs) {
-            clue.gridRefs.forEach((gridRef, index) => {
+        if (gridRefs) {
+            gridRefs.forEach((gridRef, index) => {
                 let gridEntry: GridEntryM = { cellIds: [] };
                 let cells = grid.getGridEntryForCaption(gridRef.clueNumber.toString(), gridRef.clueGroup);
 

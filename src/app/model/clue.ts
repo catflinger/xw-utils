@@ -25,7 +25,7 @@ export class Clue implements IClue {
     public readonly entries: ReadonlyArray<GridEntry>;
     public readonly chunks: ReadonlyArray<TextChunk>;
     public readonly warnings: ReadonlyArray<ClueValidationWarning>; 
-    public readonly gridRefs: ReadonlyArray<GridReference>; 
+    //public readonly gridRefs: ReadonlyArray<GridReference>; 
 
     constructor(data: any) {
         this.id = data.id;
@@ -70,11 +70,11 @@ export class Clue implements IClue {
         data.chunks.forEach(chunk => chunks.push(new TextChunk(chunk)));
         this.chunks = chunks;
 
-        let refs: GridReference[] = [];
-        if (data.gridRefs && Array.isArray(data.gridRefs)) {
-            data.gridRefs.forEach(ref => refs.push(new GridReference(ref.clueNumber, ref.clueGroup)));
-        }
-        this.gridRefs = refs;
+        // let refs: GridReference[] = [];
+        // if (data.gridRefs && Array.isArray(data.gridRefs)) {
+        //     data.gridRefs.forEach(ref => refs.push(new GridReference(ref.clueNumber, ref.clueGroup)));
+        // }
+        // this.gridRefs = refs;
 
         let warnings: ClueValidationWarning[] = [];
         if (data.warnings) {
@@ -206,7 +206,7 @@ export class Clue implements IClue {
             highlight: false,
             entries: [],
             warnings: [],
-            gridRefs: buffer.gridRefs,
+            //gridRefs: buffer.gridRefs,
             chunks: [
                 {
                     text: buffer.clue,

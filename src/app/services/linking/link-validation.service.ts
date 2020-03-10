@@ -3,6 +3,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Clue } from 'src/app/model/clue';
 import { ClueBuffer } from '../parsing/text/clue-buffer';
 import { Grid } from 'src/app/model/grid';
+import { GridReference } from 'src/app/model/grid-reference';
 
 
 export interface ILinkWarning {
@@ -56,6 +57,7 @@ export class LinkValidationService {
 
     private matchClueNumbersToGridEntries(clue: Clue, buffer: ClueBuffer, grid: Grid): ILinkWarning[] {
         let warnings: ILinkWarning[] = [];
+        let gridRefs: ReadonlyArray<GridReference> = []; 
 
         // HOW ABOUT REMOVING GRID REFS from CLUE?
 
@@ -72,15 +74,15 @@ export class LinkValidationService {
                 clueId: clue.id,
                 message: "this clue is missing gridReferences" // TO DO: this message needs to make more sense
             });
-        } else if (buffer.gridRefs.length !== clue.gridRefs.entries.length) {
+        } else if (buffer.gridRefs.length !== gridRefs.entries.length) {
             warnings.push({
                 clueId: clue.id,
-                message: `the clue text indicates ${buffer.gridRefs.length} gird entries but the clue has ${clue.gridRefs.entries.length} entries`
+                message: `the clue text indicates ${buffer.gridRefs.length} gird entries but the clue has ${gridRefs.entries.length} entries`
             });
         } else {
             for (let i = 0; i < buffer.gridRefs.length; i++) {
                 //find the caption in teh grid
-                let cell = grid.cells.find(c => c.id === clue.gridRefs.entries[i]);
+                let cell = grid.cells.find(c => c.id === gridRefs.entries[i]);
                 if (cell.caption !== buffer.gridRefs[i].clueNumber.toString()) {
                     warnings.push({
                         clueId: clue.id,

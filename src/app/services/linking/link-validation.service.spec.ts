@@ -50,10 +50,6 @@ function addGoodClue(clues: ClueM[]) {
         "12",
         "across",
         "This is a clue (7)",
-        [{
-       clueNumber: 12,
-       clueGroup: "across",     
-        }]
     ));
 }
 
@@ -64,10 +60,6 @@ function addGoodClue(clues: ClueM[]) {
         "12",
         "across",
         "This is a clue (7)",
-        [{
-       clueNumber: 12,
-       clueGroup: "across",     
-        }]
     ));
 }
 
@@ -171,7 +163,7 @@ function getEmptyPuzzle(): PuzzleM {
     };
 }
 
-function makeClue(id: string, caption: string, group: ClueGroup, text: string, gridRefs: IGridReference[]): ClueM {
+function makeClue(id: string, caption: string, group: ClueGroup, text: string): ClueM {
     return {
         id,
         group,
@@ -188,7 +180,7 @@ function makeClue(id: string, caption: string, group: ClueGroup, text: string, g
         entries: [],
         chunks: [],
         warnings: [],
-        gridRefs,
+        //gridRefs,
     };
 }
 

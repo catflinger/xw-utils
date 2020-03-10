@@ -9,7 +9,7 @@ export class ClueBuffer {
     private _caption: string;
     private _clue: string;
     private _letterCount: string;
-    private _gridRefs: GridReference[];
+    private _gridRefs: ReadonlyArray<GridReference>;
 
     constructor (text: string, direction: ClueGroup) {
         this._rawText = text.trim();
@@ -45,7 +45,7 @@ export class ClueBuffer {
         this.setCaption();
         this._letterCount = Clue.getLetterCount(this.rawText);
         if (this._caption) {
-            this.setGridReferences();
+            this._gridRefs =  ClueBuffer.makeGridReferences(this._caption, this._direction);
         }
     }
 
@@ -79,16 +79,16 @@ export class ClueBuffer {
 
     }
 
-    private setGridReferences(): void {
+    static makeGridReferences(caption: string, group: ClueGroup): ReadonlyArray<GridReference> {
         let result: GridReference[] = [];
         const expression = new RegExp(String.raw`\s*(?<clueNumber>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
         //const expression = new RegExp(clueCaptionExpressionAdditionalPart);
 
-        let parts = this.caption.split(",");
+        let parts = caption.split(",");
 
         parts.forEach((part) => {
             let clueNumber: number = 0;
-            let clueGroup: ClueGroup = this._direction;
+            let clueGroup: ClueGroup = group;
 
             let match = expression.exec(part);
 
@@ -101,7 +101,7 @@ export class ClueBuffer {
             }
         });
 
-        this._gridRefs = result;
+        return result;
     }
 
 }
