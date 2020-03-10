@@ -6,6 +6,7 @@ import { ClueValidationWarning, IClue } from './interfaces';
 import { GridReference } from './grid-reference';
 import { ClueM } from '..//modifiers/mutable-model/clue-m';
 import { ClueBuffer } from '../services/parsing/text/clue-buffer';
+import { clueLetterCountExpression } from '../services/parsing/text/types';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -134,7 +135,7 @@ export class Clue implements IClue {
     public static getLetterCount(text: string): string {
         let result = "";
 
-        const expression = String.raw`^(?<clue>.*)(?<letterCount>\([0-9-words, ]+?\)\s*$)`;
+        const expression = String.raw`^(?<clue>.*)` + clueLetterCountExpression;
 
         const regExp = new RegExp(expression);
         const match = regExp.exec(text);

@@ -1,6 +1,7 @@
 import { ClueGroup } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/grid-reference';
 import { Clue } from 'src/app/model/clue';
+import { clueCaptionExpression, clueCaptionExpressionAdditionalPart } from './types';
 
 export class ClueBuffer {
     private _rawText: string;
@@ -43,7 +44,9 @@ export class ClueBuffer {
         // TO DO: ...
         this.setCaption();
         this._letterCount = Clue.getLetterCount(this.rawText);
-        this.setGridReferences();
+        if (this._caption) {
+            this.setGridReferences();
+        }
     }
 
     private setCaption(): void {
@@ -51,30 +54,35 @@ export class ClueBuffer {
         if (!this._rawText || this._rawText.trim().length === 0) {
             this._caption = null;
         }
-
+/*
         // one or two digits
-        const firstPart = String.raw`\d{1,2}`;
+        const firstPart = String.raw`^\s*\d{1,2}`;
         
         // optional space, a comma or slash, optional space, one or two digits, then an optioanl "across" or "down" or "/""
-        const additionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across)|(down))?`;
+        const additionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across|down|ac|dn))?`;
         
         // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
         const captionGroup = String.raw`(?<caption>\*?\s*${firstPart}(${additionalPart})*)`;
-        
+*/
         // any characters up to the end of the line
-        const clueGroup = String.raw`(?<clue>.*$)`;
+        const clueGroupExpression = String.raw`(?<clue>.*$)`;
         
         // start of line, optional space, (the caption group)
-        const regExp = new RegExp(String.raw`^\s*${captionGroup}${clueGroup}`);
+        const regExp = new RegExp(clueCaptionExpression + clueGroupExpression);
+
         const match = regExp.exec(this._rawText);
 
-        this._caption = match.groups.caption.trim();
-        this._clue = match.groups.clue.trim();
+        if (match) {
+            this._caption = match.groups.caption.trim();
+            this._clue = match.groups.clue.trim();
+        }
+
     }
 
     private setGridReferences(): void {
         let result: GridReference[] = [];
-        const expression = new RegExp(String.raw`\s*(?<clueNumber>\d{1,2})(\s?(?<direction>(across)|(down)))?`);
+        const expression = new RegExp(String.raw`\s*(?<clueNumber>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
+        //const expression = new RegExp(clueCaptionExpressionAdditionalPart);
 
         let parts = this.caption.split(",");
 
@@ -84,7 +92,7 @@ export class ClueBuffer {
 
             let match = expression.exec(part);
 
-            if (match.groups.clueNumber) {
+            if (match && match.groups.clueNumber) {
                 clueNumber = parseInt(match.groups.clueNumber);
                 if (match.groups.direction) {
                     clueGroup = <ClueGroup>match.groups.direction.toLowerCase(); 

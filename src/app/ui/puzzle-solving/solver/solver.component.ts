@@ -43,7 +43,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                             }
                              this.puzzle = puzzle;
 
-                            //console.log("SOLVER " + JSON.stringify(puzzle));
+                            //console.log("SOLVER " + JSON.stringify(puzzle.clues));
                         }
                     }
             ));

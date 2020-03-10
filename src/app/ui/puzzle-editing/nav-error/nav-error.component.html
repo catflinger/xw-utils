@@ -5,9 +5,9 @@
     <div>{{provisionError}}</div>
 </div>
 
-<div *ngIf="appData && appData.error">
+<div *ngIf="appData && appData.errorMessage">
     <div>Navigation App Data Error</div>
-    <div>{{appData.error}}</div>
+    <div>{{appData.errorMessage}}</div>
 </div>
 
 <div *ngIf="localError">

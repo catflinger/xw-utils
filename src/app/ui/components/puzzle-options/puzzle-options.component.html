@@ -34,7 +34,7 @@
                                     </thead>
                                     <tbody>
                                         <ng-container formArrayName="answerCols">
-                                            <tr *ngFor="let control of form.get('answerCols').controls; let i = index;">
+                                            <tr *ngFor="let control of answerColsArray.controls; let i = index;">
                                                 <td>{{i + 1}}</td>
                                                 <td class="form-group" [formGroupName]="i">
                                                     <input type="text" class="form-control" [attr.disabled]="i ? null : ''" formControlName="caption" placeholder="(untitled)">

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
 import { ClueGroup } from 'src/app/model/interfaces';
 import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
+import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 
 export interface ClueEditModel {
     id: string;
@@ -38,9 +39,26 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.title = this.clue ? "new clue" : "edit clue";
 
         this.form = this.formBuilder.group({
-            caption: [this.clue ? this.clue.caption : "", Validators.required],
-            text: [this.clue ? this.clue.text : "", Validators.required],
-            group: [this.clue ? this.clue.group : "", Validators.required],
+            caption: [
+                this.clue ? this.clue.caption : "", 
+                [
+                    Validators.required, 
+                    Validators.pattern(clueCaptionExpression + String.raw`\s*`)
+                ]
+            ],
+            text: [
+                this.clue ? this.clue.text : "",
+                [ 
+                    Validators.required,
+                    Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
+                ]
+            ],
+            group: [
+                this.clue ? this.clue.group : "",
+                [
+                    Validators.required
+                ]
+            ],
         });
     }
 
@@ -53,6 +71,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public onSave() {
+        //TO DO: validate teh entry
         if (this.clue) {
             this.activePuzzle.update(new UpdateClue(
                 this.clue.id, 

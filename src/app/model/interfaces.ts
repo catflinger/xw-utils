@@ -164,6 +164,7 @@ export abstract class IPuzzleProvision {
     abstract readonly source: string;
     abstract readonly parseErrors: ReadonlyArray<ITextParsingError>;
     abstract readonly parseWarnings: ReadonlyArray<ITextParsingWarning>;
+    //abstract readonly linkWarnings: ReadonlyArray<ILinkWarning>;
 }
 
 export abstract class IPuzzleInfo {
@@ -229,6 +230,10 @@ export abstract class ITextParsingError {
 
 export abstract class ITextParsingWarning {
     public readonly lineNumber: number;
+    public readonly message: string;
+}
+
+export abstract class ILinkWarning {
     public readonly message: string;
 }
 

@@ -50,7 +50,7 @@
                     <div class="float-left"><label [for]="item.id">{{item.caption}}</label></div>
 
                     <div class="float-right" *ngIf="i === 0 && clue.solution && appSettings.general.showCheat.enabled">
-                        <button type="button" class="btn btn-link" *ngIf="!(options && options.modifyAnswers)" (click)="onCheat()">cheat</button>
+                        <button type="button" class="btn btn-link" *ngIf="!(publishOptions && publishOptions.textCols.length > 1)" (click)="onCheat()">cheat</button>
                         <button type="button" class="btn btn-link" (click)="onAnnotation()" *ngIf="clue.annotation">annotation</button>
                     </div>
 

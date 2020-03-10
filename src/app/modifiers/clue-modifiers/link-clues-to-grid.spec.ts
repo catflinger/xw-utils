@@ -168,7 +168,7 @@ function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGr
         caption,
         text,
         letterCount: "",
-        answer: "",
+        answers: [""],
         solution: "",
         annotation: "",
         redirect: false,
@@ -217,24 +217,35 @@ function getEmptyPuzzle(): PuzzleM {
             footer: new QuillDelta(),
         },
         publishOptions: {
-            clueStyle: {
-                color: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-            },
-            answerStyle: {
-                color: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-            },
-            definitionStyle: {
-                color: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-            },
+            textStyles: [
+                {
+                    name: "clue",
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+                {
+                    name: "answer",
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+                {
+                    name: "definition",
+                    color: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                },
+            ],
+            textCols: [
+                {
+                    caption: "answer",
+                    style: "answer",
+                }
+            ],
             includeGrid: false,
             layout: "table",
             spacing: "small",

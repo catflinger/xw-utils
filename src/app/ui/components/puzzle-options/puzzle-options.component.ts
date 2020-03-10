@@ -27,23 +27,22 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
     ) { }
 
+    public get answerColsArray(): FormArray {
+        return this.form.get("answerCols") as FormArray;
+    }
     public ngOnInit() {
         this.form = new FormGroup({
             "answerCols": new FormArray([]),
             "showCols": new FormControl(false),
         });
 
-        let items = this.form.get("answerCols") as FormArray;
-        items.clear();
-
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.colCount = puzzle.publishOptions.textCols.length;
 
             this.form.patchValue({"showCols": this.colCount > 1});
 
-            let array = this.form.get("answerCols") as FormArray;
-            array.clear();
-            this.makeControls(puzzle.publishOptions).forEach(control => items.push(control));
+            this.answerColsArray.clear();
+            this.makeControls(puzzle.publishOptions).forEach(control => this.answerColsArray.push(control));
         }));
     }
 
