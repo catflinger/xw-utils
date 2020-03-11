@@ -21,13 +21,13 @@ export class PublishOptions implements IPublishOptions {
             this.textStyles = styles;
         } else {
             // backward compatibility Feb 2020
-            let answer = data.answerStyle;
+            let answer = data.answerStyle || {};
             answer.name = "answer";
 
-            let clue = data.clueStyle;
+            let clue = data.clueStyle || {};
             clue.name = "clue";
 
-            let def = data.definitionStyle;
+            let def = data.definitionStyle || {};
             def.name = "definition";
 
             this.textStyles = [

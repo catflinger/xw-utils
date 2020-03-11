@@ -9,10 +9,10 @@ export class TextStyle implements ITextStyle {
 
         constructor(data) {
             this.name = data.name;
-            this.color = data.color;
-            this.bold = data.bold;
-            this.italic = data.italic;
-            this.underline = data.underline;
+            this.color = data.color || "black";
+            this.bold = data.bold || false;
+            this.italic = data.italic || false;
+            this.underline = data.underline || false;
         }
 
         public toCssStyleString(): string {

@@ -128,7 +128,6 @@ function addTestClues(puzzle: PuzzleM) {
    0 1 2 3 4
 */
 
-
     // add 1 across
     puzzle.clues.push(makeClue(
         "1", 

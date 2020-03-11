@@ -44,6 +44,7 @@ describe('LinkValidationService', () => {
     });
 
 });
+
 function addGoodClue(clues: ClueM[]) {
     clues.push(makeClue(
         "0123",
@@ -53,7 +54,6 @@ function addGoodClue(clues: ClueM[]) {
     ));
 }
 
-
  function addClueWithMissingNumber(clues: ClueM[]) {
     clues.push(makeClue(
         "0123",
@@ -62,7 +62,6 @@ function addGoodClue(clues: ClueM[]) {
         "This is a clue (7)",
     ));
 }
-
 
 function emptyGridData(): GridM {
 
