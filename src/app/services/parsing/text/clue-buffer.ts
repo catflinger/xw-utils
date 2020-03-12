@@ -1,4 +1,4 @@
-import { ClueGroup } from 'src/app/model/interfaces';
+import { ClueGroup, Direction } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/grid-reference';
 import { Clue } from 'src/app/model/clue';
 import { clueCaptionExpression, clueCaptionExpressionAdditionalPart } from './types';
@@ -79,25 +79,27 @@ export class ClueBuffer {
 
     }
 
-    static makeGridReferences(caption: string, group: ClueGroup): ReadonlyArray<GridReference> {
+    static makeGridReferences(clueCaption: string, group: ClueGroup): ReadonlyArray<GridReference> {
         let result: GridReference[] = [];
-        const expression = new RegExp(String.raw`\s*(?<clueNumber>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
+        const expression = new RegExp(String.raw`\s*(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
         //const expression = new RegExp(clueCaptionExpressionAdditionalPart);
 
-        let parts = caption.split(",");
+        let parts = clueCaption.split(",");
 
         parts.forEach((part) => {
-            let clueNumber: number = 0;
-            let clueGroup: ClueGroup = group;
+            let caption = "";
+            let direction: Direction = group;
 
             let match = expression.exec(part);
 
-            if (match && match.groups.clueNumber) {
-                clueNumber = parseInt(match.groups.clueNumber);
+            if (match && match.groups.caption) {
+                caption = match.groups.caption.toString();
                 if (match.groups.direction) {
-                    clueGroup = <ClueGroup>match.groups.direction.toLowerCase(); 
+                    let directionString = match.groups.direction.toLowerCase();
+                    
+                    direction = directionString.charAt(0) === "a" ? "across" : "down";
                 }
-                result.push({ clueNumber, clueGroup });
+                result.push({ caption, direction });
             }
         });
 

@@ -69,29 +69,29 @@ export class LinkValidationService {
         }
         */
 
-        if (buffer.gridRefs.length === 0) {
-            warnings.push({
-                clueId: clue.id,
-                message: "this clue is missing gridReferences" // TO DO: this message needs to make more sense
-            });
-        } else if (buffer.gridRefs.length !== gridRefs.entries.length) {
-            warnings.push({
-                clueId: clue.id,
-                message: `the clue text indicates ${buffer.gridRefs.length} gird entries but the clue has ${gridRefs.entries.length} entries`
-            });
-        } else {
-            for (let i = 0; i < buffer.gridRefs.length; i++) {
-                //find the caption in teh grid
-                let cell = grid.cells.find(c => c.id === gridRefs.entries[i]);
-                if (cell.caption !== buffer.gridRefs[i].clueNumber.toString()) {
-                    warnings.push({
-                        clueId: clue.id,
-                        message: "there is a mismatch between the captions in the clue text and the captions in the grid. " +
-                        `This is for entry number ${i} clue caption ${buffer.gridRefs[i].clueNumber.toString()} and ther grid cell at (${cell.x}, ${cell.y})`
-                    });
-                }
-            }
-        }
+        // if (buffer.gridRefs.length === 0) {
+        //     warnings.push({
+        //         clueId: clue.id,
+        //         message: "this clue is missing gridReferences" // TO DO: this message needs to make more sense
+        //     });
+        // } else if (buffer.gridRefs.length !== gridRefs.entries.length) {
+        //     warnings.push({
+        //         clueId: clue.id,
+        //         message: `the clue text indicates ${buffer.gridRefs.length} gird entries but the clue has ${gridRefs.entries.length} entries`
+        //     });
+        // } else {
+        //     for (let i = 0; i < buffer.gridRefs.length; i++) {
+        //         //find the caption in teh grid
+        //         let cell = grid.cells.find(c => c.id === gridRefs.entries[i]);
+        //         if (cell.caption !== buffer.gridRefs[i].clueNumber.toString()) {
+        //             warnings.push({
+        //                 clueId: clue.id,
+        //                 message: "there is a mismatch between the captions in the clue text and the captions in the grid. " +
+        //                 `This is for entry number ${i} clue caption ${buffer.gridRefs[i].clueNumber.toString()} and ther grid cell at (${cell.x}, ${cell.y})`
+        //             });
+        //         }
+        //     }
+        // }
 
         return warnings;
     }

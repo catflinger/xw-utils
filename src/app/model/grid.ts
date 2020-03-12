@@ -133,7 +133,9 @@ export class Grid implements IGrid {
     }
 
     public getNextClueNumber(startRef: IGridReference): number {
-        let clueNumber = startRef.clueNumber;
+
+        // TO DO: work how to handle this for non-numbered grids (eg carte blanches etc)
+        let clueNumber = parseInt(startRef.caption);
         let found = false;
 
         // find the caption of the next entry in the same direction
@@ -151,7 +153,7 @@ export class Grid implements IGrid {
                 y = startCell.y;
             }
 
-            if (startRef.clueGroup === "across") {
+            if (startRef.direction === "across") {
                 if (x === 0) {
                     found = true;
                 } else {

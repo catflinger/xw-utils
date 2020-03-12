@@ -41,26 +41,26 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
         if (gridRefs) {
             gridRefs.forEach((gridRef, index) => {
-                let gridEntry: GridEntryM = { cellIds: [] };
-                let cells = grid.getGridEntryForCaption(gridRef.clueNumber.toString(), gridRef.clueGroup);
+                let gridEntry: GridEntryM = { gridRef, cellIds: [] };
+                let cells = grid.getGridEntryForCaption(gridRef.caption, gridRef.direction);
 
                 // check that this is the right entry
                 if (index === 0) {
                     if (cells.length === 0) {
-                        throw new Error(`Could not find any entry in grid for ${gridRef.clueNumber} ${gridRef.clueGroup}`);
+                        throw new Error(`Could not find any entry in grid for ${gridRef.caption} ${gridRef.direction}`);
                     }
                 } else {
-                    if (cells.length === 0 || cells[0].caption !== gridRef.clueNumber.toString()) {
+                    if (cells.length === 0 || cells[0].caption !== gridRef.caption) {
                         
                         // this might represent the case where the second or subsequent reference is not in the same group
                         // as the first reference. Try again but look in the other group
                         cells = grid.getGridEntryForCaption(
-                            gridRef.clueNumber.toString(), 
-                            gridRef.clueGroup === "across" ? "down" : "across");
+                            gridRef.caption, 
+                            gridRef.direction === "across" ? "down" : "across");
                         
                             // check that the second go finds an entry
                         if (cells.length === 0) {
-                            throw new Error(`Could not find any entry in grid for ${gridRef.clueNumber} ${gridRef.clueGroup}`);
+                            throw new Error(`Could not find any entry in grid for ${gridRef.caption} ${gridRef.direction}`);
                         }
                     }
                 }

@@ -64,6 +64,10 @@ export class CreateClues implements IPuzzleModifier {
             comment: new QuillDelta(),
             highlight: false,
             entries: [{
+                gridRef: {
+                    caption: clueNumber.toString(),
+                    direction: clueGroup,
+                },
                  cellIds: entry
             }],
             warnings: [],

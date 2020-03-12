@@ -61,8 +61,8 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(1);
-            expect(cb.gridRefs[0].clueNumber).toEqual(2);
-            expect(cb.gridRefs[0].clueGroup).toEqual("across");
+            expect(cb.gridRefs[0].caption).toEqual("2");
+            expect(cb.gridRefs[0].direction).toEqual("across");
         });
 
         it('should read a simple caption (2)', () => {
@@ -70,8 +70,8 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(1);
-            expect(cb.gridRefs[0].clueNumber).toEqual(33);
-            expect(cb.gridRefs[0].clueGroup).toEqual("down");
+            expect(cb.gridRefs[0].caption).toEqual("33");
+            expect(cb.gridRefs[0].direction).toEqual("down");
         });
 
         it('should read a simple multi-entry caption', () => {
@@ -79,10 +79,10 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(2);
-            expect(cb.gridRefs[0].clueNumber).toEqual(2);
-            expect(cb.gridRefs[0].clueGroup).toEqual("across");
-            expect(cb.gridRefs[1].clueNumber).toEqual(3);
-            expect(cb.gridRefs[1].clueGroup).toEqual("across");
+            expect(cb.gridRefs[0].caption).toEqual("2");
+            expect(cb.gridRefs[0].direction).toEqual("across");
+            expect(cb.gridRefs[1].caption).toEqual("3");
+            expect(cb.gridRefs[1].direction).toEqual("across");
         });
 
         it('should read a complex multi-entry caption (1)', () => {
@@ -90,12 +90,12 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(3);
-            expect(cb.gridRefs[0].clueNumber).toEqual(2);
-            expect(cb.gridRefs[0].clueGroup).toEqual("across");
-            expect(cb.gridRefs[1].clueNumber).toEqual(3);
-            expect(cb.gridRefs[1].clueGroup).toEqual("down");
-            expect(cb.gridRefs[2].clueNumber).toEqual(4);
-            expect(cb.gridRefs[2].clueGroup).toEqual("across");
+            expect(cb.gridRefs[0].caption).toEqual("2");
+            expect(cb.gridRefs[0].direction).toEqual("across");
+            expect(cb.gridRefs[1].caption).toEqual("3");
+            expect(cb.gridRefs[1].direction).toEqual("down");
+            expect(cb.gridRefs[2].caption).toEqual("4");
+            expect(cb.gridRefs[2].direction).toEqual("across");
         });
 
         it('should read a complex multi-entry caption (2)', () => {
@@ -103,12 +103,12 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(3);
-            expect(cb.gridRefs[0].clueNumber).toEqual(2);
-            expect(cb.gridRefs[0].clueGroup).toEqual("down");
-            expect(cb.gridRefs[1].clueNumber).toEqual(3);
-            expect(cb.gridRefs[1].clueGroup).toEqual("across");
-            expect(cb.gridRefs[2].clueNumber).toEqual(4);
-            expect(cb.gridRefs[2].clueGroup).toEqual("down");
+            expect(cb.gridRefs[0].caption).toEqual("2");
+            expect(cb.gridRefs[0].direction).toEqual("down");
+            expect(cb.gridRefs[1].caption).toEqual("3");
+            expect(cb.gridRefs[1].direction).toEqual("across");
+            expect(cb.gridRefs[2].caption).toEqual("4");
+            expect(cb.gridRefs[2].direction).toEqual("down");
         });
     });
 });

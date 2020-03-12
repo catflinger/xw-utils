@@ -1,10 +1,15 @@
-import { ClueGroup, IGridReference } from './interfaces';
+import { IGridReference, Direction } from './interfaces';
 
 export class GridReference implements IGridReference {
     // for example: 2 down or 23 across
-    constructor(
-        public readonly clueNumber: number,
-        public readonly clueGroup: ClueGroup,
-    ) {} 
+    public readonly caption: string;
+    public readonly direction: Direction;
+
+    constructor(data: any) {
+        if (data) {
+            this.caption = data.caption;
+            this.direction = data.direction;
+        }
+     }
 }
 

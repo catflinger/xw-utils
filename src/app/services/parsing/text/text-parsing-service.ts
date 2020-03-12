@@ -380,13 +380,13 @@ export class TextParsingService {
             let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
             let nextClueBuf = new ClueBuffer(token.text, context.state as ClueGroup);
 
-            let actualNextClueNumber = nextClueBuf.gridRefs[0].clueNumber;
+            let actualNextClueNumber: number = parseInt(nextClueBuf.gridRefs[0].caption);
 
             if (expectedNextClueNumber === actualNextClueNumber) {
                 // create a new letter count
                 let letterCount = " (";
                 context.buffer.gridRefs.forEach((ref, index) => {
-                    let entry = grid.getGridEntryForCaption(ref.clueNumber.toString(), ref.clueGroup);
+                    let entry = grid.getGridEntryForCaption(ref.caption, ref.direction);
                     if (index > 0) {
                         letterCount += ", ";
                     }

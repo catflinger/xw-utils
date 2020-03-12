@@ -78,8 +78,8 @@ export abstract class ITextChunk {
 
 export abstract class IGridReference {
     // for example: 2 down or 23 across
-    abstract readonly clueNumber: number;
-    abstract readonly clueGroup: ClueGroup; 
+    abstract readonly caption: string;
+    abstract readonly direction: Direction; 
 }
 
 export abstract class IClue implements ClueEditModel {
@@ -103,6 +103,7 @@ export abstract class IClue implements ClueEditModel {
 }
 
 export abstract class IGridEntry {
+    abstract readonly gridRef: IGridReference;
     abstract readonly cellIds: readonly string[];
 }
 
