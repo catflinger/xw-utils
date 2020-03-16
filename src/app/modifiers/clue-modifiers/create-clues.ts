@@ -6,6 +6,7 @@ import { ClueGroup, QuillDelta } from 'src/app/model/interfaces';
 import { GridCell } from 'src/app/model/grid-cell';
 import { ClueM } from '../mutable-model/clue-m';
 import { RenumberGid } from '../grid-modifiers/renumber-grid';
+import { GridReference } from 'src/app/model/grid-reference';
 
 export class CreateClues implements IPuzzleModifier {
     constructor() { }
@@ -35,11 +36,16 @@ export class CreateClues implements IPuzzleModifier {
         let maxCaption = grid.getMaxCaption();
         
         for (let n = 1; n <= maxCaption; n++) {
-            cells = grid.getGridEntryForCaption(clueNumber.toString(), group);
+            
+            cells = grid.getGridEntryFromReference(new GridReference({
+                caption: clueNumber.toString(),
+                group
+            }));
+            
             if (cells && cells.length) {
                 let clue = this.makeClue(group, clueNumber, cells);
                 puzzle.clues.push(clue);
-                }
+            }
             clueNumber++;
         };
     }

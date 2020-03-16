@@ -15,8 +15,17 @@ export const parseTrack: NavTrack = {
             type: "process",
             process: "parse",
             actions: {
-                "ok": "linker",
+                "ok": "set-grid-refs",
                 "error": "error",
+            }
+        },
+        {
+            name: "set-grid-refs",
+            type: "process",
+            process: "set-grid-refs",
+            actions: {
+                "ok": "linker",
+                "error": "link-error",
             }
         },
         {

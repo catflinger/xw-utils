@@ -1,32 +1,36 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
-import { GridEntryM } from '../mutable-model/grid-entry-m';
-import { RenumberGid } from '../grid-modifiers/renumber-grid';
 import { ClueM } from '../mutable-model/clue-m';
-import { GridReference } from 'src/app/model/grid-reference';
-import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
-
 
 export class LinkCluesToGrid implements IPuzzleModifier {
-    constructor() { }
+    constructor(private clueId?: string) { }
 
     public exec(puzzle: PuzzleM) {
         if (puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
 
-            let captionWriter = new RenumberGid();
-            captionWriter.exec(puzzle);
+            // let captionWriter = new RenumberGid();
+            // captionWriter.exec(puzzle);
 
             const grid = new Grid(puzzle.grid);
+            let clues: ClueM[];
 
-            puzzle.clues.forEach((clue) => {
-                // parse the clue caption into grid references
+            if (this.clueId) {
+                // process just the specified clue
+                let clue: ClueM = puzzle.clues.find(c => c.id === this.clueId);
+                if (clue) {
+                    clues = [clue];
+                }
+            } else {
+                // if no id given then default processing all clues
+                clues = puzzle.clues;
+            }
+
+            clues.forEach((clue) => {
                 if (!clue.redirect) {
-                    clue.entries = this.makeGridEntries(grid, clue);
+                    this.setGridEntries(grid, clue);
                 }
             });
-
-            // TO DO: check entries match the letter count
 
             puzzle.capability.blogable = true;
             puzzle.capability.solveable = true;
@@ -35,39 +39,20 @@ export class LinkCluesToGrid implements IPuzzleModifier {
         }
     }
 
-    private makeGridEntries(grid: Grid, clue: ClueM): GridEntryM[] {
-        let result: GridEntryM[] = [];
-        let gridRefs: ReadonlyArray<GridReference> = ClueBuffer.makeGridReferences(clue.caption, clue.group);
+    private setGridEntries(grid: Grid, clue: ClueM) {
 
-        if (gridRefs) {
-            gridRefs.forEach((gridRef, index) => {
-                let gridEntry: GridEntryM = { gridRef, cellIds: [] };
-                let cells = grid.getGridEntryForCaption(gridRef.caption, gridRef.direction);
+        clue.entries.forEach((entry, index) => {
+            let gridRef = entry.gridRef;
 
-                // check that this is the right entry
-                if (index === 0) {
-                    if (cells.length === 0) {
-                        throw new Error(`Could not find any entry in grid for ${gridRef.caption} ${gridRef.direction}`);
-                    }
-                } else {
-                    if (cells.length === 0 || cells[0].caption !== gridRef.caption) {
-                        
-                        // this might represent the case where the second or subsequent reference is not in the same group
-                        // as the first reference. Try again but look in the other group
-                        cells = grid.getGridEntryForCaption(
-                            gridRef.caption, 
-                            gridRef.direction === "across" ? "down" : "across");
-                        
-                            // check that the second go finds an entry
-                        if (cells.length === 0) {
-                            throw new Error(`Could not find any entry in grid for ${gridRef.caption} ${gridRef.direction}`);
-                        }
-                    }
-                }
-                cells.forEach(cell => gridEntry.cellIds.push(cell.id));
-                result.push(gridEntry);
-            });
-        }
-        return result;
+            if (!gridRef) {
+                throw new Error(`Clue for ${clue.caption} ${clue.group}has no grid reference`);
+            } else {
+                entry.cellIds = [];
+                grid.getGridEntryFromReference(entry.gridRef).forEach(cell => {
+                    entry.cellIds.push(cell.id)
+                });
+            }
+        });
     }
+
 }

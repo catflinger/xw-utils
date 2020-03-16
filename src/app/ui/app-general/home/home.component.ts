@@ -32,8 +32,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.puzzleManagement.getPuzzleList().subscribe(
             (list) => {
-                this.puzzleList = list.filter(p => p.info.provider !== "grid");
-                this.gridList = list.filter(p => p.info.provider === "grid");
+                this.puzzleList = list.filter(p => p.info.provider !== "grid")
+                    .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
+                this.gridList = list.filter(p => p.info.provider === "grid")
+                    .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
             },
             (error) => this.appService.setAlert("danger", error.toString())
         ));

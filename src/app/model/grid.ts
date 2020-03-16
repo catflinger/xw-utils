@@ -117,14 +117,14 @@ export class Grid implements IGrid {
         return cells.length > 0 ? cells[0] : 0;
     }
 
-    public getGridEntryForCaption(caption: string, group: ClueGroup): ReadonlyArray<GridCell> {
+    public getGridEntryFromReference(ref: GridReference): ReadonlyArray<GridCell> {
         let entry: ReadonlyArray<GridCell> = null;
 
-        let startCell = this.cells.find(c => c.caption === caption);
+        let startCell = this.cells.find(c => c.caption === ref.caption);
 
         if (startCell) {
-            let cells = this.getEntry(startCell, group);
-            if (cells.length > 0 && cells[0].caption === caption) {
+            let cells = this.getEntry(startCell, ref.direction);
+            if (cells.length > 0 && cells[0].caption === ref.caption) {
                 entry = cells;
             }
         }

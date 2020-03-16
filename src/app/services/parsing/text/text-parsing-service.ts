@@ -386,7 +386,7 @@ export class TextParsingService {
                 // create a new letter count
                 let letterCount = " (";
                 context.buffer.gridRefs.forEach((ref, index) => {
-                    let entry = grid.getGridEntryForCaption(ref.caption, ref.direction);
+                    let entry = grid.getGridEntryFromReference(ref);
                     if (index > 0) {
                         letterCount += ", ";
                     }

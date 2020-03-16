@@ -10,6 +10,7 @@ import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-s
 import { ProviderService } from 'src/app/services/provider.service';
 import { CreateClues } from 'src/app/modifiers/clue-modifiers/create-clues';
 import { InitAnnotationWarnings } from 'src/app/modifiers/puzzle-modifiers/init-annotation-warnings';
+import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 
 @Injectable({
     providedIn: 'root'
@@ -63,6 +64,11 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 action = this.parse();
                 break;
 
+            case "set-grid-refs":
+                this.activePuzzle.update(new SetGridReferences());
+                action = Promise.resolve("ok");
+                break;
+    
             case "link":
                 try {
                     this.activePuzzle.update(new LinkCluesToGrid());

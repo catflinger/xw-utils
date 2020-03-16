@@ -7,6 +7,7 @@ import { GridM } from '../mutable-model/grid-m';
 import { GridCell } from 'src/app/model/grid-cell';
 import { ClueM } from '../mutable-model/clue-m';
 import { GridCellM } from '../mutable-model/grid-cell-m';
+import { GridEntryM } from '../mutable-model/grid-entry-m';
 
 describe('LinkCLuesToGrid modifier', () => {
 
@@ -133,6 +134,13 @@ function addTestClues(puzzle: PuzzleM) {
         "1", 
         "across", 
         "This is one across (5)",
+        [{
+            cellIds: [],
+            gridRef: {
+                caption: "1",
+                direction: "across"
+            }
+        }]
     ));
 
     // add 2 down
@@ -140,6 +148,13 @@ function addTestClues(puzzle: PuzzleM) {
         "2", 
         "down", 
         "This is 2 down (5)",
+        [{
+            cellIds: [],
+            gridRef: {
+                caption: "2",
+                direction: "down"
+            }
+        }]
     ));
 
     // add 5 across
@@ -147,10 +162,26 @@ function addTestClues(puzzle: PuzzleM) {
         "5, 3 down", 
         "across", 
         "This has two grid entries (5, 5)",
+        [
+            {
+                cellIds: [],
+                gridRef: {
+                    caption: "5",
+                    direction: "across"
+                },
+            },
+            {
+                cellIds: [],
+                gridRef: {
+                    caption: "3",
+                    direction: "down"
+                }
+            }
+        ]
     ));
 }
 
-function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
+function makeClue(caption: string, group: ClueGroup, text: string, entries: GridEntryM[]): ClueM {
     return {
         id: "",
         group,
@@ -164,10 +195,9 @@ function makeClue(caption: string, group: ClueGroup, text: string): ClueM {
         format: "",
         comment: null,
         highlight: false,
-        entries: [],
         chunks: [],
         warnings: [],
-        //gridRefs,
+        entries,
     };
 }
 
