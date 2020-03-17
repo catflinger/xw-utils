@@ -190,9 +190,9 @@ export class Clue implements IClue {
         return result;
     }
 
-    public static makeClue(buffer: ClueBuffer, group: ClueGroup): Clue {
+    public static makeClue(buffer: ClueBuffer, group: ClueGroup, clueId?: string): Clue {
         return new Clue({
-            id: uuid(),
+            id: clueId || uuid(),
             group,
             caption: buffer.caption,
             text: buffer.clue,

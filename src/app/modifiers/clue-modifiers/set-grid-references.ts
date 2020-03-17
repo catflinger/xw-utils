@@ -32,9 +32,9 @@ export class SetGridReferences implements IPuzzleModifier {
                     clue.entries.push({
                         gridRef: ref,
                         cellIds: [],
-                    })
+                    });
                 })
-            })
+            });
 
         }
     }

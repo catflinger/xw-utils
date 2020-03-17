@@ -10,6 +10,7 @@ export class AddClue implements IPuzzleModifier {
         private caption: string,
         private group: ClueGroup,
         private text: string,
+        private clueId?: string,
     ) { }
 
     exec(puzzle: PuzzleM) {
@@ -17,7 +18,7 @@ export class AddClue implements IPuzzleModifier {
             let fullText = this.caption + " " + this.text;
             const cb: ClueBuffer = new ClueBuffer(fullText, this.group);
 
-            const clue = Clue.makeClue(cb, this.group).toMutable();
+            const clue = Clue.makeClue(cb, this.group, this.clueId).toMutable();
             clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
 
             puzzle.clues.push(clue);

@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
@@ -6,6 +7,9 @@ import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
 import { ClueGroup } from 'src/app/model/interfaces';
 import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
+import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { LinkCluesToGrid } from 'src/app/modifiers/clue-modifiers/link-clues-to-grid';
+import { unescapeIdentifier } from '@angular/compiler';
 
 export interface ClueEditModel {
     id: string;
@@ -73,18 +77,29 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public onSave() {
         //TO DO: validate teh entry
         if (this.clue) {
-            this.activePuzzle.update(new UpdateClue(
-                this.clue.id, 
-                this.form.value.caption,
-                this.form.value.group,
-                this.form.value.text,
-            ));
+            this.activePuzzle.update(
+                new UpdateClue(
+                    this.clue.id, 
+                    this.form.value.caption,
+                    this.form.value.group,
+                    this.form.value.text,
+                ),
+                new SetGridReferences([this.clue.id]),
+                new LinkCluesToGrid(),
+            );
         } else {
-            this.activePuzzle.update(new AddClue(
-                this.form.value.caption,
-                this.form.value.group,
-                this.form.value.text,
-            ));
+            const clueId = uuid();
+            this.activePuzzle.update(
+                new AddClue(
+                    this.form.value.caption,
+                    this.form.value.group,
+                    this.form.value.text,
+                    clueId,
+                ),
+                new SetGridReferences([clueId]),
+                new LinkCluesToGrid(clueId),
+
+            );
         }
         this.close.emit();
     }
