@@ -10,6 +10,7 @@ import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/servic
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { LinkCluesToGrid } from 'src/app/modifiers/clue-modifiers/link-clues-to-grid';
 import { unescapeIdentifier } from '@angular/compiler';
+import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 
 export interface ClueEditModel {
     id: string;
@@ -86,6 +87,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
                 ),
                 new SetGridReferences([this.clue.id]),
                 new LinkCluesToGrid(),
+                new SortClues(),
             );
         } else {
             const clueId = uuid();
@@ -98,7 +100,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
                 ),
                 new SetGridReferences([clueId]),
                 new LinkCluesToGrid(clueId),
-
+                new SortClues(),
             );
         }
         this.close.emit();

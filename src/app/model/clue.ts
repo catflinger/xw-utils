@@ -3,7 +3,6 @@ import { ClueGroup, QuillDelta } from './interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from './interfaces';
-import { GridReference } from './grid-reference';
 import { ClueM } from '..//modifiers/mutable-model/clue-m';
 import { ClueBuffer } from '../services/parsing/text/clue-buffer';
 import { clueLetterCountExpression } from '../services/parsing/text/types';
@@ -15,7 +14,6 @@ export class Clue implements IClue {
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
     public readonly answers: ReadonlyArray<string>;
-    //public readonly answerAlt: string;
     public readonly solution: string;
     public readonly annotation: string;
     public readonly redirect: boolean;
@@ -25,7 +23,6 @@ export class Clue implements IClue {
     public readonly entries: ReadonlyArray<GridEntry>;
     public readonly chunks: ReadonlyArray<TextChunk>;
     public readonly warnings: ReadonlyArray<ClueValidationWarning>; 
-    //public readonly gridRefs: ReadonlyArray<GridReference>; 
 
     constructor(data: any) {
         this.id = data.id;
