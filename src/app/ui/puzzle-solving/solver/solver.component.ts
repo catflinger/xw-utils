@@ -116,7 +116,10 @@ export class SolverComponent implements OnInit, OnDestroy {
         if (!clue.redirect) {
             setTimeout(
                 () => {
-                    this.modalRef = this.modalService.open(ClueAnnotationComponent, { backdrop: "static"});
+                    this.modalRef = this.modalService.open(ClueAnnotationComponent, { 
+                        backdrop: "static",
+                        size: "lg",
+                    });
                     this.modalRef.componentInstance.clueId = clue.id;
                     this.modalRef.componentInstance.starterText = starterText;
                     this.modalRef.componentInstance.publishOptions = this.puzzle.publishOptions;

@@ -107,7 +107,10 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     private openEditor(clue) {
         setTimeout(
             () => {
-                this.modalRef = this.modalService.open(ClueTextEditorComponent, { backdrop: "static" });
+                this.modalRef = this.modalService.open(ClueTextEditorComponent, { 
+                    backdrop: "static",
+                    size: "lg",
+                 });
                 this.modalRef.componentInstance.clue = clue;
                 this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
                     this.modalRef.close();
