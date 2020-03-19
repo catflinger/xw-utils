@@ -176,7 +176,10 @@ function makeClue(id: string, caption: string, group: ClueGroup, text: string): 
         format: "",
         comment: null,
         highlight: false,
-        entries: [],
+        link: {
+            warning: null,
+            entries: [],
+        },
         chunks: [],
         warnings: [],
         //gridRefs,

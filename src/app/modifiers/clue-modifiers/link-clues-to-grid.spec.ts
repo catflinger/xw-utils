@@ -48,9 +48,9 @@ describe('LinkCLuesToGrid modifier', () => {
 
                 // 1st clue - 1 (across clue)
                 const clue = puzzle.clues[0];
-                expect(Array.isArray(clue.entries)).toBeTruthy;
-                expect(clue.entries.length).toEqual(1);
-                const entry = clue.entries[0];
+                expect(Array.isArray(clue.link.entries)).toBeTruthy;
+                expect(clue.link.entries.length).toEqual(1);
+                const entry = clue.link.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
                 expect(entry.cellIds.length).toEqual(5);
                 const cells = entry.cellIds;
@@ -66,9 +66,9 @@ describe('LinkCLuesToGrid modifier', () => {
 
                 // 2nd clue - 2 (down clue)
                 let clue = puzzle.clues[1];
-                expect(Array.isArray(clue.entries)).toBeTruthy;
-                expect(clue.entries.length).toEqual(1);
-                let entry = clue.entries[0];
+                expect(Array.isArray(clue.link.entries)).toBeTruthy;
+                expect(clue.link.entries.length).toEqual(1);
+                let entry = clue.link.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
                 expect(entry.cellIds.length).toEqual(5);
                 let cells = entry.cellIds;
@@ -84,11 +84,11 @@ describe('LinkCLuesToGrid modifier', () => {
 
                 // 3rd clue - 5, 3 down (across clue)
                 let clue = puzzle.clues[2];
-                expect(Array.isArray(clue.entries)).toBeTruthy;
-                expect(clue.entries.length).toEqual(2);
+                expect(Array.isArray(clue.link.entries)).toBeTruthy;
+                expect(clue.link.entries.length).toEqual(2);
 
                 // 5 across - 1st entry
-                let entry = clue.entries[0];
+                let entry = clue.link.entries[0];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
                 expect(entry.cellIds.length).toEqual(5);
                 let cells = entry.cellIds;
@@ -101,7 +101,7 @@ describe('LinkCLuesToGrid modifier', () => {
                 expect(cells[4]).toEqual("44");
 
                 // 2 across - 2nd entry
-                entry = clue.entries[1];
+                entry = clue.link.entries[1];
                 expect(Array.isArray(entry.cellIds)).toBeTruthy;
                 expect(entry.cellIds.length).toEqual(5);
                 cells = entry.cellIds;
@@ -197,7 +197,10 @@ function makeClue(caption: string, group: ClueGroup, text: string, entries: Grid
         highlight: false,
         chunks: [],
         warnings: [],
-        entries,
+        link: {
+            warning: null,
+            entries,
+        },
     };
 }
 
