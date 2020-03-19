@@ -102,7 +102,10 @@ function makeClue(caption: string, group: ClueGroup, text: string, entries: Grid
         highlight: false,
         chunks: [],
         warnings: [],
-        entries,
+        link: {
+            warning: null,
+            entries,
+        }
     };
 }
 

@@ -23,13 +23,13 @@ export class SetGridReferences implements IPuzzleModifier {
             }
 
             clues.forEach(clue => {
-                clue.entries = [];
+                clue.link.entries = [];
                 let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group);
 
                 // TO DO: check that all clues except redirects have references?
 
                 refs.forEach(ref => {
-                    clue.entries.push({
+                    clue.link.entries.push({
                         gridRef: ref,
                         cellIds: [],
                     });

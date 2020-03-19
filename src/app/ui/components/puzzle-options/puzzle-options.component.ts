@@ -37,12 +37,14 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
-            this.colCount = puzzle.publishOptions.textCols.length;
+            if (puzzle) {
+                this.colCount = puzzle.publishOptions.textCols.length;
 
-            this.form.patchValue({"showCols": this.colCount > 1});
+                this.form.patchValue({"showCols": this.colCount > 1});
 
-            this.answerColsArray.clear();
-            this.makeControls(puzzle.publishOptions).forEach(control => this.answerColsArray.push(control));
+                this.answerColsArray.clear();
+                this.makeControls(puzzle.publishOptions).forEach(control => this.answerColsArray.push(control));
+            }
         }));
     }
 

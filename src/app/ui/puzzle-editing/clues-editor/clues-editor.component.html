@@ -17,17 +17,9 @@
     </div>
 </div>
 
-<!--
 <div class="row" *ngIf="puzzle && puzzle.grid">
     <div class="col">
         <app-grid [options]="{ readonly: true, showShading: false }"></app-grid>
-    </div>
-</div>
--->
-
-<div class="row mt-3" *ngIf="puzzle">
-    <div class="col">
-        <button type="button" class="btn btn-primary mr-3" (click)="onAddClue()">Add new clue</button>
     </div>
 </div>
 
@@ -62,6 +54,12 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="row mt-3" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onAddClue()">Add new clue</button>
     </div>
 </div>
 

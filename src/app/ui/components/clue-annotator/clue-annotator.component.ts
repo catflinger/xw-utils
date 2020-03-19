@@ -289,7 +289,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         let answer = this.clean(this.form.value.answers[0]);
         let index = 0;
 
-        this.clue.entries.forEach((entry) => {
+        this.clue.link.entries.forEach((entry) => {
             entry.cellIds.forEach((id) => {
                 let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
@@ -346,7 +346,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
                 }
 
                 if (answer) {
-                    clue.entries.forEach((entry) => {
+                    clue.link.entries.forEach((entry) => {
                         entry.cellIds.forEach((id) => {
                             let cell = puzzle.grid.cells.find(c => c.id === id);
                             if (index < answer.length) {

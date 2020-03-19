@@ -41,7 +41,7 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
     private setGridEntries(grid: Grid, clue: ClueM) {
 
-        clue.entries.forEach((entry, index) => {
+        clue.link.entries.forEach((entry, index) => {
             let gridRef = entry.gridRef;
 
             if (!gridRef) {

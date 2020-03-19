@@ -6,6 +6,7 @@ import { ClueValidationWarning, IClue } from './interfaces';
 import { ClueM } from '..//modifiers/mutable-model/clue-m';
 import { ClueBuffer } from '../services/parsing/text/clue-buffer';
 import { clueLetterCountExpression } from '../services/parsing/text/types';
+import { GridLink } from './grid-link';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -20,9 +21,10 @@ export class Clue implements IClue {
     public readonly format: string;
     public readonly comment: QuillDelta;
     public readonly highlight: boolean;
-    public readonly entries: ReadonlyArray<GridEntry>;
+    public readonly link: GridLink;
+    //public readonly entries: ReadonlyArray<GridEntry>;
     public readonly chunks: ReadonlyArray<TextChunk>;
-    public readonly warnings: ReadonlyArray<ClueValidationWarning>; 
+    public readonly warnings: ReadonlyArray<ClueValidationWarning>;
 
     constructor(data: any) {
         this.id = data.id;
@@ -59,19 +61,23 @@ export class Clue implements IClue {
             this.redirect = false;
         }
 
-        let entries: GridEntry[] = [];
-        data.entries.forEach(entry => entries.push(new GridEntry(entry)));
-        this.entries = entries;
+        if (data.link) {
+            this.link = new GridLink(data.link);
+        } else if (data.entries) {
+            // backward compatibility 17/03/2020
+            this.link = new GridLink({
+                warning: null,
+                entries: data.entries,
+            });
+        }
+
+        // let entries: GridEntry[] = [];
+        // data.entries.forEach(entry => entries.push(new GridEntry(entry)));
+        // this.link.entries = entries;
 
         let chunks: TextChunk[] = [];
         data.chunks.forEach(chunk => chunks.push(new TextChunk(chunk)));
         this.chunks = chunks;
-
-        // let refs: GridReference[] = [];
-        // if (data.gridRefs && Array.isArray(data.gridRefs)) {
-        //     data.gridRefs.forEach(ref => refs.push(new GridReference(ref.clueNumber, ref.clueGroup)));
-        // }
-        // this.gridRefs = refs;
 
         let warnings: ClueValidationWarning[] = [];
         if (data.warnings) {
@@ -82,13 +88,9 @@ export class Clue implements IClue {
 
     public get lengthAvailable(): number {
         let count = 0;
-        this.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
+        this.link.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
         return count;
     }
-
-    // public get entry(): string {
-    //     return this.answers[0].toUpperCase().replace(/[^A-Z]/g, "");
-    // }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];
@@ -203,7 +205,6 @@ export class Clue implements IClue {
             highlight: false,
             entries: [],
             warnings: [],
-            //gridRefs: buffer.gridRefs,
             chunks: [
                 {
                     text: buffer.clue,

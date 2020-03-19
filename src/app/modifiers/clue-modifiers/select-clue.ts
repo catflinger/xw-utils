@@ -13,7 +13,7 @@ export class SelectClue implements IPuzzleModifier {
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
             if (clue && !clue.redirect) {
                 clue.highlight = true;
-                clue.entries.forEach((entry) => {
+                clue.link.entries.forEach((entry) => {
                     entry.cellIds.forEach((cellId) => {
                         let cell = puzzle.grid.cells.find((cell) => cell.id === cellId);
                         cell.highlight = true;

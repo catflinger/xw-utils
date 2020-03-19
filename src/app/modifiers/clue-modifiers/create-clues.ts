@@ -69,13 +69,16 @@ export class CreateClues implements IPuzzleModifier {
             format: ",".repeat(entry.length),
             comment: new QuillDelta(),
             highlight: false,
-            entries: [{
-                gridRef: {
-                    caption: clueNumber.toString(),
-                    direction: clueGroup,
-                },
-                 cellIds: entry
-            }],
+            link: {
+                warning: null,
+                entries: [{
+                    gridRef: {
+                        caption: clueNumber.toString(),
+                        direction: clueGroup,
+                    },
+                    cellIds: entry
+                }],
+            },
             warnings: [],
             // gridRefs: [{
             //     clueNumber, 

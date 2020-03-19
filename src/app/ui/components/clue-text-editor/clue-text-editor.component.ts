@@ -9,8 +9,10 @@ import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { LinkCluesToGrid } from 'src/app/modifiers/clue-modifiers/link-clues-to-grid';
-import { unescapeIdentifier } from '@angular/compiler';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
+import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
+import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
 
 export interface ClueEditModel {
     id: string;
@@ -76,33 +78,38 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public onSave() {
-        //TO DO: validate teh entry
+        let mods: IPuzzleModifier[] = [];
+
+        //TO DO: validate the entry
         if (this.clue) {
-            this.activePuzzle.update(
+            mods.push(
                 new UpdateClue(
                     this.clue.id, 
                     this.form.value.caption,
                     this.form.value.group,
                     this.form.value.text,
-                ),
-                new SetGridReferences([this.clue.id]),
-                new LinkCluesToGrid(),
-                new SortClues(),
+                )
             );
         } else {
             const clueId = uuid();
-            this.activePuzzle.update(
+            mods.push(
                 new AddClue(
                     this.form.value.caption,
                     this.form.value.group,
                     this.form.value.text,
-                    clueId,
-                ),
-                new SetGridReferences([clueId]),
-                new LinkCluesToGrid(clueId),
-                new SortClues(),
+                    clueId)
             );
         }
+
+        mods.push(
+            new SetGridReferences([this.clue.id]),
+            new LinkCluesToGrid(),
+            new ValidateLetterCounts(),
+            new SortClues(),
+            new Clear(),
+        );
+
+        this.activePuzzle.update(...mods);
         this.close.emit();
     }
 

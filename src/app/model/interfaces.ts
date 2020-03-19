@@ -1,6 +1,7 @@
 import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
 import { ClueEditModel } from '../ui/components/clue-text-editor/clue-text-editor.component';
+import { GridLink } from './grid-link';
 
 export type Base64Encoded = string;
 
@@ -76,6 +77,11 @@ export abstract class ITextChunk {
     abstract readonly isDefinition: boolean;
 }
 
+export abstract class IGridLink {
+    warning: string;
+    entries: ReadonlyArray<IGridEntry>;
+}
+
 export abstract class IGridReference {
     // for example: 2 down or 23 across
     abstract readonly caption: string;
@@ -96,7 +102,8 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly format: string;
     abstract readonly comment: QuillDelta;
     abstract readonly highlight: boolean;
-    abstract readonly entries: ReadonlyArray<IGridEntry>;
+    abstract readonly link: GridLink;
+    //abstract readonly entries: ReadonlyArray<IGridEntry>;
     abstract readonly chunks: ReadonlyArray<ITextChunk>;
     abstract readonly warnings: ReadonlyArray<ClueValidationWarning>;
     //abstract readonly gridRefs: ReadonlyArray<IGridReference>;

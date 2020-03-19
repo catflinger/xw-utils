@@ -42,7 +42,7 @@ export class LinkValidationService {
             if (clue.redirect) {
                 // TO DO: should a redirect have an entry?
             } else if (puzzle.grid) {
-                if (clue.entries.length === 0) {
+                if (clue.link.entries.length === 0) {
                     // TO DO: rasie a warning here
                 } else {
                     warnings.concat(

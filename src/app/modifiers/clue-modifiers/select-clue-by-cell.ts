@@ -62,8 +62,8 @@ export class SelectClueByCell implements IPuzzleModifier {
 
         for (let clue of clues) {
             if (!clue.redirect) {
-                if (clue.entries.length) {
-                    let entry = clue.entries[0];
+                if (clue.link.entries.length) {
+                    let entry = clue.link.entries[0];
                     entry.cellIds.forEach(id => {
                         if (id === cellId) {
                             result = clue;
@@ -83,7 +83,7 @@ export class SelectClueByCell implements IPuzzleModifier {
 
         for (let clue of clues) {
             if (!clue.redirect) {
-                clue.entries.forEach((entry) => {
+                clue.link.entries.forEach((entry) => {
                     entry.cellIds.forEach(id => {
                         if (id === cellId) {
                             result = clue;

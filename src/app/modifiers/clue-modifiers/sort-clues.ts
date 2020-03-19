@@ -11,9 +11,9 @@ export class SortClues implements IPuzzleModifier {
                 let result = a.group.localeCompare(b.group);
                 if (!result) {
                     //within a group sort clues in numerical order if possible
-                    if (a.entries.length && b.entries.length) {
-                        let gridRefA = a.entries[0].gridRef;
-                        let gridRefB = b.entries[0].gridRef;
+                    if (a.link.entries.length && b.link.entries.length) {
+                        let gridRefA = a.link.entries[0].gridRef;
+                        let gridRefB = b.link.entries[0].gridRef;
 
                         if (gridRefA && gridRefB) {
                             result = parseInt(gridRefA.caption) - parseInt(gridRefB.caption);
