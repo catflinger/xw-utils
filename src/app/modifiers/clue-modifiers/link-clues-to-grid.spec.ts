@@ -137,7 +137,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             cellIds: [],
             gridRef: {
-                caption: "1",
+                caption: 1,
                 direction: "across"
             }
         }]
@@ -151,7 +151,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             cellIds: [],
             gridRef: {
-                caption: "2",
+                caption: 2,
                 direction: "down"
             }
         }]
@@ -166,14 +166,14 @@ function addTestClues(puzzle: PuzzleM) {
             {
                 cellIds: [],
                 gridRef: {
-                    caption: "5",
+                    caption: 5,
                     direction: "across"
                 },
             },
             {
                 cellIds: [],
                 gridRef: {
-                    caption: "3",
+                    caption: 3,
                     direction: "down"
                 }
             }
@@ -290,19 +290,19 @@ function testGridData() {
 
     // set the captions
     let cell = data.cells.find(c => c.id === "00");
-    cell.caption = "1";
+    cell.caption = 1;
 
     cell = data.cells.find(c => c.id === "20");
-    cell.caption = "2";
+    cell.caption = 2;
 
     cell = data.cells.find(c => c.id === "40");
-    cell.caption = "3";
+    cell.caption = 3;
 
     cell = data.cells.find(c => c.id === "02");
-    cell.caption = "4";
+    cell.caption = 4;
 
     cell = data.cells.find(c => c.id === "04");
-    cell.caption = "5";
+    cell.caption = 5;
 
     // set the blacked-out squares
     let cells: GridCellM[] = [];
@@ -337,7 +337,7 @@ function emptyGridData(): GridM {
                 id: x.toString() + y.toString(),
                 x,
                 y,
-                caption: "",
+                caption: null,
                 content: "",
                 rightBar: false,
                 bottomBar: false,

@@ -8,7 +8,7 @@ export class UpdateCell implements IPuzzleModifier {
         public cellId: string,
         public args: {
             shading?: string,
-            caption?: string,
+            caption?: number,
             content?: string,
             light?: boolean,
             rightBar?: boolean,

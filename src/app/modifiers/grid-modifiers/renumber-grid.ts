@@ -30,10 +30,10 @@ export class RenumberGid implements IPuzzleModifier {
                     }
 
                     if (isStartCell) {
-                        cell.caption = counter.toString();
+                        cell.caption = counter;
                         counter++;
                     } else {
-                        cell.caption = "";
+                        cell.caption = null;
                     }
                 }
             }

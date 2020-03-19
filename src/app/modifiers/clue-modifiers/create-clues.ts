@@ -73,7 +73,7 @@ export class CreateClues implements IPuzzleModifier {
                 warning: null,
                 entries: [{
                     gridRef: {
-                        caption: clueNumber.toString(),
+                        caption: clueNumber,
                         direction: clueGroup,
                     },
                     cellIds: entry

@@ -4,7 +4,7 @@ export abstract class GridCellM implements IGridCell {
     public abstract id: string;
     public abstract x: number;
     public abstract y: number;
-    public abstract caption: string;
+    public abstract caption: number;
     public abstract content: string;
     public abstract light: boolean;
     public abstract rightBar: boolean;

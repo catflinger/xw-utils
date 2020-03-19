@@ -88,10 +88,10 @@ function getTestData(data: any): any {
             }
 
             if (isStart) {
-                cell.caption = counter.toString();
+                cell.caption = counter;
                 counter++;
             } else {
-                cell.caption = "";
+                cell.caption = null;
             }
         }
     }

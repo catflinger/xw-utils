@@ -87,7 +87,7 @@ export class ClueBuffer {
         let parts = clueCaption.split(",");
 
         parts.forEach((part) => {
-            let caption = "";
+            let caption;
             let direction: Direction = group;
 
             let match = expression.exec(part);
@@ -99,7 +99,7 @@ export class ClueBuffer {
                     
                     direction = directionString.charAt(0) === "a" ? "across" : "down";
                 }
-                result.push({ caption, direction });
+                result.push({ caption: parseInt(caption.toString()), direction });
             }
         });
 

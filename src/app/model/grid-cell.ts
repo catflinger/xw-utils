@@ -4,7 +4,7 @@ export class GridCell implements IGridCell {
     public readonly id: string;
     public readonly x: number;
     public readonly y: number;
-    public readonly caption: string;
+    public readonly caption: number;
     public readonly content: string;
     public readonly light: boolean;
     public readonly rightBar: boolean;

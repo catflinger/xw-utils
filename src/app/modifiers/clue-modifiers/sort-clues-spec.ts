@@ -44,14 +44,14 @@ function addTestClues(puzzle: PuzzleM) {
             {
                 cellIds: [],
                 gridRef: {
-                    caption: "5",
+                    caption: 5,
                     direction: "across"
                 },
             },
             {
                 cellIds: [],
                 gridRef: {
-                    caption: "3",
+                    caption: 3,
                     direction: "down"
                 }
             }
@@ -65,7 +65,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             cellIds: [],
             gridRef: {
-                caption: "1",
+                caption: 1,
                 direction: "across"
             }
         }]
@@ -78,7 +78,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             cellIds: [],
             gridRef: {
-                caption: "2",
+                caption: 2,
                 direction: "down"
             }
         }]

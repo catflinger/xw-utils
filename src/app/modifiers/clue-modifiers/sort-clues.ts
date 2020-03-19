@@ -16,9 +16,9 @@ export class SortClues implements IPuzzleModifier {
                         let gridRefB = b.link.entries[0].gridRef;
 
                         if (gridRefA && gridRefB) {
-                            result = parseInt(gridRefA.caption) - parseInt(gridRefB.caption);
+                            result = gridRefA.caption - gridRefB.caption;
                         } else {
-                            let result = a.caption.localeCompare(b.caption);
+                            result = 0;
                         }
                     }
                 }

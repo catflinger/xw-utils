@@ -90,7 +90,7 @@ describe('Grid', () => {
         it('should find entries for 1 across', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: "1", direction: "across" });
+            let entry = grid.getGridEntryFromReference({ caption: 1, direction: "across" });
             expect(entry.length).toEqual(5);
             expect(entry[0].id).toEqual("00");
             expect(entry[1].id).toEqual("10");
@@ -102,7 +102,7 @@ describe('Grid', () => {
         it('should find entries for 4 across', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: "4", direction: "across" });
+            let entry = grid.getGridEntryFromReference({ caption: 4, direction: "across" });
             expect(entry.length).toEqual(5);
             expect(entry[0].id).toEqual("02");
             expect(entry[1].id).toEqual("12");
@@ -114,7 +114,7 @@ describe('Grid', () => {
         it('should find entries for 4 down', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: "4", direction: "down" });
+            let entry = grid.getGridEntryFromReference({ caption: 4, direction: "down" });
             expect(entry.length).toEqual(3);
 
             expect(entry[0].id).toEqual("02");
@@ -137,19 +137,19 @@ function testGridData() {
 
     // set the captions
     let cell = data.cells.find(c => c.id === "00");
-    cell.caption = "1";
+    cell.caption = 1;
 
     cell = data.cells.find(c => c.id === "20");
-    cell.caption = "2";
+    cell.caption = 2;
 
     cell = data.cells.find(c => c.id === "40");
-    cell.caption = "3";
+    cell.caption = 3;
 
     cell = data.cells.find(c => c.id === "02");
-    cell.caption = "4";
+    cell.caption = 4;
 
     cell = data.cells.find(c => c.id === "04");
-    cell.caption = "5";
+    cell.caption = 5;
 
     // set the blacked-out squares
     let cells: GridCellM[] = [];
@@ -186,7 +186,7 @@ function emptyGridData(): GridM {
                 id: x.toString() + y.toString(),
                 x,
                 y,
-                caption: "",
+                caption: null,
                 content: "",
                 rightBar: false,
                 bottomBar: false,
