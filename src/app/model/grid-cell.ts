@@ -17,7 +17,6 @@ export class GridCell implements IGridCell {
         this.id = data.id;
         this.x = data.x;
         this.y = data.y;
-        this.caption = data.caption;
         this.content = data.content;
         this.light = data.light;
         this.rightBar = data.rightBar;
@@ -25,5 +24,11 @@ export class GridCell implements IGridCell {
         this.highlight = data.highlight;
         this.shading = data.shading;
         this.edit = data.edit;
+
+        if (data.caption && typeof data.caption === "string") {
+            this.caption = parseInt(data.caption);
+        } else {
+            this.caption = data.caption;
+        }
     }
 }
