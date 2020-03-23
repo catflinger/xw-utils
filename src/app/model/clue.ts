@@ -56,7 +56,7 @@ export class Clue implements IClue {
         if (typeof data.redirect === "boolean") {
             this.redirect = data.redirect;
         } else if (typeof data.text === "string" && data.text.length > 0) {
-            this.redirect = new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(data.text);
+            this.redirect = Clue.isRedirect(data.text);
         } else {
             this.redirect = false;
         }
@@ -86,11 +86,9 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    // public get lengthAvailable(): number {
-    //     let count = 0;
-    //     this.link.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
-    //     return count;
-    // }
+    public static isRedirect(text: string) {
+        return new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(text);
+    }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];

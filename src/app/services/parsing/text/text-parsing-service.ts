@@ -8,6 +8,7 @@ import { ClueBuffer } from './clue-buffer';
 import { ClueGroup } from 'src/app/model/interfaces';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingOptions } from './types';
+import { Clue } from 'src/app/model/clue';
 
 
 @Injectable({
@@ -241,6 +242,9 @@ export class TextParsingService {
             case "down":
                 if (!context.hasContent) {
                     context.addClueText(token.text);
+                    if (Clue.isRedirect(context.buffer.clue)) {
+                        context.save();
+                    }
                 } else {
                     this.handleUnexpectedClue(token, context, grid);
                 }
