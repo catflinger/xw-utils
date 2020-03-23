@@ -32,51 +32,45 @@ export class CreateClues implements IPuzzleModifier {
 
     private makeClues(puzzle: PuzzleM, grid: Grid, group: ClueGroup) {
         let clueNumber = 1;
-        let cells: ReadonlyArray<GridCell> = null;
-        let maxCaption = grid.getMaxCaption();
+        const maxCaption = grid.getMaxCaption();
         
         for (let n = 1; n <= maxCaption; n++) {
+            let gridRef: GridReference = {
+                caption: clueNumber,
+                direction: group,
+            };
             
-            cells = grid.getGridEntryFromReference(new GridReference({
-                caption: clueNumber.toString(),
-                group
-            }));
+            let cells: ReadonlyArray<GridCell> = grid.getGridEntryFromReference(gridRef);
             
             if (cells && cells.length) {
-                let clue = this.makeClue(group, clueNumber, cells);
+                let clue = this.makeClue(group, clueNumber, gridRef, cells.length);
                 puzzle.clues.push(clue);
             }
             clueNumber++;
         };
     }
 
-    private makeClue(clueGroup: ClueGroup, clueNumber: number, cells: ReadonlyArray<GridCell>): ClueM {
-        let entry: string[] = [];
-        let text = "Clue text...";
-
-        cells.forEach(cell => entry.push(cell.id));
+    private makeClue(clueGroup: ClueGroup, clueNumber: number, gridRef: GridReference, entryLength: number): ClueM {
+        let clueText = "Clue text...";
 
         return {
             id: uuid(),
             group: clueGroup,
             caption: clueNumber.toString(),
-            text,
-            letterCount: `(${entry.length})`,
+            text: clueText,
+            letterCount: `(${entryLength})`,
             answers: [""],
             solution: "",
             annotation: null,
             redirect: false,
-            format: ",".repeat(entry.length),
+            format: ",".repeat(entryLength),
             comment: new QuillDelta(),
             highlight: false,
             link: {
                 warning: null,
                 entries: [{
-                    gridRef: {
-                        caption: clueNumber,
-                        direction: clueGroup,
-                    },
-                    cellIds: entry
+                    gridRef,
+                    //cellIds: entry
                 }],
             },
             warnings: [],
@@ -86,7 +80,7 @@ export class CreateClues implements IPuzzleModifier {
             // }],
             chunks: [
                 {
-                    text,
+                    text: clueText,
                     isDefinition: false,
                 }
             ],

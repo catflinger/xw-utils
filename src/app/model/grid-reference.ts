@@ -7,7 +7,7 @@ export class GridReference implements IGridReference {
 
     constructor(data: any) {
         if (data) {
-            this.caption = data.caption;
+            this.caption = typeof data.caption === "string" ? parseInt(data.caption) : data.caption;
             this.direction = data.direction;
         }
      }

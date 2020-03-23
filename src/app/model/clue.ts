@@ -86,11 +86,11 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    public get lengthAvailable(): number {
-        let count = 0;
-        this.link.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
-        return count;
-    }
+    // public get lengthAvailable(): number {
+    //     let count = 0;
+    //     this.link.entries.forEach(entry => entry.cellIds.forEach(c => count = count + 1 ));
+    //     return count;
+    // }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];

@@ -31,7 +31,7 @@ export class SetGridReferences implements IPuzzleModifier {
                 refs.forEach(ref => {
                     clue.link.entries.push({
                         gridRef: ref,
-                        cellIds: [],
+                        //cellIds: [],
                     });
                 })
             });

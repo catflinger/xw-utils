@@ -1,17 +1,20 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { PuzzleM } from '../mutable-model/puzzle-m';
+import { Grid } from 'src/app/model/grid';
 
 export class ValidateLetterCounts implements IPuzzleModifier {
     public constructor() {}
 
     public exec(puzzle: PuzzleM) {
         if (puzzle && puzzle.clues && puzzle.grid) {
+            let grid = new Grid(puzzle.grid);
+
             puzzle.clues.forEach(clue => {
                 let letterCountSum = this.sumLetterCounts(clue.letterCount);
                 let cellCount = 0;
 
                 clue.link.entries.forEach(entry => {
-                    entry.cellIds.forEach(() => cellCount++);
+                    grid.getGridEntryFromReference(entry.gridRef).forEach(() => cellCount++);
                 });
 
                 if (cellCount != letterCountSum) {

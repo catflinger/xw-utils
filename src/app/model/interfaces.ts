@@ -2,6 +2,7 @@ import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
 import { ClueEditModel } from '../ui/components/clue-text-editor/clue-text-editor.component';
 import { GridLink } from './grid-link';
+import { Grid } from './grid';
 
 export type Base64Encoded = string;
 
@@ -111,7 +112,7 @@ export abstract class IClue implements ClueEditModel {
 
 export abstract class IGridEntry {
     abstract readonly gridRef: IGridReference;
-    abstract readonly cellIds: readonly string[];
+    //abstract cellIds(grid: Grid): readonly string[];
 }
 
 export abstract class IGridCell {

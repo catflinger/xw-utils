@@ -15,6 +15,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
+import { Grid } from 'src/app/model/grid';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -61,6 +62,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
+    private grid: Grid = null;
 
     constructor(
         private activePuzzle: IActivePuzzle,
@@ -82,6 +84,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
                     if (puzzle) {
                         this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clueId);
                         this.clue = puzzle.clues.find((c) => c.id === this.clueId);
+                        this.grid = puzzle.grid;
 
                         let formArray: FormArray = this.form.get("answers") as FormArray;
                         formArray.clear();
@@ -173,9 +176,15 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
         } else {
             let answer = this.clean(this.form.value.answers[0]);
+            let lengthAvailable = 0;
 
-            if (answer && answer.length !== this.clue.lengthAvailable) {
-                this.showSaveWarning("Warning: the answer does not fit the space available");
+            if (this.grid) {
+                this.clue.link.entries.forEach(entry => {
+                    lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
+                })
+            }
+            if (answer && lengthAvailable && answer.length !== lengthAvailable) {
+                this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
 
             } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
                 this.showSaveWarning("Warning: the answer does match the publsihed solution");
@@ -257,7 +266,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private setLatestAnswer(): void {
         let result: AnswerTextChunk[] = [];
-        let answer: AnswerTextChunk[] = this.getLatestAnswer();
+        let answer: AnswerTextChunk[] = this.getLatestAnswer(this.grid);
         let format = this.clue.format;
         let formatIndex = 0;
         let answerIndex = 0;
@@ -284,13 +293,15 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         this.latestAnswer = result;
     }
 
-    private getLatestAnswer(): AnswerTextChunk[] {
+    private getLatestAnswer(grid: Grid): AnswerTextChunk[] {
         let result: AnswerTextChunk[] = [];
         let answer = this.clean(this.form.value.answers[0]);
         let index = 0;
 
         this.clue.link.entries.forEach((entry) => {
-            entry.cellIds.forEach((id) => {
+            grid.getGridEntryFromReference(entry.gridRef)
+            .map(c => c.id)
+            .forEach((id) => {
                 let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
                 // choose in order of preference:
@@ -333,6 +344,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         let puzzle = JSON.parse(JSON.stringify(original)) as PuzzleM;
 
         if (puzzle.grid) {
+            let grid = new Grid(puzzle.grid);
 
             // clear the grid
             puzzle.grid.cells.forEach(cell => cell.content = "");
@@ -347,7 +359,9 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
                 if (answer) {
                     clue.link.entries.forEach((entry) => {
-                        entry.cellIds.forEach((id) => {
+                        grid.getGridEntryFromReference(entry.gridRef)
+                        .map(c => c.id)
+                        .forEach((id) => {
                             let cell = puzzle.grid.cells.find(c => c.id === id);
                             if (index < answer.length) {
                                 cell.content = answer.charAt(index);

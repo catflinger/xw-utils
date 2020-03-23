@@ -12,25 +12,25 @@ export class LinkCluesToGrid implements IPuzzleModifier {
             // let captionWriter = new RenumberGid();
             // captionWriter.exec(puzzle);
 
-            const grid = new Grid(puzzle.grid);
-            let clues: ClueM[];
+            // const grid = new Grid(puzzle.grid);
+            // let clues: ClueM[];
 
-            if (this.clueId) {
-                // process just the specified clue
-                let clue: ClueM = puzzle.clues.find(c => c.id === this.clueId);
-                if (clue) {
-                    clues = [clue];
-                }
-            } else {
-                // if no id given then default processing all clues
-                clues = puzzle.clues;
-            }
+            // if (this.clueId) {
+            //     // process just the specified clue
+            //     let clue: ClueM = puzzle.clues.find(c => c.id === this.clueId);
+            //     if (clue) {
+            //         clues = [clue];
+            //     }
+            // } else {
+            //     // if no id given then default processing all clues
+            //     clues = puzzle.clues;
+            // }
 
-            clues.forEach((clue) => {
-                if (!clue.redirect) {
-                    this.setGridEntries(grid, clue);
-                }
-            });
+            // clues.forEach((clue) => {
+            //     if (!clue.redirect) {
+            //         this.setGridEntries(grid, clue);
+            //     }
+            // });
 
             puzzle.capability.blogable = true;
             puzzle.capability.solveable = true;
@@ -39,20 +39,20 @@ export class LinkCluesToGrid implements IPuzzleModifier {
         }
     }
 
-    private setGridEntries(grid: Grid, clue: ClueM) {
+    // private setGridEntries(grid: Grid, clue: ClueM) {
 
-        clue.link.entries.forEach((entry, index) => {
-            let gridRef = entry.gridRef;
+    //     clue.link.entries.forEach((entry, index) => {
+    //         let gridRef = entry.gridRef;
 
-            if (!gridRef) {
-                throw new Error(`Clue for ${clue.caption} ${clue.group}has no grid reference`);
-            } else {
-                entry.cellIds = [];
-                grid.getGridEntryFromReference(entry.gridRef).forEach(cell => {
-                    entry.cellIds.push(cell.id)
-                });
-            }
-        });
-    }
+    //         // if (!gridRef) {
+    //         //     throw new Error(`Clue for ${clue.caption} ${clue.group} has no grid reference`);
+    //         // } else {
+    //         //     entry.cellIds = [];
+    //         //     grid.getGridEntryFromReference(entry.gridRef).forEach(cell => {
+    //         //         entry.cellIds.push(cell.id)
+    //         //     });
+    //         // }
+    //     });
+    // }
 
 }

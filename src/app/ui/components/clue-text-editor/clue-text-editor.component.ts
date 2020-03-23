@@ -103,7 +103,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
         mods.push(
             new SetGridReferences([this.clue.id]),
-            new LinkCluesToGrid(),
+            //new LinkCluesToGrid(),
             new ValidateLetterCounts(),
             new SortClues(),
             new Clear(),

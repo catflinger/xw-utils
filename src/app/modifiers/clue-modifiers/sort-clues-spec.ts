@@ -42,17 +42,17 @@ function addTestClues(puzzle: PuzzleM) {
         "This has two grid entries (5, 5)",
         [
             {
-                cellIds: [],
+                //cellIds: [],
                 gridRef: {
                     caption: 5,
-                    direction: "across"
+                    direction: "across",
                 },
             },
             {
-                cellIds: [],
+                //cellIds: [],
                 gridRef: {
                     caption: 3,
-                    direction: "down"
+                    direction: "down",
                 }
             }
         ]
@@ -63,7 +63,7 @@ function addTestClues(puzzle: PuzzleM) {
         "across", 
         "This is one across (5)",
         [{
-            cellIds: [],
+            //cellIds: [],
             gridRef: {
                 caption: 1,
                 direction: "across"
@@ -76,7 +76,7 @@ function addTestClues(puzzle: PuzzleM) {
         "down", 
         "This is 2 down (5)",
         [{
-            cellIds: [],
+            //cellIds: [],
             gridRef: {
                 caption: 2,
                 direction: "down"

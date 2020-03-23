@@ -66,7 +66,7 @@ export class SolverComponent implements OnInit, OnDestroy {
             } else if (event.key === "Escape") {
                 event.stopPropagation();
                 this.activePuzzle.update(new Clear());
-            } else if (/[a-zA-Z]/.test(event.key)) {
+            } else if (/^[a-zA-Z]$/.test(event.key)) {
                 event.stopPropagation();
                 let clue = this.puzzle.getSelectedClue();
                 if (clue) {
@@ -102,7 +102,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     onCellClick(cell: GridCell) {
 
         if (!cell.highlight) {
-            this.activePuzzle.update(new SelectClueByCell(cell));
+            this.activePuzzle.update(new SelectClueByCell(cell.id));
         } else {
             let clue = this.puzzle.getSelectedClue();
 
