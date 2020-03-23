@@ -6,9 +6,11 @@ import { GridM } from './grid-m';
 import { ClueM } from './clue-m';
 import { PuzzleProvisionM } from './puzzle-provision-m';
 import { PuzzleCapabilityM } from './puzzle-capability-m';
+import { PuzzleOptionsM } from './puzzle-options-m';
 
 export abstract class PuzzleM implements IPuzzle {
     public abstract info: PuzzleInfoM;
+    public abstract options: PuzzleOptionsM;
     public abstract publishOptions: PublishOptionsM;
     public abstract notes: PuzzleAnnotationM;
     public abstract provision: PuzzleProvisionM;

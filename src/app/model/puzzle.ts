@@ -6,11 +6,13 @@ import { Clue } from './clue';
 import { IPuzzle } from './interfaces';
 import { PuzzleProvision } from './puzzle-provision';
 import { PuzzleCapability } from './puzzle-capability';
+import { PuzzleOptions } from './puzzle-options';
 
 export const definitionMaskMarker: string = "d";
 
 export class Puzzle implements IPuzzle {
     public readonly info: PuzzleInfo;
+    public readonly options: PuzzleOptions;
     public readonly publishOptions: PublishOptions;
     public readonly notes: PuzzleAnnotation;
     public readonly provision: PuzzleProvision;
@@ -25,6 +27,8 @@ export class Puzzle implements IPuzzle {
     constructor(data: any) {
 
         this.revision = data.revision ? data.revision : 0;
+
+        this.options = new PuzzleOptions(data.options);
 
         if (data.grid) {
             this.grid = new Grid(data.grid);

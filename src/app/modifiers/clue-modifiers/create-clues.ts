@@ -35,10 +35,10 @@ export class CreateClues implements IPuzzleModifier {
         const maxCaption = grid.getMaxCaption();
         
         for (let n = 1; n <= maxCaption; n++) {
-            let gridRef: GridReference = {
+            let gridRef: GridReference = new GridReference({
                 caption: clueNumber,
                 direction: group,
-            };
+            });
             
             let cells: ReadonlyArray<GridCell> = grid.getGridEntryFromReference(gridRef);
             

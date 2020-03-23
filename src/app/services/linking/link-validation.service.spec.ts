@@ -112,6 +112,9 @@ function getEmptyPuzzle(): PuzzleM {
             setter: "anon",
             wordpressId: null,
         },
+        options: {
+            setGridRefsFromCaptions: true,
+        },
         capability: {
             ready: true,
             blogable: true,

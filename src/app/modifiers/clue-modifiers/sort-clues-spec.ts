@@ -44,6 +44,7 @@ function addTestClues(puzzle: PuzzleM) {
             {
                 //cellIds: [],
                 gridRef: {
+                    id: "",
                     caption: 5,
                     direction: "across",
                 },
@@ -51,6 +52,7 @@ function addTestClues(puzzle: PuzzleM) {
             {
                 //cellIds: [],
                 gridRef: {
+                    id: "",
                     caption: 3,
                     direction: "down",
                 }
@@ -65,6 +67,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             //cellIds: [],
             gridRef: {
+                id: "",
                 caption: 1,
                 direction: "across"
             }
@@ -78,6 +81,7 @@ function addTestClues(puzzle: PuzzleM) {
         [{
             //cellIds: [],
             gridRef: {
+                id: "",
                 caption: 2,
                 direction: "down"
             }
@@ -115,6 +119,9 @@ function getEmptyPuzzle(): PuzzleM {
         grid: null,
         //linked: false,
         revision: 0,
+        options: {
+            setGridRefsFromCaptions: true,
+        },
         info: {
             id: "abc123",
             title: "untitled",

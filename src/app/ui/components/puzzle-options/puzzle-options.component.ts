@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { UpdatePublsihOptions } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PublishOptions } from 'src/app/model/publish-options';
-import { TextColumn } from 'src/app/model/text-column';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
+import { UpdatePuzzleOptions } from 'src/app/modifiers/publish-options-modifiers/update-puzzle-options';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -32,14 +31,17 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     }
     public ngOnInit() {
         this.form = new FormGroup({
+            "setGridRefsFromCaptions": new FormControl(true),
             "answerCols": new FormArray([]),
             "showCols": new FormControl(false),
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
-                this.colCount = puzzle.publishOptions.textCols.length;
 
+                this.form.patchValue({"setGridRefsFromCaptions": puzzle.options.setGridRefsFromCaptions});
+
+                this.colCount = puzzle.publishOptions.textCols.length;
                 this.form.patchValue({"showCols": this.colCount > 1});
 
                 this.answerColsArray.clear();
@@ -52,7 +54,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
         let controls: FormGroup[] = [];
 
         publishOptions.textCols.forEach(col => {
-            //console.log("ADDING CONTROL " + col.caption);
             controls.push(new FormGroup({
                 "caption": new FormControl(col.caption),
                 "textStyle": new FormControl(col.style),
@@ -68,6 +69,10 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
 
     public onPuzzleOptions() {
         this.showOptions = !this.showOptions;
+    }
+
+    public onChangeGridRefs() {
+        this.activePuzzle.update(new UpdatePuzzleOptions(this.form.value.setGridRefsFromCaptions));
     }
 
     public onEdit() {

@@ -96,7 +96,6 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly caption: string;        // "1 across, 2 down"
     abstract readonly text: string;           // "How to train a dragon (5, 4)"
     abstract readonly letterCount: string;    // "(5, 4)"
-    //abstract readonly answer: string;         // the answer entered int the grid
     abstract readonly answers: ReadonlyArray<string>;  // additional columns displayed in the blog (optional)
     abstract readonly solution: string;
     abstract readonly annotation: string;
@@ -105,15 +104,12 @@ export abstract class IClue implements ClueEditModel {
     abstract readonly comment: QuillDelta;
     abstract readonly highlight: boolean;
     abstract readonly link: GridLink;
-    //abstract readonly entries: ReadonlyArray<IGridEntry>;
     abstract readonly chunks: ReadonlyArray<ITextChunk>;
     abstract readonly warnings: ReadonlyArray<ClueValidationWarning>;
-    //abstract readonly gridRefs: ReadonlyArray<IGridReference>;
 }
 
 export abstract class IGridEntry {
     abstract readonly gridRef: IGridReference;
-    //abstract cellIds(grid: Grid): readonly string[];
 }
 
 export abstract class IGridCell {
@@ -143,6 +139,7 @@ export abstract class IGrid {
 
 export abstract class IPuzzle {
     abstract readonly info: IPuzzleInfo;
+    abstract readonly options: IPuzzleOptions;
     abstract readonly publishOptions: IPublishOptions;
     abstract readonly notes: IPuzzleAnnotation;
     abstract readonly provision: IPuzzleProvision;
@@ -155,6 +152,10 @@ export abstract class IPuzzle {
     //abstract readonly linked: boolean;
     
     abstract readonly revision: number;
+}
+
+export abstract class IPuzzleOptions {
+    abstract readonly setGridRefsFromCaptions: boolean;
 }
 
 export abstract class IPuzzleCapability {

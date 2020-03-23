@@ -289,6 +289,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 setter: "anon", 
                 wordpressId: null,
             },
+            options: {
+                setGridRefsFromCaptions: true,
+            },
             provision: {
                 source: null,
                 parseErrors: [],
