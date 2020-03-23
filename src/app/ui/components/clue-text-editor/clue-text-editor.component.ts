@@ -8,7 +8,6 @@ import { ClueGroup } from 'src/app/model/interfaces';
 import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
-import { LinkCluesToGrid } from 'src/app/modifiers/clue-modifiers/link-clues-to-grid';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';

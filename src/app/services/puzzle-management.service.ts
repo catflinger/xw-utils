@@ -279,7 +279,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return {
             clues: null,
             grid: null,
-            linked: false,
+            //linked: false,
             revision: 0,
             info: {
                 id: uuid(),

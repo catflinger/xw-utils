@@ -12,7 +12,7 @@ export class AddGrid implements IPuzzleModifier {
         if (puzzle) {
             if (typeof this.args.grid !== "undefined") {
                 puzzle.grid = JSON.parse(JSON.stringify(this.args.grid));
-                puzzle.linked = false;
+                //puzzle.linked = false;
             }
         }
     }

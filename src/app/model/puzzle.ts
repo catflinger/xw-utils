@@ -18,7 +18,7 @@ export class Puzzle implements IPuzzle {
 
     public readonly grid: Grid;
     public readonly clues: readonly Clue[];
-    public readonly linked: boolean;
+    //public readonly linked: boolean;
 
     public readonly revision: number;
 
@@ -62,7 +62,7 @@ export class Puzzle implements IPuzzle {
         this.publishOptions = new PublishOptions(data.publishOptions);
         this.capability = new PuzzleCapability(data.capability);
 
-        this.linked = data.linked;
+        //this.linked = data.linked;
     }
 
     public getSelectedClue(): Clue {

@@ -29,10 +29,6 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         let action: Promise<string>;
 
         switch (processName) {
-            // case "new-puzzle":
-            //     this.puzzleManager.newPuzzle(this.appService.openPuzzleParameters.provider);
-            //     action = Promise.resolve("ok");
-            //     break;
 
             case "make-clues":
                 // TO DO: work out what to do if puzzle aready has clues
@@ -83,7 +79,8 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
 
             case "editor-select":
-                action = this.activePuzzle.puzzle.linked ?
+                // TO DO: think if this test needs to be more sophisticated
+                action = this.activePuzzle.puzzle.grid ?
                     Promise.resolve("solve") :
                     Promise.resolve("blog");
                     break;

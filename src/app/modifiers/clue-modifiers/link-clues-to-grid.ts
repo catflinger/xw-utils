@@ -34,7 +34,7 @@ export class LinkCluesToGrid implements IPuzzleModifier {
 
             puzzle.capability.blogable = true;
             puzzle.capability.solveable = true;
-            puzzle.linked = true;
+            //puzzle.linked = true;
             puzzle.capability.ready = true;
         }
     }

@@ -26,7 +26,7 @@ export class CreateClues implements IPuzzleModifier {
             puzzle.capability.ready = true;
             puzzle.capability.gridable = true;
 
-            puzzle.linked = true;
+            //puzzle.linked = true;
         }
     }
 

@@ -151,7 +151,7 @@ export abstract class IPuzzle {
     abstract readonly clues: readonly IClue[];
 
     // TO DO: move linked to puzzle provision as it is temporary
-    abstract readonly linked: boolean;
+    //abstract readonly linked: boolean;
     
     abstract readonly revision: number;
 }

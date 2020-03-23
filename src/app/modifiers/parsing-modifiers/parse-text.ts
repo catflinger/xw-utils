@@ -48,7 +48,7 @@ export class ParseText implements IPuzzleModifier {
             puzzle.provision.parseErrors = error ? [error] : [];
             puzzle.provision.parseWarnings = JSON.parse(JSON.stringify(context.value.warnings));
 
-            puzzle.linked = false;
+            //puzzle.linked = false;
         
             new InitAnnotationWarnings().exec(puzzle);
 

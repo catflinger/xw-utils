@@ -113,7 +113,7 @@ function getEmptyPuzzle(): PuzzleM {
     return {
         clues: [],
         grid: null,
-        linked: false,
+        //linked: false,
         revision: 0,
         info: {
             id: "abc123",
