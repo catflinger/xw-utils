@@ -90,7 +90,7 @@ describe('Grid', () => {
         it('should find entries for 1 across', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: 1, direction: "across" });
+            let entry = grid.getGridEntryFromReference({ id: "", caption: 1, direction: "across" });
             expect(entry.length).toEqual(5);
             expect(entry[0].id).toEqual("00");
             expect(entry[1].id).toEqual("10");
@@ -102,7 +102,7 @@ describe('Grid', () => {
         it('should find entries for 4 across', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: 4, direction: "across" });
+            let entry = grid.getGridEntryFromReference({ id: "", caption: 4, direction: "across" });
             expect(entry.length).toEqual(5);
             expect(entry[0].id).toEqual("02");
             expect(entry[1].id).toEqual("12");
@@ -114,7 +114,7 @@ describe('Grid', () => {
         it('should find entries for 4 down', () => {
             let grid = new Grid(testGridData());
 
-            let entry = grid.getGridEntryFromReference({ caption: 4, direction: "down" });
+            let entry = grid.getGridEntryFromReference({ id: "", caption: 4, direction: "down" });
             expect(entry.length).toEqual(3);
 
             expect(entry[0].id).toEqual("02");

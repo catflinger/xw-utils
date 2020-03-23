@@ -99,7 +99,7 @@ export class ClueBuffer {
                     
                     direction = directionString.charAt(0) === "a" ? "across" : "down";
                 }
-                result.push({ caption: parseInt(caption.toString()), direction });
+                result.push(new GridReference({ caption: caption, direction }));
             }
         });
 

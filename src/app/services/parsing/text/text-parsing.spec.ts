@@ -14,7 +14,7 @@ import { GridM } from 'src/app/modifiers/mutable-model/grid-m';
 
 let tokeniser: TokeniserService = new TokeniserService();
 
-describe('Text Parsing', () => {
+describe('TextParsing', () => {
     
     describe('Full Puzzle Test', () => {
 

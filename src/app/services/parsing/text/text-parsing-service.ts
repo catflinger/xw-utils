@@ -10,7 +10,6 @@ import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingOptions } from './types';
 import { Clue } from 'src/app/model/clue';
 
-
 @Injectable({
     providedIn: 'root'
 })

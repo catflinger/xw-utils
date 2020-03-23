@@ -80,6 +80,7 @@ import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 import { ClueTextEditorComponent } from './ui/components/clue-text-editor/clue-text-editor.component';
 import { PuzzleOptionsComponent } from './ui/components/puzzle-options/puzzle-options.component';
+import { GridReferenceComponent } from './ui/components/grid-reference/grid-reference.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -162,6 +163,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         NavLogComponent,
         ClueTextEditorComponent,
         PuzzleOptionsComponent,
+        GridReferenceComponent,
     ],
     imports: [
         BrowserModule,

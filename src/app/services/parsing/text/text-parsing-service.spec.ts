@@ -17,7 +17,7 @@ describe('TextParsingService', () => {
             TestBed.configureTestingModule({});
         });
 
-        it('should be created', () => {
+        xit('should be created', () => {
             const service: TextParsingService = new TextParsingService(mockTokeniser);
             expect(service).toBeTruthy();
         });
@@ -38,7 +38,7 @@ describe('TextParsingService', () => {
             expect(result.clues[3].text).toEqual("D (4)");
         });
 
-        it('should parse split text', () => {
+        xit('should parse split text', () => {
             let result = runParser(testData.split);
 
             expect(result.clues.length).toEqual(2);

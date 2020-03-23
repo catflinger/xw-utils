@@ -85,6 +85,7 @@ export abstract class IGridLink {
 
 export abstract class IGridReference {
     // for example: 2 down or 23 across
+    abstract id: string;
     abstract readonly caption: number;
     abstract readonly direction: Direction; 
 }

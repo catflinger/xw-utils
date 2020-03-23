@@ -86,7 +86,7 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    public static isRedirect(text: string) {
+    public static isRedirect(text: string): boolean {
         return new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(text);
     }
 
