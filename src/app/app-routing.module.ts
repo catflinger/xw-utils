@@ -28,6 +28,7 @@ import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.compo
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
+import { Solver2Component } from './ui/puzzle-solving/solver2/solver2.component';
 
 const routes: Routes = [
     // landing pages
@@ -36,6 +37,7 @@ const routes: Routes = [
 
     // solving and blogging puzzles
     { path: "solver", component: SolverComponent },
+    { path: "solver2", component: Solver2Component },
     { path: "blogger", component: BloggerComponent },
 
     // publishing puzzles

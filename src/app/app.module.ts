@@ -81,6 +81,8 @@ import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track'
 import { ClueTextEditorComponent } from './ui/components/clue-text-editor/clue-text-editor.component';
 import { PuzzleOptionsComponent } from './ui/components/puzzle-options/puzzle-options.component';
 import { GridReferenceComponent } from './ui/components/grid-reference/grid-reference.component';
+import { Solver2Component } from './ui/puzzle-solving/solver2/solver2.component';
+import { ClueEditorComponent } from './ui/components/clue-editor/clue-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -164,6 +166,8 @@ const tracks: ReadonlyArray<NavTrack> = [
         ClueTextEditorComponent,
         PuzzleOptionsComponent,
         GridReferenceComponent,
+        Solver2Component,
+        ClueEditorComponent,
     ],
     imports: [
         BrowserModule,
@@ -189,6 +193,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         ClueAnnotationComponent,
         ConfirmModalComponent,
         ClueTextEditorComponent,
+        ClueEditorComponent,
     ],
     bootstrap: [AppComponent]
 })

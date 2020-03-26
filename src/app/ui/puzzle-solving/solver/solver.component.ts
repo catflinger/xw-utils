@@ -10,7 +10,6 @@ import { SelectClueByCell } from 'src/app//modifiers/clue-modifiers/select-clue-
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
 
 @Component({
     selector: 'app-solver',
