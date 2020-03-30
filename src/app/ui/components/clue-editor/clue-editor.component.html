@@ -1,23 +1,37 @@
 <div>
     <div class="modal-header">
-        This is the header
+        <h3>Clue Editor</h3>
     </div>
 
     <div class="modal-body">
         <ul ngbNav #nav="ngbNav" class="nav-tabs">
             <li ngbNavItem>
-              <a ngbNavLink>First</a>
-              <ng-template ngbNavContent>First content</ng-template>
+              <a ngbNavLink>Solve and annotate</a>
+              <ng-template ngbNavContent><app-clue-annotator></app-clue-annotator></ng-template>
             </li>
             <li ngbNavItem>
-              <a ngbNavLink>Second</a>
-              <ng-template ngbNavContent>Second content</ng-template>
+              <a ngbNavLink>Edit clue text</a>
+              <ng-template ngbNavContent><app-clue-text-editor></app-clue-text-editor></ng-template>
             </li>
-          </ul>
-          <div [ngbNavOutlet]="nav"></div></div>
+            <li ngbNavItem>
+                <a ngbNavLink>Edit grid entry</a>
+                <ng-template ngbNavContent>
+                    <p>Change the grid entries</p>
+                    <app-grid-linker></app-grid-linker>
+                </ng-template>
+              </li>
+              <li ngbNavItem>
+                <a ngbNavLink>Options</a>
+                <ng-template ngbNavContent>
+                    <p>Puzzle Options</p>
+                    <app-puzzle-options></app-puzzle-options>
+                </ng-template>
+              </li>
+            </ul>
+          <div class="mt-3" [ngbNavOutlet]="nav"></div>
+    </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="onSave()">Save</button>
-        <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Cancel</button>
+        this is the footer
     </div>
 </div>

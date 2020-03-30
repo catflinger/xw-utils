@@ -1,81 +1,40 @@
-<div class="row" *ngIf="!showOptions">
-    <div class="col text-right">
-        <button type="button" class="btn btn-link" (click)="onPuzzleOptions()">
-            <i class="fas fa-cog"></i> Show options
-        </button>
-    </div>
-</div>
+<form [formGroup]="form">
 
-<div *ngIf="showOptions">
-    <div class="row">
-        <div class="col">
-
-            <div class="card w-100pc mb-5">
-                <div class="card-header">
-                    <h5 class="float-left">Puzzle Options</h5>
-                    <button type="button" class="btn btn-link float-right" (click)="onPuzzleOptions()">
-                        Hide options
-                    </button>
-        
-                </div>
-                <div class="card-body">
-                    <form [formGroup]="form">
-                        <div class="form-check">
-                            <input class="form-check-input" id="setGridRefsFromCaptions" type="checkbox" formControlName="setGridRefsFromCaptions" (change)="onChangeGridRefs()">
-                            <label for="setGridRefsFromCaptions" class="form-check-label">
-                                Choose grid entries automatically (clear this if the clue caption is not numeric, eg an alphabetical jigsaw)
-                            </label>
-                        </div>
-                
-                        <div class="form-group mt-3">
-                            <p>
-                                <input type="checkbox" class="form-check-control" formControlName="showCols" [attr.disabled]="colCount > 1 ? '' : null">
-                                I need more columns in the blog...
-                            </p>
-                            
-                            <div *ngIf="form.value.showCols">
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>column position</th>
-                                            <th>column caption</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container formArrayName="answerCols">
-                                            <tr *ngFor="let control of answerColsArray.controls; let i = index;">
-                                                <td>{{i + 1}}</td>
-                                                <td class="form-group" [formGroupName]="i">
-                                                    <input type="text" class="form-control" [attr.disabled]="i ? null : ''" formControlName="caption" placeholder="(untitled)">
-                                                </td>
-                                                <td>
-                                                    <button *ngIf="i" 
-                                                        [ngStyle]="{visibility: control.get('caption').dirty ? 'visible' : 'hidden'}" 
-                                                        title="save changes" 
-                                                        type="button" 
-                                                        class="btn mr-3" 
-                                                        (click)="onSaveColumn(i)">
-                                                        <i  style="font-size: 2em; color: Green;" class="fas fa-check"></i>
-                                                    </button>
-                                                    <button *ngIf="i" title="delete column" type="button" class="btn" (click)="onDeleteColumn(i)">
-                                                        <i  style="font-size: 2em; color: Tomato;" class="fas fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                                <button type="button" class="btn btn-primary" (click)="onAddColumn()">Add column</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="form-group mt-5">
-                        There is a mistake in the clue text <button type="button" class="btn btn-link" (click)="onEdit()">Edit the clues</button>
-                    </div>
-                </div>
-            </div>
+    <div class="form-group mt-3">
+        <div>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>column position</th>
+                        <th>column caption</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container formArrayName="answerCols">
+                        <tr *ngFor="let control of answerColsArray.controls; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td class="form-group" [formGroupName]="i">
+                                <input type="text" class="form-control" [attr.disabled]="i ? null : ''" formControlName="caption" placeholder="(untitled)">
+                            </td>
+                            <td>
+                                <button *ngIf="i" 
+                                    [ngStyle]="{visibility: control.get('caption').dirty ? 'visible' : 'hidden'}" 
+                                    title="save changes" 
+                                    type="button" 
+                                    class="btn mr-3" 
+                                    (click)="onSaveColumn(i)">
+                                    <i  style="font-size: 2em; color: Green;" class="fas fa-check"></i>
+                                </button>
+                                <button *ngIf="i" title="delete column" type="button" class="btn" (click)="onDeleteColumn(i)">
+                                    <i  style="font-size: 2em; color: Tomato;" class="fas fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" (click)="onAddColumn()">Add column</button>
         </div>
-
     </div>
-</div>
+</form>

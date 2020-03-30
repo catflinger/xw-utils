@@ -14,8 +14,6 @@ import { UpdatePuzzleOptions } from 'src/app/modifiers/publish-options-modifiers
     styleUrls: ['./puzzle-options.component.css']
 })
 export class PuzzleOptionsComponent implements OnInit, OnDestroy {
-    public showOptions = false;
-    public colCount = 0;
     public form: FormGroup;
 
     @Output() public edit = new EventEmitter<void>();
@@ -31,18 +29,11 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     }
     public ngOnInit() {
         this.form = new FormGroup({
-            "setGridRefsFromCaptions": new FormControl(true),
             "answerCols": new FormArray([]),
-            "showCols": new FormControl(false),
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
-
-                this.form.patchValue({"setGridRefsFromCaptions": puzzle.options.setGridRefsFromCaptions});
-
-                this.colCount = puzzle.publishOptions.textCols.length;
-                this.form.patchValue({"showCols": this.colCount > 1});
 
                 this.answerColsArray.clear();
                 this.makeControls(puzzle.publishOptions).forEach(control => this.answerColsArray.push(control));
@@ -65,14 +56,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
 
     public  ngOnDestroy() {
         this.subs.forEach(s => s .unsubscribe());
-    }
-
-    public onPuzzleOptions() {
-        this.showOptions = !this.showOptions;
-    }
-
-    public onChangeGridRefs() {
-        this.activePuzzle.update(new UpdatePuzzleOptions(this.form.value.setGridRefsFromCaptions));
     }
 
     public onEdit() {

@@ -43,9 +43,9 @@ class AnswerTextChunk {
     styleUrls: ['./clue-annotator.component.css']
 })
 export class ClueAnnotationComponent implements OnInit, OnDestroy {
-    @Input() clueId: string;
+    //@Input() clueId: string;
     @Input() starterText: string;
-    @Input() publishOptions: PublishOptions;
+    //@Input() publishOptions: PublishOptions;
 
     @Output() close = new EventEmitter<string>();
 
@@ -57,6 +57,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     public warnings: ClueValidationWarning[] = [];
     public showAnnotation: boolean = false;
     public latestAnswer: AnswerTextChunk[] = [];
+    public publishOptions: PublishOptions;
 
     public answerItems: AnswerItem[] = [];
 
@@ -82,47 +83,52 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
-                        this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clueId);
-                        this.clue = puzzle.clues.find((c) => c.id === this.clueId);
-                        this.grid = puzzle.grid;
+                        let selectedClue = puzzle.getSelectedClue();
+                        if (selectedClue) {
 
-                        let formArray: FormArray = this.form.get("answers") as FormArray;
-                        formArray.clear();
-                        this.answerItems = [];
+                            this.shadowPuzzle = this.makeShadowPuzzle(puzzle, selectedClue.id);
+                            this.clue = puzzle.clues.find((c) => c.id === selectedClue.id);
+                            this.grid = puzzle.grid;
+                            this.publishOptions = puzzle.publishOptions;
 
-                        puzzle.publishOptions.textCols.forEach((col, index) => {
-                            let answerText = "";
-                            
-                            if (index === 0) {
-                                answerText = this.starterText || this.clue.answers[0];
-                            } else if (index < this.clue.answers.length){
-                                answerText = this.clue.answers[index];
-                            } else {
-                                answerText = "";
-                            }
+                            let formArray: FormArray = this.form.get("answers") as FormArray;
+                            formArray.clear();
+                            this.answerItems = [];
 
-                            this.answerItems.push({
-                                index,
-                                id: "answer" + index,
-                                caption: col.caption,
-                                answer:  answerText,
+                            puzzle.publishOptions.textCols.forEach((col, index) => {
+                                let answerText = "";
+                                
+                                if (index === 0) {
+                                    answerText = this.starterText || this.clue.answers[0];
+                                } else if (index < this.clue.answers.length){
+                                    answerText = this.clue.answers[index];
+                                } else {
+                                    answerText = "";
+                                }
+
+                                this.answerItems.push({
+                                    index,
+                                    id: "answer" + index,
+                                    caption: col.caption,
+                                    answer:  answerText,
+                                });
                             });
-                        });
 
-                        this.form.patchValue({
-                            comment: this.clue.comment,
-                            answer: this.starterText ? this.starterText : this.clue.answers[0],
-                            chunks: this.clue.chunks,
-                        });
+                            this.form.patchValue({
+                                comment: this.clue.comment,
+                                answer: this.starterText ? this.starterText : this.clue.answers[0],
+                                chunks: this.clue.chunks,
+                            });
 
-                        this.answerItems.forEach((item) => {
-                            formArray.push(this.formBuilder.control(item.answer));
-                        });
+                            this.answerItems.forEach((item) => {
+                                formArray.push(this.formBuilder.control(item.answer));
+                            });
 
-                        this.warnings = [];
-                        this.clue.warnings.forEach(warning => this.warnings.push(warning));
+                            this.warnings = [];
+                            this.clue.warnings.forEach(warning => this.warnings.push(warning));
 
-                        this.setLatestAnswer();
+                            this.setLatestAnswer();
+                        }
                     }
                 }
             )
@@ -247,7 +253,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     private closeEditor(save: boolean) {
         if (save) {
             this.activePuzzle.update(new AnnotateClue(
-                this.clueId,
+                this.clue.id,
                 this.form.value.answers,
                 this.form.value.comment,
                 this.form.value.chunks,

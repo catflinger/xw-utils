@@ -33,12 +33,7 @@
                     <tr *ngIf="clue.highlight">
                         <td class="p-0" [attr.colspan]="puzzle.publishOptions.textCols.length + 4">
                             <div class="border rounded">
-                                <app-clue-annotator 
-                                    [clueId]="clue.id" 
-                                    (close)="onEditorClose(clue, $event)"
-                                    [publishOptions] = "this.puzzle.publishOptions"
-                                    >
-                                </app-clue-annotator>
+                                <app-clue-annotator (close)="onEditorClose(clue, $event)"></app-clue-annotator>
                             </div>
                         </td>
                     </tr>

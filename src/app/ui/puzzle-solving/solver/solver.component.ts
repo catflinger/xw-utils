@@ -119,9 +119,9 @@ export class SolverComponent implements OnInit, OnDestroy {
                         backdrop: "static",
                         size: "lg",
                     });
-                    this.modalRef.componentInstance.clueId = clue.id;
+                    //this.modalRef.componentInstance.clueId = clue.id;
                     this.modalRef.componentInstance.starterText = starterText;
-                    this.modalRef.componentInstance.publishOptions = this.puzzle.publishOptions;
+                    //this.modalRef.componentInstance.publishOptions = this.puzzle.publishOptions;
                     this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
                         this.modalRef.close();
                         this.modalRef = null;

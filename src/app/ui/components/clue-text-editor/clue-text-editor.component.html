@@ -1,11 +1,5 @@
-<div class="container">
+<div class="container" *ngIf="clue">
     <form [formGroup]="form">
-
-        <div class="row">
-            <div class="col">
-                <h3>Clue Editor</h3>
-            </div>
-        </div>
 
         <div class="row mt-3">
             <div class="col">
@@ -52,12 +46,6 @@
         <div class="row" *ngIf="!form.get('text').valid">
             <div class="col text-danger">
                 The clue text has a missing or incomplete lettercount: (2,3) or (8, 2 words) for example 
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col">
-                 <app-grid-reference *ngFor="let entry of clue.link.entries" [gridRef]="entry.gridRef"></app-grid-reference>
             </div>
         </div>
 

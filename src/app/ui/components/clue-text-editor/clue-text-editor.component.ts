@@ -12,6 +12,7 @@ import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
+import { GridReference } from 'src/app/model/grid-reference';
 
 export interface ClueEditModel {
     id: string;
@@ -30,11 +31,11 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     public form: FormGroup;
     public title = "";
+    public clue: ClueEditModel;
 
-    @Input() clue: ClueEditModel;
     @Output() close = new EventEmitter<void>();
     
-    @ViewChild("text", { static: true }) textInput: ElementRef;
+    @ViewChild("text", { static: false }) textInput: ElementRef;
 
     constructor(
         private activePuzzle:IActivePuzzle,
@@ -42,30 +43,46 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     ) { }
 
     public ngOnInit() {
-        this.title = this.clue ? "new clue" : "edit clue";
+        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            if (puzzle) {
+                let selectedClue = puzzle.getSelectedClue();
 
-        this.form = this.formBuilder.group({
-            caption: [
-                this.clue ? this.clue.caption : "", 
-                [
-                    Validators.required, 
-                    Validators.pattern(clueCaptionExpression + String.raw`\s*`)
-                ]
-            ],
-            text: [
-                this.clue ? this.clue.text : "",
-                [ 
-                    Validators.required,
-                    Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
-                ]
-            ],
-            group: [
-                this.clue ? this.clue.group : "",
-                [
-                    Validators.required
-                ]
-            ],
-        });
+                if (selectedClue) {
+                    this.clue = {
+                        id: selectedClue.id,
+                        caption: selectedClue.caption,
+                        group: selectedClue.group,
+                        text: selectedClue.text,
+                    }
+                }
+
+                this.title = this.clue ? "new clue" : "edit clue";
+
+                this.form = this.formBuilder.group({
+                    caption: [
+                        this.clue ? this.clue.caption : "", 
+                        [
+                            Validators.required, 
+                            Validators.pattern(clueCaptionExpression + String.raw`\s*`)
+                        ]
+                    ],
+                    text: [
+                        this.clue ? this.clue.text : "",
+                        [ 
+                            Validators.required,
+                            Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
+                        ]
+                    ],
+                    group: [
+                        this.clue ? this.clue.group : "",
+                        [
+                            Validators.required
+                        ]
+                    ],
+                });
+        
+            }
+        }));
     }
 
     public ngAfterViewInit() {

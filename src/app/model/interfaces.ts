@@ -90,7 +90,7 @@ export abstract class IGridReference {
     abstract readonly direction: Direction; 
 }
 
-export abstract class IClue implements ClueEditModel {
+export abstract class IClue {
     abstract readonly id: string;
     abstract readonly group: ClueGroup;
     abstract readonly caption: string;        // "1 across, 2 down"
