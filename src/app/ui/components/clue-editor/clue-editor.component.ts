@@ -16,4 +16,8 @@ export class ClueEditorComponent implements OnInit {
 
     public ngOnInit() {
     }
+
+    public onAnnotatorClose(event: string) {
+
+    }
 }

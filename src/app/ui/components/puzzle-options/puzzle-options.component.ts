@@ -34,7 +34,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
-
                 this.answerColsArray.clear();
                 this.makeControls(puzzle.publishOptions).forEach(control => this.answerColsArray.push(control));
             }
