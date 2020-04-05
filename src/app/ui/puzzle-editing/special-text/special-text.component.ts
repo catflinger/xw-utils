@@ -60,7 +60,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onParse() {
         this.appService.clear();
 
-        this.activePuzzle.update(new UpdateInfo({
+        this.activePuzzle.updateAndCommit(new UpdateInfo({
             title: this.form.value.title,
             source: this.form.value.text 
         }));

@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +12,8 @@ import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
-import { GridReference } from 'src/app/model/grid-reference';
+import { ClueEditorService } from '../clue-editor.service';
+import { ClueEditorComponentName } from '../editor-component.factory';
 
 export interface ClueEditModel {
     id: string;
@@ -33,16 +34,17 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public title = "";
     public clue: ClueEditModel;
 
-    @Output() close = new EventEmitter<void>();
-    
     @ViewChild("text", { static: false }) textInput: ElementRef;
 
     constructor(
+        private editorService: ClueEditorService,
         private activePuzzle:IActivePuzzle,
         private formBuilder: FormBuilder,
     ) { }
 
     public ngOnInit() {
+        console.log("INIT ClueTextEditorComponent");
+
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
                 let selectedClue = puzzle.getSelectedClue();
@@ -93,6 +95,11 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.subs.forEach(s => s.unsubscribe());
     }
 
+    public onNav(nextComponent: ClueEditorComponentName) {
+        // TO DO: check for unsaved changes here and warn the user before navigating
+        this.editorService.open(this.clue.id, null, nextComponent);
+    }
+
     public onSave() {
         let mods: IPuzzleModifier[] = [];
 
@@ -125,11 +132,11 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             new Clear(),
         );
 
-        this.activePuzzle.update(...mods);
-        this.close.emit();
+        this.activePuzzle.updateAndCommit(...mods);
+        this.editorService.close();
     }
 
     public onCancel() {
-        this.close.emit();
+        this.editorService.close();
     }
 }

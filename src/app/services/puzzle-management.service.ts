@@ -27,6 +27,9 @@ export abstract class IActivePuzzle {
     abstract hasPuzzle: boolean;
     abstract clear(id?: string);
     abstract update(...reducers: IPuzzleModifier[]): void;
+    abstract commit(): void;
+    abstract discard(): void;
+    abstract updateAndCommit(...reducers: IPuzzleModifier[]): void;
 }
 export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
@@ -128,12 +131,41 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         }
     }
 
-    public update(...reducers: IPuzzleModifier[]) {
+    public update(...reducers: IPuzzleModifier[]): void {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
-            this.commit(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
+        }
+    };
+
+    public commit() {
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+
+        if (puzzle) {
+            puzzle.revision += 1;
+            this.savePuzzle(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
+        }
+    }
+
+    public discard(): void {
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+
+        if (puzzle) {
+            this.openPuzzle(puzzle.info.id);
+        }
+    }
+
+    public updateAndCommit(...reducers: IPuzzleModifier[]) {
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+
+        if (puzzle) {
+            reducers.forEach(reducer => reducer.exec(puzzle));
+            puzzle.revision += 1;
+            this.savePuzzle(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
         }
     }
 
@@ -253,13 +285,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     private getMutableCopy(puzzle: Puzzle): PuzzleM {
         return JSON.parse(JSON.stringify(this.bsActive.value)) as PuzzleM;
-    }
-
-    private commit(puzzle: PuzzleM) {
-        puzzle.revision += 1;
-        
-        this.savePuzzle(puzzle);
-        this.bsActive.next(new Puzzle(puzzle));
     }
 
     private getSavedPuzzle(id: string): Promise<Puzzle> {

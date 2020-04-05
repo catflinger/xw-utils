@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueAnnotationComponent } from '../../components/clue-annotator/clue-annotator.component';
+import { ClueAnnotationComponent } from '../../components/editor/clue-annotator/clue-annotator.component';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';
@@ -64,7 +64,7 @@ export class SolverComponent implements OnInit, OnDestroy {
                 }
             } else if (event.key === "Escape") {
                 event.stopPropagation();
-                this.activePuzzle.update(new Clear());
+                this.activePuzzle.updateAndCommit(new Clear());
             } else if (/^[a-zA-Z]$/.test(event.key)) {
                 event.stopPropagation();
                 let clue = this.puzzle.getSelectedClue();
@@ -76,17 +76,17 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     onContinue() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("continue");
     }
 
     onBack() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("back");
     }
 
     onEdit() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("edit");
     }
 
@@ -101,7 +101,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     onCellClick(cell: GridCell) {
 
         if (!cell.highlight) {
-            this.activePuzzle.update(new SelectClueByCell(cell.id));
+            this.activePuzzle.updateAndCommit(new SelectClueByCell(cell.id));
         } else {
             let clue = this.puzzle.getSelectedClue();
 

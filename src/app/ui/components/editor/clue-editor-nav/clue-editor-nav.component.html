@@ -1,0 +1,18 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeId" (navChange)="onNavChange($event)">
+    <li ngbNavItem="ClueAnnotationComponent">
+      <a ngbNavLink>Solve and blog</a>
+    </li>
+
+    <li ngbNavItem="ClueTextEditorComponent">
+      <a ngbNavLink>Edit clue text</a>
+    </li>
+
+    <li ngbNavItem="GridLinkerComponent">
+        <a ngbNavLink>Change grid entry</a>
+     </li>
+
+     <li ngbNavItem="PuzzleOptionsComponent">
+        <a ngbNavLink>Options</a>
+     </li>
+
+</ul>

@@ -9,7 +9,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
 import { ClueListAction } from '../../components/clue-list-item/clue-list-item.component';
-import { ClueTextEditorComponent } from '../../components/clue-text-editor/clue-text-editor.component';
+import { ClueTextEditorComponent } from '../../components/editor/clue-text-editor/clue-text-editor.component';
 import { DeleteClue } from 'src/app//modifiers/clue-modifiers/delete-clue';
 
 @Component({
@@ -30,7 +30,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     handleKeyboardEvent(event: KeyboardEvent) {
         if (event.key === "Escape") {
             event.stopPropagation();
-            this.activePuzzle.update(new Clear());
+            this.activePuzzle.updateAndCommit(new Clear());
         }
     }
 
@@ -66,13 +66,13 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     }
 
     public onContinue() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("continue");
     }
 
     public onClueClick(clue: Clue) {
         if (!clue.highlight) {
-            this.activePuzzle.update(new SelectClue(clue.id));
+            this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
         }
     }
 
@@ -85,7 +85,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
             this.modalService.open(this.confirmation, {}).result.then(
                 (result) => {
                     if (result === "delete") {
-                        this.activePuzzle.update(new DeleteClue(clue.id));
+                        this.activePuzzle.updateAndCommit(new DeleteClue(clue.id));
                     }
                 }, 
                 (reason) => {}

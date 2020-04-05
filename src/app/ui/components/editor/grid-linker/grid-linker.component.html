@@ -1,0 +1,25 @@
+<div>
+    <div class="modal-header pb-0">
+        <app-clue-editor-nav (nav)="onNav($event)"></app-clue-editor-nav>
+    </div>
+
+    <div class="modal-body">
+        <form [formGroup]="form" *ngIf="clue">
+            <div class="form-check">
+                <input class="form-check-input" id="setGridRefsFromCaptions" type="checkbox" formControlName="setGridRefsFromCaptions" (change)="onChangeGridRefs()">
+                <label for="setGridRefsFromCaptions" class="form-check-label">
+                    Choose grid entries automatically (clear this if the clue caption is not numeric, eg an alphabetical jigsaw)
+                </label>
+            </div>
+            <div class="mt-5">
+                <div class="m-3" *ngFor="let entry of clue.link.entries">
+                    <app-grid-reference [gridRef]="entry.gridRef"></app-grid-reference>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Close</button>
+    </div>
+</div>

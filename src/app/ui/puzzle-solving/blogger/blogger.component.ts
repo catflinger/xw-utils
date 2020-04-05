@@ -60,7 +60,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onBack() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("back");
     }
 
@@ -73,14 +73,14 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        this.activePuzzle.update(new SelectClue(clue.id));
+        this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
     }
 
     onEditorClose(clue: Clue, reason: string) {
         if (reason === "cancel") {
-            this.activePuzzle.update(new Clear());
+            this.activePuzzle.updateAndCommit(new Clear());
         } else {
-            this.activePuzzle.update(new SelectNextClue(clue.id));
+            this.activePuzzle.updateAndCommit(new SelectNextClue(clue.id));
         }
     }
 }

@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, Type } from '@angular/core';
 import { GridReference } from 'src/app/model/grid-reference';
 import { Direction } from 'src/app/model/interfaces';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ClueEditorService } from '../clue-editor.service';
 
 export interface GridReferenceEvent {
     id: string,
@@ -24,7 +25,9 @@ export class GridReferenceComponent implements OnInit {
 
     public form: FormGroup;
 
-    constructor(private fb: FormBuilder) { }
+    constructor(
+        private fb: FormBuilder
+    ) { }
 
     public ngOnInit() {
         this.form = this.fb.group({
@@ -48,4 +51,5 @@ export class GridReferenceComponent implements OnInit {
             direction: this.form.value.direction,
         });
     }
+
 }

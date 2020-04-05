@@ -1,21 +1,23 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, Type } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
-import { ClueTextChunk } from '../clue-text-control/clue-text-control.component';
+import { ClueTextChunk } from '../../clue-text-control/clue-text-control.component';
 import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { TipInstance, TipStatus } from '../tip/tip-instance';
+import { TipInstance, TipStatus } from '../../tip/tip-instance';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
-import { ClueValidationWarning, QuillDelta } from 'src/app/model/interfaces';
+import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
+import { ClueEditorService } from '../clue-editor.service';
+import { ClueEditorComponentName } from '../editor-component.factory';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -43,11 +45,7 @@ class AnswerTextChunk {
     styleUrls: ['./clue-annotator.component.css']
 })
 export class ClueAnnotationComponent implements OnInit, OnDestroy {
-    //@Input() clueId: string;
     @Input() starterText: string;
-    //@Input() publishOptions: PublishOptions;
-
-    @Output() close = new EventEmitter<string>();
 
     public clue: Clue;
     public form: FormGroup;
@@ -70,9 +68,12 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
+        private editorService: ClueEditorService,
     ) { }
 
     ngOnInit() {
+        console.log("INIT ClueAnnotatorComponent");
+
         this.form = this.formBuilder.group({
             answers: this.formBuilder.array([]),
             comment: [""],
@@ -201,14 +202,19 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onCancel() {
+        this.closeEditor(false);
+    }
+
+    public onNav(nextComponent: ClueEditorComponentName) {
+        // TO DO: check for unsaved changes here and warn the user before navigating
+        this.editorService.open(this.clue.id, null, nextComponent);
+    }
+
     public onTipInstance(instance: TipInstance) {
         this.tipInstance = instance;
         this.tipInstance.activated = false;
         this.tipInstance.observe().subscribe(ts => this.tipStatus = ts);
-    }
-
-    public onCancel() {
-        this.closeEditor(false);
     }
 
     public onToggleComment() {
@@ -216,7 +222,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
     }
 
     public onCheat() {
-        let answers = this.form.get("answers").patchValue([this.clue.solution]);
+        this.form.get("answers").patchValue([this.clue.solution]);
 
         this.validate();
         this.setLatestAnswer();
@@ -252,16 +258,18 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
 
     private closeEditor(save: boolean) {
         if (save) {
-            this.activePuzzle.update(new AnnotateClue(
-                this.clue.id,
-                this.form.value.answers,
-                this.form.value.comment,
-                this.form.value.chunks,
-                this.warnings,
-            ));
+            this.activePuzzle.updateAndCommit(
+                new AnnotateClue(
+                    this.clue.id,
+                    this.form.value.answers,
+                    this.form.value.comment,
+                    this.form.value.chunks,
+                    this.warnings,
+                ),
+                new Clear()
+            );
         }
-        this.activePuzzle.update(new Clear());
-        this.close.emit(save? "save" : "cancel");
+        this.editorService.close();
     }
 
     private clean(answer: string): string {

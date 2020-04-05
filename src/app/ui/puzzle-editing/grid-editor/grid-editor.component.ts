@@ -116,30 +116,30 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
         this.tool = event.nextId as ToolType;
         this.options.showShading = event.nextId === "color";
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
     }
 
     public onContinue() {
         this.appService.clear();
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("continue");
     }
 
     public onClose() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.goHome();
     }
 
     public onSubmit() {
         this.appService.clear();
-        this.activePuzzle.update(new UpdateInfo({
+        this.activePuzzle.updateAndCommit(new UpdateInfo({
             title: this.form.value.title
         }));
     }
 
     public onSymmetrical(val: boolean) {
         this.appService.clear();
-        this.activePuzzle.update(new UpdateGridProperties({
+        this.activePuzzle.updateAndCommit(new UpdateGridProperties({
             symmetrical: val,
         }));
     }
@@ -150,11 +150,11 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             case "grid":
                 const symCell = this.getSymCell(cell);
                 if (this.puzzle.grid.properties.style === "standard") {
-                    this.activePuzzle.update(new UpdateCell(cell.id, { light: !cell.light }));
+                    this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { light: !cell.light }));
                     if (symCell) {
-                        this.activePuzzle.update(new UpdateCell(symCell.id, { light: !cell.light }));
+                        this.activePuzzle.updateAndCommit(new UpdateCell(symCell.id, { light: !cell.light }));
                     }
-                    this.activePuzzle.update(new RenumberGid());
+                    this.activePuzzle.updateAndCommit(new RenumberGid());
                 }
                 break;
 
@@ -163,21 +163,21 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                     if (cell.highlight) {
                         // cell is already part of a text edit
                         let updates = this.gridEditor.onGridNavigation(this.puzzle, "absolute", { x: cell.x, y: cell.y});
-                        updates.forEach(update => this.activePuzzle.update(update));
+                        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
                     } else {
                         // this is a new edit
                         let updates = this.gridEditor.startEdit(this.puzzle, cell);
-                        updates.forEach(update => this.activePuzzle.update(update));
+                        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
                     }
 
                 } else {
-                    this.activePuzzle.update(new Clear());
+                    this.activePuzzle.updateAndCommit(new Clear());
                 }
                 break;
                 
             case "color":
                 let color: string = cell.shading && cell.shading === this.shadingColor ? null : this.shadingColor;
-                this.activePuzzle.update(new UpdateCell(cell.id, { shading: color }));
+                this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
                 break;
                         
             default:
@@ -191,18 +191,18 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
         if (this.tool === "grid" && this.puzzle.grid.properties.style === "barred") {
             if (event.bar === "rightBar") {
-                this.activePuzzle.update(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));
+                this.activePuzzle.updateAndCommit(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));
             } else {
-                this.activePuzzle.update(new UpdateCell(event.cell.id, { bottomBar: !event.cell.bottomBar }));
+                this.activePuzzle.updateAndCommit(new UpdateCell(event.cell.id, { bottomBar: !event.cell.bottomBar }));
             }
-            this.activePuzzle.update(new RenumberGid());
+            this.activePuzzle.updateAndCommit(new RenumberGid());
         }
     }
 
     public onOptionChange() {
         this.appService.clear();
 
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
     }
 
@@ -210,20 +210,20 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
 
         let updates = this.gridEditor.onGridText(this.puzzle, event.text, event.writingDirection);
-        updates.forEach(update => this.activePuzzle.update(update));
+        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
     }
 
     public onGridNavigation(event: GridNavigationEvent) {
         this.appService.clear();
 
         let updates = this.gridEditor.onGridNavigation(this.puzzle, event.navigation);
-        updates.forEach(update => this.activePuzzle.update(update));
+        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
     }
 
     public onClearAll() {
         this.appService.clear();
 
-        this.activePuzzle.update(new ClearShading());
+        this.activePuzzle.updateAndCommit(new ClearShading());
     }
 
     public onDownload(instance: DownloadInstance) {

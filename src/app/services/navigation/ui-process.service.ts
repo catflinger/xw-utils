@@ -32,7 +32,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
             case "make-clues":
                 // TO DO: work out what to do if puzzle aready has clues
-                this.activePuzzle.update(new CreateClues(), new InitAnnotationWarnings());
+                this.activePuzzle.updateAndCommit(new CreateClues(), new InitAnnotationWarnings());
                 action = Promise.resolve("ok");
                 break;
 
@@ -49,7 +49,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
             case "grid-captions":
                 try {
-                    this.activePuzzle.update(new RenumberGid());
+                    this.activePuzzle.updateAndCommit(new RenumberGid());
                     action = Promise.resolve("ok");
                 } catch (error) {
                     action = Promise.resolve("error");
@@ -61,13 +61,13 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
 
             case "set-grid-refs":
-                this.activePuzzle.update(new SetGridReferences());
+                this.activePuzzle.updateAndCommit(new SetGridReferences());
                 action = Promise.resolve("ok");
                 break;
     
             case "link":
                 try {
-                    this.activePuzzle.update(new LinkCluesToGrid());
+                    this.activePuzzle.updateAndCommit(new LinkCluesToGrid());
                     action = Promise.resolve("ok");
                 } catch (error) {
                     action = Promise.resolve("error");
@@ -96,7 +96,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         let action = "error";
 
         try {
-            this.activePuzzle.update(new ParseText(this.textParsingService, this.providerService));
+            this.activePuzzle.updateAndCommit(new ParseText(this.textParsingService, this.providerService));
             const errors = this.activePuzzle.puzzle.provision.parseErrors;
 
             if (errors && errors.length) {

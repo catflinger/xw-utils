@@ -8,8 +8,9 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { Clue } from 'src/app/model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from '../../components/clue-editor/clue-editor.component';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ClueEditorService } from '../../components/editor/clue-editor.service';
+import { ClueAnnotationComponent } from '../../components/editor/clue-annotator/clue-annotator.component';
 
 @Component({
   selector: 'app-solver2',
@@ -25,8 +26,8 @@ export class Solver2Component implements OnInit {
 
     constructor(
         private navService: NavService<AppTrackData>,
-        private activePuzzle: IActivePuzzle, 
-        private modalService: NgbModal,
+        private activePuzzle: IActivePuzzle,
+        private editorService: ClueEditorService,
     ) { }
 
     ngOnInit() {
@@ -55,57 +56,34 @@ export class Solver2Component implements OnInit {
     }
     
     public onContinue() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("continue");
     }
 
     public onBack() {
-        this.activePuzzle.update(new Clear());
+        this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("back");
     }
 
     public onCellClick(cell: GridCell) {
         if (!cell.highlight) {
-            this.activePuzzle.update(new SelectClueByCell(cell.id));
+            this.activePuzzle.updateAndCommit(new SelectClueByCell(cell.id));
         } else {
             let clue = this.puzzle.getSelectedClue();
 
             if (clue) {
-                this.openEditor(this.puzzle, clue, null);
+                this.openEditor(clue, null);
             }
         }
     }
 
     public onClueClick(clue: Clue) {
-        this.openEditor(this.puzzle, clue, null);
+        this.openEditor(clue, null);
     }
 
-    private openEditor(puzzle: Puzzle, clue: Clue, starterText: string) {
+    private openEditor(clue: Clue, starterText: string) {
         if (!clue.redirect) {
-            setTimeout(
-                () => {
-                    this.modalRef = this.modalService.open(ClueEditorComponent, { 
-                        backdrop: "static",
-                        size: "lg",
-                    });
-                    this.modalRef.componentInstance.clueId = clue.id;
-                    this.modalRef.componentInstance.starterText = starterText;
-
-                    this.subs.push(this.modalRef.componentInstance.close.subscribe(
-                        result => {
-                            this.modalRef.close();
-                            this.modalRef = null;
-                        },
-                        error => {
-                            this.modalRef.close();
-                            this.modalRef = null;
-                        }
-                    ));
-
-                    // this.modalRef.result.finally(() => this.modalRef = null);
-                },
-                0
-            );
+            this.editorService.open(clue.id, starterText, "ClueAnnotationComponent");
         }
     }
 }

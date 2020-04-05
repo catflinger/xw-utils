@@ -72,7 +72,7 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onContinue() {
-        this.activePuzzle.update(new UpdatePreamble(
+        this.activePuzzle.updateAndCommit(new UpdatePreamble(
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
@@ -85,7 +85,7 @@ export class PublishPreambleComponent implements OnInit {
     }
 
     onBack() {
-        this.activePuzzle.update(new UpdatePreamble(
+        this.activePuzzle.updateAndCommit(new UpdatePreamble(
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));

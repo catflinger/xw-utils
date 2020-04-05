@@ -1,15 +1,11 @@
 export type AlertType = "info" | "danger";
 
-export type NavAction = "solve" | "login";
+//export type ClueEditor = "annotator" | "clue-editor" | "linker" | "options";
+//export type ClueEditorCloseResult = "save" | "cancel" | ClueEditor;
 
 export type UIResult = "ok" | "cancel" | "back";
 
 export type GridSizes = "small" | "large";
-
-export interface NavResult {
-    action: NavAction;
-    paramter: string;
-}
 
 export class Alert {
     constructor(public readonly type: AlertType, public readonly message: string) {}

@@ -42,7 +42,7 @@ export class ClueListComponent implements OnInit {
         if (clue.highlight) {
             this.clueClick.emit(clue);
         } else {
-            this.activePuzzle.update(new SelectClue(clue.id));
+            this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
         }
     }
 }
