@@ -9,11 +9,8 @@ import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
-import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
-import { ClueEditorService } from '../../clue-editor.service';
-import { ClueEditorComponentName } from '../../editor-component.factory';
 import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
 
 export interface ClueEditModel {
@@ -47,10 +44,9 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public ngOnInit() {
 
         this.instance.emit({ 
-            confirmClose: () => false,
-            save: () => {
-                console.log("SAVING ClueTextEditorComponent");
-                //this.onSave();
+            //confirmClose: () => false,
+            save: (): Promise<boolean> => {
+                return this.onSave();
             },
          });
 
@@ -104,7 +100,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    private onSave() {
+    private onSave(): Promise<boolean> {
         let mods: IPuzzleModifier[] = [];
 
         //TO DO: validate the entry
@@ -130,7 +126,6 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
         mods.push(
             new SetGridReferences([this.clue.id]),
-            //new LinkCluesToGrid(),
             new ValidateLetterCounts(),
             new SortClues(),
             //new Clear(),
@@ -138,5 +133,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
         this.activePuzzle.updateAndCommit(...mods);
         //this.editorService.close();
+
+        return Promise.resolve(false);
     }
 }

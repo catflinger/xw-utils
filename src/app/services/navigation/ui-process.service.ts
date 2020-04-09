@@ -3,7 +3,6 @@ import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../../ui/services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzle-management.service';
-import { LinkCluesToGrid } from 'src/app//modifiers/clue-modifiers/link-clues-to-grid';
 import { ParseText } from 'src/app//modifiers/parsing-modifiers/parse-text';
 import { RenumberGid } from 'src/app//modifiers/grid-modifiers/renumber-grid';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
@@ -66,12 +65,12 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 break;
     
             case "link":
-                try {
-                    this.activePuzzle.updateAndCommit(new LinkCluesToGrid());
+                // try {
+                //     this.activePuzzle.updateAndCommit(new LinkCluesToGrid());
                     action = Promise.resolve("ok");
-                } catch (error) {
-                    action = Promise.resolve("error");
-                }
+                // } catch (error) {
+                //     action = Promise.resolve("error");
+                // }
                 break;
 
             case "validate":

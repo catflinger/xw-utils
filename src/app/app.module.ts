@@ -83,7 +83,6 @@ import { PuzzleOptionsComponent } from './ui/components/editor/forms/puzzle-opti
 import { GridReferenceComponent } from './ui/components/editor/grid-reference/grid-reference.component';
 import { Solver2Component } from './ui/puzzle-solving/solver2/solver2.component';
 import { GridLinkerComponent } from './ui/components/editor/forms/grid-linker/grid-linker.component';
-import { ClueEditorNavComponent } from './ui/components/editor/clue-editor-nav/clue-editor-nav.component';
 import { ClueEditorComponent } from './ui/components/editor/clue-editor/clue-editor.component';
 
 const quillGlobalConfig = {
@@ -170,7 +169,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridReferenceComponent,
         Solver2Component,
         GridLinkerComponent,
-        ClueEditorNavComponent,
         ClueEditorComponent,
     ],
     imports: [

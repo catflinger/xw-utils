@@ -83,7 +83,7 @@ export class Solver2Component implements OnInit {
 
     private openEditor(clue: Clue, starterText: string) {
         if (!clue.redirect) {
-            this.editorService.open(clue.id, starterText, "ClueAnnotationComponent");
+            this.editorService.open(clue.id, starterText);
         }
     }
 }

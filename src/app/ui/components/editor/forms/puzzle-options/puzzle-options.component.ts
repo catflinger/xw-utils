@@ -6,8 +6,6 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
-import { ClueEditorService } from '../../clue-editor.service';
-import { ClueEditorComponentName } from '../../editor-component.factory';
 import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
 
 @Component({
@@ -24,7 +22,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     private subs: Subscription[] = [];
 
     constructor(
-        //private editorService: ClueEditorService,
         private activePuzzle: IActivePuzzle,
     ) { }
 
@@ -34,9 +31,9 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     public ngOnInit() {
 
         this.instance.emit({ 
-            confirmClose: () => false,
-            save: () => {
-                console.log("Saving PuzzleOptionsComponent");
+            //confirmClose: () => false,
+            save: (): Promise<boolean> => {
+                return Promise.resolve(false);
             },
          });
 

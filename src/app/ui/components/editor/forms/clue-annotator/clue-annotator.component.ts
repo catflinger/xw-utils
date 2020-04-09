@@ -15,8 +15,6 @@ import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
-import { ClueEditorService } from '../../clue-editor.service';
-import { ClueEditorComponentName } from '../../editor-component.factory';
 import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
@@ -76,10 +74,9 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     ngOnInit() {
 
         this.instance.emit({ 
-            confirmClose: () => false,
-            save: () => {
-                console.log("SAVING ClueAnnotatorComponent");
-                //this.onSave();
+            //confirmClose: () => false,
+            save: (): Promise<boolean> => {
+                return this.onSave();
             },
          });
 
@@ -212,7 +209,9 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             !this.clue.redirect;
     }
 
-    private onSave() {
+    private onSave(): Promise<boolean> {
+        let result = Promise.resolve(true);
+
         if (this.appSettings.general.showCommentEditor.enabled &&
             this.appSettings.tips.definitionWarning.enabled &&
             !this.tipStatus.show &&
@@ -229,28 +228,25 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
                     lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
                 })
             }
+
             if (answer && lengthAvailable && answer.length !== lengthAvailable) {
-                this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
-
+                result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
             } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
-                this.showSaveWarning("Warning: the answer does match the publsihed solution");
-
+                result = this.showSaveWarning("Warning: the answer does match the publsihed solution");
             } else {
+                result = Promise.resolve(false);
                 this.save();
             }
         }
+
+        return result;
     }
 
-    private showSaveWarning(message: string) {
+    private showSaveWarning(message: string): Promise<boolean> {
         let lengthDialog = this.modalService.open(ConfirmModalComponent);
         lengthDialog.componentInstance.message = message;
         
-        lengthDialog.result.then((result) => { 
-            if (result) {
-                this.save();
-            }
-        })
-        .catch();
+        return lengthDialog.result;
     }
 
     private save() {

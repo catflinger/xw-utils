@@ -25,9 +25,9 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
     public ngOnInit() {
 
         this.instance.emit({ 
-            confirmClose: () => false,
-            save: () => {
-                console.log("SAVING GridLinkerComponent");
+            //confirmClose: () => false,
+            save: (): Promise<boolean> => {
+                return Promise.resolve(false);
             },
          });
 

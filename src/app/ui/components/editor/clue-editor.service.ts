@@ -1,12 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponentName } from './editor-component.factory';
 import { ClueEditorComponent } from './clue-editor/clue-editor.component';
 
 export interface ClueEditor {
-    modalRef: NgbModalRef,
-    componentName: ClueEditorComponentName,
+    modalRef: NgbModalRef
 }
 
 @Injectable({
@@ -14,7 +12,7 @@ export interface ClueEditor {
 })
 export class ClueEditorService implements OnDestroy {
 
-    private editor: ClueEditor;
+    private modalRef: NgbModalRef;
     private subs: Subscription[] = [];
 
     constructor(
@@ -26,39 +24,28 @@ export class ClueEditorService implements OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    public get isOpen(): boolean {
-        return this.editor !== null;
-    }
-
-    public get selectedEditorId(): ClueEditorComponentName {
-        return this.editor ? this.editor.componentName : null;
-    }
-
-    public open(clueId: string, starterText: string, componentName: ClueEditorComponentName) {
+    public open(clueId: string, starterText: string) {
         
-        if (this.isOpen) {
+        if (this.modalRef !== null) {
             this.close();
+            this.modalRef = null;
         }
 
-        this.editor = {
-            modalRef: null,
-            componentName
-        };
-
-        this.editor.modalRef = this.modalService.open(ClueEditorComponent, { 
+        this.modalRef = this.modalService.open(ClueEditorComponent, { 
             backdrop: "static",
             size: "lg",
         });
         
-        this.editor.modalRef.componentInstance.clueId = clueId;
-        this.editor.modalRef.componentInstance.starterText = starterText;
-        this.editor.modalRef.componentInstance.close.subscribe(() => this.close());
+        this.modalRef.componentInstance.clueId = clueId;
+        this.modalRef.componentInstance.starterText = starterText;
+        this.modalRef.componentInstance.close.subscribe(() => this.close());
     }
 
     public close() {
-        if (this.editor) {
-            this.editor.modalRef.close();
-            this.editor = null;
+        if (this.modalRef) {
+            this.modalRef.close();
+            this.modalRef = null;
         }
     }
+
 }

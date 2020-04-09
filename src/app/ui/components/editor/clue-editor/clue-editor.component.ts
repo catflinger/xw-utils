@@ -1,16 +1,14 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorService } from '../clue-editor.service';
 
 export interface ClueEditorInstance {
-    confirmClose: () => boolean;
-    save: () => void;
+    //confirmClose: () => boolean;
+    save: () => Promise<boolean>;
 }
 
 export interface IClueEditor {
     instance: EventEmitter<ClueEditorInstance>;
 } 
-
 
 @Component({
     selector: 'app-clue-editor',
@@ -26,7 +24,6 @@ export class ClueEditorComponent implements OnInit {
     private editorInstance: ClueEditorInstance = null;
 
     constructor(
-        //private editorService: ClueEditorService,
     ) { }
 
     public ngOnInit(): void {
@@ -37,27 +34,27 @@ export class ClueEditorComponent implements OnInit {
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
-        let cancel = false;
+        event.preventDefault();
 
         if (this.editorInstance) {
-            cancel = this.editorInstance.confirmClose();
-            if (cancel) {
-                event.preventDefault();
-            } else {
-                this.editorInstance.save();
-            }
+            this.editorInstance.save()
+            .then(cancel => {
+                if (!cancel) {
+                    this.activeId = event.nextId;
+                }
+            });
         }
     }
 
     public onSave() {
         if (this.editorInstance) {
-            const cancel = this.editorInstance.confirmClose();
-            
-            if (!cancel) {
-                this.editorInstance.save();
-            }
+            this.editorInstance.save()
+            .then(cancel => {
+                if (!cancel) {
+                    this.close.emit();
+                }
+            });
         }
-        this.close.emit();
     }
 
     public onCancel() {
