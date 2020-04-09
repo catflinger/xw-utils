@@ -1,23 +1,23 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, Type } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
-import { ClueTextChunk } from '../../clue-text-control/clue-text-control.component';
+import { ClueTextChunk } from '../../../clue-text-control/clue-text-control.component';
 import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app-settings.service';
-import { TipInstance, TipStatus } from '../../tip/tip-instance';
-import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
+import { TipInstance, TipStatus } from '../../../tip/tip-instance';
 import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
 import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
-import { ClueEditorService } from '../clue-editor.service';
-import { ClueEditorComponentName } from '../editor-component.factory';
+import { ClueEditorService } from '../../clue-editor.service';
+import { ClueEditorComponentName } from '../../editor-component.factory';
+import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -44,8 +44,10 @@ class AnswerTextChunk {
     templateUrl: './clue-annotator.component.html',
     styleUrls: ['./clue-annotator.component.css']
 })
-export class ClueAnnotationComponent implements OnInit, OnDestroy {
+export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     @Input() starterText: string;
+
+    @Output() instance = new EventEmitter<ClueEditorInstance>();
 
     public clue: Clue;
     public form: FormGroup;
@@ -68,11 +70,18 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
-        private editorService: ClueEditorService,
+        //private editorService: ClueEditorService,
     ) { }
 
     ngOnInit() {
-        console.log("INIT ClueAnnotatorComponent");
+
+        this.instance.emit({ 
+            confirmClose: () => false,
+            save: () => {
+                console.log("SAVING ClueAnnotatorComponent");
+                //this.onSave();
+            },
+         });
 
         this.form = this.formBuilder.group({
             answers: this.formBuilder.array([]),
@@ -170,47 +179,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
         return definitionCount > 0;
     }
 
-    public onSave() {
-
-        //console.log("FORM " + JSON.stringify(this.form.value));
-
-        if (this.appSettings.general.showCommentEditor.enabled &&
-            this.appSettings.tips.definitionWarning.enabled &&
-            !this.tipStatus.show &&
-            this.form.value.chunks.length < 2) {
-
-            this.tipInstance.activated = true;
-
-        } else {
-            let answer = this.clean(this.form.value.answers[0]);
-            let lengthAvailable = 0;
-
-            if (this.grid) {
-                this.clue.link.entries.forEach(entry => {
-                    lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
-                })
-            }
-            if (answer && lengthAvailable && answer.length !== lengthAvailable) {
-                this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
-
-            } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
-                this.showSaveWarning("Warning: the answer does match the publsihed solution");
-
-            } else {
-                this.closeEditor(true);
-            }
-        }
-    }
-
-    public onCancel() {
-        this.closeEditor(false);
-    }
-
-    public onNav(nextComponent: ClueEditorComponentName) {
-        // TO DO: check for unsaved changes here and warn the user before navigating
-        this.editorService.open(this.clue.id, null, nextComponent);
-    }
-
     public onTipInstance(instance: TipInstance) {
         this.tipInstance = instance;
         this.tipInstance.activated = false;
@@ -244,32 +212,57 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy {
             !this.clue.redirect;
     }
 
+    private onSave() {
+        if (this.appSettings.general.showCommentEditor.enabled &&
+            this.appSettings.tips.definitionWarning.enabled &&
+            !this.tipStatus.show &&
+            this.form.value.chunks.length < 2) {
+
+            this.tipInstance.activated = true;
+
+        } else {
+            let answer = this.clean(this.form.value.answers[0]);
+            let lengthAvailable = 0;
+
+            if (this.grid) {
+                this.clue.link.entries.forEach(entry => {
+                    lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
+                })
+            }
+            if (answer && lengthAvailable && answer.length !== lengthAvailable) {
+                this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
+
+            } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
+                this.showSaveWarning("Warning: the answer does match the publsihed solution");
+
+            } else {
+                this.save();
+            }
+        }
+    }
+
     private showSaveWarning(message: string) {
         let lengthDialog = this.modalService.open(ConfirmModalComponent);
         lengthDialog.componentInstance.message = message;
         
         lengthDialog.result.then((result) => { 
             if (result) {
-                this.closeEditor(true);
+                this.save();
             }
         })
         .catch();
     }
 
-    private closeEditor(save: boolean) {
-        if (save) {
-            this.activePuzzle.updateAndCommit(
-                new AnnotateClue(
-                    this.clue.id,
-                    this.form.value.answers,
-                    this.form.value.comment,
-                    this.form.value.chunks,
-                    this.warnings,
-                ),
-                new Clear()
-            );
-        }
-        this.editorService.close();
+    private save() {
+        this.activePuzzle.updateAndCommit(
+            new AnnotateClue(
+                this.clue.id,
+                this.form.value.answers,
+                this.form.value.comment,
+                this.form.value.chunks,
+                this.warnings,
+            ),
+        );
     }
 
     private clean(answer: string): string {

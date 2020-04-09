@@ -1,0 +1,38 @@
+<form [formGroup]="form">
+    <div class="form-group mt-3">
+        <div>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>column position</th>
+                        <th>column caption</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container formArrayName="answerCols">
+                        <tr *ngFor="let control of answerColsArray.controls; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td class="form-group" [formGroupName]="i">
+                                <input type="text" class="form-control" [attr.disabled]="i ? null : ''"
+                                    formControlName="caption" placeholder="(untitled)">
+                            </td>
+                            <td>
+                                <button *ngIf="i"
+                                    [ngStyle]="{visibility: control.get('caption').dirty ? 'visible' : 'hidden'}"
+                                    title="save changes" type="button" class="btn mr-3" (click)="onSaveColumn(i)">
+                                    <i style="font-size: 2em; color: Green;" class="fas fa-check"></i>
+                                </button>
+                                <button *ngIf="i" title="delete column" type="button" class="btn"
+                                    (click)="onDeleteColumn(i)">
+                                    <i style="font-size: 2em; color: Tomato;" class="fas fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" (click)="onAddColumn()">Add column</button>
+        </div>
+    </div>
+</form>

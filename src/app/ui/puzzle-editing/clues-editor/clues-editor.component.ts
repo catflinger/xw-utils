@@ -9,7 +9,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
 import { ClueListAction } from '../../components/clue-list-item/clue-list-item.component';
-import { ClueTextEditorComponent } from '../../components/editor/clue-text-editor/clue-text-editor.component';
+import { ClueTextEditorComponent } from '../../components/editor/forms/clue-text-editor/clue-text-editor.component';
 import { DeleteClue } from 'src/app//modifiers/clue-modifiers/delete-clue';
 
 @Component({

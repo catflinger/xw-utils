@@ -6,24 +6,25 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
-import { ClueEditorService } from '../clue-editor.service';
-import { ClueEditorComponentName } from '../editor-component.factory';
+import { ClueEditorService } from '../../clue-editor.service';
+import { ClueEditorComponentName } from '../../editor-component.factory';
+import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
 
 @Component({
     selector: 'app-puzzle-options',
     templateUrl: './puzzle-options.component.html',
     styleUrls: ['./puzzle-options.component.css']
 })
-export class PuzzleOptionsComponent implements OnInit, OnDestroy {
+export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     public form: FormGroup;
-
-    @Output() public edit = new EventEmitter<void>();
+    
+    @Output() instance = new EventEmitter<ClueEditorInstance>();
     @Input() public clueId: string;
 
     private subs: Subscription[] = [];
 
     constructor(
-        private editorService: ClueEditorService,
+        //private editorService: ClueEditorService,
         private activePuzzle: IActivePuzzle,
     ) { }
 
@@ -32,7 +33,12 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     }
     public ngOnInit() {
 
-        console.log("INIT PuzzleOptionsComponent");
+        this.instance.emit({ 
+            confirmClose: () => false,
+            save: () => {
+                console.log("Saving PuzzleOptionsComponent");
+            },
+         });
 
         this.form = new FormGroup({
             "answerCols": new FormArray([]),
@@ -63,10 +69,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s .unsubscribe());
     }
 
-    public onEdit() {
-        this.edit.emit();
-    }
-
     public onAddColumn() {
         this.activePuzzle.updateAndCommit(new AddTextColumn());
     }
@@ -77,14 +79,5 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     
     public onSaveColumn(index: number) {
         this.activePuzzle.updateAndCommit(new UpdateTextColumn(index, this.form.value.answerCols[index].caption))
-    }
-    
-    public onNav(nextComponent: ClueEditorComponentName) {
-        // TO DO: check for unsaved changes here and warn the user before navigating
-        this.editorService.open(this.clueId, null, nextComponent);
-    }
-
-    public onCancel() {
-        this.editorService.close();
     }
 }

@@ -10,7 +10,7 @@ import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ClueEditorService } from '../../components/editor/clue-editor.service';
-import { ClueAnnotationComponent } from '../../components/editor/clue-annotator/clue-annotator.component';
+import { ClueAnnotationComponent } from '../../components/editor/forms/clue-annotator/clue-annotator.component';
 
 @Component({
   selector: 'app-solver2',

@@ -16,7 +16,7 @@ import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complet
 import { PublishPreambleComponent } from './ui/puzzle-publishing/publish-preamble/publish-preamble.component';
 import { ClueListComponent } from './ui/components/clue-list/clue-list.component';
 import { SolverComponent } from './ui/puzzle-solving/solver/solver.component';
-import { ClueAnnotationComponent } from './ui/components/editor/clue-annotator/clue-annotator.component';
+import { ClueAnnotationComponent } from './ui/components/editor/forms/clue-annotator/clue-annotator.component';
 import { ClueTextChunkComponent } from './ui/components/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/components/grid/grid.component';
 
@@ -78,12 +78,13 @@ import { createTextTrack } from './services/navigation/tracks/create-text-track'
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
-import { ClueTextEditorComponent } from './ui/components/editor/clue-text-editor/clue-text-editor.component';
-import { PuzzleOptionsComponent } from './ui/components/editor/puzzle-options/puzzle-options.component';
+import { ClueTextEditorComponent } from './ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
+import { PuzzleOptionsComponent } from './ui/components/editor/forms/puzzle-options/puzzle-options.component';
 import { GridReferenceComponent } from './ui/components/editor/grid-reference/grid-reference.component';
 import { Solver2Component } from './ui/puzzle-solving/solver2/solver2.component';
-import { GridLinkerComponent } from './ui/components/editor/grid-linker/grid-linker.component';
+import { GridLinkerComponent } from './ui/components/editor/forms/grid-linker/grid-linker.component';
 import { ClueEditorNavComponent } from './ui/components/editor/clue-editor-nav/clue-editor-nav.component';
+import { ClueEditorComponent } from './ui/components/editor/clue-editor/clue-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -170,6 +171,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         Solver2Component,
         GridLinkerComponent,
         ClueEditorNavComponent,
+        ClueEditorComponent,
     ],
     imports: [
         BrowserModule,

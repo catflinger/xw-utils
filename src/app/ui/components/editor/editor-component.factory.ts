@@ -1,8 +1,8 @@
 import { Injectable, Type } from '@angular/core';
-import { ClueAnnotationComponent } from './clue-annotator/clue-annotator.component';
-import { ClueTextEditorComponent } from './clue-text-editor/clue-text-editor.component';
-import { GridLinkerComponent } from './grid-linker/grid-linker.component';
-import { PuzzleOptionsComponent } from './puzzle-options/puzzle-options.component';
+import { ClueAnnotationComponent } from './forms/clue-annotator/clue-annotator.component';
+import { ClueTextEditorComponent } from './forms/clue-text-editor/clue-text-editor.component';
+import { GridLinkerComponent } from './forms/grid-linker/grid-linker.component';
+import { PuzzleOptionsComponent } from './forms/puzzle-options/puzzle-options.component';
 
 export type ClueEditorComponentName = "ClueAnnotationComponent" | "ClueTextEditorComponent" | "GridLinkerComponent" | "PuzzleOptionsComponent";
 

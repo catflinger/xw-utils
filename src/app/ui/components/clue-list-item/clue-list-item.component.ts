@@ -20,6 +20,7 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
 
     @Input() public clue: Clue;
     @Input() public options: ClueListItemOptions;
+    
     @Output() public action = new EventEmitter<ClueListAction>();
 
     public klasses: string[];

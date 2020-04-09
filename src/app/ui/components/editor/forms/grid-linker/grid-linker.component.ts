@@ -1,30 +1,36 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit, Type, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { FormGroup, FormControl } from '@angular/forms';
-import { UpdatePuzzleOptions } from 'src/app/modifiers/publish-options-modifiers/update-puzzle-options';
-import { ClueEditorService } from '../clue-editor.service';
-import { ClueEditorComponentName } from '../editor-component.factory';
+import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
 
 @Component({
     selector: 'app-grid-linker',
     templateUrl: './grid-linker.component.html',
     styleUrls: ['./grid-linker.component.css']
 })
-export class GridLinkerComponent implements OnInit {
+export class GridLinkerComponent implements OnInit, IClueEditor {
     private subs: Subscription[] = [];
 
+    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    
     public clue: Clue;
     public form: FormGroup;
 
     constructor(
-        private editorService: ClueEditorService,
         private activePuzzle:IActivePuzzle,
     ) { }
 
     public ngOnInit() {
-        console.log("INIT GridLinkerComponent");
+
+        this.instance.emit({ 
+            confirmClose: () => false,
+            save: () => {
+                console.log("SAVING GridLinkerComponent");
+            },
+         });
+
 
         this.form = new FormGroup({
             "setGridRefsFromCaptions": new FormControl(true),
@@ -34,25 +40,11 @@ export class GridLinkerComponent implements OnInit {
             if (puzzle) {
                 this.form.patchValue({"setGridRefsFromCaptions": puzzle.options.setGridRefsFromCaptions});
                 this.clue = puzzle.getSelectedClue();
-                //console.log("CLUE: " + JSON.stringify(this.clue))
             }
         }));
     }
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
-    }
-
-    public onChangeGridRefs() {
-        //this.activePuzzle.update(new UpdatePuzzleOptions(this.form.value.setGridRefsFromCaptions));
-    }
-
-    public onNav(nextComponent: ClueEditorComponentName) {
-        // TO DO: check for unsaved changes here and warn the user before navigating
-        this.editorService.open(this.clue.id, null, nextComponent);
-    }
-
-    public onCancel() {
-        this.editorService.close();
     }
 }

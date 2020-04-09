@@ -12,8 +12,9 @@ import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
-import { ClueEditorService } from '../clue-editor.service';
-import { ClueEditorComponentName } from '../editor-component.factory';
+import { ClueEditorService } from '../../clue-editor.service';
+import { ClueEditorComponentName } from '../../editor-component.factory';
+import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
 
 export interface ClueEditModel {
     id: string;
@@ -27,7 +28,7 @@ export interface ClueEditModel {
     templateUrl: './clue-text-editor.component.html',
     styleUrls: ['./clue-text-editor.component.css']
 })
-export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditor {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
@@ -35,15 +36,23 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public clue: ClueEditModel;
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
-
+    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    
     constructor(
-        private editorService: ClueEditorService,
+        //private editorService: ClueEditorService,
         private activePuzzle:IActivePuzzle,
         private formBuilder: FormBuilder,
     ) { }
 
     public ngOnInit() {
-        console.log("INIT ClueTextEditorComponent");
+
+        this.instance.emit({ 
+            confirmClose: () => false,
+            save: () => {
+                console.log("SAVING ClueTextEditorComponent");
+                //this.onSave();
+            },
+         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
@@ -95,12 +104,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onNav(nextComponent: ClueEditorComponentName) {
-        // TO DO: check for unsaved changes here and warn the user before navigating
-        this.editorService.open(this.clue.id, null, nextComponent);
-    }
-
-    public onSave() {
+    private onSave() {
         let mods: IPuzzleModifier[] = [];
 
         //TO DO: validate the entry
@@ -129,14 +133,10 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             //new LinkCluesToGrid(),
             new ValidateLetterCounts(),
             new SortClues(),
-            new Clear(),
+            //new Clear(),
         );
 
         this.activePuzzle.updateAndCommit(...mods);
-        this.editorService.close();
-    }
-
-    public onCancel() {
-        this.editorService.close();
+        //this.editorService.close();
     }
 }

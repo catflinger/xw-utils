@@ -1,6 +1,6 @@
 import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
-import { ClueEditModel } from '../ui/components/editor/clue-text-editor/clue-text-editor.component';
+import { ClueEditModel } from '../ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
 import { GridLink } from './grid-link';
 import { Grid } from './grid';
 

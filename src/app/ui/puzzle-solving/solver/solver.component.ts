@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ClueAnnotationComponent } from '../../components/editor/clue-annotator/clue-annotator.component';
+import { ClueAnnotationComponent } from '../../components/editor/forms/clue-annotator/clue-annotator.component';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { GridCell } from 'src/app/model/grid-cell';

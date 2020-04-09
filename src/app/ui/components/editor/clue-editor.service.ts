@@ -1,7 +1,8 @@
-import { Injectable, OnDestroy, Type } from '@angular/core';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponentName, EditorComponentFactory } from './editor-component.factory';
+import { ClueEditorComponentName } from './editor-component.factory';
+import { ClueEditorComponent } from './clue-editor/clue-editor.component';
 
 export interface ClueEditor {
     modalRef: NgbModalRef,
@@ -18,7 +19,6 @@ export class ClueEditorService implements OnDestroy {
 
     constructor(
         private modalService: NgbModal,
-        private componentFactory: EditorComponentFactory,
     ) {
     }
 
@@ -40,20 +40,19 @@ export class ClueEditorService implements OnDestroy {
             this.close();
         }
 
-        const component = this.componentFactory.getComponent(componentName);
-        
         this.editor = {
             modalRef: null,
             componentName
         };
 
-        this.editor.modalRef = this.modalService.open(component, { 
+        this.editor.modalRef = this.modalService.open(ClueEditorComponent, { 
             backdrop: "static",
             size: "lg",
         });
         
         this.editor.modalRef.componentInstance.clueId = clueId;
         this.editor.modalRef.componentInstance.starterText = starterText;
+        this.editor.modalRef.componentInstance.close.subscribe(() => this.close());
     }
 
     public close() {

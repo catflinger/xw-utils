@@ -1,0 +1,14 @@
+<form [formGroup]="form" *ngIf="clue">
+    <div class="form-check">
+        <input class="form-check-input" id="setGridRefsFromCaptions" type="checkbox"
+            formControlName="setGridRefsFromCaptions" (change)="onChangeGridRefs()">
+        <label for="setGridRefsFromCaptions" class="form-check-label">
+            Choose grid entries automatically (clear this if the clue caption is not numeric, eg an alphabetical jigsaw)
+        </label>
+    </div>
+    <div class="mt-5">
+        <div class="m-3" *ngFor="let entry of clue.link.entries">
+            <app-grid-reference [gridRef]="entry.gridRef"></app-grid-reference>
+        </div>
+    </div>
+</form>

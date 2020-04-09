@@ -11,7 +11,7 @@ class ColorPickerOption {
     selector: 'app-color-control',
     templateUrl: './color-control.component.html',
     styleUrls: ['./color-control.component.css'],
-    providers: [    { 
+    providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => ColorControlComponent),
         multi: true
