@@ -78,6 +78,9 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
+            showSaveButton: true,
+            showCancelButton: true,
+            showCloseButton: false,
          });
 
         this.form = this.formBuilder.group({

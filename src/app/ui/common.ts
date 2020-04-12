@@ -48,7 +48,8 @@ export class GridParametersSmall implements GridParameters {
 }
 
 export interface GridControlOptions {
-    showShading?: boolean;
+    hideShading?: boolean;
+    hideHighlight?: boolean;
     //enableTextEdit?: boolean;
     editor?: Symbol;
     size?: GridSizes;

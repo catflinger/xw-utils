@@ -4,6 +4,9 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 export interface ClueEditorInstance {
     //confirmClose: () => boolean;
     save: () => Promise<boolean>;
+    showSaveButton: boolean;
+    showCancelButton: boolean;
+    showCloseButton: boolean;
 }
 
 export interface IClueEditor {
@@ -20,6 +23,9 @@ export class ClueEditorComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
     public activeId: string = "ClueAnnotatorComponent";
+    public hideSaveButton = true;
+    public hideCancelButton = true;
+    public hideCloseButton = true;
 
     private editorInstance: ClueEditorInstance = null;
 
@@ -31,6 +37,12 @@ export class ClueEditorComponent implements OnInit {
 
     public onEditorInstance(instance: ClueEditorInstance) {
         this.editorInstance = instance;
+
+        Promise.resolve(null).then(() => {
+            this.hideSaveButton = !instance.showSaveButton;
+            this.hideCancelButton = !instance.showCancelButton;
+            this.hideCloseButton = !instance.showCloseButton;
+        });
     }
 
     public onNavChange(event: NgbNavChangeEvent) {

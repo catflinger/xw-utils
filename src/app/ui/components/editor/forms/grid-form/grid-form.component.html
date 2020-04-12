@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <app-grid 
+            (cellClick)="onCellClick($event)" 
+            (barClick)="onBarClick($event)" 
+            [options]="{ hideShading: true, hideHighlight: true }">
+        </app-grid>
+    </div>
+</div>

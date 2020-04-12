@@ -48,6 +48,9 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
+            showSaveButton: true,
+            showCancelButton: true,
+            showCloseButton: false,
          });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {

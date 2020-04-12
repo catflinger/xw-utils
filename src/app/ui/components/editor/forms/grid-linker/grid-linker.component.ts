@@ -29,11 +29,17 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
             save: (): Promise<boolean> => {
                 return Promise.resolve(false);
             },
+            showSaveButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
          });
 
 
         this.form = new FormGroup({
-            "setGridRefsFromCaptions": new FormControl(true),
+            "setGridRefsFromCaptions": new FormControl({
+                value: true,
+                disabled: true
+            }),
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -46,5 +52,9 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+    }
+
+    public onChangeGridRefs() {
+        // TO DO:
     }
 }

@@ -25,9 +25,16 @@
         </li>
 
         <li ngbNavItem="PuzzleOptionsComponent">
-            <a ngbNavLink>Otions</a>
+            <a ngbNavLink>Annotation otions</a>
             <ng-template ngbNavContent>
                 <app-puzzle-options (instance)="onEditorInstance($event)"></app-puzzle-options>
+            </ng-template>
+        </li>
+
+        <li ngbNavItem="GridFormComponent">
+            <a ngbNavLink>Grid</a>
+            <ng-template ngbNavContent>
+                <app-grid-form (instance)="onEditorInstance($event)"></app-grid-form>
             </ng-template>
         </li>
     </ul>
@@ -37,6 +44,7 @@
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()">Save</button>
-    <button type="button" class="btn btn-outline-dark" (click)="onCancel()">Cancel</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveButton }">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="onCancel()" [ngClass]="{ 'd-none': hideCancelButton }">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="onCancel()" [ngClass]="{ 'd-none': hideCloseButton }">Close</button>
 </div>

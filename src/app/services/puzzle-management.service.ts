@@ -138,7 +138,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             reducers.forEach(reducer => reducer.exec(puzzle));
             this.bsActive.next(new Puzzle(puzzle));
         }
-    };
+    }
 
     public commit() {
         let puzzle = this.getMutableCopy(this.bsActive.value);

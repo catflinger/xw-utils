@@ -81,11 +81,13 @@ export class GridPainterService {
             this.fillCell(context, left, top, gridParams.gridColor, gridParams);
 
         } else {
+            const hideShading = options && options.hideShading;
+            const hideHighlight = options && options.hideHighlight;
 
             // highlight cells that are in focus
-            if (cell.highlight) {
+            if (cell.highlight && !hideHighlight) {
                 this.fillCell(context, left, top, gridParams.highlightColor, gridParams);
-            } else if (options && options.showShading && cell.shading)  {
+            } else if (cell.shading && !hideShading)  {
                 this.fillCell(context, left, top, cell.shading, gridParams);
             }
 

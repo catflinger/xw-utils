@@ -32,7 +32,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
-    public options: GridControlOptions = { editor: GridEditors.cellEditor, showShading: false };
+    public options: GridControlOptions = { editor: GridEditors.cellEditor, hideShading: true };
     public gridEditors = GridEditors;
     public shadingColor: string;
 
@@ -115,7 +115,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onTabChange(event: NgbTabChangeEvent) {
         this.appService.clear();
         this.tool = event.nextId as ToolType;
-        this.options.showShading = event.nextId === "color";
+        this.options.hideShading = event.nextId !== "color";
         this.activePuzzle.updateAndCommit(new Clear());
     }
 

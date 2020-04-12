@@ -35,6 +35,9 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
             save: (): Promise<boolean> => {
                 return Promise.resolve(false);
             },
+            showSaveButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
          });
 
         this.form = new FormGroup({
