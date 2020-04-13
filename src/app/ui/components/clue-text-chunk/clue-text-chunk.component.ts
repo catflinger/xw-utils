@@ -8,7 +8,7 @@ import { ClueTextChunk } from '../clue-text-control/clue-text-control.component'
 })
 export class ClueTextChunkComponent implements OnInit {
     @Input() chunk: ClueTextChunk;
-    @Output()chunkMouseUp = new EventEmitter<any>();
+    //@Output()chunkMouseUp = new EventEmitter<any>();
 
     @ViewChild("span", { static: false}) spanElemnt: ElementRef;
 
@@ -21,9 +21,9 @@ export class ClueTextChunkComponent implements OnInit {
         return this.chunk.isDefinition ? "definition" : "plain";
     };
 
-    public onMouseUp() {
-        this.chunkMouseUp.emit(this.chunk);
-    }
+    // public onMouseUp() {
+    //     this.chunkMouseUp.emit(this.chunk);
+    // }
 
     public containsDomElement(target: any): boolean {
         let result = false;

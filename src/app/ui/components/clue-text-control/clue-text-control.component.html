@@ -1,3 +1,3 @@
-<div>
-    <app-clue-text-chunk *ngFor="let chunk of chunks" [chunk]="chunk" (chunkMouseUp)="onChunkMouseUp()"></app-clue-text-chunk>
+<div class="p-3 border border-dark bg-light" (mouseup)="onMouseUp()">
+    <app-clue-text-chunk *ngFor="let chunk of chunks" [chunk]="chunk"></app-clue-text-chunk>
 </div>

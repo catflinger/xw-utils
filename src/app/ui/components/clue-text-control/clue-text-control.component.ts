@@ -59,7 +59,7 @@ export class ClueTextControlComponent implements ControlValueAccessor, OnInit {
     ngOnInit() {
     }
 
-    public onChunkMouseUp() {
+    public onMouseUp() {
         if (window.getSelection) {
             let selection = window.getSelection();
 
