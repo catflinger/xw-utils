@@ -5,7 +5,7 @@
         <li ngbNavItem="ClueAnnotatorComponent">
             <a ngbNavLink>Solve and annotate</a>
             <ng-template ngbNavContent>
-                <app-clue-annotator [starterText]="starterText" (instance)="onEditorInstance($event)">
+                <app-clue-annotator [starterText]="starterText" (instance)="onEditorInstance($event)" (dirty)="onDirty()">
                 </app-clue-annotator>
             </ng-template>
         </li>
@@ -13,7 +13,7 @@
         <li ngbNavItem="ClueTextEditorComponent">
             <a ngbNavLink>Edit clue</a>
             <ng-template ngbNavContent>
-                <app-clue-text-editor (instance)="onEditorInstance($event)"></app-clue-text-editor>
+                <app-clue-text-editor (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-clue-text-editor>
             </ng-template>
         </li>
 
@@ -44,7 +44,8 @@
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveButton }">Save</button>
-    <button type="button" class="btn btn-outline-dark" (click)="onCancel()" [ngClass]="{ 'd-none': hideCancelButton }">Cancel</button>
-    <button type="button" class="btn btn-outline-dark" (click)="onCancel()" [ngClass]="{ 'd-none': hideCloseButton }">Close</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Save</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Cancel</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()" [ngClass]="{ 'd-none': !hideSaveCancelButtons }">Close</button>
+
 </div>

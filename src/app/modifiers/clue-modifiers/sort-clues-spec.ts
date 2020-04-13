@@ -119,6 +119,7 @@ function getEmptyPuzzle(): PuzzleM {
         grid: null,
         //linked: false,
         revision: 0,
+        uncommitted: false,
         options: {
             setGridRefsFromCaptions: true,
         },

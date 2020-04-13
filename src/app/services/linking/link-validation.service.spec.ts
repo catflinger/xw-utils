@@ -104,6 +104,7 @@ function getEmptyPuzzle(): PuzzleM {
         clues: [],
         grid: null,
         revision: 0,
+        uncommitted: false,
         info: {
             id: "abc123",
             title: "untitled",

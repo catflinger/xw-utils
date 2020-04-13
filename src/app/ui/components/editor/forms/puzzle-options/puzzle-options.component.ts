@@ -17,6 +17,8 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     public form: FormGroup;
     
     @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() dirty = new EventEmitter<void>();
+
     @Input() public clueId: string;
 
     private subs: Subscription[] = [];
@@ -35,9 +37,6 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
             save: (): Promise<boolean> => {
                 return Promise.resolve(false);
             },
-            showSaveButton: false,
-            showCancelButton: false,
-            showCloseButton: true,
          });
 
         this.form = new FormGroup({
@@ -70,14 +69,14 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     }
 
     public onAddColumn() {
-        this.activePuzzle.updateAndCommit(new AddTextColumn());
+        this.activePuzzle.update(new AddTextColumn());
     }
 
     public onDeleteColumn(index: number) {
-        this.activePuzzle.updateAndCommit(new DeleteTextColumn(index));
+        this.activePuzzle.update(new DeleteTextColumn(index));
     }
     
     public onSaveColumn(index: number) {
-        this.activePuzzle.updateAndCommit(new UpdateTextColumn(index, this.form.value.answerCols[index].caption))
+        this.activePuzzle.update(new UpdateTextColumn(index, this.form.value.answerCols[index].caption))
     }
 }

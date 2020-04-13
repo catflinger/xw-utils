@@ -1,5 +1,4 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
 import { PuzzleM } from '../mutable-model/puzzle-m';
 
 export class Clear implements IPuzzleModifier {

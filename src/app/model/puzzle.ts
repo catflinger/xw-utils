@@ -17,6 +17,7 @@ export class Puzzle implements IPuzzle {
     public readonly notes: PuzzleAnnotation;
     public readonly provision: PuzzleProvision;
     public readonly capability: PuzzleCapability;
+    public readonly uncommitted: boolean;
 
     public readonly grid: Grid;
     public readonly clues: readonly Clue[];
@@ -27,6 +28,9 @@ export class Puzzle implements IPuzzle {
     constructor(data: any) {
 
         this.revision = data.revision ? data.revision : 0;
+
+        this.uncommitted = !!data.uncommitted;
+
 
         this.options = new PuzzleOptions(data.options);
 

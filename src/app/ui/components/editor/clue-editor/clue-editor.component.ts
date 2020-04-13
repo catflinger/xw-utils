@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { Subscription } from 'rxjs';
+import { Puzzle } from 'src/app/model/puzzle';
 
 export interface ClueEditorInstance {
-    //confirmClose: () => boolean;
     save: () => Promise<boolean>;
-    showSaveButton: boolean;
-    showCancelButton: boolean;
-    showCloseButton: boolean;
 }
 
 export interface IClueEditor {
     instance: EventEmitter<ClueEditorInstance>;
+    dirty: EventEmitter<void>;
 } 
 
 @Component({
@@ -18,31 +18,38 @@ export interface IClueEditor {
     templateUrl: './clue-editor.component.html',
     styleUrls: ['./clue-editor.component.css']
 })
-export class ClueEditorComponent implements OnInit {
+export class ClueEditorComponent implements OnInit, OnDestroy {
     @Input() starterText: string;
     @Output() close = new EventEmitter<void>();
 
     public activeId: string = "ClueAnnotatorComponent";
-    public hideSaveButton = true;
-    public hideCancelButton = true;
-    public hideCloseButton = true;
+    
+    public puzzle: Puzzle = null;
+    public dirty: boolean = false;
 
     private editorInstance: ClueEditorInstance = null;
+    private subs: Subscription[] = [];
 
     constructor(
+        private activePuzzle: IActivePuzzle,
     ) { }
 
     public ngOnInit(): void {
+        this.subs.push(
+            this.activePuzzle.observe().subscribe(puzzle => this.puzzle = puzzle)
+        );
+    }
+
+    ngOnDestroy() {
+        this.subs.forEach(s => s.unsubscribe());
     }
 
     public onEditorInstance(instance: ClueEditorInstance) {
         this.editorInstance = instance;
+    }
 
-        Promise.resolve(null).then(() => {
-            this.hideSaveButton = !instance.showSaveButton;
-            this.hideCancelButton = !instance.showCancelButton;
-            this.hideCloseButton = !instance.showCloseButton;
-        });
+    public onDirty() {
+        this.dirty = true;
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
@@ -52,6 +59,7 @@ export class ClueEditorComponent implements OnInit {
             this.editorInstance.save()
             .then(cancel => {
                 if (!cancel) {
+                    this.dirty = false;
                     this.activeId = event.nextId;
                 }
             });
@@ -63,6 +71,7 @@ export class ClueEditorComponent implements OnInit {
             this.editorInstance.save()
             .then(cancel => {
                 if (!cancel) {
+                    this.dirty = false;
                     this.close.emit();
                 }
             });
@@ -72,5 +81,19 @@ export class ClueEditorComponent implements OnInit {
     public onCancel() {
         this.close.emit();
     }
+
+    public onClose() {
+        this.close.emit();
+    }
+
+    public get hideSaveCancelButtons(): boolean {
+        let result = true;
+
+        if (this.puzzle) {
+            result = !(this.puzzle.uncommitted || this.dirty); 
+        }
+
+        return result;
+    };
 
 }

@@ -15,6 +15,8 @@ import { ApiSymbols } from './common';
 import { UpdateInfo } from '../modifiers/puzzle-modifiers/update-info';
 import { Grid } from '../model/grid';
 import { AddGrid } from '../modifiers/grid-modifiers/add-grid';
+import { MarkAsCommitted } from '../modifiers/puzzle-modifiers/mark-as-committed';
+import { MarkAsUncommitted } from '../modifiers/puzzle-modifiers/mark-as-uncommitted';
 
 
 // Note: using abstract classes rather than interfaces to enable them to be used
@@ -136,6 +138,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
+            new MarkAsUncommitted().exec(puzzle);
             this.bsActive.next(new Puzzle(puzzle));
         }
     }
@@ -144,6 +147,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         let puzzle = this.getMutableCopy(this.bsActive.value);
 
         if (puzzle) {
+            new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
             this.bsActive.next(new Puzzle(puzzle));
@@ -163,6 +167,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
+            new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
             this.bsActive.next(new Puzzle(puzzle));
@@ -276,8 +281,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         // create a mutable copy
         let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
 
-        // modify it
+        // reset to unused state
         new Clear().exec(puzzleM);
+        new MarkAsCommitted().exec(puzzleM);
 
         // push a read-only version
         this.bsActive.next(new Puzzle(puzzleM));
@@ -306,6 +312,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             grid: null,
             //linked: false,
             revision: 0,
+            uncommitted: false,
             info: {
                 id: uuid(),
                 title: "",

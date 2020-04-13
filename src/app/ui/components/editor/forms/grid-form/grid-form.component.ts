@@ -18,6 +18,7 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
     private puzzle: Puzzle;
 
     @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() dirty = new EventEmitter<void>();
 
     constructor(
         //private editorService: ClueEditorService,
@@ -31,9 +32,6 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
-            showSaveButton: false,
-            showCancelButton: false,
-            showCloseButton: true,
          });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -51,7 +49,7 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
     public onCellClick(cell: GridCell) {
         if (this.puzzle.grid.properties.style === "standard") {
 
-            this.activePuzzle.updateAndCommit(
+            this.activePuzzle.update(
                 new UpdateCell(cell.id, { light: !cell.light}),
                 new RenumberGid(),
             );
@@ -64,7 +62,7 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
                 { rightBar: !event.cell.rightBar } :
                 { bottomBar: !event.cell.bottomBar };
 
-            this.activePuzzle.updateAndCommit(
+            this.activePuzzle.update(
                 new UpdateCell(event.cell.id, barData),
                 new RenumberGid(),
             );

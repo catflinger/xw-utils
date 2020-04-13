@@ -46,6 +46,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     @Input() starterText: string;
 
     @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() dirty = new EventEmitter<void>();
 
     public clue: Clue;
     public form: FormGroup;
@@ -68,7 +69,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
         private appSettingsService: AppSettingsService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
-        //private editorService: ClueEditorService,
     ) { }
 
     ngOnInit() {
@@ -78,9 +78,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
-            showSaveButton: true,
-            showCancelButton: true,
-            showCloseButton: false,
          });
 
         this.form = this.formBuilder.group({
@@ -149,6 +146,12 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
                 this.appSettings = settings;
             }));
 
+        this.subs.push(this.form.valueChanges.subscribe(x => {
+            if (this.form.dirty) {
+                this.dirty.emit();
+            }
+        }));
+
     }
 
     ngOnDestroy() {
@@ -215,30 +218,35 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     private onSave(): Promise<boolean> {
         let result = Promise.resolve(true);
 
-        if (this.appSettings.general.showCommentEditor.enabled &&
-            this.appSettings.tips.definitionWarning.enabled &&
-            !this.tipStatus.show &&
-            this.form.value.chunks.length < 2) {
-
-            this.tipInstance.activated = true;
+        if (!this.form.dirty) {
+            result = Promise.resolve(false);
 
         } else {
-            let answer = this.clean(this.form.value.answers[0]);
-            let lengthAvailable = 0;
-
-            if (this.grid) {
-                this.clue.link.entries.forEach(entry => {
-                    lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
-                })
-            }
-
-            if (answer && lengthAvailable && answer.length !== lengthAvailable) {
-                result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
-            } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
-                result = this.showSaveWarning("Warning: the answer does match the publsihed solution");
+            if (this.appSettings.general.showCommentEditor.enabled &&
+                this.appSettings.tips.definitionWarning.enabled &&
+                !this.tipStatus.show &&
+                this.form.value.chunks.length < 2) {
+    
+                this.tipInstance.activated = true;
+    
             } else {
-                result = Promise.resolve(false);
-                this.save();
+                let answer = this.clean(this.form.value.answers[0]);
+                let lengthAvailable = 0;
+    
+                if (this.grid) {
+                    this.clue.link.entries.forEach(entry => {
+                        lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
+                    })
+                }
+    
+                if (answer && lengthAvailable && answer.length !== lengthAvailable) {
+                    result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
+                } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
+                    result = this.showSaveWarning("Warning: the answer does match the publsihed solution");
+                } else {
+                    result = Promise.resolve(false);
+                    this.save();
+                }
             }
         }
 
@@ -253,7 +261,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     }
 
     private save() {
-        this.activePuzzle.updateAndCommit(
+        this.activePuzzle.update(
             new AnnotateClue(
                 this.clue.id,
                 this.form.value.answers,

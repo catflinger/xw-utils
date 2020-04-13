@@ -152,6 +152,8 @@ export abstract class IPuzzle {
     //abstract readonly linked: boolean;
     
     abstract readonly revision: number;
+
+    abstract readonly uncommitted: boolean;
 }
 
 export abstract class IPuzzleOptions {

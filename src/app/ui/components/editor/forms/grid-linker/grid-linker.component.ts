@@ -14,7 +14,8 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
     private subs: Subscription[] = [];
 
     @Output() instance = new EventEmitter<ClueEditorInstance>();
-    
+    @Output() dirty = new EventEmitter<void>();
+
     public clue: Clue;
     public form: FormGroup;
 
@@ -29,9 +30,6 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
             save: (): Promise<boolean> => {
                 return Promise.resolve(false);
             },
-            showSaveButton: false,
-            showCancelButton: false,
-            showCloseButton: true,
          });
 
 

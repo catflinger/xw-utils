@@ -70,7 +70,7 @@ export class PublicationService {
                 } else if (data.success === ApiResponseStatus.authorizationFailure) {
                     throw ApiSymbols.AuthorizationFailure;
                 } else {
-                    console.log("Publish Grid Failure: " + data.message);
+                    //console.log("Publish Grid Failure: " + data.message);
                     throw "Publish Grid Failure: " + data.message;
                 }
             });
@@ -99,7 +99,7 @@ export class PublicationService {
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {
-                console.log("Publish Post Failure: " + data.message);
+                //console.log("Publish Post Failure: " + data.message);
                 throw "Publish Post Failure: " + data.message;
             }
         });

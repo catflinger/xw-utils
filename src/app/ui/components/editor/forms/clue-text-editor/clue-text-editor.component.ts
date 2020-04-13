@@ -33,10 +33,11 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public clue: ClueEditModel;
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
+
     @Output() instance = new EventEmitter<ClueEditorInstance>();
-    
+    @Output() dirty = new EventEmitter<void>();
+
     constructor(
-        //private editorService: ClueEditorService,
         private activePuzzle:IActivePuzzle,
         private formBuilder: FormBuilder,
     ) { }
@@ -48,9 +49,6 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
-            showSaveButton: true,
-            showCancelButton: true,
-            showCloseButton: false,
          });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -93,6 +91,13 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         
             }
         }));
+
+        this.subs.push(this.form.valueChanges.subscribe(x => {
+            if (this.form.dirty) {
+                this.dirty.emit();
+            }
+        }));
+
     }
 
     public ngAfterViewInit() {
@@ -104,39 +109,51 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     private onSave(): Promise<boolean> {
+        let result: Promise<boolean>;
+
         let mods: IPuzzleModifier[] = [];
 
-        //TO DO: validate the entry
-        if (this.clue) {
-            mods.push(
-                new UpdateClue(
-                    this.clue.id, 
-                    this.form.value.caption,
-                    this.form.value.group,
-                    this.form.value.text,
-                )
-            );
+        if (!this.form.dirty) {
+            result = Promise.resolve(false);
+            
         } else {
-            const clueId = uuid();
+            
+            // TO DO: validate the entry
+            // return result = Promise.resolve(true) if validation fails
+            
+            if (this.clue) {
+                mods.push(
+                    new UpdateClue(
+                        this.clue.id, 
+                        this.form.value.caption,
+                        this.form.value.group,
+                        this.form.value.text,
+                    )
+                );
+            } else {
+                const clueId = uuid();
+                mods.push(
+                    new AddClue(
+                        this.form.value.caption,
+                        this.form.value.group,
+                        this.form.value.text,
+                        clueId)
+                );
+            }
+
             mods.push(
-                new AddClue(
-                    this.form.value.caption,
-                    this.form.value.group,
-                    this.form.value.text,
-                    clueId)
+                new SetGridReferences([this.clue.id]),
+                new ValidateLetterCounts(),
+                new SortClues(),
+                //new Clear(),
             );
+
+            this.activePuzzle.update(...mods);
+            //this.editorService.close();
+
+            result = Promise.resolve(false);
         }
-
-        mods.push(
-            new SetGridReferences([this.clue.id]),
-            new ValidateLetterCounts(),
-            new SortClues(),
-            //new Clear(),
-        );
-
-        this.activePuzzle.updateAndCommit(...mods);
-        //this.editorService.close();
-
-        return Promise.resolve(false);
+        
+        return result;
     }
 }
