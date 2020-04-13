@@ -11,6 +11,7 @@ import { AppSettingsService } from 'src/app/services/app-settings.service';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { ClueEditorService } from '../../components/editor/clue-editor.service';
 
 @Component({
   selector: 'app-blogger',
@@ -27,6 +28,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
         private appSettinsgService: AppSettingsService, 
+        private editorService: ClueEditorService,
     ) { }
 
     ngOnInit() {
@@ -73,14 +75,11 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
+        //console.log("CLUE " + JSON.stringify(clue));
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
-    }
-
-    onEditorClose(clue: Clue, reason: string) {
-        if (reason === "cancel") {
-            this.activePuzzle.updateAndCommit(new Clear());
-        } else {
-            this.activePuzzle.updateAndCommit(new SelectNextClue(clue.id));
+        if (!clue.redirect) {
+            this.editorService.open(clue.id, null);
         }
+
     }
 }

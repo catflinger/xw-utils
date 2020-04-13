@@ -81,7 +81,6 @@ import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track'
 import { ClueTextEditorComponent } from './ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
 import { PuzzleOptionsComponent } from './ui/components/editor/forms/puzzle-options/puzzle-options.component';
 import { GridReferenceComponent } from './ui/components/editor/grid-reference/grid-reference.component';
-import { Solver2Component } from './ui/puzzle-solving/solver2/solver2.component';
 import { GridLinkerComponent } from './ui/components/editor/forms/grid-linker/grid-linker.component';
 import { ClueEditorComponent } from './ui/components/editor/clue-editor/clue-editor.component';
 import { GridFormComponent } from './ui/components/editor/forms/grid-form/grid-form.component';
@@ -168,7 +167,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         ClueTextEditorComponent,
         PuzzleOptionsComponent,
         GridReferenceComponent,
-        Solver2Component,
         GridLinkerComponent,
         ClueEditorComponent,
         GridFormComponent,

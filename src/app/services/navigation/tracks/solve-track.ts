@@ -16,7 +16,7 @@ export const solveTrack: NavTrack = {
         {
             name: "solver",
             type: "route",
-            route: "/solver2",
+            route: "/solver",
             actions: {
                 "continue": "publish",
                 "blog": "blogger",

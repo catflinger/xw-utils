@@ -35,7 +35,7 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
 
         this.subs.push(this.appSettings.observe().subscribe(settings => {
             const validationRequired: boolean = settings.general.showCommentValidation.enabled;
-            const detailsRequired: boolean = settings.general.showCommentEditor.enabled;
+            const detailsRequired: boolean = true; //settings.general.showCommentEditor.enabled;
             this.klasses = [];
 
             if (this.clue.highlight) {

@@ -10,7 +10,7 @@
             </thead>
             <tbody>
                 <ng-container *ngFor="let clue of puzzle.clues">
-                    <tr class="border-top bg-light" (click)="onRowClick(clue)" *ngIf="!clue.highlight">
+                    <tr class="border-top bg-light" (click)="onRowClick(clue)">
                         <td class="py-0">
                             {{clue.caption}}
                         </td>
@@ -27,14 +27,6 @@
                             <ng-container *ngIf="appSettings.general.showCommentValidation.enabled && clue.warnings.length && !clue.redirect">
                                 <span class="text-warning"> {{clue.warnings[0]}}</span>
                             </ng-container>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="clue.highlight">
-                        <td class="p-0" [attr.colspan]="puzzle.publishOptions.textCols.length + 4">
-                            <div class="border rounded">
-                                <app-clue-annotator (close)="onEditorClose(clue, $event)"></app-clue-annotator>
-                            </div>
                         </td>
                     </tr>
                 </ng-container>

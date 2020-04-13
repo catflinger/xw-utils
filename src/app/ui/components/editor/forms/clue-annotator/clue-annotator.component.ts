@@ -48,6 +48,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     @Output() instance = new EventEmitter<ClueEditorInstance>();
     @Output() dirty = new EventEmitter<void>();
 
+    public grid: Grid = null;
     public clue: Clue;
     public form: FormGroup;
     public appSettings: AppSettings;
@@ -62,7 +63,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
 
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
-    private grid: Grid = null;
 
     constructor(
         private activePuzzle: IActivePuzzle,
@@ -188,10 +188,6 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
         this.tipInstance.observe().subscribe(ts => this.tipStatus = ts);
     }
 
-    public onToggleComment() {
-        this.appSettingsService.toggleCommentEditor();
-    }
-
     public onCheat() {
         this.form.get("answers").patchValue([this.clue.solution]);
 
@@ -209,8 +205,8 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     }
 
     public get showTextWarning() {
-        return this.appSettings.general.showCommentEditor.enabled &&
-            this.appSettings.general.showCommentValidation.enabled &&
+        // return this.appSettings.general.showCommentEditor.enabled &&
+        return this.appSettings.general.showCommentValidation.enabled &&
             this.warnings.length &&
             !this.clue.redirect;
     }
@@ -222,7 +218,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             result = Promise.resolve(false);
 
         } else {
-            if (this.appSettings.general.showCommentEditor.enabled &&
+            if (//this.appSettings.general.showCommentEditor.enabled &&
                 this.appSettings.tips.definitionWarning.enabled &&
                 !this.tipStatus.show &&
                 this.form.value.chunks.length < 2) {

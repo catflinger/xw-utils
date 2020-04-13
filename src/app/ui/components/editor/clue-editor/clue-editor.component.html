@@ -1,4 +1,4 @@
-<div class="modal-body">
+<div class="modal-body" *ngIf="puzzle">
 
     <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
 
@@ -17,7 +17,7 @@
             </ng-template>
         </li>
 
-        <li ngbNavItem="GridLinkerComponent">
+        <li ngbNavItem="GridLinkerComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid entries</a>
             <ng-template ngbNavContent>
                 <app-grid-linker (instance)="onEditorInstance($event)"></app-grid-linker>
@@ -31,7 +31,7 @@
             </ng-template>
         </li>
 
-        <li ngbNavItem="GridFormComponent">
+        <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid</a>
             <ng-template ngbNavContent>
                 <app-grid-form (instance)="onEditorInstance($event)"></app-grid-form>

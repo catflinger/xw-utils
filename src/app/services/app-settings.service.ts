@@ -16,7 +16,7 @@ class _BooleanSetting implements BooleanSetting {
 }
 
 class _GeneralSettings implements GeneralSettings {
-    public showCommentEditor: _BooleanSetting;
+    //public showCommentEditor: _BooleanSetting;
     public showCommentValidation: _BooleanSetting;
     public showCheat: _BooleanSetting;
 }
@@ -62,7 +62,7 @@ const _defaultSettings: _AppSettings = {
     sandbox: false,
     footer: { ops: []},
     general: {
-        showCommentEditor: { caption: "show comment editor", enabled: true },
+        //showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
     },
@@ -151,25 +151,25 @@ export class AppSettingsService {
         });
     }
 
-    public hideCommentEditor() {
-        this._update((settings) => {
-            settings.general.showCommentEditor.enabled = false;
-        });
-    }
+    // public hideCommentEditor() {
+    //     this._update((settings) => {
+    //         settings.general.showCommentEditor.enabled = false;
+    //     });
+    // }
 
-    public showCommentEditor() {
-        this._update((settings) => {
-            settings.general.showCommentEditor.enabled = true;
-        });
-    }
+    // public showCommentEditor() {
+    //     this._update((settings) => {
+    //         settings.general.showCommentEditor.enabled = true;
+    //     });
+    // }
 
-    public toggleCommentEditor() {
-        if (this.bs.value.general.showCommentEditor.enabled) {
-            this.hideCommentEditor();
-        } else {
-            this.showCommentEditor();
-        }
-    }
+    // public toggleCommentEditor() {
+    //     if (this.bs.value.general.showCommentEditor.enabled) {
+    //         this.hideCommentEditor();
+    //     } else {
+    //         this.showCommentEditor();
+    //     }
+    // }
 
     public factoryReset() {
         this.storageService.saveUserSettings(JSON.stringify(_defaultSettings));

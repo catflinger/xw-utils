@@ -32,7 +32,7 @@ export interface BooleanSetting {
 
 // add new general settings here first, this will ensure all other missing additions are caught by the compiler
 export interface GeneralSettings {
-    readonly showCommentEditor: BooleanSetting;
+    //readonly showCommentEditor: BooleanSetting;
     readonly showCommentValidation: BooleanSetting;
     readonly showCheat: BooleanSetting;
 }

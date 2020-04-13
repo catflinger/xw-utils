@@ -6,7 +6,7 @@
     </div>
 
     <div class="row">
-        <div class="col">
+        <div class="col" *ngIf="puzzle.grid">
             <app-grid (cellClick)="onCellClick($event)"></app-grid>
         </div>
 
@@ -26,7 +26,5 @@
             <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
         </div>
     </div>
-
-    <app-puzzle-options (edit)="onEdit()"></app-puzzle-options>
 
 </div>
