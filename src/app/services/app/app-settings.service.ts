@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LocalStorageService } from '../backup/local-storage.service';
+import { LocalStorageService } from '../storage/local-storage.service';
 import { QuillDelta } from '../../model/interfaces';
 import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey } from '../common';
 

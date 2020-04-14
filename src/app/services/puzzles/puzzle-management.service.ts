@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PuzzleInfo } from '../../model/puzzle-info';
-import { LocalStorageService } from '../backup/local-storage.service';
+import { LocalStorageService } from '../storage/local-storage.service';
 import { Puzzle } from '../../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
