@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
 import { ClueGroup } from 'src/app/model/interfaces';

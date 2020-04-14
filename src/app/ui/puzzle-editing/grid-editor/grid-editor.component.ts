@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
 import { BarClickEvent, GridTextEvent, GridNavigationEvent, GridComponent } from '../../components/grid/grid.component';

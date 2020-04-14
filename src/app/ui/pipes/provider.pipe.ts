@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ProviderService } from 'src/app/services/provider.service';
+import { ProviderService } from 'src/app/services/puzzles/provider.service';
 
 @Pipe({ name: 'provider', pure: false })
 export class ProviderPipe implements PipeTransform {

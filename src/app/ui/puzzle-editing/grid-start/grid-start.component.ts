@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GridCellM } from 'src/app//modifiers/mutable-model/grid-cell-m';
-import { IPuzzleManager } from 'src/app/services/puzzle-management.service';
+import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';

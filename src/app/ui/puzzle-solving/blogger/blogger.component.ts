@@ -6,8 +6,8 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
 import { SelectNextClue } from 'src/app//modifiers/clue-modifiers/select-next-clue';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -77,9 +77,9 @@ export class BloggerComponent implements OnInit, OnDestroy {
     onRowClick(clue: Clue) {
         //console.log("CLUE " + JSON.stringify(clue));
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
-        if (!clue.redirect) {
+        //if (!clue.redirect) {
             this.editorService.open(clue.id, null);
-        }
+        //}
 
     }
 }

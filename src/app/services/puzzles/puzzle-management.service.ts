@@ -1,23 +1,22 @@
 import { v4 as uuid } from "uuid";
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PuzzleInfo } from '../model/puzzle-info';
-import { LocalStorageService } from './local-storage.service';
-import { Puzzle } from '../model/puzzle';
+import { PuzzleInfo } from '../../model/puzzle-info';
+import { LocalStorageService } from '../backup/local-storage.service';
+import { Puzzle } from '../../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
-import { Clear } from '../modifiers/puzzle-modifiers/clear';
-import { IPuzzleModifier } from '../modifiers/puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider, IPuzzleSummary } from '../model/interfaces';
-import { PuzzleM } from '../modifiers/mutable-model/puzzle-m';
-import { InitAnnotationWarnings } from '../modifiers/puzzle-modifiers/init-annotation-warnings';
-import { OpenPuzzleParamters } from '../ui/services/app.service';
-import { ApiSymbols } from './common';
-import { UpdateInfo } from '../modifiers/puzzle-modifiers/update-info';
-import { Grid } from '../model/grid';
-import { AddGrid } from '../modifiers/grid-modifiers/add-grid';
-import { MarkAsCommitted } from '../modifiers/puzzle-modifiers/mark-as-committed';
-import { MarkAsUncommitted } from '../modifiers/puzzle-modifiers/mark-as-uncommitted';
-
+import { Clear } from '../../modifiers/puzzle-modifiers/clear';
+import { IPuzzleModifier } from '../../modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzle, QuillDelta, Base64Encoded, PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
+import { PuzzleM } from '../../modifiers/mutable-model/puzzle-m';
+import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
+import { OpenPuzzleParamters } from '../../ui/services/app.service';
+import { ApiSymbols } from '../common';
+import { UpdateInfo } from '../../modifiers/puzzle-modifiers/update-info';
+import { Grid } from '../../model/grid';
+import { AddGrid } from '../../modifiers/grid-modifiers/add-grid';
+import { MarkAsCommitted } from '../../modifiers/puzzle-modifiers/mark-as-committed';
+import { MarkAsUncommitted } from '../../modifiers/puzzle-modifiers/mark-as-uncommitted';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -44,6 +43,10 @@ export abstract class IPuzzleManager {
 
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
+
+    abstract makeBackup(): Promise<any>;
+    abstract restoreFromBackup(options: any): Promise<any>;
+
 }
 
 @Injectable()
@@ -178,6 +181,14 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     //#region General Puzzle management
 
+    public makeBackup(): Promise<any> {
+        return Promise.resolve({foo: "bar"});
+    }
+
+    public restoreFromBackup(options: any): Promise<any> {
+        return Promise.resolve({foo: "bar"});
+    }
+
     public getPuzzleList(): Observable<IPuzzleSummary[]> {
         return this.bsList.asObservable();
     }
@@ -267,6 +278,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             }
         });
     }
+
 
     //#endregion
 

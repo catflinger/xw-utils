@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ArchiveItem } from 'src/app/model/archive-item';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
-import { ArchiveService } from 'src/app/services/archive-source.service';
+import { ArchiveService } from 'src/app/services/puzzles/archive-source.service';
 import { Archive } from 'src/app/model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { NavService } from '../../../services/navigation/nav.service';

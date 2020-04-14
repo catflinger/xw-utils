@@ -3,7 +3,7 @@ import { Puzzle } from 'src/app/model/puzzle';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Clue } from 'src/app/model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';

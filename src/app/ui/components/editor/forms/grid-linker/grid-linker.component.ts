@@ -1,6 +1,6 @@
 import { Component, OnInit, Type, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { FormGroup, FormControl } from '@angular/forms';
 import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';

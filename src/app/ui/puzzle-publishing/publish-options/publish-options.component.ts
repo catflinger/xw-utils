@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { TextStyle } from 'src/app/model/text-style';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { Puzzle } from 'src/app/model/puzzle';
 import { UpdatePublsihOptions, PublishOptionsUpdate } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';

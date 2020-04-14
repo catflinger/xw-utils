@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
+import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
 import { environment } from 'src/environments/environment';
 import { AppSettingsService } from './app-settings.service';
 

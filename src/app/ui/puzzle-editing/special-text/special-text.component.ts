@@ -3,7 +3,7 @@ import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IParseContext } from 'src/app/services/parsing/text/text-parsing-context';
 import { Puzzle } from 'src/app/model/puzzle';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';

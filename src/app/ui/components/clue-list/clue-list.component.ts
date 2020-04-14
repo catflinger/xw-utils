@@ -3,8 +3,8 @@ import { Direction } from 'src/app/model/interfaces';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 
 @Component({

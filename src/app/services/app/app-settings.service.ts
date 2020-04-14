@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LocalStorageService } from './local-storage.service';
-import { QuillDelta } from '../model/interfaces';
-import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey } from './common';
+import { LocalStorageService } from '../backup/local-storage.service';
+import { QuillDelta } from '../../model/interfaces';
+import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey } from '../common';
 
 // TO DO: so far all the the settings have turned out to be related to the UI.
 // Consider if we need an app-wide settings service.  Perhaps move this to the

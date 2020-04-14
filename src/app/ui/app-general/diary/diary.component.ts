@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DiaryService } from 'src/app/services/diary.service';
+import { DiaryService } from 'src/app/services/app/diary.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService } from '../../services/app.service';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { DiaryEntry } from 'src/app/model/diary-entry';
 import { ApiSymbols } from 'src/app/services/common';
 

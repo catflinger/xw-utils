@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { Injectable } from '@angular/core';
 import { TipKey } from 'src/app/services/common';
 

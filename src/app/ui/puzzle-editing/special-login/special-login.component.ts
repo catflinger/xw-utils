@@ -4,7 +4,7 @@ import { AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { UIResult } from '../../common';
 
 @Component({

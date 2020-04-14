@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ApiSymbols, ApiResponse, ApiResponseStatus } from './common';
-import { Diary } from '../model/diary';
+import { ApiSymbols, ApiResponse, ApiResponseStatus } from '../common';
+import { Diary } from '../../model/diary';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export abstract class DiaryResponse implements ApiResponse {

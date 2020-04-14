@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
 import { Subscription } from 'rxjs';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { UpdateCell } from 'src/app/modifiers/grid-modifiers/update-cell';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';

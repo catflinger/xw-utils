@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { AppSettingsService } from 'src/app/services/app-settings.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings } from 'src/app/services/common';

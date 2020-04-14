@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Type, Input } from '@angular/core';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PublishOptions } from 'src/app/model/publish-options';

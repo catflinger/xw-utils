@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle';
 import { Subscription } from 'rxjs';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Router, ChildActivationStart } from '@angular/router';
 import { GridCell } from 'src/app/model/grid-cell';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { PublicationService } from 'src/app/services/publication.service';
-import { IActivePuzzle } from 'src/app/services/puzzle-management.service';
+import { PublicationService } from 'src/app/services/puzzles/publication.service';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';

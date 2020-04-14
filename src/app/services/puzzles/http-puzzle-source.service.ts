@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse, ApiResponseStatus, ApiSymbols } from './common';
-import { AuthService } from './auth.service';
-import { environment } from "../../environments/environment";
-import { OpenPuzzleParamters } from '../ui/services/app.service';
-import { Base64Encoded } from '../model/interfaces';
+import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
+import { AuthService } from '../app/auth.service';
+import { environment } from "../../../environments/environment";
+import { OpenPuzzleParamters } from '../../ui/services/app.service';
+import { Base64Encoded } from '../../model/interfaces';
 
 abstract class ApiPdfExtractResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -39,32 +39,33 @@ export class HttpPuzzleSourceService {
 
     constructor(
         private http: HttpClient,
-        private authService: AuthService) { }
+        private authService: AuthService
+    ) { }
 
-        public providePuzzle(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
-            const credentials = this.authService.getCredentials();
+    public providePuzzle(params: OpenPuzzleParamters): Promise<PdfExtractResponse> {
+        const credentials = this.authService.getCredentials();
 
-            if (!credentials.authenticated) {
-                return Promise.reject(ApiSymbols.AuthorizationFailure);
-            }
-    
-            params.username = credentials.username;
-            params.password = credentials.password;
-    
-            return this.http.post(environment.apiRoot + "provision/", params)
-            .toPromise()
-            .then((data: ApiPdfExtractResponse) => {
-                if (data.success === ApiResponseStatus.OK) {
-                    return data as PdfExtractResponse;
-                } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
-                } else {
-                    throw data.message;
-                }
-            });
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
         }
 
-        public getPuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
+        params.username = credentials.username;
+        params.password = credentials.password;
+
+        return this.http.post(environment.apiRoot + "provision/", params)
+        .toPromise()
+        .then((data: ApiPdfExtractResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return data as PdfExtractResponse;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw data.message;
+            }
+        });
+    }
+
+    public getPuzzle(params: OpenPuzzleParamters): Promise<PuzzleResponse> {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {

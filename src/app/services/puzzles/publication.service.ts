@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Puzzle } from '../model/puzzle';
+import { Puzzle } from '../../model/puzzle';
 import { HttpClient } from '@angular/common/http';
-import { ContentGeneratorTableLayout } from './content-generator/content-generator-table-layout';
-import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols } from './common';
-import { AuthService, Credentials } from './auth.service';
+import { ContentGeneratorTableLayout } from '../content-generator/content-generator-table-layout';
+import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols } from '../common';
+import { AuthService, Credentials } from '../app/auth.service';
 import { environment } from 'src/environments/environment';
-import { ContentGeneratorListLayout } from './content-generator/content-generator-list-layout';
-import { AppSettingsService } from './app-settings.service';
+import { ContentGeneratorListLayout } from '../content-generator/content-generator-list-layout';
+import { AppSettingsService } from '../app/app-settings.service';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;

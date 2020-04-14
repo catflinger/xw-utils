@@ -5,7 +5,7 @@ import { TextParsingErrorM } from '../mutable-model/text-parsing-error-m';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
-import { ProviderService } from 'src/app/services/provider.service';
+import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { TextParsingOptions } from 'src/app/services/parsing/text/types';
 
