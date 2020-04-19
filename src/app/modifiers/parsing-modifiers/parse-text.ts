@@ -8,6 +8,7 @@ import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-s
 import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { TextParsingOptions } from 'src/app/services/parsing/text/types';
+import { UpdateInfo } from '../puzzle-modifiers/update-info';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -94,6 +95,16 @@ export class ParseText implements IPuzzleModifier {
             if (!puzzle.info.title) {
                 puzzle.info.title = "untitled";
                 puzzle.info.setter = "anon";
+            }
+
+            const parseErrors = puzzle.provision.parseErrors;
+
+            if (!parseErrors || parseErrors.length === 0) {
+                new UpdateInfo({
+                    blogable: true,
+                    solveable: !!puzzle.grid,
+                    gridable: false,
+                }).exec(puzzle);
             }
 
         } catch (error) {

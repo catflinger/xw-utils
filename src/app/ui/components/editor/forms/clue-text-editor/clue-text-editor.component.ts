@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -45,10 +45,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     public ngOnInit() {
 
         this.instance.emit({ 
-            //confirmClose: () => false,
-            save: (): Promise<boolean> => {
-                return this.onSave();
-            },
+            save: () => Promise.resolve(false),
          });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -108,18 +105,18 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    private onSave(): Promise<boolean> {
-        let result: Promise<boolean>;
+    private onSave(): boolean {
+        let result: boolean;
 
         let mods: IPuzzleModifier[] = [];
 
         if (!this.form.dirty) {
-            result = Promise.resolve(false);
+            result = false;
             
         } else {
             
             // TO DO: validate the entry
-            // return result = Promise.resolve(true) if validation fails
+            // return result = true if validation fails
             
             if (this.clue) {
                 mods.push(
@@ -149,9 +146,8 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             );
 
             this.activePuzzle.update(...mods);
-            //this.editorService.close();
 
-            result = Promise.resolve(false);
+            result = false;
         }
         
         return result;

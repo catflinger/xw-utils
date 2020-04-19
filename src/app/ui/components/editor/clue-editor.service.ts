@@ -24,8 +24,12 @@ export class ClueEditorService implements OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
+    public get isOpen(): boolean {
+        return !!this.modalRef;
+    }
+
     public open(clueId: string, starterText: string) {
-        
+
         if (this.modalRef !== null) {
             this.close();
             this.modalRef = null;
@@ -36,7 +40,7 @@ export class ClueEditorService implements OnDestroy {
             size: "lg",
         });
         
-        this.modalRef.componentInstance.clueId = clueId;
+        //this.modalRef.componentInstance.clueId = clueId;
         this.modalRef.componentInstance.starterText = starterText;
         this.modalRef.componentInstance.close.subscribe(() => this.close());
     }

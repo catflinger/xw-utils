@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import bsCustomFileInput from "bs-custom-file-input";
 
 @Component({
     selector: 'app-special-pdf',
     templateUrl: './special-pdf.component.html',
     styleUrls: ['./special-pdf.component.css']
 })
-export class SpecialPdfComponent implements OnInit {
+export class SpecialPdfComponent implements OnInit, AfterViewInit {
     public form: FormGroup;
 
     private content: string = null;
@@ -29,7 +30,11 @@ export class SpecialPdfComponent implements OnInit {
         });
     }
 
-    public onFileChange(files: any[]) {
+    public ngAfterViewInit() {
+        bsCustomFileInput.init();
+    }
+
+    public onFileChange(files: FileList) {
         this.appService.clear();
 
         if (files && files.length) {

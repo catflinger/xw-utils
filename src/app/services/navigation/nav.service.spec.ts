@@ -11,8 +11,6 @@ let mockRouter = new MockRouter();
 class TestProcessor implements NavProcessor<string> {
     exec(processName: string, appData: string): Promise<string> {
         
-        //console.log("Running process " + processName);
-        
         switch (processName) {
             case "Pa":
                 return Promise.resolve("a");

@@ -59,11 +59,8 @@ function runParser(data: IParseToken[]) {
     let parser = service.parser(new ParseData(), null);
     let context = parser.next();
 
-    //console.log("CONTEXT " + JSON.stringify(context));
-
     while(!context.done) {
         context = parser.next();
-        //console.log("CONTEXT " + JSON.stringify(context));
     }
 
     return context.value as IParseContext;

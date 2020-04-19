@@ -1,10 +1,8 @@
 <form [formGroup]="form" *ngIf="clue && appSettings">
 
     <div class="row mt-3">
-        <!-- <div class="col"><span class="">{{clue.caption}}</span></div> -->
         <div class="col text-right">
             <button type="button" class="btn btn-link"
-                [ngClass]="{ 'd-none' : !hasDefinition() }"
                 (click)="onClearDefinition()">clear definition</button>
         </div>
     </div>
@@ -39,10 +37,10 @@
         <div class="col">
             <app-tip group="none" [suppressable]="false" *ngIf="showAnnotation">{{clue.annotation}}</app-tip>
 
-            <ng-container formArrayName="answers">
-                <div class="form-group" *ngFor="let item of answerItems; let i = index;">
+            <div formArrayName="answers" class="form-group" *ngFor="let item of form.get('answers').controls; index as i;">
+                <div [formGroup]="item">
 
-                    <div class="float-left"><label [for]="item.id">{{item.caption}}</label></div>
+                    <div class="float-left"><label [for]="item.value.id">{{item.value.caption}}</label></div>
 
                     <div class="float-right" *ngIf="i === 0 && clue.solution && appSettings.general.showCheat.enabled">
                         <button type="button" class="btn btn-link"
@@ -52,10 +50,10 @@
                             *ngIf="clue.annotation">annotation</button>
                     </div>
 
-                    <input [id]="item.id" class="form-control" [ngClass]="{'text-uppercase': !i}"
-                        [attr.ngbautofocus]="i ? null : ''" [formControlName]="item.index" (input)="!i && onChange()">
+                    <input [attr.id]="item.value.id" class="form-control" [ngClass]="{'text-uppercase': !i}"
+                        [autofocus]="!i" formControlName="answer" (input)="onChange(i)">
                 </div>
-            </ng-container>
+            </div>
         </div>
     </div>
 
@@ -83,3 +81,7 @@
     </div>
 
 </form>
+
+<pre>
+{{debug | json}}
+</pre>

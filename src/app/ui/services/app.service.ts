@@ -84,7 +84,8 @@ export class AppService implements OnDestroy {
 
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
-        this.subs.push(timer(100, 100).subscribe((t) => {
+
+        this.subs.push(timer(950, 950).subscribe((t) => {
             if (this._activityMonitor.onTick()) {
                 this.emitNext();
             }

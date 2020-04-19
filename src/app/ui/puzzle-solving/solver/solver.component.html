@@ -5,7 +5,13 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="showEditor">
+        <div class="col">
+            <app-clue-editor [starterText]="starterText" (close)="onEditorClose()"></app-clue-editor>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!showEditor">
         <div class="col" *ngIf="puzzle.grid">
             <app-grid (cellClick)="onCellClick($event)"></app-grid>
         </div>
@@ -19,7 +25,7 @@
         </div>
     </div>
 
-    <div class="row  mb-5">
+    <div class="row  mb-5" *ngIf="!showEditor">
         <div class="col">
             <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBlogger()">Open in blogger</button>

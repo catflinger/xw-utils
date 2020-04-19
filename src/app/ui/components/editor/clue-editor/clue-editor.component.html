@@ -1,6 +1,6 @@
 <div class="modal-body" *ngIf="puzzle">
 
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
+    <ul ngbNav #nav="ngbNav" [activeId]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
 
         <li ngbNavItem="ClueAnnotatorComponent">
             <a ngbNavLink>Solve and annotate</a>
@@ -47,5 +47,4 @@
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Save</button>
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Cancel</button>
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()" [ngClass]="{ 'd-none': !hideSaveCancelButtons }">Close</button>
-
 </div>

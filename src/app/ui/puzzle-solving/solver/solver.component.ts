@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Puzzle } from 'src/app/model/puzzle'; 
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
@@ -13,11 +13,14 @@ import { ClueEditorService } from '../../components/editor/clue-editor.service';
 @Component({
   selector: 'app-solver',
   templateUrl: './solver.component.html',
-  styleUrls: ['./solver.component.css']
+  styleUrls: ['./solver.component.css'],
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolverComponent implements OnInit {
 
     public puzzle: Puzzle = null;
+    public showEditor = false;
+    public starterText = null;
 
     private subs: Subscription[] = [];
 
@@ -40,14 +43,33 @@ export class SolverComponent implements OnInit {
                                 this.navService.goHome();
                             }
                              this.puzzle = puzzle;
-
-                            //console.log("SOLVER " + JSON.stringify(puzzle.clues));
                         }
                     }
             ));
         }
     }
-
+    
+    @HostListener('window:keydown', ['$event'])
+    public handleKeyboardEvent(event: KeyboardEvent) {
+        if (this.puzzle && !this.editorService.isOpen) {
+            if (event.key === "Enter") {
+                event.stopPropagation();
+                let clue = this.puzzle.getSelectedClue();
+                if (clue) { 
+                    this.openEditor(null);
+                }
+            } else if (event.key === "Escape") {
+                event.stopPropagation();
+                this.activePuzzle.updateAndCommit(new Clear());
+            } else if (/^[a-zA-Z]$/.test(event.key)) {
+                event.stopPropagation();
+                let clue = this.puzzle.getSelectedClue();
+                if (clue) {
+                    this.openEditor(event.key);
+                }
+            }
+        }
+    }
     public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
     }
@@ -73,18 +95,36 @@ export class SolverComponent implements OnInit {
             let clue = this.puzzle.getSelectedClue();
 
             if (clue) {
-                this.openEditor(clue, null);
+                this.openEditor(null);
             }
         }
     }
 
     public onClueClick(clue: Clue) {
-        this.openEditor(clue, null);
+        this.openEditor(null);
     }
 
-    private openEditor(clue: Clue, starterText: string) {
-        if (!clue.redirect) {
-            this.editorService.open(clue.id, starterText);
-        }
+    public onEditorClose() {
+        this.showEditor = false;
+        this.starterText = null;
     }
+
+    // private openEditor(clue: Clue, starterText: string) {
+    //     this.editorService.open(clue.id, starterText);
+    // }
+
+    private openEditor(starterText: string) {
+        this.showEditor = true;
+        this.starterText = starterText;
+
+        // let modalRef = this.modalService.open(ClueEditor2Component, { 
+        //     backdrop: "static",
+        //     size: "lg",
+        // });
+        
+        //this.modalRef.componentInstance.clueId = clueId;
+        // modalRef.componentInstance.starterText = starterText;
+        //modalRef.componentInstance.close.subscribe(() => modalRef.close());
+    }
+
 }

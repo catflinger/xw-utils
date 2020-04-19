@@ -4,7 +4,6 @@ export class MockRouter {
 
     public navigate(route: string[]): Promise<boolean> {
         this.route = route;
-        //console.log("navigating to " + route.join());
         return Promise.resolve(true);
     }
 

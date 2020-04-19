@@ -6,12 +6,13 @@
 
 <div class="row">
     <div class="col">
-        <form [formGroup]="form">
-            <div class="form-group">
-                <input #file class="form-control-file" type="file" accept=".pdf" (change)="onFileChange(file.files)">
+        <form [formGroup]="form" class="mt-3">
+            <div class="custom-file">
+                <input id="fileInput" #file class="custom-file-input" type="file" accept=".pdf" (change)="onFileChange(file.files)">
+                <label for="fileInput" class="custom-file-label">Choose a PDF file</label>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label>
                     <input type="checkbox" formControlName="advancedOptions">
                     show advanced options

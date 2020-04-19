@@ -26,14 +26,10 @@ export class GridLinkerComponent implements OnInit, IClueEditor {
     public ngOnInit() {
 
         this.instance.emit({ 
-            //confirmClose: () => false,
-            save: (): Promise<boolean> => {
-                return Promise.resolve(false);
-            },
+            save: () => Promise.resolve(false),
          });
 
-
-        this.form = new FormGroup({
+         this.form = new FormGroup({
             "setGridRefsFromCaptions": new FormControl({
                 value: true,
                 disabled: true

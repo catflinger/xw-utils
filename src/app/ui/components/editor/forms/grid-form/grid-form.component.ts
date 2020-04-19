@@ -28,12 +28,9 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
     public ngOnInit() {
 
         this.instance.emit({ 
-            //confirmClose: () => false,
-            save: (): Promise<boolean> => {
-                return this.onSave();
-            },
+            save: () => Promise.resolve(false),
          });
-
+        
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.puzzle = puzzle;
 
@@ -67,10 +64,6 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
                 new RenumberGid(),
             );
         }
-    }
-
-    private onSave(): Promise<boolean> {
-        return Promise.resolve(false);
     }
 }
 

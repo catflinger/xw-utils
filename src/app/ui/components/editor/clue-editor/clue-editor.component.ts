@@ -53,12 +53,13 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
-        event.preventDefault();
-
         if (this.editorInstance) {
+            
             this.editorInstance.save()
             .then(cancel => {
-                if (!cancel) {
+                if (cancel) {
+                    event.preventDefault();
+                } else {
                     this.dirty = false;
                     this.activeId = event.nextId;
                 }
@@ -68,13 +69,12 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onSave() {
         if (this.editorInstance) {
-            this.editorInstance.save()
-            .then(cancel => {
-                if (!cancel) {
-                    this.dirty = false;
-                    this.close.emit();
-                }
-            });
+            const cancel = this.editorInstance.save();
+            
+            if (!cancel) {
+                this.dirty = false;
+                this.close.emit();
+            }
         }
     }
 

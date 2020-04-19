@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-readme',
@@ -8,10 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ReadmeComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit() {
-      //console.log(this.route.snapshot);
   }
 
 }

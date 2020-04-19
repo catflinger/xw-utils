@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, DoCheck, ElementRef, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, NgModel } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../../../clue-text-control/clue-text-control.component';
@@ -19,13 +19,6 @@ import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.c
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
-interface AnswerItem {
-    index: number,
-    id: string;
-    caption: string;
-    answer: string;
-}
-
 class AnswerTextChunk {
     constructor(
         public readonly letter: string,
@@ -42,11 +35,13 @@ class AnswerTextChunk {
     templateUrl: './clue-annotator.component.html',
     styleUrls: ['./clue-annotator.component.css']
 })
-export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
+export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditor {
     @Input() starterText: string;
 
     @Output() instance = new EventEmitter<ClueEditorInstance>();
     @Output() dirty = new EventEmitter<void>();
+
+    @ViewChildren("") children: QueryList<NgModel>;
 
     public grid: Grid = null;
     public clue: Clue;
@@ -59,7 +54,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     public latestAnswer: AnswerTextChunk[] = [];
     public publishOptions: PublishOptions;
 
-    public answerItems: AnswerItem[] = [];
+    public debug: any;
 
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
@@ -71,10 +66,8 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
         private modalService: NgbModal,
     ) { }
 
-    ngOnInit() {
-
+    public ngOnInit() {
         this.instance.emit({ 
-            //confirmClose: () => false,
             save: (): Promise<boolean> => {
                 return this.onSave();
             },
@@ -90,45 +83,40 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     if (puzzle) {
-                        let selectedClue = puzzle.getSelectedClue();
-                        if (selectedClue) {
+                        this.clue = puzzle.getSelectedClue();
+                        if (this.clue) {
 
-                            this.shadowPuzzle = this.makeShadowPuzzle(puzzle, selectedClue.id);
-                            this.clue = puzzle.clues.find((c) => c.id === selectedClue.id);
+                            this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clue.id);
+
                             this.grid = puzzle.grid;
                             this.publishOptions = puzzle.publishOptions;
 
                             let formArray: FormArray = this.form.get("answers") as FormArray;
                             formArray.clear();
-                            this.answerItems = [];
 
                             puzzle.publishOptions.textCols.forEach((col, index) => {
                                 let answerText = "";
                                 
                                 if (index === 0) {
-                                    answerText = this.starterText || this.clue.answers[0];
+                                    answerText = this.starterText ? this.starterText : this.clue.answers[0];
                                 } else if (index < this.clue.answers.length){
                                     answerText = this.clue.answers[index];
                                 } else {
                                     answerText = "";
                                 }
 
-                                this.answerItems.push({
-                                    index,
-                                    id: "answer" + index,
-                                    caption: col.caption,
-                                    answer:  answerText,
-                                });
+                                formArray.push(
+                                    this.formBuilder.group({
+                                        id: ["answer" + index],
+                                        caption: [col.caption],
+                                        answer: [answerText],
+                                    })
+                                );
                             });
 
                             this.form.patchValue({
                                 comment: this.clue.comment,
-                                answer: this.starterText ? this.starterText : this.clue.answers[0],
                                 chunks: this.clue.chunks,
-                            });
-
-                            this.answerItems.forEach((item) => {
-                                formArray.push(this.formBuilder.control(item.answer));
                             });
 
                             this.warnings = [];
@@ -151,25 +139,28 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
                 this.dirty.emit();
             }
         }));
-
     }
 
-    ngOnDestroy() {
+    public ngAfterViewInit() {
+        console.log ("CHILDREN " + this.children.length)
+        this.subs.push(this.children.changes.subscribe((x) => {
+            console.log ("CHILDREN " + this.children.length)
+        }));
+    }
+
+    public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
         if (this.tipInstance) {
             this.tipInstance.destroy();
         }
     }
 
-    public get answerControls() {
-        return this.form.get('answers') as FormArray;
-      }
-
     public onClearDefinition() {
         this.form.patchValue({
             chunks: [new ClueTextChunk(0, this.clue.text, false)]
         });
         this.validate();
+
     }
 
     public hasDefinition(): boolean {
@@ -189,7 +180,8 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     }
 
     public onCheat() {
-        this.form.get("answers").patchValue([this.clue.solution]);
+        const formArray = this.form.get("answers") as FormArray;
+        formArray[0].patchValue({ answer: this.clue.solution });
 
         this.validate();
         this.setLatestAnswer();
@@ -199,13 +191,14 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
         this.showAnnotation = !this.showAnnotation;
     }
 
-    public onChange() {
-        this.validate();
-        this.setLatestAnswer();
+    public onChange(index: number) {
+        if (index === 0) {
+            this.validate();
+            this.setLatestAnswer();
+        }
     }
 
     public get showTextWarning() {
-        // return this.appSettings.general.showCommentEditor.enabled &&
         return this.appSettings.general.showCommentValidation.enabled &&
             this.warnings.length &&
             !this.clue.redirect;
@@ -226,7 +219,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
                 this.tipInstance.activated = true;
     
             } else {
-                let answer = this.clean(this.form.value.answers[0]);
+                let answer = this.clean(this.form.value.answers[0].answer);
                 let lengthAvailable = 0;
     
                 if (this.grid) {
@@ -257,10 +250,12 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
     }
 
     private save() {
+        let answers = this.form.value.answers.map(item => item.answer)
+
         this.activePuzzle.update(
             new AnnotateClue(
                 this.clue.id,
-                this.form.value.answers,
+                answers,
                 this.form.value.comment,
                 this.form.value.chunks,
                 this.warnings,
@@ -276,16 +271,16 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
 
     private setLatestAnswer(): void {
         let result: AnswerTextChunk[] = [];
-        let answer: AnswerTextChunk[] = this.getLatestAnswer(this.grid);
+        let answerChunks: AnswerTextChunk[] = this.getLatestAnswer(this.grid);
         let format = this.clue.format;
         let formatIndex = 0;
-        let answerIndex = 0;
+        let answerChunkIndex = 0;
 
         while (formatIndex < format.length) {
             if (format[formatIndex] === ",") {
-                if (answerIndex < answer.length) {
-                    result.push(answer[answerIndex]);
-                    answerIndex++;
+                if (answerChunkIndex < answerChunks.length) {
+                    result.push(answerChunks[answerChunkIndex]);
+                    answerChunkIndex++;
                 } else {
                     result.push(new AnswerTextChunk("_", "placeholder"));
                 }
@@ -295,9 +290,9 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
             formatIndex++;
         }
 
-        while (answerIndex < answer.length) {
-            result.push(answer[answerIndex]);
-            answerIndex++;
+        while (answerChunkIndex < answerChunks.length) {
+            result.push(answerChunks[answerChunkIndex]);
+            answerChunkIndex++;
         }
 
         this.latestAnswer = result;
@@ -305,7 +300,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
 
     private getLatestAnswer(grid: Grid): AnswerTextChunk[] {
         let result: AnswerTextChunk[] = [];
-        let answer = this.clean(this.form.value.answers[0]);
+        let answer = this.clean(this.form.value.answers[0].answer);
         let index = 0;
 
         this.clue.link.entries.forEach((entry) => {
@@ -388,7 +383,7 @@ export class ClueAnnotationComponent implements OnInit, OnDestroy, IClueEditor {
 
     private validate() {
         this.warnings = Clue.validateAnnotation(
-            this.form.value.answers[0],
+            this.form.value.answers[0].answer,
             this.form.value.comment,
             this.form.value.chunks,
         );

@@ -44,8 +44,6 @@ export class BloggerComponent implements OnInit, OnDestroy {
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;
-
-                    //console.log("BLOGGER " + JSON.stringify(puzzle.clues));
                 }
             }));
 
@@ -75,7 +73,6 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        //console.log("CLUE " + JSON.stringify(clue));
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
         //if (!clue.redirect) {
             this.editorService.open(clue.id, null);

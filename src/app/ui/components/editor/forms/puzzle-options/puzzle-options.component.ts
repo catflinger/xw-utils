@@ -33,10 +33,7 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
     public ngOnInit() {
 
         this.instance.emit({ 
-            //confirmClose: () => false,
-            save: (): Promise<boolean> => {
-                return Promise.resolve(false);
-            },
+            save: () => Promise.resolve(false),
          });
 
         this.form = new FormGroup({

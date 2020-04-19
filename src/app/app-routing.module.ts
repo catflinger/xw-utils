@@ -30,6 +30,7 @@ import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-edi
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 
 const routes: Routes = [
+
     // landing pages
     { path: "home", component: HomeComponent },
     { path: "login", component: LoginComponent },
