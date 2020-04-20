@@ -20,7 +20,6 @@ export class SolverComponent implements OnInit {
 
     public puzzle: Puzzle = null;
     public showEditor = false;
-    public starterText = null;
 
     private subs: Subscription[] = [];
 
@@ -56,20 +55,22 @@ export class SolverComponent implements OnInit {
                 event.stopPropagation();
                 let clue = this.puzzle.getSelectedClue();
                 if (clue) { 
-                    this.openEditor(null);
+                    this.openEditor();
                 }
             } else if (event.key === "Escape") {
                 event.stopPropagation();
                 this.activePuzzle.updateAndCommit(new Clear());
-            } else if (/^[a-zA-Z]$/.test(event.key)) {
-                event.stopPropagation();
-                let clue = this.puzzle.getSelectedClue();
-                if (clue) {
-                    this.openEditor(event.key);
-                }
             }
+            // } else if (/^[a-zA-Z]$/.test(event.key)) {
+            //     event.stopPropagation();
+            //     let clue = this.puzzle.getSelectedClue();
+            //     if (clue) {
+            //         this.openEditor(event.key);
+            //     }
+            // }
         }
     }
+
     public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
     }
@@ -95,35 +96,33 @@ export class SolverComponent implements OnInit {
             let clue = this.puzzle.getSelectedClue();
 
             if (clue) {
-                this.openEditor(null);
+                this.openEditor();
             }
         }
     }
 
     public onClueClick(clue: Clue) {
-        this.openEditor(null);
+        this.openEditor();
     }
 
     public onEditorClose() {
         this.showEditor = false;
-        this.starterText = null;
     }
 
-    // private openEditor(clue: Clue, starterText: string) {
-    //     this.editorService.open(clue.id, starterText);
+    // private openEditor(clue: Clue) {
+    //     this.editorService.open(clue.id);
     // }
 
-    private openEditor(starterText: string) {
-        this.showEditor = true;
-        this.starterText = starterText;
+    private openEditor() {
+        if (!this.showEditor) {
+            this.showEditor = true;
+        }
 
         // let modalRef = this.modalService.open(ClueEditor2Component, { 
         //     backdrop: "static",
         //     size: "lg",
         // });
         
-        //this.modalRef.componentInstance.clueId = clueId;
-        // modalRef.componentInstance.starterText = starterText;
         //modalRef.componentInstance.close.subscribe(() => modalRef.close());
     }
 

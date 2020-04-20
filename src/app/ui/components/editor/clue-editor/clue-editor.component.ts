@@ -19,7 +19,6 @@ export interface IClueEditor {
     styleUrls: ['./clue-editor.component.css']
 })
 export class ClueEditorComponent implements OnInit, OnDestroy {
-    @Input() starterText: string;
     @Output() close = new EventEmitter<void>();
 
     public activeId: string = "ClueAnnotatorComponent";
@@ -36,7 +35,10 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subs.push(
-            this.activePuzzle.observe().subscribe(puzzle => this.puzzle = puzzle)
+            this.activePuzzle.observe().subscribe(puzzle => {
+                this.puzzle = puzzle;
+                this.dirty = false;
+            })
         );
     }
 
@@ -69,21 +71,21 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onSave() {
         if (this.editorInstance) {
-            const cancel = this.editorInstance.save();
-            
-            if (!cancel) {
-                this.dirty = false;
-                this.close.emit();
-            }
+            this.editorInstance.save()
+            .then(cancel => {
+                if (!cancel) {
+                    this.closeAndCommit();
+                }
+            });
         }
     }
 
     public onCancel() {
-        this.close.emit();
+        this.closeAndDiscard();
     }
 
     public onClose() {
-        this.close.emit();
+        this.closeAndDiscard();
     }
 
     public get hideSaveCancelButtons(): boolean {
@@ -95,5 +97,17 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
         return result;
     };
+
+    private closeAndCommit() {
+        this.dirty = false;
+        this.activePuzzle.commit();
+        this.close.emit();
+    }
+
+    private closeAndDiscard() {
+        this.dirty = false;
+        this.activePuzzle.discard();
+        this.close.emit();
+    }
 
 }

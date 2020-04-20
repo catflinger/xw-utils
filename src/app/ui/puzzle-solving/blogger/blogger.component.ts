@@ -75,7 +75,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     onRowClick(clue: Clue) {
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
         //if (!clue.redirect) {
-            this.editorService.open(clue.id, null);
+            this.editorService.open();
         //}
 
     }

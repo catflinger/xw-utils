@@ -9,8 +9,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { AutofocusFixModule }from "ngx-autofocus-fix";
-
 import { AppComponent } from './ui/app/app.component';
 import { PublishOptionsComponent } from './ui/puzzle-publishing/publish-options/publish-options.component';
 import { PublishComponent } from './ui/puzzle-publishing/publish/publish.component';
@@ -183,7 +181,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         HttpClientModule,
         QuillModule.forRoot(quillGlobalConfig),
         AppRoutingModule,
-        AutofocusFixModule.forRoot(),
     ],
     providers: [
         PuzzleManagementService,

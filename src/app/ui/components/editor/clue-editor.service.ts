@@ -28,7 +28,7 @@ export class ClueEditorService implements OnDestroy {
         return !!this.modalRef;
     }
 
-    public open(clueId: string, starterText: string) {
+    public open() {
 
         if (this.modalRef !== null) {
             this.close();
@@ -40,9 +40,9 @@ export class ClueEditorService implements OnDestroy {
             size: "lg",
         });
         
-        //this.modalRef.componentInstance.clueId = clueId;
-        this.modalRef.componentInstance.starterText = starterText;
-        this.modalRef.componentInstance.close.subscribe(() => this.close());
+        this.subs.push(
+            this.modalRef.componentInstance.close.subscribe(
+                () => this.close()));
     }
 
     public close() {

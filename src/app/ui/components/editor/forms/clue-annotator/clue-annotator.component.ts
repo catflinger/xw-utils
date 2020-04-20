@@ -36,12 +36,11 @@ class AnswerTextChunk {
     styleUrls: ['./clue-annotator.component.css']
 })
 export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditor {
-    @Input() starterText: string;
 
     @Output() instance = new EventEmitter<ClueEditorInstance>();
     @Output() dirty = new EventEmitter<void>();
 
-    @ViewChildren("") children: QueryList<NgModel>;
+    @ViewChildren("answer", { read: ElementRef }) children: QueryList<ElementRef>;
 
     public grid: Grid = null;
     public clue: Clue;
@@ -53,8 +52,6 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     public showAnnotation: boolean = false;
     public latestAnswer: AnswerTextChunk[] = [];
     public publishOptions: PublishOptions;
-
-    public debug: any;
 
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
@@ -97,9 +94,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                             puzzle.publishOptions.textCols.forEach((col, index) => {
                                 let answerText = "";
                                 
-                                if (index === 0) {
-                                    answerText = this.starterText ? this.starterText : this.clue.answers[0];
-                                } else if (index < this.clue.answers.length){
+                                if (index < this.clue.answers.length){
                                     answerText = this.clue.answers[index];
                                 } else {
                                     answerText = "";
@@ -142,10 +137,9 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public ngAfterViewInit() {
-        console.log ("CHILDREN " + this.children.length)
-        this.subs.push(this.children.changes.subscribe((x) => {
-            console.log ("CHILDREN " + this.children.length)
-        }));
+        if (this.children.length) {
+            this.children.first.nativeElement.focus();
+        }
     }
 
     public ngOnDestroy() {
@@ -153,6 +147,10 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         if (this.tipInstance) {
             this.tipInstance.destroy();
         }
+    }
+
+    public trackAnsersBy(index) {
+        return index;
     }
 
     public onClearDefinition() {
@@ -211,30 +209,41 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
             result = Promise.resolve(false);
 
         } else {
-            if (//this.appSettings.general.showCommentEditor.enabled &&
-                this.appSettings.tips.definitionWarning.enabled &&
+            if (this.appSettings.tips.definitionWarning.enabled &&
                 !this.tipStatus.show &&
                 this.form.value.chunks.length < 2) {
-    
+
                 this.tipInstance.activated = true;
-    
+
             } else {
                 let answer = this.clean(this.form.value.answers[0].answer);
                 let lengthAvailable = 0;
-    
+
                 if (this.grid) {
                     this.clue.link.entries.forEach(entry => {
                         lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
                     })
                 }
-    
+
                 if (answer && lengthAvailable && answer.length !== lengthAvailable) {
-                    result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid");
+                    result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid")
+                        .then((cancel): boolean => {
+                            if (!cancel) {
+                                this.save();
+                            }
+                            return cancel;
+                        });
                 } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
-                    result = this.showSaveWarning("Warning: the answer does match the publsihed solution");
+                    result = this.showSaveWarning("Warning: the answer does match the publsihed solution")
+                        .then((cancel): boolean => {
+                            if (!cancel) {
+                                this.save();
+                            }
+                            return cancel;
+                        });
                 } else {
-                    result = Promise.resolve(false);
                     this.save();
+                    result = Promise.resolve(false);
                 }
             }
         }

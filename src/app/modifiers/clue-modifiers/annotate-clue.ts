@@ -14,6 +14,7 @@ export class AnnotateClue implements IPuzzleModifier {
         private warnings: ClueValidationWarning[]) { }
 
     exec(puzzle: PuzzleM) {
+
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {

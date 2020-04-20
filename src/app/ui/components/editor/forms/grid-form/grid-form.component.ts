@@ -21,7 +21,6 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
     @Output() dirty = new EventEmitter<void>();
 
     constructor(
-        //private editorService: ClueEditorService,
         private activePuzzle:IActivePuzzle,
     ) { }
 

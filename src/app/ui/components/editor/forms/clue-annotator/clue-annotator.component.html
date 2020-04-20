@@ -10,7 +10,7 @@
     <div class="row mt-3">
         <div class="col">
             <h4>
-                <app-clue-text-control formControlName="chunks" (change)="onChange()"></app-clue-text-control>
+                <app-clue-text-control formControlName="chunks" (change)="onChange(0)"></app-clue-text-control>
             </h4>
         </div>
     </div>
@@ -37,7 +37,7 @@
         <div class="col">
             <app-tip group="none" [suppressable]="false" *ngIf="showAnnotation">{{clue.annotation}}</app-tip>
 
-            <div formArrayName="answers" class="form-group" *ngFor="let item of form.get('answers').controls; index as i;">
+            <div formArrayName="answers" class="form-group" *ngFor="let item of form.get('answers').controls; index as i; trackBy: trackAnswersBy">
                 <div [formGroup]="item">
 
                     <div class="float-left"><label [for]="item.value.id">{{item.value.caption}}</label></div>
@@ -50,8 +50,13 @@
                             *ngIf="clue.annotation">annotation</button>
                     </div>
 
-                    <input [attr.id]="item.value.id" class="form-control" [ngClass]="{'text-uppercase': !i}"
-                        [autofocus]="!i" formControlName="answer" (input)="onChange(i)">
+                    <input 
+                        [attr.id]="item.value.id" 
+                        class="form-control" 
+                        [ngClass]="{'text-uppercase': !i}"
+                        #answer 
+                        formControlName="answer" 
+                        (input)="onChange(i)">
                 </div>
             </div>
         </div>
@@ -66,7 +71,7 @@
 
                 <div>
                     <quill-editor id="comment" formControlName="comment" format="object"
-                        (onContentChanged)="onChange()"></quill-editor>
+                        (onContentChanged)="onChange(0)"></quill-editor>
                 </div>
             </div>
         </div>
@@ -82,6 +87,3 @@
 
 </form>
 
-<pre>
-{{debug | json}}
-</pre>

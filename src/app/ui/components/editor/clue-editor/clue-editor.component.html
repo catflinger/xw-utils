@@ -5,7 +5,7 @@
         <li ngbNavItem="ClueAnnotatorComponent">
             <a ngbNavLink>Solve and annotate</a>
             <ng-template ngbNavContent>
-                <app-clue-annotator [starterText]="starterText" (instance)="onEditorInstance($event)" (dirty)="onDirty()">
+                <app-clue-annotator (instance)="onEditorInstance($event)" (dirty)="onDirty()">
                 </app-clue-annotator>
             </ng-template>
         </li>
@@ -20,21 +20,21 @@
         <li ngbNavItem="GridLinkerComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid entries</a>
             <ng-template ngbNavContent>
-                <app-grid-linker (instance)="onEditorInstance($event)"></app-grid-linker>
+                <app-grid-linker (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-grid-linker>
             </ng-template>
         </li>
 
         <li ngbNavItem="PuzzleOptionsComponent">
             <a ngbNavLink>Annotation otions</a>
             <ng-template ngbNavContent>
-                <app-puzzle-options (instance)="onEditorInstance($event)"></app-puzzle-options>
+                <app-puzzle-options (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-puzzle-options>
             </ng-template>
         </li>
 
         <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid</a>
             <ng-template ngbNavContent>
-                <app-grid-form (instance)="onEditorInstance($event)"></app-grid-form>
+                <app-grid-form (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-grid-form>
             </ng-template>
         </li>
     </ul>
@@ -45,6 +45,9 @@
 
 <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Save</button>
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Cancel</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Discard changes</button>
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()" [ngClass]="{ 'd-none': !hideSaveCancelButtons }">Close</button>
 </div>
+
+<div>dirty = {{dirty}}</div>
+<div *ngIf="puzzle">uncommitted = {{puzzle.uncommitted}}</div>
