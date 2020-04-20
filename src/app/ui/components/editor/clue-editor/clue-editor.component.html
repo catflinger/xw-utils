@@ -48,6 +48,3 @@
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Discard changes</button>
     <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()" [ngClass]="{ 'd-none': !hideSaveCancelButtons }">Close</button>
 </div>
-
-<div>dirty = {{dirty}}</div>
-<div *ngIf="puzzle">uncommitted = {{puzzle.uncommitted}}</div>

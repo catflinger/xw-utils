@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, DoCheck, ElementRef, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, NgModel } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../../../clue-text-control/clue-text-control.component';
@@ -151,6 +151,20 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
     public trackAnsersBy(index) {
         return index;
+    }
+
+    public get clueCaption(): string {
+        let result = "";
+
+        if (this.clue) {
+            result = this.clue.caption;
+
+            if (!/(across|down)/i.test(this.clue.caption)) {
+                result += " " + this.clue.group;
+            }
+        }
+
+        return result;
     }
 
     public onClearDefinition() {

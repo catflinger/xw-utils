@@ -1,6 +1,9 @@
 <form [formGroup]="form" *ngIf="clue && appSettings">
 
     <div class="row mt-3">
+        <div class="col text-left">
+            <h5 class="text-capitalize">{{clueCaption}}</h5>
+        </div>
         <div class="col text-right">
             <button type="button" class="btn btn-link"
                 (click)="onClearDefinition()">clear definition</button>
