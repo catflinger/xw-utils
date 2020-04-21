@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { QuillDelta } from '../../model/interfaces';
-import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey } from '../common';
+import { BooleanSetting, GeneralSettings, TipSettings, DiarySettings, AppSettings, BooleanSettingsGroupKey, EditorMode } from '../common';
 
 // TO DO: so far all the the settings have turned out to be related to the UI.
 // Consider if we need an app-wide settings service.  Perhaps move this to the
@@ -42,6 +42,7 @@ class _AppSettings implements AppSettings {
     public sandbox: boolean;
     public footer: QuillDelta;
     public diary: _DiarySettings;
+    public editorMode: EditorMode;
 }
 
 /*
@@ -60,6 +61,7 @@ class _AppSettings implements AppSettings {
 const _defaultSettings: _AppSettings = {
     username: null,
     sandbox: false,
+    editorMode: "modal",
     footer: { ops: []},
     general: {
         //showCommentEditor: { caption: "show comment editor", enabled: true },
@@ -124,6 +126,10 @@ export class AppSettingsService {
 
                 if (changes.sandbox !== undefined && typeof changes.sandbox === "boolean") {
                     _settings.sandbox = changes.sandbox;
+                }
+
+                if (changes.editorMode !== undefined && typeof changes.editorMode === "string") {
+                    _settings.editorMode = changes.editorMode;
                 }
 
                 if (changes.diary && typeof changes.diary.showEverybody === "boolean") {

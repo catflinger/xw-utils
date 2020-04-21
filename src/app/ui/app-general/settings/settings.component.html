@@ -8,7 +8,7 @@
         <p>To be displayed at the bottom of your posts</p>
         <quill-editor formControlName="footer" format="object"></quill-editor>
     </div>
-    
+
     <h5 class="mt-5">Solving and blogging options</h5>
 
     <div formGroupName="general">
@@ -17,6 +17,17 @@
             <label class="form-check-label">{{settings.general[key].caption}}</label>
         </div>
     </div>
+
+    <h5 class="mt-5">Clue Editor Options</h5>
+
+    <div class="form-group">
+        <label for="editorMode">How to position the clue editor window</label>
+        <select class="form-control" id="editorMode" formControlName="editorMode">
+          <option value="modal">Show in a pop-up window</option>
+          <option value="fullscreen">Show full screen</option>
+          <option value="inline">Show above the grid and clues</option>
+        </select>
+      </div>
 
     <h5 class="mt-5">Help tips</h5>
 

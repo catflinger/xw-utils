@@ -25,6 +25,9 @@ export interface ContentGenerator {
     getContent(puzzle: Puzzle, gridUrl: string): string;
 }
 
+export type EditorMode = "modal" | "inline" | "fullscreen";
+export const editorModes: ReadonlyArray<EditorMode> = ["modal", "inline", "fullscreen"];
+
 export interface BooleanSetting {
     readonly caption: string
     readonly enabled: boolean;
@@ -56,9 +59,10 @@ export interface AppSettings {
     readonly username: string;
     readonly general: GeneralSettings;
     readonly tips: TipSettings;
-    readonly sandbox: boolean;
     readonly footer: ReadonlyQuillDelta;
     readonly diary: DiarySettings;
+    readonly sandbox: boolean;
+    readonly editorMode: EditorMode;
 }
 
 export type TipKey = keyof TipSettings;

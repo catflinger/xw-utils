@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="!showEditor">
+    <div class="row" *ngIf="showPuzzle">
         <div class="col" *ngIf="puzzle.grid">
             <app-grid (cellClick)="onCellClick($event)"></app-grid>
         </div>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="row  mb-5" *ngIf="!showEditor">
+    <div class="row  mb-5" *ngIf="showPuzzle">
         <div class="col">
             <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBlogger()">Open in blogger</button>

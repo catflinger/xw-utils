@@ -84,6 +84,7 @@ import { GridReferenceComponent } from './ui/components/editor/grid-reference/gr
 import { GridLinkerComponent } from './ui/components/editor/forms/grid-linker/grid-linker.component';
 import { ClueEditorComponent } from './ui/components/editor/clue-editor/clue-editor.component';
 import { GridFormComponent } from './ui/components/editor/forms/grid-form/grid-form.component';
+import { ClueEditorWrapComponent } from './ui/components/editor/clue-editor-wrap/clue-editor-wrap.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -170,6 +171,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridLinkerComponent,
         ClueEditorComponent,
         GridFormComponent,
+        ClueEditorWrapComponent,
     ],
     imports: [
         BrowserModule,

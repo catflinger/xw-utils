@@ -3,7 +3,7 @@ import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppService } from 'src/app/ui/services/app.service';
-import { AppSettings, BooleanSettingsGroupKey } from 'src/app/services/common';
+import { AppSettings, BooleanSettingsGroupKey, EditorMode, editorModes } from 'src/app/services/common';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 
@@ -17,6 +17,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
     public form: FormGroup;
+    public editorModes: ReadonlyArray<EditorMode> = editorModes;
 
     constructor(
         private navService: NavService<AppTrackData>,
@@ -31,6 +32,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.form = this.formBuilder.group({
             sandbox: [false],
+            editorMode: "modal",
             footer: [""],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
@@ -50,6 +52,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.form.patchValue({
                 sandbox: settings.sandbox,
                 footer: settings.footer,
+                editorMode: settings.editorMode,
             });
 
             Object.keys(this.settings.general).forEach(key => {
@@ -71,6 +74,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         let changes = {
             sandbox: this.form.value.sandbox,
+            editorMode: this.form.value.editorMode,
             general: this.getChanges("general"),
             footer: this.form.value.footer,
             tips: this.getChanges("tips"),
@@ -96,7 +100,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public onReset() {
         this.settingsService.factoryReset();
-        this.navService.goHome();
+        //this.navService.goHome();
         //this.navService.returnToSender();
     }
 

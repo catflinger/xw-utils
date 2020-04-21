@@ -2,13 +2,17 @@ import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angul
 import { Puzzle } from 'src/app/model/puzzle'; 
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest, Observable } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridCell } from 'src/app/model/grid-cell';
 import { Clue } from 'src/app/model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
 import { ClueEditorService } from '../../components/editor/clue-editor.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
+import { ClueEditorComponent } from '../../components/editor/clue-editor/clue-editor.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-solver',
@@ -19,14 +23,17 @@ import { ClueEditorService } from '../../components/editor/clue-editor.service';
 export class SolverComponent implements OnInit {
 
     public puzzle: Puzzle = null;
-    public showEditor = false;
+    public appSettings: AppSettings = null;
 
     private subs: Subscription[] = [];
+    private _showEditor = false;
 
     constructor(
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
+        private appSettingsService: AppSettingsService,
         private editorService: ClueEditorService,
+        private modalService: NgbModal,
     ) { }
 
     ngOnInit() {
@@ -34,14 +41,23 @@ export class SolverComponent implements OnInit {
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
         } else {
+
+            const observer: Observable<[Puzzle, AppSettings]> = combineLatest(
+                this.activePuzzle.observe(),
+                this.appSettingsService.observe());
+
             this.subs.push(
-                this.activePuzzle.observe().subscribe(
-                    (puzzle) => {
-                        if (puzzle) {
+                observer.subscribe(
+                    (result) => {
+                        const puzzle = result[0];
+                        const appSettings = result[1];
+
+                        if (puzzle && appSettings) {
                             if (!puzzle.capability.solveable) {
                                 this.navService.goHome();
                             }
-                             this.puzzle = puzzle;
+                            this.puzzle = puzzle;
+                            this.appSettings = appSettings;
                         }
                     }
             ));
@@ -73,6 +89,30 @@ export class SolverComponent implements OnInit {
 
     public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
+    }
+
+    public get showPuzzle(): boolean {
+        const mode = this.appSettings.editorMode;
+        let result = true;
+
+        if (this.appSettings) {
+            if (this._showEditor && mode === "fullscreen") {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public get showEditor(): boolean {
+        const mode = this.appSettings.editorMode;
+        let result = false;
+
+        if (this.appSettings) {
+            if (this._showEditor && (mode === "fullscreen" || mode === "inline")) {
+                result = true;
+            }
+        }
+        return result;
     }
     
     public onContinue() {
@@ -106,24 +146,25 @@ export class SolverComponent implements OnInit {
     }
 
     public onEditorClose() {
-        this.showEditor = false;
+        this._showEditor = false;
     }
 
-    // private openEditor(clue: Clue) {
-    //     this.editorService.open(clue.id);
-    // }
-
     private openEditor() {
-        if (!this.showEditor) {
-            this.showEditor = true;
-        }
+        if (!this._showEditor) {
+            this._showEditor = true;
 
-        // let modalRef = this.modalService.open(ClueEditor2Component, { 
-        //     backdrop: "static",
-        //     size: "lg",
-        // });
-        
-        //modalRef.componentInstance.close.subscribe(() => modalRef.close());
+            if (this.appSettings.editorMode === "modal") {
+                let modalRef = this.modalService.open(ClueEditorComponent, { 
+                    backdrop: "static",
+                    size: "lg",
+                });
+                
+                modalRef.componentInstance.close.subscribe(() => {
+                    modalRef.close();
+                    this.onEditorClose();
+                });
+            }
+        }
     }
 
 }
