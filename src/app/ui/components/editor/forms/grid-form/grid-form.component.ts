@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-editor.component';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { UpdateCell } from 'src/app/modifiers/grid-modifiers/update-cell';
@@ -13,11 +13,11 @@ import { BarClickEvent } from '../../../grid/grid.component';
     templateUrl: './grid-form.component.html',
     styleUrls: ['./grid-form.component.css']
 })
-export class GridFormComponent implements OnInit, OnDestroy, IClueEditor {
+export class GridFormComponent implements OnInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];
     private puzzle: Puzzle;
 
-    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     constructor(

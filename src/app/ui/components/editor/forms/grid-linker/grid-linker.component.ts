@@ -3,17 +3,17 @@ import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/clue';
 import { FormGroup, FormControl } from '@angular/forms';
-import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-editor.component';
 
 @Component({
     selector: 'app-grid-linker',
     templateUrl: './grid-linker.component.html',
     styleUrls: ['./grid-linker.component.css']
 })
-export class GridLinkerComponent implements OnInit, IClueEditor {
+export class GridLinkerComponent implements OnInit, IClueEditorForm {
     private subs: Subscription[] = [];
 
-    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     public clue: Clue;

@@ -15,7 +15,7 @@ import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
-import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
+import { ClueEditorFormInstance, IClueEditorForm } from '../../clue-editor/clue-editor.component';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -35,9 +35,9 @@ class AnswerTextChunk {
     templateUrl: './clue-annotator.component.html',
     styleUrls: ['./clue-annotator.component.css']
 })
-export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditor {
+export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
 
-    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     @ViewChildren("answer", { read: ElementRef }) children: QueryList<ElementRef>;

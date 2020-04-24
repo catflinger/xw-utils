@@ -150,7 +150,9 @@ export class SolverComponent implements OnInit {
     }
 
     private openEditor() {
-        if (!this._showEditor) {
+        if (this._showEditor) {
+            //???????
+        } else {
             this._showEditor = true;
 
             if (this.appSettings.editorMode === "modal") {

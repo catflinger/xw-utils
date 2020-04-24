@@ -11,7 +11,7 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
-import { ClueEditorInstance, IClueEditor } from '../../clue-editor/clue-editor.component';
+import { ClueEditorFormInstance, IClueEditorForm } from '../../clue-editor/clue-editor.component';
 
 export interface ClueEditModel {
     id: string;
@@ -25,7 +25,7 @@ export interface ClueEditModel {
     templateUrl: './clue-text-editor.component.html',
     styleUrls: ['./clue-text-editor.component.css']
 })
-export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditor {
+export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
@@ -34,7 +34,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
 
-    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     constructor(

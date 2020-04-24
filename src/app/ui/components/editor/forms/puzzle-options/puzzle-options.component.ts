@@ -6,17 +6,17 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
-import { IClueEditor, ClueEditorInstance } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-editor.component';
 
 @Component({
     selector: 'app-puzzle-options',
     templateUrl: './puzzle-options.component.html',
     styleUrls: ['./puzzle-options.component.css']
 })
-export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditor {
+export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditorForm {
     public form: FormGroup;
     
-    @Output() instance = new EventEmitter<ClueEditorInstance>();
+    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     @Input() public clueId: string;

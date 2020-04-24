@@ -4,12 +4,12 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle';
 
-export interface ClueEditorInstance {
+export interface ClueEditorFormInstance {
     save: () => Promise<boolean>;
 }
 
-export interface IClueEditor {
-    instance: EventEmitter<ClueEditorInstance>;
+export interface IClueEditorForm {
+    instance: EventEmitter<ClueEditorFormInstance>;
     dirty: EventEmitter<void>;
 } 
 
@@ -26,7 +26,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public dirty: boolean = false;
 
-    private editorInstance: ClueEditorInstance = null;
+    private formInstance: ClueEditorFormInstance = null;
     private subs: Subscription[] = [];
 
     constructor(
@@ -36,6 +36,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.subs.push(
             this.activePuzzle.observe().subscribe(puzzle => {
+
                 this.puzzle = puzzle;
                 this.dirty = false;
             })
@@ -46,8 +47,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onEditorInstance(instance: ClueEditorInstance) {
-        this.editorInstance = instance;
+    public onEditorInstance(instance: ClueEditorFormInstance) {
+        this.formInstance = instance;
     }
 
     public onDirty() {
@@ -55,9 +56,9 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
-        if (this.editorInstance) {
+        if (this.formInstance) {
             
-            this.editorInstance.save()
+            this.formInstance.save()
             .then(cancel => {
                 if (cancel) {
                     event.preventDefault();
@@ -70,8 +71,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     }
 
     public onSave() {
-        if (this.editorInstance) {
-            this.editorInstance.save()
+        if (this.formInstance) {
+            this.formInstance.save()
             .then(cancel => {
                 if (!cancel) {
                     this.closeAndCommit();
