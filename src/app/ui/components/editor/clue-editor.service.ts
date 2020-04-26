@@ -1,55 +1,50 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ClueEditorComponent } from './clue-editor/clue-editor.component';
+import { v4 as uuid } from "uuid";
 
-export interface ClueEditor {
-    modalRef: NgbModalRef
+interface IEditorInstance {
+    id: string,
+    save: () => Promise<boolean>,
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class ClueEditorService implements OnDestroy {
+export class ClueEditorService {
+    private currentInstance: IEditorInstance = null;
 
-    private modalRef: NgbModalRef;
-    private subs: Subscription[] = [];
-
-    constructor(
-        private modalService: NgbModal,
-    ) {
+    constructor() {
     }
 
-    public ngOnDestroy(){
-        this.subs.forEach(sub => sub.unsubscribe());
+    public register(save: () => Promise<boolean>): string {
+        const id = uuid();
+        this.currentInstance = {id, save };
+        return id;
     }
 
-    public get isOpen(): boolean {
-        return !!this.modalRef;
-    }
+    public unRegister(id: string) {
+        const current = this.currentInstance;
 
-    public open() {
-
-        if (this.modalRef !== null) {
-            this.close();
-            this.modalRef = null;
-        }
-
-        this.modalRef = this.modalService.open(ClueEditorComponent, { 
-            backdrop: "static",
-            size: "lg",
-        });
-        
-        this.subs.push(
-            this.modalRef.componentInstance.close.subscribe(
-                () => this.close()));
-    }
-
-    public close() {
-        if (this.modalRef) {
-            this.modalRef.close();
-            this.modalRef = null;
+        if (current && id && current.id === id) {
+            this.currentInstance.save = null;
+            this.currentInstance = null;
         }
     }
 
+    public get isActive(): boolean {
+        return this.currentInstance !== null;
+    }
+
+    public save(): Promise<boolean> {
+        if (this.currentInstance) {
+            return this.currentInstance.save()
+            .then((cancel) => {
+                if (!cancel) {
+                    this.currentInstance = null;
+                }
+                return cancel;
+            });
+        } else {
+            return Promise.resolve(false);
+        }
+    }
 }

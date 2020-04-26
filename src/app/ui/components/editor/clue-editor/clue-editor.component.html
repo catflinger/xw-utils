@@ -1,11 +1,11 @@
 <div class="modal-body" *ngIf="puzzle">
 
-    <ul ngbNav #nav="ngbNav" [activeId]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
 
         <li ngbNavItem="ClueAnnotatorComponent">
             <a ngbNavLink>Solve and annotate</a>
             <ng-template ngbNavContent>
-                <app-clue-annotator (instance)="onEditorInstance($event)" (dirty)="onDirty()">
+                <app-clue-annotator (dirty)="onDirty()">
                 </app-clue-annotator>
             </ng-template>
         </li>
@@ -13,28 +13,28 @@
         <li ngbNavItem="ClueTextEditorComponent">
             <a ngbNavLink>Edit clue</a>
             <ng-template ngbNavContent>
-                <app-clue-text-editor (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-clue-text-editor>
+                <app-clue-text-editor (dirty)="onDirty()"></app-clue-text-editor>
             </ng-template>
         </li>
 
         <li ngbNavItem="GridLinkerComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid entries</a>
             <ng-template ngbNavContent>
-                <app-grid-linker (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-grid-linker>
+                <app-grid-linker (dirty)="onDirty()"></app-grid-linker>
             </ng-template>
         </li>
 
         <li ngbNavItem="PuzzleOptionsComponent">
             <a ngbNavLink>Annotation otions</a>
             <ng-template ngbNavContent>
-                <app-puzzle-options (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-puzzle-options>
+                <app-puzzle-options (dirty)="onDirty()"></app-puzzle-options>
             </ng-template>
         </li>
 
         <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid</a>
             <ng-template ngbNavContent>
-                <app-grid-form (instance)="onEditorInstance($event)" (dirty)="onDirty()"></app-grid-form>
+                <app-grid-form (dirty)="onDirty()"></app-grid-form>
             </ng-template>
         </li>
     </ul>

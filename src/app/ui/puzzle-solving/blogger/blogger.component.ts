@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/clue';
@@ -12,6 +12,8 @@ import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { ClueEditorService } from '../../components/editor/clue-editor.service';
+import { ClueEditorComponent } from '../../components/editor/clue-editor/clue-editor.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-blogger',
@@ -21,7 +23,9 @@ import { ClueEditorService } from '../../components/editor/clue-editor.service';
 export class BloggerComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appSettings;
+
     private subs: Subscription[] = [];
+    private _showEditor = false;
 
     constructor(
         private navService: NavService<AppTrackData>,
@@ -29,6 +33,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private appSettinsgService: AppSettingsService, 
         private editorService: ClueEditorService,
+        private modalService: NgbModal,
     ) { }
 
     ngOnInit() {
@@ -36,8 +41,6 @@ export class BloggerComponent implements OnInit, OnDestroy {
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
         } else {
-            this.appSettings = this.appSettinsgService.settings;
-
             this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
                 if (puzzle) {
                     if (!puzzle.capability.blogable) {
@@ -74,9 +77,60 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
     onRowClick(clue: Clue) {
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
-        //if (!clue.redirect) {
-            this.editorService.open();
-        //}
 
+        Promise.resolve().then(() => this.openEditor());
     }
+
+    // vvvvvvvvvvv from here down shared with solver vvvvvvvvvvvvvvvvvvv
+    //            TO DO: move this to a shared location
+
+    public get showPuzzle(): boolean {
+        let result = true;
+
+        if (this.appSettings) {
+            const mode = this.appSettings.editorMode;
+            if (this._showEditor && mode === "fullscreen") {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public get showEditor(): boolean {
+        let result = false;
+
+        if (this.appSettings) {
+            const mode = this.appSettings.editorMode;
+
+            if (this._showEditor && (mode === "fullscreen" || mode === "inline")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public onEditorClose() {
+        this._showEditor = false;
+    }
+
+    private openEditor() {
+        if (this._showEditor) {
+            //???????
+        } else {
+            this._showEditor = true;
+
+            if (this.appSettings.editorMode === "modal") {
+                let modalRef = this.modalService.open(ClueEditorComponent, { 
+                    backdrop: "static",
+                    size: "lg",
+                });
+                
+                modalRef.componentInstance.close.subscribe(() => {
+                    modalRef.close();
+                    this.onEditorClose();
+                });
+            }
+        }
+    }
+
 }

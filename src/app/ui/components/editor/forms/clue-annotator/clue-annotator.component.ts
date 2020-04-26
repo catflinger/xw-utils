@@ -15,7 +15,8 @@ import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
-import { ClueEditorFormInstance, IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { ClueEditorService } from '../../clue-editor.service';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -37,7 +38,6 @@ class AnswerTextChunk {
 })
 export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
 
-    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     @ViewChildren("answer", { read: ElementRef }) children: QueryList<ElementRef>;
@@ -55,20 +55,19 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
+    private instanceId: string = null;
 
     constructor(
         private activePuzzle: IActivePuzzle,
         private appSettingsService: AppSettingsService,
+        private editorService: ClueEditorService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
     ) { }
 
     public ngOnInit() {
-        this.instance.emit({ 
-            save: (): Promise<boolean> => {
-                return this.onSave();
-            },
-         });
+
+        this.instanceId = this.editorService.register(() => this.onSave());
 
         this.form = this.formBuilder.group({
             answers: this.formBuilder.array([]),
@@ -147,6 +146,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         if (this.tipInstance) {
             this.tipInstance.destroy();
         }
+        this.editorService.unRegister(this.instanceId);
     }
 
     public trackAnsersBy(index) {
@@ -220,6 +220,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         let result = Promise.resolve(true);
 
         if (!this.form.dirty) {
+
             result = Promise.resolve(false);
 
         } else {

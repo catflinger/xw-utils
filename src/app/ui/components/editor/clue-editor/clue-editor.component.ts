@@ -3,13 +3,9 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle';
-
-export interface ClueEditorFormInstance {
-    save: () => Promise<boolean>;
-}
+import { ClueEditorService } from '../clue-editor.service';
 
 export interface IClueEditorForm {
-    instance: EventEmitter<ClueEditorFormInstance>;
     dirty: EventEmitter<void>;
 } 
 
@@ -26,11 +22,11 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public dirty: boolean = false;
 
-    private formInstance: ClueEditorFormInstance = null;
     private subs: Subscription[] = [];
 
     constructor(
         private activePuzzle: IActivePuzzle,
+        private editorService: ClueEditorService,
     ) { }
 
     public ngOnInit(): void {
@@ -47,32 +43,26 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onEditorInstance(instance: ClueEditorFormInstance) {
-        this.formInstance = instance;
-    }
-
     public onDirty() {
         this.dirty = true;
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
-        if (this.formInstance) {
-            
-            this.formInstance.save()
+        if (this.editorService.isActive) {
+            this.editorService.save()
             .then(cancel => {
                 if (cancel) {
                     event.preventDefault();
                 } else {
                     this.dirty = false;
-                    this.activeId = event.nextId;
                 }
             });
         }
     }
 
     public onSave() {
-        if (this.formInstance) {
-            this.formInstance.save()
+        if (this.editorService.isActive) {
+            this.editorService.save()
             .then(cancel => {
                 if (!cancel) {
                     this.closeAndCommit();

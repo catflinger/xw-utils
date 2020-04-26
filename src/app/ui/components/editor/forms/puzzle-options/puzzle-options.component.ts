@@ -6,7 +6,8 @@ import { PublishOptions } from 'src/app/model/publish-options';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
-import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { ClueEditorService } from '../../clue-editor.service';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -16,25 +17,23 @@ import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-
 export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditorForm {
     public form: FormGroup;
     
-    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     @Input() public clueId: string;
 
     private subs: Subscription[] = [];
+    private instanceId: string = null;
 
     constructor(
         private activePuzzle: IActivePuzzle,
+        private editorService: ClueEditorService,
     ) { }
 
     public get answerColsArray(): FormArray {
         return this.form.get("answerCols") as FormArray;
     }
     public ngOnInit() {
-
-        this.instance.emit({ 
-            save: () => Promise.resolve(false),
-         });
+        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
         this.form = new FormGroup({
             "answerCols": new FormArray([]),
@@ -63,6 +62,7 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditorFor
 
     public  ngOnDestroy() {
         this.subs.forEach(s => s .unsubscribe());
+        this.editorService.unRegister(this.instanceId);
     }
 
     public onAddColumn() {

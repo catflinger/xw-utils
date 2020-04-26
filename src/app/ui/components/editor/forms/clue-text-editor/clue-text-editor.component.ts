@@ -11,7 +11,8 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
-import { ClueEditorFormInstance, IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { ClueEditorService } from '../../clue-editor.service';
 
 export interface ClueEditModel {
     id: string;
@@ -27,6 +28,7 @@ export interface ClueEditModel {
 })
 export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];
+    private instanceId: string = null;
 
     public form: FormGroup;
     public title = "";
@@ -34,19 +36,16 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
 
-    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
     @Output() dirty = new EventEmitter<void>();
 
     constructor(
         private activePuzzle:IActivePuzzle,
+        private editorService: ClueEditorService,
         private formBuilder: FormBuilder,
     ) { }
 
     public ngOnInit() {
-
-        this.instance.emit({ 
-            save: () => Promise.resolve(false),
-         });
+        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
@@ -103,6 +102,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+        this.editorService.unRegister(this.instanceId);
     }
 
     private onSave(): boolean {

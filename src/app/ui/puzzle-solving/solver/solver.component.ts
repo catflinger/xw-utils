@@ -66,7 +66,7 @@ export class SolverComponent implements OnInit {
     
     @HostListener('window:keydown', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (this.puzzle && !this.editorService.isOpen) {
+        if (this.puzzle && !this.editorService.isActive) {
             if (event.key === "Enter") {
                 event.stopPropagation();
                 let clue = this.puzzle.getSelectedClue();
@@ -92,10 +92,10 @@ export class SolverComponent implements OnInit {
     }
 
     public get showPuzzle(): boolean {
-        const mode = this.appSettings.editorMode;
         let result = true;
 
         if (this.appSettings) {
+            const mode = this.appSettings.editorMode;
             if (this._showEditor && mode === "fullscreen") {
                 result = false;
             }
@@ -104,10 +104,10 @@ export class SolverComponent implements OnInit {
     }
 
     public get showEditor(): boolean {
-        const mode = this.appSettings.editorMode;
         let result = false;
 
         if (this.appSettings) {
+            const mode = this.appSettings.editorMode;
             if (this._showEditor && (mode === "fullscreen" || mode === "inline")) {
                 result = true;
             }

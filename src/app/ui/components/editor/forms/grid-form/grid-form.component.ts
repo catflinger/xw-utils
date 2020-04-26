@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { IClueEditorForm, ClueEditorFormInstance } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { UpdateCell } from 'src/app/modifiers/grid-modifiers/update-cell';
@@ -7,6 +7,7 @@ import { GridCell } from 'src/app/model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle';
 import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
 import { BarClickEvent } from '../../../grid/grid.component';
+import { ClueEditorService } from '../../clue-editor.service';
 
 @Component({
     selector: 'app-grid-form',
@@ -16,20 +17,18 @@ import { BarClickEvent } from '../../../grid/grid.component';
 export class GridFormComponent implements OnInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];
     private puzzle: Puzzle;
+    private instanceId: string = null;
 
-    @Output() instance = new EventEmitter<ClueEditorFormInstance>();
-    @Output() dirty = new EventEmitter<void>();
+   @Output() dirty = new EventEmitter<void>();
 
     constructor(
         private activePuzzle:IActivePuzzle,
+        private editorService: ClueEditorService,
     ) { }
 
     public ngOnInit() {
+        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
-        this.instance.emit({ 
-            save: () => Promise.resolve(false),
-         });
-        
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.puzzle = puzzle;
 
@@ -40,6 +39,7 @@ export class GridFormComponent implements OnInit, OnDestroy, IClueEditorForm {
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+        this.editorService.unRegister(this.instanceId);
     }
 
     public onCellClick(cell: GridCell) {
