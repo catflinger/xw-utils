@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, DoCheck } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, DoCheck, ChangeDetectionStrategy } from '@angular/core';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -11,7 +11,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;

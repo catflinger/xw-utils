@@ -17,6 +17,13 @@
             </ng-template>
         </li>
 
+        <li ngbNavItem="AddRemoveClueComponent">
+            <a ngbNavLink>Add remove</a>
+            <ng-template ngbNavContent>
+                <app-add-remove-clue (dirty)="onDirty()"></app-add-remove-clue>
+            </ng-template>
+        </li>
+
         <li ngbNavItem="GridLinkerComponent" *ngIf="puzzle.grid">
             <a ngbNavLink>Grid entries</a>
             <ng-template ngbNavContent>

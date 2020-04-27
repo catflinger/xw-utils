@@ -45,7 +45,7 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
     ) { }
 
     public ngOnInit() {
-        this.instanceId = this.editorService.register(() => Promise.resolve(false));
+        this.instanceId = this.editorService.register(() => this.onSave());
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
@@ -105,16 +105,13 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
         this.editorService.unRegister(this.instanceId);
     }
 
-    private onSave(): boolean {
-        let result: boolean;
+    private onSave(): Promise<boolean> {
+        let result: boolean = false;
 
         let mods: IPuzzleModifier[] = [];
 
-        if (!this.form.dirty) {
-            result = false;
-            
-        } else {
-            
+        if (this.form.dirty) {
+           
             // TO DO: validate the entry
             // return result = true if validation fails
             
@@ -146,10 +143,8 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             );
 
             this.activePuzzle.update(...mods);
-
-            result = false;
         }
         
-        return result;
+        return Promise.resolve(result);
     }
 }

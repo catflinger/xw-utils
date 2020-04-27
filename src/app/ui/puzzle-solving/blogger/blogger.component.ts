@@ -78,7 +78,8 @@ export class BloggerComponent implements OnInit, OnDestroy {
     onRowClick(clue: Clue) {
         this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
 
-        Promise.resolve().then(() => this.openEditor());
+        //Promise.resolve().then(() => this.openEditor());
+        this.openEditor();
     }
 
     // vvvvvvvvvvv from here down shared with solver vvvvvvvvvvvvvvvvvvv

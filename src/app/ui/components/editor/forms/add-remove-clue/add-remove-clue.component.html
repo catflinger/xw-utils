@@ -1,0 +1,36 @@
+<div *ngIf="clue">
+    <div class="row mt-3">
+        <div class="col font-weight-bold">{{clue.caption}} {{clue.text}}</div>
+    </div>
+
+    <div class="row mt-3 border-top border-dark">
+        <div class="col p-3">
+            <button type="button" class="btn btn-primary">Add a new clue</button>
+        </div>
+    </div>
+
+    <div class="row mt-3 border-top border-dark">
+        <div class="col p-3">
+            <button type="button" class="btn btn-primary">Remove this clue</button>
+        </div>
+    </div>
+
+
+    <div class="row mt-3 border-top border-dark">
+        <div class="col p-3">
+            <div class="row">
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary">Split this clue</button>
+                </div>
+                <div class="col-10">
+                    <span *ngFor="let letter of letters; index as i" (click)="onLetterClick(i)">{{letter}}</span>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="false">
+                <div class="col text-danger">
+                    Please select where to break the clue
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

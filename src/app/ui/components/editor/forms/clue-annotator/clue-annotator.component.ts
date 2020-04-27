@@ -236,7 +236,10 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
                 if (this.grid) {
                     this.clue.link.entries.forEach(entry => {
-                        lengthAvailable += this.grid.getGridEntryFromReference(entry.gridRef).length;
+                        let ge = this.grid.getGridEntryFromReference(entry.gridRef);
+                        if (ge) {
+                            lengthAvailable += ge.length;
+                        }
                     })
                 }
 
@@ -328,40 +331,43 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         let index = 0;
 
         this.clue.link.entries.forEach((entry) => {
-            grid.getGridEntryFromReference(entry.gridRef)
-            .map(c => c.id)
-            .forEach((id) => {
-                let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
+            let ge = grid.getGridEntryFromReference(entry.gridRef);
 
-                // choose in order of preference:
-                //     - a letter from the answer
-                //     - a letter from the grid
-                //     - a placeholder
+            if (ge) {
+                ge.map(c => c.id)
+                .forEach((id) => {
+                    let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
-                let letter = "_";
-                let klass: AnswerTextKlass = "placeholder";
+                    // choose in order of preference:
+                    //     - a letter from the answer
+                    //     - a letter from the grid
+                    //     - a placeholder
 
-                let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
-                let editorEntry = answer.length > index ? answer.charAt(index) : null;
+                    let letter = "_";
+                    let klass: AnswerTextKlass = "placeholder";
 
-                if (!gridEntry) {
-                    if (editorEntry) {
-                        letter = editorEntry;
-                        klass = "editorEntry";
-                    }
-                } else {
-                    if (editorEntry && gridEntry !== editorEntry) {
-                        letter = editorEntry;
-                        klass = "clash";
+                    let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
+                    let editorEntry = answer.length > index ? answer.charAt(index) : null;
+
+                    if (!gridEntry) {
+                        if (editorEntry) {
+                            letter = editorEntry;
+                            klass = "editorEntry";
+                        }
                     } else {
-                        letter = gridEntry;
-                        klass = "gridEntry";
+                        if (editorEntry && gridEntry !== editorEntry) {
+                            letter = editorEntry;
+                            klass = "clash";
+                        } else {
+                            letter = gridEntry;
+                            klass = "gridEntry";
+                        }
                     }
-                }
 
-                result.push(new AnswerTextChunk(letter, klass));
-                index++;
-            })
+                    result.push(new AnswerTextChunk(letter, klass));
+                    index++;
+                });
+            }
         });
 
         return result;
