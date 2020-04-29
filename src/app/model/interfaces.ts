@@ -1,8 +1,6 @@
 import { DeltaOperation } from 'quill';
 import { DateTime } from 'luxon';
-import { ClueEditModel } from '../ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
 import { GridLink } from './grid-link';
-import { Grid } from './grid';
 
 export type Base64Encoded = string;
 
@@ -233,7 +231,6 @@ export abstract class ITokenGroup {
         abstract readonly current: IParseToken;
         abstract readonly next: IParseToken;
 }
-
 
 export abstract class ITextParsingError {
     public readonly code: TextParsingErrorCode;
