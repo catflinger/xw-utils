@@ -3,7 +3,7 @@ import { PuzzleInfo } from './puzzle-info';
 import { PuzzleAnnotation } from './puzzle-annotation';
 import { Grid } from './grid';
 import { Clue } from './clue';
-import { IPuzzle } from './interfaces';
+import { IPuzzle } from '../model3/interfaces';
 import { PuzzleProvision } from './puzzle-provision';
 import { PuzzleCapability } from './puzzle-capability';
 import { PuzzleOptions } from './puzzle-options';
@@ -20,7 +20,7 @@ export class Puzzle implements IPuzzle {
     public readonly uncommitted: boolean;
 
     public readonly grid: Grid;
-    public readonly clues: readonly Clue[];
+    public readonly clues: Clue[];
     //public readonly linked: boolean;
 
     public readonly revision: number;

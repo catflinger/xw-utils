@@ -6,8 +6,7 @@ import { Puzzle } from '../../model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
 import { IPuzzleModifier } from '../../modifiers/puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, QuillDelta, PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
-import { PuzzleM } from '../../modifiers/mutable-model/puzzle-m';
+import { PuzzleProvider, IPuzzleSummary } from '../../model3/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../../ui/services/app.service';
 import { ApiSymbols } from '../common';
@@ -16,6 +15,8 @@ import { Grid } from '../../model/grid';
 import { AddGrid } from '../../modifiers/grid-modifiers/add-grid';
 import { MarkAsCommitted } from '../../modifiers/puzzle-modifiers/mark-as-committed';
 import { MarkAsUncommitted } from '../../modifiers/puzzle-modifiers/mark-as-uncommitted';
+import { IPuzzle } from 'src/app/model3/interfaces';
+import { QuillDelta } from 'src/app/model/quill-delta';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -108,7 +109,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     public newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): Puzzle {
         let result: Puzzle = null;
 
-        let puzzle: PuzzleM = this.makeEmptyPuzzle(provider);
+        let puzzle: IPuzzle = this.makeEmptyPuzzle(provider);
 
         if (reducers) {
             reducers.forEach(reducer => reducer.exec(puzzle));
@@ -228,7 +229,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 let puzzle = new Puzzle(response.puzzle);
 
                 // add some defaults
-                let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
+                let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
                 new InitAnnotationWarnings().exec(puzzleM);
 
                 this.localStorageService.putPuzzle(puzzleM);
@@ -290,7 +291,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     private usePuzzle(puzzle: IPuzzle) {
         // create a mutable copy
-        let puzzleM: PuzzleM = JSON.parse(JSON.stringify(puzzle));
+        let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
 
         // reset to unused state
         new Clear().exec(puzzleM);
@@ -300,8 +301,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.bsActive.next(new Puzzle(puzzleM));
     }
 
-    private getMutableCopy(puzzle: Puzzle): PuzzleM {
-        return JSON.parse(JSON.stringify(this.bsActive.value)) as PuzzleM;
+    private getMutableCopy(puzzle: Puzzle): IPuzzle {
+        return JSON.parse(JSON.stringify(this.bsActive.value)) as IPuzzle;
     }
 
     private getSavedPuzzle(id: string): Promise<Puzzle> {
@@ -317,7 +318,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.refreshPuzzleList();
     }
 
-    private makeEmptyPuzzle(provider: PuzzleProvider): PuzzleM {
+    private makeEmptyPuzzle(provider: PuzzleProvider): IPuzzle {
         return {
             clues: null,
             grid: null,

@@ -7,11 +7,10 @@ import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { TipInstance, TipStatus } from '../../../tip/tip-instance';
-import { ClueValidationWarning } from 'src/app/model/interfaces';
+import { ClueValidationWarning, IPuzzle } from 'src/app/model3/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle';
-import { PuzzleM } from 'src/app//modifiers/mutable-model/puzzle-m';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { Grid } from 'src/app/model/grid';
@@ -376,7 +375,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     // this function takes the model and creates a copy set to the state the original would have been
     // if the current clue had not yet been attempted
     private makeShadowPuzzle(original: Puzzle, clueId: string): Puzzle {
-        let puzzle = JSON.parse(JSON.stringify(original)) as PuzzleM;
+        let puzzle = JSON.parse(JSON.stringify(original)) as IPuzzle;
 
         if (puzzle.grid) {
             let grid = new Grid(puzzle.grid);

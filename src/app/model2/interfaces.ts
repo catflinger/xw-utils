@@ -407,39 +407,3 @@ export const recordFactories = {
 
     //TO DO: finish adding these...
 };
-
-
-interface ImFoo {
-    readonly name: string;
-}
-
-const Base = (defaultValues)=> class extends Record<ImFoo>(defaultValues) {
-}
-
-class Foo extends Base({ name: null }) {
-
-    constructor(val: string) {
-        super({ name: val })
-    }
-
-    sayMyName() {
-        console.log(this.name);
-    }
-}
-
-//USAGE EXAMPLE
-
-const me = new Foo("paul");
-
-me.sayMyName();
-
-
-const rf = recordFactories;
-// import { recordFactories as rf } from "../etc/interfaces"
-
-const puzzle9Bar = rf.puzzle({ 
-    revision: 9, 
-    clues: List<ImClue>([
-        rf.clue({ id: "bar"})
-    ]) 
-});

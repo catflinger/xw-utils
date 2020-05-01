@@ -1,8 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { Layouts, Spacing } from 'src/app/model/interfaces';
-import { TextStyle } from 'src/app/model/text-style';
-import { TextColumn } from 'src/app/model/text-column';
+import { IPuzzle, Layouts } from '../../model3/interfaces';
+import { Spacing } from 'src/app/model3/interfaces';
 
 export type PublishOptionsUpdate = { 
     includeGrid?: boolean; 
@@ -15,7 +13,7 @@ export type PublishOptionsUpdate = {
 export class UpdatePublsihOptions implements IPuzzleModifier {
     constructor(private options: PublishOptionsUpdate) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (!this.options) {
             return;
         }

@@ -1,11 +1,11 @@
-import { IPuzzleProvision } from './interfaces';
+import { IPuzzleProvision } from '../model3/interfaces';
 import { TextParsingError } from './text-parsing-error';
 import { TextParsingWarning } from './text-parsing-warning';
 
 export class PuzzleProvision implements IPuzzleProvision {
     public readonly source: string;
-    public readonly parseErrors: ReadonlyArray<TextParsingError>;
-    public readonly parseWarnings: ReadonlyArray<TextParsingWarning>;
+    public readonly parseErrors: Array<TextParsingError>;
+    public readonly parseWarnings: Array<TextParsingWarning>;
 
     constructor(data: any) {
         let errors: TextParsingError[] = [];

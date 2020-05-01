@@ -1,10 +1,10 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from 'src/app/model3/interfaces';
 
 export class ClearShading implements IPuzzleModifier {
     constructor() { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle.grid) {
             puzzle.grid.cells.forEach((cell) => {
                 cell.shading = null;

@@ -1,4 +1,4 @@
-import { ClueGroup, Direction } from 'src/app/model/interfaces';
+import { ClueGroup, Direction } from 'src/app/model3/interfaces';
 import { GridReference } from 'src/app/model/grid-reference';
 import { Clue } from 'src/app/model/clue';
 import { clueCaptionExpression, clueCaptionExpressionAdditionalPart } from './types';

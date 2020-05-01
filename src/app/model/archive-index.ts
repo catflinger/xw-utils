@@ -1,5 +1,5 @@
 import { ArchiveItem } from './archive-item';
-import { PuzzleProvider } from './interfaces';
+import { PuzzleProvider } from '../model3/interfaces';
 
 export class ArchiveIndex {
     public readonly provider: PuzzleProvider;

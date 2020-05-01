@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
-import { ClueGroup } from 'src/app/model/interfaces';
+import { ClueGroup } from 'src/app/model3/interfaces';
 import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';

@@ -1,4 +1,4 @@
-import { IDiary } from './interfaces';
+import { IDiary } from '../model3/interfaces';
 import { DiaryEntry } from './diary-entry';
 
 export class Diary implements IDiary {

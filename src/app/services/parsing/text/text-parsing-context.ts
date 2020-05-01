@@ -1,6 +1,4 @@
-import { v4 as uuid } from "uuid";
 import { Clue } from '../../../model/clue';
-import { QuillDelta } from 'src/app/model/interfaces';
 import { ClueBuffer } from './clue-buffer';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingWarning } from 'src/app/model/text-parsing-warning';

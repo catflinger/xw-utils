@@ -8,7 +8,7 @@ import { TokeniserService } from './tokeniser/tokeniser.service';
 
 import { data as testData } from "./mocks/pdf-extract-1";
 import { Grid } from 'src/app/model/grid';
-import { GridStyle, ClueGroup } from 'src/app/model/interfaces';
+import { GridStyle, ClueGroup } from 'src/app/model3/interfaces';
 import { GridCellM } from 'src/app/modifiers/mutable-model/grid-cell-m';
 import { GridM } from 'src/app/modifiers/mutable-model/grid-m';
 

@@ -1,17 +1,17 @@
 import { v4 as uuid } from "uuid";
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
-import { ClueGroup, QuillDelta } from 'src/app/model/interfaces';
+import { ClueGroup } from 'src/app/model3/interfaces';
 import { GridCell } from 'src/app/model/grid-cell';
-import { ClueM } from '../mutable-model/clue-m';
+import { IClue } from '../../model3/interfaces';
 import { RenumberGid } from '../grid-modifiers/renumber-grid';
 import { GridReference } from 'src/app/model/grid-reference';
 
 export class CreateClues implements IPuzzleModifier {
     constructor() { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle && puzzle.grid) {
             new RenumberGid().exec(puzzle);
             puzzle.clues = [];
@@ -30,7 +30,7 @@ export class CreateClues implements IPuzzleModifier {
         }
     }
 
-    private makeClues(puzzle: PuzzleM, grid: Grid, group: ClueGroup) {
+    private makeClues(puzzle: IPuzzle, grid: Grid, group: ClueGroup) {
         let clueNumber = 1;
         const maxCaption = grid.getMaxCaption();
         
@@ -50,7 +50,7 @@ export class CreateClues implements IPuzzleModifier {
         };
     }
 
-    private makeClue(clueGroup: ClueGroup, clueNumber: number, gridRef: GridReference, entryLength: number): ClueM {
+    private makeClue(clueGroup: ClueGroup, clueNumber: number, gridRef: GridReference, entryLength: number): IClue {
         let clueText = "Clue text...";
 
         return {
@@ -64,7 +64,7 @@ export class CreateClues implements IPuzzleModifier {
             annotation: null,
             redirect: false,
             format: ",".repeat(entryLength),
-            comment: new QuillDelta(),
+            comment: { ops: []},
             highlight: false,
             link: {
                 warning: null,

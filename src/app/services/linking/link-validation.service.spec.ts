@@ -1,11 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { LinkValidationService } from './link-validation.service';
-import { GridCellM } from 'src/app/modifiers/mutable-model/grid-cell-m';
-import { GridM } from 'src/app/modifiers/mutable-model/grid-m';
-import { QuillDelta, ClueGroup, IGridReference } from 'src/app/model/interfaces';
-import { PuzzleM } from 'src/app/modifiers/mutable-model/puzzle-m';
-import { ClueM } from 'src/app/modifiers/mutable-model/clue-m';
+import { ClueGroup, IGridCell, IPuzzle, IClue, IGrid } from 'src/app/model3/interfaces';
 import { Puzzle } from 'src/app/model/puzzle';
 
 describe('LinkValidationService', () => {
@@ -45,7 +41,7 @@ describe('LinkValidationService', () => {
 
 });
 
-function addGoodClue(clues: ClueM[]) {
+function addGoodClue(clues: IClue[]) {
     clues.push(makeClue(
         "0123",
         "12",
@@ -54,7 +50,7 @@ function addGoodClue(clues: ClueM[]) {
     ));
 }
 
- function addClueWithMissingNumber(clues: ClueM[]) {
+ function addClueWithMissingNumber(clues: IClue[]) {
     clues.push(makeClue(
         "0123",
         "12",
@@ -63,9 +59,9 @@ function addGoodClue(clues: ClueM[]) {
     ));
 }
 
-function emptyGridData(): GridM {
+function emptyGridData(): IGrid {
 
-    let grid: GridM = {
+    let grid: IGrid = {
         properties: {
             style: "standard",
             symmetrical: false,
@@ -79,7 +75,7 @@ function emptyGridData(): GridM {
 
     for (let x = 0; x < 5; x++) {
         for (let y = 0; y < 5; y++) {
-            let cell: GridCellM = {
+            let cell: IGridCell = {
                 id: x.toString() + y.toString(),
                 x,
                 y,
@@ -99,7 +95,7 @@ function emptyGridData(): GridM {
     return grid;
 }
 
-function getEmptyPuzzle(): PuzzleM {
+function getEmptyPuzzle(): IPuzzle {
     return {
         clues: [],
         grid: null,
@@ -124,9 +120,9 @@ function getEmptyPuzzle(): PuzzleM {
         },
         provision: null,
         notes: {
-            header: new QuillDelta(),
-            body: new QuillDelta(),
-            footer: new QuillDelta(),
+            header: { ops:[] },
+            body:  { ops:[] },
+            footer:  { ops:[] },
         },
         publishOptions: {
             textStyles: [
@@ -165,7 +161,7 @@ function getEmptyPuzzle(): PuzzleM {
     };
 }
 
-function makeClue(id: string, caption: string, group: ClueGroup, text: string): ClueM {
+function makeClue(id: string, caption: string, group: ClueGroup, text: string): IClue {
     return {
         id,
         group,
@@ -209,7 +205,7 @@ function testGridData() {
     cell.caption = 5;
 
     // set the blacked-out squares
-    let cells: GridCellM[] = [];
+    let cells: IGridCell[] = [];
 
     cells.push(data.cells.find(c => c.id === "11"))
     cells.push(data.cells.find(c => c.id === "31"))

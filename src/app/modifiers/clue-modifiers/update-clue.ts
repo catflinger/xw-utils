@@ -1,6 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { ClueGroup } from 'src/app/model/interfaces';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle, ClueGroup } from '../../model3/interfaces';
 import { Clue } from 'src/app/model/clue';
 
 export class UpdateClue implements IPuzzleModifier {
@@ -11,7 +10,7 @@ export class UpdateClue implements IPuzzleModifier {
         private text: string,
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             let clue = puzzle.clues.find((c) => c.id === this.id);
 

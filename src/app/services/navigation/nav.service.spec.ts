@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NavService } from './nav.service';
 import { MockRouter } from './mocks/mock-router';
 import { Router } from '@angular/router';
-import { NavProcessor, NavTrack } from './interfaces';
+import { NavProcessor, NavTrack } from '../model3/interfaces';
 
 //let mockTokeniser: MockTokeniserService = new MockTokeniserService();
 let mockRouter = new MockRouter();

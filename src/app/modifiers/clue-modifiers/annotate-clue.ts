@@ -1,9 +1,10 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { QuillDelta, ClueValidationWarning } from 'src/app/model/interfaces';
+import { ClueValidationWarning } from 'src/app/model3/interfaces';
 import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { SyncGridContent } from '../grid-modifiers/sync-grid-content';
 import { Clue } from 'src/app/model/clue';
+import { QuillDelta } from 'src/app/model/quill-delta';
 
 export class AnnotateClue implements IPuzzleModifier {
     constructor(
@@ -13,7 +14,7 @@ export class AnnotateClue implements IPuzzleModifier {
         private chunks: TextChunk[],
         private warnings: ClueValidationWarning[]) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         //console.log("MODIFIER annotate clue:  " + JSON.stringify({id: this.id, answers: this.answers, comment: this.comment}))
 
         let clue = puzzle.clues.find((c) => c.id === this.id);

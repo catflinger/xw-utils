@@ -1,6 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { GridM } from '../mutable-model/grid-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
 
 export class AddGrid implements IPuzzleModifier {
@@ -8,7 +7,7 @@ export class AddGrid implements IPuzzleModifier {
         public args: {grid: Grid}
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             if (typeof this.args.grid !== "undefined") {
                 puzzle.grid = JSON.parse(JSON.stringify(this.args.grid));

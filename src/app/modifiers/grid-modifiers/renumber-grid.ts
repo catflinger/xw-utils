@@ -1,13 +1,11 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { GridStyle, ClueGroup } from 'src/app/model/interfaces';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { GridCellM } from '../mutable-model/grid-cell-m';
-import { GridM } from '../mutable-model/grid-m';
+import { GridStyle, ClueGroup } from 'src/app/model3/interfaces';
+import { IPuzzle, IGrid, IGridCell } from '../../model3/interfaces';
 
 export class RenumberGid implements IPuzzleModifier {
     constructor() { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         let counter = 1;
 
         if (puzzle.grid) {
@@ -40,7 +38,7 @@ export class RenumberGid implements IPuzzleModifier {
         }
     }
 
-    private isStartCell(gridStyle: GridStyle, cell: GridCellM, previous: GridCellM, next: GridCellM, direction: ClueGroup): boolean {
+    private isStartCell(gridStyle: GridStyle, cell: IGridCell, previous: IGridCell, next: IGridCell, direction: ClueGroup): boolean {
         let result: boolean = false;
 
         if (gridStyle === "standard") {
@@ -64,28 +62,28 @@ export class RenumberGid implements IPuzzleModifier {
         return result;
 }
 
-    private nextCellAcross(grid: GridM, cell: GridCellM): GridCellM {
+    private nextCellAcross(grid: IGrid, cell: IGridCell): IGridCell {
         const x = cell.x;
         const y = cell.y;
 
         return x < grid.properties.size.across - 1 ? grid.cells.find(c => c.y === y && c.x === x + 1) : null; 
     }
 
-    private previousCellAcross(grid: GridM, cell: GridCellM): GridCellM {
+    private previousCellAcross(grid: IGrid, cell: IGridCell): IGridCell {
         const x = cell.x;
         const y = cell.y;
 
         return x > 0 ? grid.cells.find(c => c.y === y && c.x === x - 1) : null; 
     }
 
-    private nextCellDown(grid: GridM, cell: GridCellM): GridCellM {
+    private nextCellDown(grid: IGrid, cell: IGridCell): IGridCell {
         const x = cell.x;
         const y = cell.y;
 
         return y < grid.properties.size.down - 1 ? grid.cells.find(c => c.y === y + 1 && c.x === x) : null; 
     }
 
-    private previousCellDown(grid: GridM, cell: GridCellM): GridCellM {
+    private previousCellDown(grid: IGrid, cell: IGridCell): IGridCell {
         const x = cell.x;
         const y = cell.y;
 

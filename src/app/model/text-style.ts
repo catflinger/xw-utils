@@ -1,4 +1,4 @@
-import { ITextStyle, TextStyleName } from './interfaces';
+import { ITextStyle, TextStyleName } from '../model3/interfaces';
 
 export class TextStyle implements ITextStyle {
         public readonly name: TextStyleName;

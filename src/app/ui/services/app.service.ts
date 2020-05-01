@@ -2,7 +2,7 @@
 import { Injectable, OnDestroy, Type } from '@angular/core';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { Alert, AlertType } from '../common';
-import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
+import { PuzzleProvider, Base64Encoded } from 'src/app/model3/interfaces';
 
 // TO DO: do we still need this?
 export type LoginCallback = () => void;

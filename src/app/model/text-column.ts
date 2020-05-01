@@ -1,4 +1,4 @@
-import { ITextColumn, TextStyleName } from './interfaces'
+import { ITextColumn, TextStyleName } from '../model3/interfaces'
 
 export class TextColumn implements ITextColumn {
     public readonly caption: string;    

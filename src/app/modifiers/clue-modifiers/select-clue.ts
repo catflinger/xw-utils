@@ -1,12 +1,12 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
 
 export class SelectClue implements IPuzzleModifier {
     constructor(public readonly clueId: string) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             new Clear().exec(puzzle);
 

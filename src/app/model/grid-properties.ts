@@ -1,4 +1,4 @@
-import { GridStyle, IGridProperties } from './interfaces';
+import { GridStyle, IGridProperties } from '../model3/interfaces';
 import { GridSize } from './grid-size';
 
 export class GridProperties implements IGridProperties {

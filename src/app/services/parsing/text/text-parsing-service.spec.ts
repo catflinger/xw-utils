@@ -5,7 +5,7 @@ import { Line } from './line';
 import { ParseData } from './parse-data';
 import { MockTokeniserService } from './tokeniser/mock-tokeniser.service';
 import { IParseContext } from './text-parsing-context';
-import { IParseToken } from 'src/app/model/interfaces';
+import { IParseToken } from 'src/app/model3/interfaces';
 
 let mockTokeniser: MockTokeniserService = new MockTokeniserService();
 

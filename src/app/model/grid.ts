@@ -1,11 +1,11 @@
-import { IGrid, GridNavigation, Direction, ClueGroup, IGridReference } from './interfaces';
+import { IGrid, GridNavigation, Direction, ClueGroup, IGridReference } from '../model3/interfaces';
 import { GridCell } from './grid-cell';
 import { GridProperties } from './grid-properties';
 import { GridReference } from './grid-reference';
 
 export class Grid implements IGrid {
     public readonly properties: GridProperties;
-    public readonly cells: readonly GridCell[];
+    public readonly cells: GridCell[];
 
     constructor(data: any) {
         if (data.size) {

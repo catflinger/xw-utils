@@ -1,11 +1,11 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
 
 export class ValidateLetterCounts implements IPuzzleModifier {
     public constructor() {}
 
-    public exec(puzzle: PuzzleM) {
+    public exec(puzzle: IPuzzle) {
         if (puzzle && puzzle.clues && puzzle.grid) {
             let grid = new Grid(puzzle.grid);
 

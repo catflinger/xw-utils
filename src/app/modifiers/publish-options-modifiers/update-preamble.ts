@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { QuillDelta } from 'src/app/model/interfaces';
+import { IPuzzle } from '../../model3/interfaces';
+import { QuillDelta } from 'src/app/model/quill-delta';
 
 export class UpdatePreamble implements IPuzzleModifier {
     constructor(
@@ -8,7 +8,7 @@ export class UpdatePreamble implements IPuzzleModifier {
         private header:  QuillDelta, 
         private body:  QuillDelta) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         puzzle.info.title = this.title ? this.title : "untitled";
         puzzle.notes.header = this.header;
         puzzle.notes.body = this.body;

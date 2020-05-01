@@ -1,4 +1,4 @@
-import { IGridCell } from './interfaces';
+import { IGridCell } from '../model3/interfaces';
 
 export class GridCell implements IGridCell {
     public readonly id: string;

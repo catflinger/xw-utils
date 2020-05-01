@@ -1,8 +1,7 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, IClue } from 'src/app/model/interfaces';
+import { IPuzzle, IClue } from 'src/app/model3/interfaces';
 import { Clear } from '../puzzle-modifiers/clear';
 import { SelectClue } from './select-clue';
-import { PuzzleM } from '../mutable-model/puzzle-m';
 import { Grid } from 'src/app/model/grid';
 
 export class SelectClueByCell implements IPuzzleModifier {
@@ -10,7 +9,7 @@ export class SelectClueByCell implements IPuzzleModifier {
         private cellId: string,
         ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         new Clear().exec(puzzle);
 
         if (this.cellId && puzzle.grid) {

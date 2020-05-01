@@ -1,14 +1,14 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { ClueM } from '../mutable-model/clue-m';
+import { IPuzzle } from '../../model3/interfaces';
+import { IClue } from '../../model3/interfaces';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
 
 export class SetGridReferences implements IPuzzleModifier {
     constructor(private clueIds?: string[]) { }
 
-    public exec(puzzle: PuzzleM) {
+    public exec(puzzle: IPuzzle) {
         if (puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
-            let clues: ClueM[];
+            let clues: IClue[];
 
             if (!this.clueIds) {
                 clues = puzzle.clues;

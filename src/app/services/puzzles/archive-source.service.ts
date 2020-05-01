@@ -4,7 +4,7 @@ import { ApiResponse, ApiResponseStatus } from '../common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Archive } from '../../model/archive';
 import { environment } from 'src/environments/environment';
-import { PuzzleProvider } from '../../model/interfaces';
+import { PuzzleProvider } from '../../model3/interfaces';
 
 interface ArchiveItemResponse {
     setter: string;

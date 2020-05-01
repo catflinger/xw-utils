@@ -1,11 +1,11 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
 
 export class SyncGridContent implements IPuzzleModifier {
     constructor() { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (!puzzle || !puzzle.clues || !puzzle.grid) {
             return;
         }

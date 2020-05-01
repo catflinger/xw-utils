@@ -1,9 +1,6 @@
 import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { ClueGroup, QuillDelta } from 'src/app/model/interfaces';
-import { GridEntryM } from '../mutable-model/grid-entry-m';
-import { ClueM } from '../mutable-model/clue-m';
+import { IPuzzle, IClue, IGridEntry, ClueGroup } from '../../model3/interfaces';
 import { SortClues } from './sort-clues';
 
 describe('SortClues modifier', () => {
@@ -33,7 +30,7 @@ describe('SortClues modifier', () => {
     });
 });
 
-function addTestClues(puzzle: PuzzleM) {
+function addTestClues(puzzle: IPuzzle) {
 
     // add 5 across
     puzzle.clues.push(makeClue(
@@ -90,7 +87,7 @@ function addTestClues(puzzle: PuzzleM) {
 
 }
 
-function makeClue(caption: string, group: ClueGroup, text: string, entries: GridEntryM[]): ClueM {
+function makeClue(caption: string, group: ClueGroup, text: string, entries: IGridEntry[]): IClue {
     return {
         id: "",
         group,
@@ -113,7 +110,7 @@ function makeClue(caption: string, group: ClueGroup, text: string, entries: Grid
     };
 }
 
-function getEmptyPuzzle(): PuzzleM {
+function getEmptyPuzzle(): IPuzzle {
     return {
         clues: [],
         grid: null,
@@ -139,9 +136,9 @@ function getEmptyPuzzle(): PuzzleM {
         },
         provision: null,
         notes: {
-            header: new QuillDelta(),
-            body: new QuillDelta(),
-            footer: new QuillDelta(),
+            header: { ops: [] },
+            body: { ops: [] },
+            footer: { ops: [] },
         },
         publishOptions: {
             textStyles: [

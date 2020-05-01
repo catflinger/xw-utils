@@ -8,7 +8,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
-import { ITextParsingError } from 'src/app/model/interfaces';
+import { ITextParsingError } from 'src/app/model3/interfaces';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 

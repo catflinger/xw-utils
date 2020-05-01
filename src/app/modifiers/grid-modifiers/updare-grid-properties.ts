@@ -1,7 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { GridProperties } from 'src/app/model/grid-properties';
-import { GridStyle } from 'src/app/model/interfaces';
+import { IPuzzle, GridStyle } from '../../model3/interfaces';
 import { GridSize } from 'src/app/model/grid-size';
 
 export class UpdateGridProperties implements IPuzzleModifier {
@@ -9,7 +7,7 @@ export class UpdateGridProperties implements IPuzzleModifier {
         public args: { style?: GridStyle, size?: GridSize, symmetrical?: boolean },
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             if (this.args) {
                 if (this.args.style) {

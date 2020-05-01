@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { IPuzzleSummary } from 'src/app/model/interfaces';
+import { IPuzzleSummary } from 'src/app/model3/interfaces';
 
 @Component({
     selector: 'app-home',

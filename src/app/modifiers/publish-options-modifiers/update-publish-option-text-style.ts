@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { TextStyleName } from 'src/app/model/interfaces';
+import { IPuzzle } from '../../model3/interfaces';
+import { TextStyleName } from 'src/app/model3/interfaces';
 
 export class UpdatePublsihOptionTextStyle implements IPuzzleModifier {
     constructor(
@@ -10,7 +10,7 @@ export class UpdatePublsihOptionTextStyle implements IPuzzleModifier {
         private italic: boolean, 
         private underline: boolean) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         let ts = puzzle.publishOptions.textStyles.find(ts => ts.name === this.textStyleName);
         ts.color = this.color;
         ts.bold = this.bold;

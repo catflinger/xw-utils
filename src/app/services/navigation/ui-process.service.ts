@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NavProcessor } from './interfaces';
 import { AppTrackData } from './tracks/app-track-data';
 import { AppService } from '../../ui/services/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
@@ -10,6 +9,7 @@ import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { CreateClues } from 'src/app/modifiers/clue-modifiers/create-clues';
 import { InitAnnotationWarnings } from 'src/app/modifiers/puzzle-modifiers/init-annotation-warnings';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { NavProcessor } from './interfaces';
 
 @Injectable({
     providedIn: 'root'

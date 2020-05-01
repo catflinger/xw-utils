@@ -1,6 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { ClueGroup } from 'src/app/model/interfaces';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle, ClueGroup } from '../../model3/interfaces';
 import { Clue } from 'src/app/model/clue';
 import { SortClues } from './sort-clues';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
@@ -13,7 +12,7 @@ export class AddClue implements IPuzzleModifier {
         private clueId?: string,
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             let fullText = this.caption + " " + this.text;
             const cb: ClueBuffer = new ClueBuffer(fullText, this.group);

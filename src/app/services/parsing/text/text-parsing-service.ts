@@ -5,7 +5,7 @@ import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, Ac
 import { IParseContext, ParseContext } from './text-parsing-context';
 import { Grid } from 'src/app/model/grid';
 import { ClueBuffer } from './clue-buffer';
-import { ClueGroup } from 'src/app/model/interfaces';
+import { ClueGroup } from 'src/app/model3/interfaces';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
 import { TextParsingOptions } from './types';
 import { Clue } from 'src/app/model/clue';

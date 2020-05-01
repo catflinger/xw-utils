@@ -1,9 +1,9 @@
-import { IGridLink, IGridEntry } from './interfaces';
+import { IGridLink, IGridEntry } from '../model3/interfaces';
 import { GridEntry } from './grid-entry';
 
 export class GridLink implements IGridLink {
     public readonly warning: string;
-    public readonly entries: ReadonlyArray<IGridEntry>;
+    public readonly entries: Array<GridEntry>;
 
     constructor(data: any) {
         if (data) {

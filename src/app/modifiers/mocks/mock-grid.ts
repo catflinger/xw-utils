@@ -1,4 +1,4 @@
-import { GridNavigation, Direction } from 'src/app/model/interfaces';
+import { GridNavigation, Direction } from 'src/app/model3/interfaces';
 import { GridProperties } from 'src/app/model/grid-properties';
 import { GridCell } from 'src/app/model/grid-cell';
 

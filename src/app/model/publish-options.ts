@@ -1,10 +1,10 @@
 import { TextStyle } from './text-style';
-import { IPublishOptions, Layouts, Spacing } from './interfaces';
+import { IPublishOptions, Layouts, Spacing } from '../model3/interfaces';
 import { TextColumn } from './text-column';
 
 export class PublishOptions implements IPublishOptions {
-    public readonly textCols: ReadonlyArray<TextColumn>;
-    public readonly textStyles: ReadonlyArray<TextStyle>;
+    public readonly textCols: Array<TextColumn>;
+    public readonly textStyles: Array<TextStyle>;
 
     public readonly includeGrid: boolean;
     public readonly layout: Layouts;

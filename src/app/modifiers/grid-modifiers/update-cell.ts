@@ -1,7 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
-import { Clear } from '../puzzle-modifiers/clear';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 
 export class UpdateCell implements IPuzzleModifier {
     constructor(
@@ -16,7 +14,7 @@ export class UpdateCell implements IPuzzleModifier {
         }
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             
             let cell = puzzle.grid.cells.find((cell) => cell.id === this.cellId);

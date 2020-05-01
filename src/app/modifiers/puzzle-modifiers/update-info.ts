@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
-import { PuzzleProvider } from 'src/app/model/interfaces';
+import { IPuzzle } from '../../model3/interfaces';
+import { PuzzleProvider } from 'src/app/model3/interfaces';
 
 export class UpdateInfo implements IPuzzleModifier {
     constructor(
@@ -16,7 +16,7 @@ export class UpdateInfo implements IPuzzleModifier {
         },
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (this.args.wordPressId !== undefined) {
             puzzle.info.wordpressId = this.args.wordPressId;
         }

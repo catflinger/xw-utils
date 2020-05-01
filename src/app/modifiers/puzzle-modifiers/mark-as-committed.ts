@@ -1,10 +1,10 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 
 export class MarkAsCommitted implements IPuzzleModifier {
     constructor() { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             puzzle.uncommitted = false;
         }

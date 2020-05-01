@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GridCellM } from 'src/app//modifiers/mutable-model/grid-cell-m';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -8,7 +7,7 @@ import { AddGrid } from 'src/app//modifiers/grid-modifiers/add-grid';
 import { Grid } from 'src/app/model/grid';
 import { GridProperties } from 'src/app/model/grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GridStyles } from 'src/app/model/interfaces';
+import { GridStyles, IGridCell } from 'src/app/model3/interfaces';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { AppService } from '../../services/app.service';
 
@@ -100,13 +99,13 @@ export class GridStartComponent implements OnInit, OnDestroy {
     }
 
     private createGrid(params: GridProperties): Grid {
-        let cells: GridCellM[] = [];
+        let cells: IGridCell[] = [];
         const cellsAcross = params.size.across;
         const cellsDown = params.size.down;
 
         for(let x = 0; x < cellsAcross; x++) {
             for(let y = 0; y < cellsDown; y++) {
-                let cell: GridCellM = {
+                let cell: IGridCell = {
                     id: `cell-${x}-${y}`,
                     x,
                     y,

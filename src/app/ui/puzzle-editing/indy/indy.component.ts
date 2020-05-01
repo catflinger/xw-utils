@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import moment from "moment";
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
-import { PuzzleProvider } from 'src/app/model/interfaces';
+import { PuzzleProvider } from 'src/app/model3/interfaces';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 

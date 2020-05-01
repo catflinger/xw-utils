@@ -1,12 +1,11 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from 'src/app/model/interfaces';
 import { Clear } from '../puzzle-modifiers/clear';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 
 export class SelectNextClue implements IPuzzleModifier {
     constructor(public readonly clueId: string) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         new Clear().exec(puzzle);
 
         let index = puzzle.clues.findIndex((clue) => clue.id === this.clueId);

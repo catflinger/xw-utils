@@ -1,12 +1,12 @@
 import { Puzzle } from 'src/app/model/puzzle';
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
-import { QuillDelta } from 'src/app/model/interfaces';
 import { Clue } from 'src/app/model/clue';
 import escape from "escape-html";
 import { TextChunk } from 'src/app/model/clue-text-chunk';
 import { PublishOptions } from 'src/app/model/publish-options';
 import { TextStyle } from 'src/app/model/text-style';
 import { ContentGenerator } from '../common';
+import { QuillDelta } from 'src/app/model/quill-delta';
 
 const marginSizes = {
     small: "2px",

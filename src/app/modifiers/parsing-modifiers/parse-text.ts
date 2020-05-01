@@ -1,9 +1,8 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle, ITextParsingError } from '../../model3/interfaces';
 import { Grid } from 'src/app/model/grid';
-import { TextParsingErrorM } from '../mutable-model/text-parsing-error-m';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
-import { PuzzleProvider } from 'src/app/model/interfaces';
+import { PuzzleProvider } from 'src/app/model3/interfaces';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
 import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
@@ -23,7 +22,7 @@ export class ParseText implements IPuzzleModifier {
         private providerService: ProviderService
     ) { }
 
-    public exec(puzzle: PuzzleM): void {
+    public exec(puzzle: IPuzzle): void {
         let parseData = new ParseData();
         parseData.clueDataType = "text";
         parseData.rawData = puzzle.provision.source;
@@ -45,7 +44,7 @@ export class ParseText implements IPuzzleModifier {
         try {
             puzzle.clues = JSON.parse(JSON.stringify(context.value.clues));
 
-            let error: TextParsingErrorM = JSON.parse(JSON.stringify(context.value.error));
+            let error: ITextParsingError = JSON.parse(JSON.stringify(context.value.error));
             puzzle.provision.parseErrors = error ? [error] : [];
             puzzle.provision.parseWarnings = JSON.parse(JSON.stringify(context.value.warnings));
 

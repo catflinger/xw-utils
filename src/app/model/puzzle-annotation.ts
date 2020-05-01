@@ -1,4 +1,5 @@
-import { IPuzzleAnnotation, QuillDelta } from './interfaces';
+import { IPuzzleAnnotation } from '../model3/interfaces';
+import { QuillDelta } from './quill-delta';
 
 export class PuzzleAnnotation implements IPuzzleAnnotation {
     public readonly header:  QuillDelta;

@@ -1,5 +1,5 @@
 import { Puzzle } from '../model/puzzle';
-import { ReadonlyQuillDelta } from '../model/interfaces';
+import { QuillDelta } from '../model/quill-delta';
 
 export enum ApiResponseStatus {
     OK = 0,
@@ -59,7 +59,7 @@ export interface AppSettings {
     readonly username: string;
     readonly general: GeneralSettings;
     readonly tips: TipSettings;
-    readonly footer: ReadonlyQuillDelta;
+    readonly footer: QuillDelta;
     readonly diary: DiarySettings;
     readonly sandbox: boolean;
     readonly editorMode: EditorMode;

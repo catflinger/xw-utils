@@ -1,4 +1,4 @@
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 
 export class DeleteClue implements IPuzzleModifier {
@@ -6,7 +6,7 @@ export class DeleteClue implements IPuzzleModifier {
         private id: string,
     ) { }
 
-    exec(puzzle: PuzzleM) {
+    exec(puzzle: IPuzzle) {
         if (puzzle) {
             let index = puzzle.clues.findIndex((c) => c.id === this.id);
 

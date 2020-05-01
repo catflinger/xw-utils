@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TextParsingError } from 'src/app/model/text-parsing-error';
-import { TextParsingErrorCode } from 'src/app/model/interfaces';
+import { TextParsingErrorCode } from 'src/app/model3/interfaces';
 
 @Component({
     selector: 'app-parse-error-hint',

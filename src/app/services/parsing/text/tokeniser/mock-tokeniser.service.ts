@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TokenList, TokeniserService } from './tokeniser.service';
-import { IParseToken } from 'src/app/model/interfaces';
+import { IParseToken } from 'src/app/model3/interfaces';
 
 @Injectable({
   providedIn: 'root'

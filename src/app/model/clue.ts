@@ -1,12 +1,12 @@
 import { v4 as uuid } from "uuid";
-import { ClueGroup, QuillDelta } from './interfaces';
+import { ClueGroup } from '../model3/interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
-import { ClueValidationWarning, IClue } from './interfaces';
-import { ClueM } from '..//modifiers/mutable-model/clue-m';
+import { ClueValidationWarning, IClue } from '../model3/interfaces';
 import { ClueBuffer } from '../services/parsing/text/clue-buffer';
 import { clueLetterCountExpression } from '../services/parsing/text/types';
 import { GridLink } from './grid-link';
+import { QuillDelta } from './quill-delta';
 
 export class Clue implements IClue {
     public readonly id: string;
@@ -14,7 +14,7 @@ export class Clue implements IClue {
     public readonly caption: string;        // "1 across, 2 down"
     public readonly text: string;           // "How to train a dragon (5, 4)"
     public readonly letterCount: string;    // "(5, 4)"
-    public readonly answers: ReadonlyArray<string>;
+    public readonly answers: Array<string>;
     public readonly solution: string;
     public readonly annotation: string;
     public readonly redirect: boolean;
@@ -23,8 +23,8 @@ export class Clue implements IClue {
     public readonly highlight: boolean;
     public readonly link: GridLink;
     //public readonly entries: ReadonlyArray<GridEntry>;
-    public readonly chunks: ReadonlyArray<TextChunk>;
-    public readonly warnings: ReadonlyArray<ClueValidationWarning>;
+    public readonly chunks: Array<TextChunk>;
+    public readonly warnings: Array<ClueValidationWarning>;
 
     constructor(data: any) {
         this.id = data.id;
@@ -212,7 +212,7 @@ export class Clue implements IClue {
         });
     }
 
-    public toMutable(): ClueM {
+    public toMutable(): IClue {
         return JSON.parse(JSON.stringify(this));
     }
 

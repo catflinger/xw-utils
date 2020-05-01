@@ -1,4 +1,4 @@
-import { IGridEntry, ClueGroup } from './interfaces';
+import { IGridEntry, ClueGroup } from '../model3/interfaces';
 import { GridReference } from './grid-reference';
 import { Grid } from './grid';
 

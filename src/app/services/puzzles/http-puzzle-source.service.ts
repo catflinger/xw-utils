@@ -4,7 +4,7 @@ import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
 import { AuthService } from '../app/auth.service';
 import { environment } from "../../../environments/environment";
 import { OpenPuzzleParamters } from '../../ui/services/app.service';
-import { Base64Encoded } from '../../model/interfaces';
+import { Base64Encoded } from '../../model3/interfaces';
 
 abstract class ApiPdfExtractResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;

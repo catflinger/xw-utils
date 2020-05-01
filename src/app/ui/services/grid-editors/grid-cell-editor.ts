@@ -1,5 +1,5 @@
 import { GridCell } from 'src/app/model/grid-cell';
-import { Direction, WritingDirection, GridNavigation } from 'src/app/model/interfaces';
+import { Direction, WritingDirection, GridNavigation } from 'src/app/model3/interfaces';
 import { Puzzle } from 'src/app/model/puzzle';
 import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modifier';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';

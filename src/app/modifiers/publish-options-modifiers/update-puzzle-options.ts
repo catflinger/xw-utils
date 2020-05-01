@@ -1,4 +1,4 @@
-import { PuzzleM } from '../mutable-model/puzzle-m';
+import { IPuzzle } from '../../model3/interfaces';
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 
 export class UpdatePuzzleOptions implements IPuzzleModifier {
@@ -6,7 +6,7 @@ export class UpdatePuzzleOptions implements IPuzzleModifier {
         private setGridRefsFromCaptions: boolean
     ) { }
 
-    public exec(puzzle: PuzzleM) {
+    public exec(puzzle: IPuzzle) {
         puzzle.options.setGridRefsFromCaptions = this.setGridRefsFromCaptions;
     }
 }
