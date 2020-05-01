@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { IPuzzle } from '../../model3/interfaces';
-import { QuillDelta } from 'src/app/model/quill-delta';
+import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 
 export class UpdatePreamble implements IPuzzleModifier {
     constructor(

@@ -1,7 +1,7 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
 import { IPuzzle } from '../../model3/interfaces';
-import { Grid } from 'src/app/model/grid';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class SelectClue implements IPuzzleModifier {
     constructor(public readonly clueId: string) { }

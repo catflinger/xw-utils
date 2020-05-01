@@ -1,4 +1,4 @@
-import { IGridReference, Direction } from '../model3/interfaces';
+import { IGridReference, Direction } from '../../model3/interfaces';
 import { v4 as uuid } from "uuid";
 import { ObjectUnsubscribedError } from 'rxjs';
 

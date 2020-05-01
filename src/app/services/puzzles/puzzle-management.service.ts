@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from '../storage/local-storage.service';
-import { Puzzle } from '../../model/puzzle';
+import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
 import { IPuzzleModifier } from '../../modifiers/puzzle-modifiers/puzzle-modifier';
@@ -11,12 +11,12 @@ import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-an
 import { OpenPuzzleParamters } from '../../ui/services/app.service';
 import { ApiSymbols } from '../common';
 import { UpdateInfo } from '../../modifiers/puzzle-modifiers/update-info';
-import { Grid } from '../../model/grid';
+import { Grid } from '../../model/puzzle-model/grid';
 import { AddGrid } from '../../modifiers/grid-modifiers/add-grid';
 import { MarkAsCommitted } from '../../modifiers/puzzle-modifiers/mark-as-committed';
 import { MarkAsUncommitted } from '../../modifiers/puzzle-modifiers/mark-as-uncommitted';
 import { IPuzzle } from 'src/app/model3/interfaces';
-import { QuillDelta } from 'src/app/model/quill-delta';
+import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.

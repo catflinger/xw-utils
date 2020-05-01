@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle';
-import { Clue } from 'src/app/model/clue';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import { ClueBuffer } from '../parsing/text/clue-buffer';
-import { Grid } from 'src/app/model/grid';
-import { GridReference } from 'src/app/model/grid-reference';
+import { Grid } from 'src/app/model/puzzle-model/grid';
+import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 
 
 export interface ILinkWarning {

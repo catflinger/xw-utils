@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Puzzle } from '../../model/puzzle';
+import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { ContentGeneratorTableLayout } from '../content-generator/content-generator-table-layout';
 import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols } from '../common';

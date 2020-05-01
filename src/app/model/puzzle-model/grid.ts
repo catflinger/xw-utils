@@ -1,4 +1,4 @@
-import { IGrid, GridNavigation, Direction, ClueGroup, IGridReference } from '../model3/interfaces';
+import { IGrid, GridNavigation, Direction, ClueGroup, IGridReference } from '../../model3/interfaces';
 import { GridCell } from './grid-cell';
 import { GridProperties } from './grid-properties';
 import { GridReference } from './grid-reference';

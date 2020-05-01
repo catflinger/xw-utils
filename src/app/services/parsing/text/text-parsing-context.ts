@@ -1,8 +1,8 @@
-import { Clue } from '../../../model/clue';
+import { Clue } from '../../../model/puzzle-model/clue';
 import { ClueBuffer } from './clue-buffer';
-import { TextParsingError } from 'src/app/model/text-parsing-error';
-import { TextParsingWarning } from 'src/app/model/text-parsing-warning';
-import { TokenGroup } from 'src/app/model/token-group';
+import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error';
+import { TextParsingWarning } from 'src/app/model/puzzle-model/text-parsing-warning';
+import { TokenGroup } from 'src/app/model/puzzle-model/token-group';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 

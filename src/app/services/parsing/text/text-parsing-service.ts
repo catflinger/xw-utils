@@ -3,12 +3,12 @@ import { ParseData } from "./parse-data";
 import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
 import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { IParseContext, ParseContext } from './text-parsing-context';
-import { Grid } from 'src/app/model/grid';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 import { ClueBuffer } from './clue-buffer';
 import { ClueGroup } from 'src/app/model3/interfaces';
-import { TextParsingError } from 'src/app/model/text-parsing-error';
+import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error';
 import { TextParsingOptions } from './types';
-import { Clue } from 'src/app/model/clue';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 
 @Injectable({
     providedIn: 'root'

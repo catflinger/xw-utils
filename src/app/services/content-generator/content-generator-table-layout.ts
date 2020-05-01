@@ -1,12 +1,12 @@
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
-import { Clue } from 'src/app/model/clue';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import escape from "escape-html";
-import { TextChunk } from 'src/app/model/clue-text-chunk';
-import { PublishOptions } from 'src/app/model/publish-options';
-import { TextStyle } from 'src/app/model/text-style';
+import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
+import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
+import { TextStyle } from 'src/app/model/puzzle-model/text-style';
 import { ContentGenerator } from '../common';
-import { QuillDelta } from 'src/app/model/quill-delta';
+import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 
 const paddingSizes = {
     small: "1px",

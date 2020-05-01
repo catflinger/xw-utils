@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IPuzzleManager } from '../puzzles/puzzle-management.service';
 import { AppSettingsService } from '../app/app-settings.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PuzzleInfo } from '../../model/puzzle-info';
+import { PuzzleInfo } from '../../model/puzzle-model/puzzle-info';
 import { HttpBackupSourceService } from './http-backup-source.service';
 
 export type MergeAction = "skip" | "replace";

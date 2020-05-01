@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
-import { TextParsingError } from 'src/app/model/text-parsing-error';
+import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 

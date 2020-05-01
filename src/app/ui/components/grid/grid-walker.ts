@@ -1,5 +1,5 @@
-import { GridCell } from "src/app/model/grid-cell";
-import { Grid } from 'src/app/model/grid';
+import { GridCell } from "src/app/model/puzzle-model/grid-cell";
+import { Grid } from 'src/app/model/puzzle-model/grid';
 import { Direction } from 'src/app/model3/interfaces';
 
 class GridWalker {

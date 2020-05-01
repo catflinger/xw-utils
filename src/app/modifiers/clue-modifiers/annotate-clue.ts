@@ -1,10 +1,10 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { ClueValidationWarning } from 'src/app/model3/interfaces';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
 import { IPuzzle } from '../../model3/interfaces';
 import { SyncGridContent } from '../grid-modifiers/sync-grid-content';
-import { Clue } from 'src/app/model/clue';
-import { QuillDelta } from 'src/app/model/quill-delta';
+import { Clue } from 'src/app/model/puzzle-model/clue';
+import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 
 export class AnnotateClue implements IPuzzleModifier {
     constructor(

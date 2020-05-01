@@ -1,12 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { IPuzzle } from '../../model3/interfaces';
-import { Grid } from 'src/app/model/grid';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 import { ClueGroup } from 'src/app/model3/interfaces';
-import { GridCell } from 'src/app/model/grid-cell';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { IClue } from '../../model3/interfaces';
 import { RenumberGid } from '../grid-modifiers/renumber-grid';
-import { GridReference } from 'src/app/model/grid-reference';
+import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 
 export class CreateClues implements IPuzzleModifier {
     constructor() { }

@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { GridM } from '..//modifiers/mutable-model/grid-m';
-import { GridCellM } from '..//modifiers/mutable-model/grid-cell-m';
 import { Grid } from './grid';
+import { IGridCell, IGrid } from '../../model3/interfaces';
 
 describe('Grid', () => {
 
@@ -152,7 +151,7 @@ function testGridData() {
     cell.caption = 5;
 
     // set the blacked-out squares
-    let cells: GridCellM[] = [];
+    let cells: IGridCell[] = [];
 
     cells.push(data.cells.find(c => c.id === "01"))
     cells.push(data.cells.find(c => c.id === "11"))
@@ -166,9 +165,9 @@ function testGridData() {
     return data;
 }
 
-function emptyGridData(): GridM {
+function emptyGridData(): IGrid {
 
-    let grid: GridM = {
+    let grid: IGrid = {
         properties: {
             style: "standard",
             symmetrical: false,
@@ -182,7 +181,7 @@ function emptyGridData(): GridM {
 
     for (let x = 0; x < 5; x++) {
         for (let y = 0; y < 5; y++) {
-            let cell: GridCellM = {
+            let cell: IGridCell = {
                 id: x.toString() + y.toString(),
                 x,
                 y,

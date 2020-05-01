@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { Clue } from 'src/app/model/clue';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Subscription } from 'rxjs';
 import { ClueTextChunk } from '../../../clue-text-control/clue-text-control.component';
 import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
@@ -10,10 +10,10 @@ import { TipInstance, TipStatus } from '../../../tip/tip-instance';
 import { ClueValidationWarning, IPuzzle } from 'src/app/model3/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../../confirm-modal/confirm-modal.component';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettings } from 'src/app/services/common';
-import { PublishOptions } from 'src/app/model/publish-options';
-import { Grid } from 'src/app/model/grid';
+import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 

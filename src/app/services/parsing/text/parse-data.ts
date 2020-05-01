@@ -1,4 +1,4 @@
-import { Grid } from '../../../model/grid';
+import { Grid } from '../../../model/puzzle-model/grid';
 
 export class ParseData {
 

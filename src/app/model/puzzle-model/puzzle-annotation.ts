@@ -1,4 +1,4 @@
-import { IPuzzleAnnotation } from '../model3/interfaces';
+import { IPuzzleAnnotation } from '../../model3/interfaces';
 import { QuillDelta } from './quill-delta';
 
 export class PuzzleAnnotation implements IPuzzleAnnotation {

@@ -1,4 +1,4 @@
-import { ITextChunk } from '../model3/interfaces';
+import { ITextChunk } from '../../model3/interfaces';
 
 export class TextChunk implements ITextChunk {
     public readonly text: string;

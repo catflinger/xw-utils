@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { UpdatePreamble } from 'src/app//modifiers/publish-options-modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { Clue } from 'src/app/model/clue';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';

@@ -1,4 +1,4 @@
-import { ITextParsingError, TextParsingErrorCode, ITextParsingWarning } from '../model3/interfaces';
+import { ITextParsingError, TextParsingErrorCode, ITextParsingWarning } from '../../model3/interfaces';
 import { TokenGroup } from './token-group';
 
 export class TextParsingError implements ITextParsingError {

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Clue } from 'src/app/model/clue';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Clue } from 'src/app/model/puzzle-model/clue';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
 import { SelectNextClue } from 'src/app//modifiers/clue-modifiers/select-next-clue';

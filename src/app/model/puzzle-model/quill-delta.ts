@@ -1,4 +1,4 @@
-import { IQuillDelta, IDeltaOperation } from '../model3/interfaces';
+import { IQuillDelta, IDeltaOperation } from '../../model3/interfaces';
 
 export class QuillDelta implements IQuillDelta {
     ops: IDeltaOperation[] = [];

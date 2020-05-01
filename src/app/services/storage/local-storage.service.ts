@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Puzzle } from '../../model/puzzle';
+import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { IPuzzle, IPuzzleSummary } from 'src/app/model3/interfaces';
 
 @Injectable({

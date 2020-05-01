@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { GridCell } from 'src/app/model/grid-cell';
-import { Puzzle } from 'src/app/model/puzzle';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';

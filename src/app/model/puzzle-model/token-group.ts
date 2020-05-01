@@ -1,4 +1,4 @@
-import { ITokenGroup, IParseToken } from '../model3/interfaces';
+import { ITokenGroup, IParseToken } from '../../model3/interfaces';
 
 export class TokenGroup implements ITokenGroup {
     public readonly previous: IParseToken;

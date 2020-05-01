@@ -1,4 +1,4 @@
-import { IDiaryEntry } from '../model3/interfaces';
+import { IDiaryEntry } from '../../model3/interfaces';
 import { DateTime } from 'luxon';
 
 export class DiaryEntry implements IDiaryEntry {

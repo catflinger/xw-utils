@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Clue } from 'src/app/model/clue';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { Subscription } from 'rxjs';
 

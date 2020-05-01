@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { LinkValidationService } from './link-validation.service';
 import { ClueGroup, IGridCell, IPuzzle, IClue, IGrid } from 'src/app/model3/interfaces';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 
 describe('LinkValidationService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

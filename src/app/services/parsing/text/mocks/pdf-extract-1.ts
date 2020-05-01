@@ -1,5 +1,5 @@
 import { ParseData } from '../parse-data';
-import { Grid } from 'src/app/model/grid';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 
 const rawData = `
 CROSSWORD

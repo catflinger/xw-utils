@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angu
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ClueEditorService } from '../clue-editor.service';
 
 export interface IClueEditorForm {

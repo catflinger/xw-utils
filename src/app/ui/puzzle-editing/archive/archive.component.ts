@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
-import { ArchiveItem } from 'src/app/model/archive-item';
+import { ArchiveItem } from 'src/app/model/archive-model/archive-item';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { ArchiveService } from 'src/app/services/puzzles/archive-source.service';
-import { Archive } from 'src/app/model/archive';
+import { Archive } from 'src/app/model/archive-model/archive';
 import { PuzzleProvider } from 'src/app/model3/interfaces';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';

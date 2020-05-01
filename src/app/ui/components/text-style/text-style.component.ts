@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { UpdatePublsihOptionTextStyle } from 'src/app//modifiers/publish-options-modifiers/update-publish-option-text-style';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { TextStyleName } from 'src/app/model3/interfaces';

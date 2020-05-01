@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GridParameters, GridControlOptions, GridParametersSmall } from '../common';
-import { Grid } from 'src/app/model/grid';
-import { GridCell } from 'src/app/model/grid-cell';
+import { Grid } from 'src/app/model/puzzle-model/grid';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 
 export class GridDisplayInfo {
     public top: number;

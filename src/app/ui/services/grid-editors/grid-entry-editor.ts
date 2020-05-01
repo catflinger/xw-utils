@@ -1,8 +1,8 @@
 import { WritingDirection, GridNavigation, Direction } from 'src/app/model3/interfaces';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modifier';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
-import { GridCell } from 'src/app/model/grid-cell';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { GridEditor, EditContext } from './grid-editor';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { SelectCellsForEdit } from 'src/app//modifiers/grid-modifiers/select-cells-for-edit';

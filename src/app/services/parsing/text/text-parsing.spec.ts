@@ -2,15 +2,12 @@
 
 import { TestBed } from '@angular/core/testing';
 import { TextParsingService } from './text-parsing-service';
-import { ParseData } from './parse-data';
 import { IParseContext } from './text-parsing-context';
 import { TokeniserService } from './tokeniser/tokeniser.service';
 
 import { data as testData } from "./mocks/pdf-extract-1";
-import { Grid } from 'src/app/model/grid';
-import { GridStyle, ClueGroup } from 'src/app/model3/interfaces';
-import { GridCellM } from 'src/app/modifiers/mutable-model/grid-cell-m';
-import { GridM } from 'src/app/modifiers/mutable-model/grid-m';
+import { Grid } from 'src/app/model/puzzle-model/grid';
+import { GridStyle, ClueGroup, IGridCell, IGrid } from 'src/app/model3/interfaces';
 
 let tokeniser: TokeniserService = new TokeniserService();
 
@@ -100,7 +97,7 @@ function getTestData(data: any): any {
     return data;
 }
 
-function isStartCell(gridStyle: GridStyle, cell: GridCellM, previous: GridCellM, next: GridCellM, direction: ClueGroup): boolean {
+function isStartCell(gridStyle: GridStyle, cell: IGridCell, previous: IGridCell, next: IGridCell, direction: ClueGroup): boolean {
     let result: boolean = false;
 
     if (gridStyle === "standard") {
@@ -124,28 +121,28 @@ function isStartCell(gridStyle: GridStyle, cell: GridCellM, previous: GridCellM,
     return result;
 }
 
-function nextCellAcross(grid: GridM, cell: GridCellM): GridCellM {
+function nextCellAcross(grid: IGrid, cell: IGridCell): IGridCell {
     const x = cell.x;
     const y = cell.y;
 
     return x < grid.properties.size.across - 1 ? grid.cells.find(c => c.y === y && c.x === x + 1) : null; 
 }
 
-function previousCellAcross(grid: GridM, cell: GridCellM): GridCellM {
+function previousCellAcross(grid: IGrid, cell: IGridCell): IGridCell {
     const x = cell.x;
     const y = cell.y;
 
     return x > 0 ? grid.cells.find(c => c.y === y && c.x === x - 1) : null; 
 }
 
-function nextCellDown(grid: GridM, cell: GridCellM): GridCellM {
+function nextCellDown(grid: IGrid, cell: IGridCell): IGridCell {
     const x = cell.x;
     const y = cell.y;
 
     return y < grid.properties.size.down - 1 ? grid.cells.find(c => c.y === y + 1 && c.x === x) : null; 
 }
 
-function previousCellDown(grid: GridM, cell: GridCellM): GridCellM {
+function previousCellDown(grid: IGrid, cell: IGridCell): IGridCell {
     const x = cell.x;
     const y = cell.y;
 

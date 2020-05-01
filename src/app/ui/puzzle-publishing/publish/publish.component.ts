@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService, PublishGridResult } from 'src/app/services/puzzles/publication.service';
 import { AppStatus, AppService } from 'src/app/ui/services/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ApiSymbols, PublishStatus, ContentGenerator } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { GridComponent } from '../../components/grid/grid.component';

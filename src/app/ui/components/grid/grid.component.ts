@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Subscription } from 'rxjs';
-import { GridCell } from 'src/app/model/grid-cell';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridParameters, GridControlOptions, GridParametersSmall, GridParametersLarge } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, ViewChildren, QueryList, EventEmitter, OnChanges, forwardRef, HostListener } from '@angular/core';
 import { ClueTextChunkComponent } from '../clue-text-chunk/clue-text-chunk.component';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TextChunk } from 'src/app/model/clue-text-chunk';
+import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
 
 // ClueTextChunk is a ViewModel representing the definition mask string in a ui-friendly way 
 export class ClueTextChunk {

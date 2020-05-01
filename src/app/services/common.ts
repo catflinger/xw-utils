@@ -1,5 +1,5 @@
-import { Puzzle } from '../model/puzzle';
-import { QuillDelta } from '../model/quill-delta';
+import { Puzzle } from '../model/puzzle-model/puzzle';
+import { QuillDelta } from '../model/puzzle-model/quill-delta';
 
 export enum ApiResponseStatus {
     OK = 0,

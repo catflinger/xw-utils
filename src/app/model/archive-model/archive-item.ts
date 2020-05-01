@@ -1,5 +1,5 @@
 import moment from "moment";
-import { PuzzleProvider } from '../model3/interfaces';
+import { PuzzleProvider } from '../../model3/interfaces';
 
 export class ArchiveItem {
     public readonly provider: PuzzleProvider;

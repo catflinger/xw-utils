@@ -2,7 +2,7 @@ import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { IPuzzle, IClue } from 'src/app/model3/interfaces';
 import { Clear } from '../puzzle-modifiers/clear';
 import { SelectClue } from './select-clue';
-import { Grid } from 'src/app/model/grid';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class SelectClueByCell implements IPuzzleModifier {
     constructor(

@@ -1,6 +1,6 @@
 import { GridNavigation, Direction } from 'src/app/model3/interfaces';
-import { GridProperties } from 'src/app/model/grid-properties';
-import { GridCell } from 'src/app/model/grid-cell';
+import { GridProperties } from 'src/app/model/puzzle-model/grid-properties';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 
 export class MockGrid {
     public properties: GridProperties;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Line } from '../line';
 import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken, StartMarkerToken, NullToken } from './tokens';
 import { TextParsingOptions } from '../types';
-import { TokenGroup } from 'src/app/model/token-group';
+import { TokenGroup } from 'src/app/model/puzzle-model/token-group';
 import { IParseToken } from 'src/app/model3/interfaces';
 
 export class TokenList {

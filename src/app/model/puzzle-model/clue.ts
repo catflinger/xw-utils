@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
-import { ClueGroup } from '../model3/interfaces';
+import { ClueGroup } from '../../model3/interfaces';
 import { GridEntry } from './grid-entry';
 import { TextChunk } from './clue-text-chunk';
-import { ClueValidationWarning, IClue } from '../model3/interfaces';
-import { ClueBuffer } from '../services/parsing/text/clue-buffer';
-import { clueLetterCountExpression } from '../services/parsing/text/types';
+import { ClueValidationWarning, IClue } from '../../model3/interfaces';
+import { ClueBuffer } from '../../services/parsing/text/clue-buffer';
+import { clueLetterCountExpression } from '../../services/parsing/text/types';
 import { GridLink } from './grid-link';
 import { QuillDelta } from './quill-delta';
 

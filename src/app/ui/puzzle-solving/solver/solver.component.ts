@@ -1,11 +1,11 @@
 import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle'; 
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle'; 
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { Subscription, combineLatest, Observable } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { GridCell } from 'src/app/model/grid-cell';
-import { Clue } from 'src/app/model/clue';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
+import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
 import { ClueEditorService } from '../../components/editor/clue-editor.service';

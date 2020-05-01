@@ -2,7 +2,7 @@ import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modi
 import { GridEntryEditor } from './grid-entry-editor';
 import { EditContext } from './grid-editor';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
-import { Puzzle } from 'src/app/model/puzzle';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 
 export class GridEntryEditorFluid extends GridEntryEditor {
 

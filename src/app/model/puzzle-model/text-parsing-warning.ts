@@ -1,4 +1,4 @@
-import { ITextParsingWarning } from '../model3/interfaces';
+import { ITextParsingWarning } from '../../model3/interfaces';
 
 export class TextParsingWarning implements ITextParsingWarning {
     public readonly lineNumber: number;
