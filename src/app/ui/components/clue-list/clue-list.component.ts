@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Direction } from 'src/app/model3/interfaces';
+import { Direction } from 'src/app/model/interfaces';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';

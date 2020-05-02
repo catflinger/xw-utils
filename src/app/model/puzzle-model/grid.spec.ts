@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Grid } from './grid';
-import { IGridCell, IGrid } from '../../model3/interfaces';
+import { IGridCell, IGrid } from '../interfaces';
 
 describe('Grid', () => {
 

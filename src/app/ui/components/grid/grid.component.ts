@@ -5,7 +5,7 @@ import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridParameters, GridControlOptions, GridParametersSmall, GridParametersLarge } from '../../common';
 import { GridPainterService } from '../../services/grid-painter.service';
-import { GridNavigation, WritingDirection } from 'src/app/model3/interfaces';
+import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
 

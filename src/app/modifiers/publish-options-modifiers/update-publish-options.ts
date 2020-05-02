@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, Layouts } from '../../model3/interfaces';
-import { Spacing } from 'src/app/model3/interfaces';
+import { IPuzzle, Layouts } from '../../model/interfaces';
+import { Spacing } from 'src/app/model/interfaces';
 
 export type PublishOptionsUpdate = { 
     includeGrid?: boolean; 

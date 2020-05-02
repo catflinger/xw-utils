@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
-import { PuzzleProvider } from 'src/app/model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 export class UpdateInfo implements IPuzzleModifier {
     constructor(

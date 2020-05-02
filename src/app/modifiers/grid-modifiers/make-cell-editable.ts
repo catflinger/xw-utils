@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 
 export class MakeCellEditable implements IPuzzleModifier {
     constructor(private cellId: string) { }

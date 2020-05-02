@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 
 export class SelectNextClue implements IPuzzleModifier {
     constructor(public readonly clueId: string) { }

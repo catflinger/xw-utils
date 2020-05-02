@@ -1,4 +1,4 @@
-import { IPuzzleProvision } from '../../model3/interfaces';
+import { IPuzzleProvision } from '../interfaces';
 import { TextParsingError } from './text-parsing-error';
 import { TextParsingWarning } from './text-parsing-warning';
 

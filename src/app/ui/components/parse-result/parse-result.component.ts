@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ITextParsingError } from 'src/app/model3/interfaces';
+import { ITextParsingError } from 'src/app/model/interfaces';
 
 @Component({
     selector: 'app-parse-result',

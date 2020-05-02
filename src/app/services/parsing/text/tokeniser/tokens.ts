@@ -1,5 +1,5 @@
 import { Line } from '../line';
-import { IParseToken } from 'src/app/model3/interfaces';
+import { IParseToken } from 'src/app/model/interfaces';
 
 export const parseTokenTypes = {
 

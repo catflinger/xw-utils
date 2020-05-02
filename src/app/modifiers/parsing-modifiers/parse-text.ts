@@ -1,8 +1,8 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, ITextParsingError } from '../../model3/interfaces';
+import { IPuzzle, ITextParsingError } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
-import { PuzzleProvider } from 'src/app/model3/interfaces';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 import { TextParsingService } from 'src/app/services/parsing/text/text-parsing-service';
 import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';

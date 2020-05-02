@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class SelectClue implements IPuzzleModifier {

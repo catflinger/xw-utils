@@ -1,4 +1,4 @@
-import { IGridLink, IGridEntry } from '../../model3/interfaces';
+import { IGridLink, IGridEntry } from '../interfaces';
 import { GridEntry } from './grid-entry';
 
 export class GridLink implements IGridLink {

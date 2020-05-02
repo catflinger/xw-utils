@@ -1,5 +1,5 @@
 import { ArchiveIndex } from './archive-index';
-import { PuzzleProvider } from '../../model3/interfaces';
+import { PuzzleProvider } from '../interfaces';
 
 export class Archive {
     public readonly indexes: ReadonlyArray<ArchiveIndex>;

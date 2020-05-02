@@ -1,4 +1,4 @@
-import { PuzzleProvider, IPuzzleCapability } from '../../model3/interfaces';
+import { PuzzleProvider, IPuzzleCapability } from '../interfaces';
 import { PuzzleProvision } from './puzzle-provision';
 
 export class PuzzleCapability implements IPuzzleCapability {

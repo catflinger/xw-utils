@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from 'src/app/model3/interfaces';
+import { IPuzzle } from 'src/app/model/interfaces';
 
 export class ClearShading implements IPuzzleModifier {
     constructor() { }

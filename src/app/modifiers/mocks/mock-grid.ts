@@ -1,4 +1,4 @@
-import { GridNavigation, Direction } from 'src/app/model3/interfaces';
+import { GridNavigation, Direction } from 'src/app/model/interfaces';
 import { GridProperties } from 'src/app/model/puzzle-model/grid-properties';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 

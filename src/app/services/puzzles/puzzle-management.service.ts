@@ -6,7 +6,7 @@ import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
 import { IPuzzleModifier } from '../../modifiers/puzzle-modifiers/puzzle-modifier';
-import { PuzzleProvider, IPuzzleSummary } from '../../model3/interfaces';
+import { PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../../ui/services/app.service';
 import { ApiSymbols } from '../common';
@@ -15,7 +15,7 @@ import { Grid } from '../../model/puzzle-model/grid';
 import { AddGrid } from '../../modifiers/grid-modifiers/add-grid';
 import { MarkAsCommitted } from '../../modifiers/puzzle-modifiers/mark-as-committed';
 import { MarkAsUncommitted } from '../../modifiers/puzzle-modifiers/mark-as-uncommitted';
-import { IPuzzle } from 'src/app/model3/interfaces';
+import { IPuzzle } from 'src/app/model/interfaces';
 import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 
 // Note: using abstract classes rather than interfaces to enable them to be used

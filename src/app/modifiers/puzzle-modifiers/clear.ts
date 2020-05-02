@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from './puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 
 export class Clear implements IPuzzleModifier {
     constructor() { }

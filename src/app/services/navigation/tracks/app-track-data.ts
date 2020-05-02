@@ -1,4 +1,4 @@
-import { PuzzleProvider } from 'src/app/model3/interfaces';
+import { PuzzleProvider } from 'src/app/model/interfaces';
 
 export type EditorType = "blogger" | "solver";
 

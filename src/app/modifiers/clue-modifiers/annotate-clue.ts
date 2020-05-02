@@ -1,7 +1,7 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { ClueValidationWarning } from 'src/app/model3/interfaces';
+import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 import { SyncGridContent } from '../grid-modifiers/sync-grid-content';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';

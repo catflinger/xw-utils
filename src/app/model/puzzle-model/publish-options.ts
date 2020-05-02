@@ -1,5 +1,5 @@
 import { TextStyle } from './text-style';
-import { IPublishOptions, Layouts, Spacing } from '../../model3/interfaces';
+import { IPublishOptions, Layouts, Spacing } from '../interfaces';
 import { TextColumn } from './text-column';
 
 export class PublishOptions implements IPublishOptions {

@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle, ClueGroup } from '../../model3/interfaces';
+import { IPuzzle, ClueGroup } from '../../model/interfaces';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { SortClues } from './sort-clues';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';

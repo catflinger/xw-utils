@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
-import { IClue } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
+import { IClue } from '../../model/interfaces';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
 
 export class SetGridReferences implements IPuzzleModifier {

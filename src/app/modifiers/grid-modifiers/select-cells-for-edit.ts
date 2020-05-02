@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 
 export class SelectCellsForEdit implements IPuzzleModifier {

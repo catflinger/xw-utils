@@ -7,7 +7,7 @@ import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { TipInstance, TipStatus } from '../../../tip/tip-instance';
-import { ClueValidationWarning, IPuzzle } from 'src/app/model3/interfaces';
+import { ClueValidationWarning, IPuzzle } from 'src/app/model/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../../confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';

@@ -7,7 +7,7 @@ import { TokeniserService } from './tokeniser/tokeniser.service';
 
 import { data as testData } from "./mocks/pdf-extract-1";
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { GridStyle, ClueGroup, IGridCell, IGrid } from 'src/app/model3/interfaces';
+import { GridStyle, ClueGroup, IGridCell, IGrid } from 'src/app/model/interfaces';
 
 let tokeniser: TokeniserService = new TokeniserService();
 

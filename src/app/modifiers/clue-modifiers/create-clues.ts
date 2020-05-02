@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
 import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
-import { IPuzzle } from '../../model3/interfaces';
+import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { ClueGroup } from 'src/app/model3/interfaces';
+import { ClueGroup } from 'src/app/model/interfaces';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
-import { IClue } from '../../model3/interfaces';
+import { IClue } from '../../model/interfaces';
 import { RenumberGid } from '../grid-modifiers/renumber-grid';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 

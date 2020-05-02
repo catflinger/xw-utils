@@ -1,4 +1,4 @@
-import { IGridSize } from '../../model3/interfaces';
+import { IGridSize } from '../interfaces';
 
 export class GridSize implements IGridSize {
     public readonly across: number;

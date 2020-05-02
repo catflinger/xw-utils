@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
-import { IPuzzle, IClue, IGridEntry, ClueGroup } from '../../model3/interfaces';
+import { IPuzzle, IClue, IGridEntry, ClueGroup } from '../../model/interfaces';
 import { SortClues } from './sort-clues';
 
 describe('SortClues modifier', () => {

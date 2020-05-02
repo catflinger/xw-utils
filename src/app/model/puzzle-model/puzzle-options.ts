@@ -1,4 +1,4 @@
-import { IPuzzleOptions } from '../../model3/interfaces';
+import { IPuzzleOptions } from '../interfaces';
 
 export class PuzzleOptions implements IPuzzleOptions {
     public readonly setGridRefsFromCaptions: boolean;
