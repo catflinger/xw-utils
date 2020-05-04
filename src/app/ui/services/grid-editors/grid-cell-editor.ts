@@ -1,7 +1,7 @@
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Direction, WritingDirection, GridNavigation } from 'src/app/model/interfaces';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { SelectCellsForEdit } from 'src/app//modifiers/grid-modifiers/select-cells-for-edit';
 import { MakeCellEditable } from 'src/app//modifiers/grid-modifiers/make-cell-editable';

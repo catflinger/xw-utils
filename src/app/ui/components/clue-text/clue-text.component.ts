@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { TextStyle } from 'src/app/model/puzzle-model/text-style';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
@@ -7,7 +7,8 @@ import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 @Component({
     selector: 'app-clue-text',
     templateUrl: './clue-text.component.html',
-    styleUrls: ['./clue-text.component.css']
+    styleUrls: ['./clue-text.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClueTextComponent implements OnInit {
     @Input() clue: Clue;

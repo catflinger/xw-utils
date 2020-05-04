@@ -5,7 +5,7 @@ import { LocalStorageService } from '../storage/local-storage.service';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
-import { IPuzzleModifier } from '../../modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../../modifiers/puzzle-modifier';
 import { PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../../ui/services/app.service';
@@ -109,7 +109,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     public newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): Puzzle {
         let result: Puzzle = null;
 
-        let puzzle: IPuzzle = this.makeEmptyPuzzle(provider);
+        let puzzle: Puzzle = this.makeEmptyPuzzle(provider);
 
         if (reducers) {
             reducers.forEach(reducer => reducer.exec(puzzle));
@@ -137,23 +137,25 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public update(...reducers: IPuzzleModifier[]): void {
-        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.getMutableCopy(this.bsActive.value);
+        let puzzle = this.bsActive.value;
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
             new MarkAsUncommitted().exec(puzzle);
-            this.bsActive.next(new Puzzle(puzzle));
+            this.bsActive.next(puzzle);
         }
     }
 
     public commit() {
-        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.getMutableCopy(this.bsActive.value);
+        let puzzle = this.bsActive.value;
 
         if (puzzle) {
             new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
-            this.bsActive.next(new Puzzle(puzzle));
+            this.bsActive.next(puzzle);
         }
     }
 
@@ -166,14 +168,15 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public updateAndCommit(...reducers: IPuzzleModifier[]) {
-        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.getMutableCopy(this.bsActive.value);
+        let puzzle = this.bsActive.value;
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
             new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
-            this.bsActive.next(new Puzzle(puzzle));
+            this.bsActive.next(puzzle);
         }
     }
 
@@ -194,7 +197,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public openPuzzle(id: string): Promise<Puzzle> {
-        return this.getSavedPuzzle(id)
+        return this.localStorageService.getPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
                 this.usePuzzle(puzzle);
@@ -291,26 +294,18 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     private usePuzzle(puzzle: IPuzzle) {
         // create a mutable copy
-        let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
+        //let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
 
         // reset to unused state
-        new Clear().exec(puzzleM);
-        new MarkAsCommitted().exec(puzzleM);
+        new Clear().exec(puzzle);
+        new MarkAsCommitted().exec(puzzle);
 
         // push a read-only version
-        this.bsActive.next(new Puzzle(puzzleM));
+        this.bsActive.next(new Puzzle(puzzle));
     }
 
     private getMutableCopy(puzzle: Puzzle): IPuzzle {
         return JSON.parse(JSON.stringify(this.bsActive.value)) as IPuzzle;
-    }
-
-    private getSavedPuzzle(id: string): Promise<Puzzle> {
-        return this.localStorageService.getPuzzle(id)
-            .then((puzzle) => {
-                this.localStorageService.putPuzzle(puzzle);
-                return puzzle;
-            });
     }
 
     private savePuzzle(puzzle: IPuzzle): void {
@@ -318,8 +313,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.refreshPuzzleList();
     }
 
-    private makeEmptyPuzzle(provider: PuzzleProvider): IPuzzle {
-        return {
+    private makeEmptyPuzzle(provider: PuzzleProvider): Puzzle {
+        return new Puzzle({
             clues: null,
             grid: null,
             //linked: false,
@@ -386,7 +381,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 layout: "table",
                 spacing: "small",
             },
-        };
+        });
     }
 
     //#endregion

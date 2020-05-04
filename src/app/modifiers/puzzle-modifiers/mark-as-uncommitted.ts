@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from './puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
 
 export class MarkAsUncommitted implements IPuzzleModifier {

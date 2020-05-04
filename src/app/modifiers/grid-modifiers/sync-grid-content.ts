@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 
@@ -10,7 +10,8 @@ export class SyncGridContent implements IPuzzleModifier {
             return;
         }
 
-        let grid: Grid = new Grid(puzzle.grid);
+        // TO DO: temporary fix, need to think of something better
+        let gridX: Grid = new Grid(puzzle.grid);
 
         // clear the grid
         puzzle.grid.cells.forEach(cell => cell.content = "");
@@ -21,7 +22,7 @@ export class SyncGridContent implements IPuzzleModifier {
 
             if (answer) {
                 clue.link.entries.forEach((entry) => {
-                    grid.getGridEntryFromReference(entry.gridRef)
+                    gridX.getGridEntryFromReference(entry.gridRef)
                     .map(cell => cell.id)
                     .forEach(id => {
                         let cell = puzzle.grid.cells.find(c => c.id === id);

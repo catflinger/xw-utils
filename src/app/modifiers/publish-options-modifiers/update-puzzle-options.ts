@@ -1,5 +1,5 @@
 import { IPuzzle } from '../../model/interfaces';
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 
 export class UpdatePuzzleOptions implements IPuzzleModifier {
     constructor(

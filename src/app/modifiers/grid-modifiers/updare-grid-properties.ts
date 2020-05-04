@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, GridStyle } from '../../model/interfaces';
 import { GridSize } from 'src/app/model/puzzle-model/grid-size';
 

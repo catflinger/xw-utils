@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { GridEntryEditor } from './grid-entry-editor';
 import { EditContext } from './grid-editor';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';

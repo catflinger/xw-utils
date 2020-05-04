@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
 import { TextStyleName } from 'src/app/model/interfaces';
 

@@ -1,7 +1,7 @@
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Direction, WritingDirection, GridNavigation } from 'src/app/model/interfaces';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { IPuzzleModifier } from 'src/app//modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { JsonPipe } from '@angular/common';
 
 export class EditContext { 

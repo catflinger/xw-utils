@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
 import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
@@ -10,16 +10,17 @@ export class SelectClue implements IPuzzleModifier {
         if (puzzle) {
             new Clear().exec(puzzle);
 
-            let grid: Grid = puzzle.grid ? new Grid(puzzle.grid) : null;
+            // TO DO: temp fix, do something better
+            let gridX: Grid = puzzle.grid ? new Grid(puzzle.grid) : null;
 
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
 
             if (clue && !clue.redirect) {
                 clue.highlight = true;
 
-                if (grid) {
+                if (gridX) {
                     clue.link.entries.forEach((entry) => {
-                        let cells = grid.getGridEntryFromReference(entry.gridRef);
+                        let cells = gridX.getGridEntryFromReference(entry.gridRef);
                         if (cells) {
                             cells.forEach(cell => {
                                 // find the matching cell in the mutable puzzle

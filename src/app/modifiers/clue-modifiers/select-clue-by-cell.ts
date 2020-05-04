@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, IClue } from 'src/app/model/interfaces';
 import { Clear } from '../puzzle-modifiers/clear';
 import { SelectClue } from './select-clue';

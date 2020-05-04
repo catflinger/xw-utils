@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { ClueGroup } from 'src/app/model/interfaces';

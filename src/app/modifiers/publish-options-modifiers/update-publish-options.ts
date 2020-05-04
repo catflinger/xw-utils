@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, Layouts } from '../../model/interfaces';
 import { Spacing } from 'src/app/model/interfaces';
 

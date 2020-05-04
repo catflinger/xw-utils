@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
 import { IPuzzle } from '../../model/interfaces';
 

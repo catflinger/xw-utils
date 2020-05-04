@@ -10,7 +10,7 @@ import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/servic
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
-import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 

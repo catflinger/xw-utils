@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, ITextParsingError } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';

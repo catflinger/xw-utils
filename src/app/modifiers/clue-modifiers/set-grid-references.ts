@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
 import { IClue } from '../../model/interfaces';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';

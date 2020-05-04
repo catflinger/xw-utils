@@ -1,24 +1,21 @@
-import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, DoCheck, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Subscription, combineLatest } from 'rxjs';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
-import { SelectNextClue } from 'src/app//modifiers/clue-modifiers/select-next-clue';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
-import { AppService } from '../../services/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClueEditorService } from '../../components/editor/clue-editor.service';
 import { ClueEditorComponent } from '../../components/editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-blogger',
-  templateUrl: './blogger.component.html',
-  styleUrls: ['./blogger.component.css']
+    selector: 'app-blogger',
+    templateUrl: './blogger.component.html',
+    styleUrls: ['./blogger.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BloggerComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
@@ -29,32 +26,40 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
     constructor(
         private navService: NavService<AppTrackData>,
-        private appService: AppService,
         private activePuzzle: IActivePuzzle,
-        private appSettinsgService: AppSettingsService, 
-        private editorService: ClueEditorService,
+        private appSettinsgService: AppSettingsService,
         private modalService: NgbModal,
-    ) { }
+        private changeDetector: ChangeDetectorRef,
+    ) {
+        this.changeDetector.detach();
+    }
 
     ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
         } else {
-            this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            const puzzleObserver = this.activePuzzle.observe();
+            const settingsObserver = this.appSettinsgService.observe();
+
+            this.subs.push(combineLatest(puzzleObserver, settingsObserver).subscribe(result => {
+                const puzzle = result[0];
+                const settings = result[1];
+
+                this.appSettings = settings;
+
                 if (puzzle) {
                     if (!puzzle.capability.blogable) {
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;
                 }
+                this.changeDetector.detectChanges();
             }));
-
-            this.subs.push(this.appSettinsgService.observe().subscribe(settings => this.appSettings = settings));
         }
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
@@ -76,10 +81,13 @@ export class BloggerComponent implements OnInit, OnDestroy {
     }
 
     onRowClick(clue: Clue) {
-        this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
+        if (clue.highlight) {
+            this.openEditor();
+        } else {
+            this.activePuzzle.update(new SelectClue(clue.id));
+        }
 
         //Promise.resolve().then(() => this.openEditor());
-        this.openEditor();
     }
 
     // vvvvvvvvvvv from here down shared with solver vvvvvvvvvvvvvvvvvvv
@@ -121,11 +129,11 @@ export class BloggerComponent implements OnInit, OnDestroy {
             this._showEditor = true;
 
             if (this.appSettings.editorMode === "modal") {
-                let modalRef = this.modalService.open(ClueEditorComponent, { 
+                let modalRef = this.modalService.open(ClueEditorComponent, {
                     backdrop: "static",
                     size: "lg",
                 });
-                
+
                 modalRef.componentInstance.close.subscribe(() => {
                     modalRef.close();
                     this.onEditorClose();

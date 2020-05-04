@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, ClueGroup } from '../../model/interfaces';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { SortClues } from './sort-clues';

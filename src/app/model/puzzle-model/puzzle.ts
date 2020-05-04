@@ -17,13 +17,13 @@ export class Puzzle implements IPuzzle {
     public readonly notes: PuzzleAnnotation;
     public readonly provision: PuzzleProvision;
     public readonly capability: PuzzleCapability;
-    public readonly uncommitted: boolean;
+    public uncommitted: boolean;
 
     public readonly grid: Grid;
     public readonly clues: Clue[];
     //public readonly linked: boolean;
 
-    public readonly revision: number;
+    public revision: number;
 
     constructor(data: any) {
 

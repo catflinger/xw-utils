@@ -1,4 +1,4 @@
-import { IPuzzleModifier } from '../puzzle-modifiers/puzzle-modifier';
+import { IPuzzleModifier } from '../puzzle-modifier';
 import { ClueValidationWarning } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
 import { IPuzzle } from '../../model/interfaces';
