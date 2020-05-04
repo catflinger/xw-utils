@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { ClueEditorService } from '../../clue-editor.service';
@@ -8,7 +8,8 @@ import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 @Component({
     selector: 'app-add-remove-clue',
     templateUrl: './add-remove-clue.component.html',
-    styleUrls: ['./add-remove-clue.component.css']
+    styleUrls: ['./add-remove-clue.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];

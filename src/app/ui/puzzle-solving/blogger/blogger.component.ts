@@ -140,6 +140,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
                 });
             }
         }
+        this.changeDetector.detectChanges();
     }
 
 }

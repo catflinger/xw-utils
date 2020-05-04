@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,8 @@ export interface IClueEditorForm {
 @Component({
     selector: 'app-clue-editor',
     templateUrl: './clue-editor.component.html',
-    styleUrls: ['./clue-editor.component.css']
+    styleUrls: ['./clue-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClueEditorComponent implements OnInit, OnDestroy {
     @Output() close = new EventEmitter<void>();
@@ -27,6 +28,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     constructor(
         private activePuzzle: IActivePuzzle,
         private editorService: ClueEditorService,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit(): void {
@@ -35,6 +37,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
                 this.puzzle = puzzle;
                 this.dirty = false;
+                
+                this.detRef.detectChanges();
             })
         );
     }

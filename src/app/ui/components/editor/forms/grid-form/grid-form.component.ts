@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -12,7 +12,8 @@ import { ClueEditorService } from '../../clue-editor.service';
 @Component({
     selector: 'app-grid-form',
     templateUrl: './grid-form.component.html',
-    styleUrls: ['./grid-form.component.css']
+    styleUrls: ['./grid-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridFormComponent implements OnInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];

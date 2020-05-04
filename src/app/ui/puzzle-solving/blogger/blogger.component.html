@@ -16,14 +16,14 @@
             </thead>
             <tbody>
                 <ng-container *ngFor="let clue of puzzle.clues;">
-                    <tr class="border-top bg-light" (click)="onRowClick(clue)">
+                    <tr class="border-top bg-light" [ngClass]="{'bg-white': clue.highlight}" (click)="onRowClick(clue)">
                         <td class="py-0">
                             {{clue.caption}}
                         </td>
                         <td class="font-weight-bold py-0" *ngFor="let textCol of puzzle.publishOptions.textCols; let i = index;">
                             {{ clue.answers[i] }}
                         </td>
-                        <td class="py-0" [ngClass]="{'bg-warning': clue.highlight}">
+                        <td class="py-0">
                             <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
                         </td>
                         <td class="py-0">

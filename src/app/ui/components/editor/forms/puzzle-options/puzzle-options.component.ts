@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Type, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Type, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
@@ -12,7 +12,8 @@ import { ClueEditorService } from '../../clue-editor.service';
 @Component({
     selector: 'app-puzzle-options',
     templateUrl: './puzzle-options.component.html',
-    styleUrls: ['./puzzle-options.component.css']
+    styleUrls: ['./puzzle-options.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PuzzleOptionsComponent implements OnInit, OnDestroy, IClueEditorForm {
     public form: FormGroup;

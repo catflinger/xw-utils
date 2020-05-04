@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Subscription } from 'rxjs';
@@ -33,7 +33,8 @@ class AnswerTextChunk {
 @Component({
     selector: 'app-clue-annotator',
     templateUrl: './clue-annotator.component.html',
-    styleUrls: ['./clue-annotator.component.css']
+    styleUrls: ['./clue-annotator.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
 

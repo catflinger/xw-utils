@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, Type } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, Type, ChangeDetectionStrategy } from '@angular/core';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { Direction } from 'src/app/model/interfaces';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ClueEditorService } from '../clue-editor.service';
 
 export interface GridReferenceEvent {
     id: string,
@@ -13,7 +12,8 @@ export interface GridReferenceEvent {
 @Component({
     selector: 'app-grid-reference',
     templateUrl: './grid-reference.component.html',
-    styleUrls: ['./grid-reference.component.css']
+    styleUrls: ['./grid-reference.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridReferenceComponent implements OnInit {
 

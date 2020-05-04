@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -24,7 +24,8 @@ export interface ClueEditModel {
 @Component({
     selector: 'app-clue-text-editor',
     templateUrl: './clue-text-editor.component.html',
-    styleUrls: ['./clue-text-editor.component.css']
+    styleUrls: ['./clue-text-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
     private subs: Subscription[] = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit, Type, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Type, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
@@ -9,7 +9,8 @@ import { ClueEditorService } from '../../clue-editor.service';
 @Component({
     selector: 'app-grid-linker',
     templateUrl: './grid-linker.component.html',
-    styleUrls: ['./grid-linker.component.css']
+    styleUrls: ['./grid-linker.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridLinkerComponent implements OnInit, IClueEditorForm {
     private subs: Subscription[] = [];
