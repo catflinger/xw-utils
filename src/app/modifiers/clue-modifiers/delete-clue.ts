@@ -8,11 +8,7 @@ export class DeleteClue implements IPuzzleModifier {
 
     exec(puzzle: IPuzzle) {
         if (puzzle) {
-            let index = puzzle.clues.findIndex((c) => c.id === this.id);
-
-            if (index >= 0) {
-                puzzle.clues.splice(index, 1);
-            }
+            puzzle.clues = puzzle.clues.filter((c) => c.id !== this.id);
         }
     }
 }

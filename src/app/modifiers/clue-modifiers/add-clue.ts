@@ -21,7 +21,9 @@ export class AddClue implements IPuzzleModifier {
             clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
 
             puzzle.clues.push(clue);
-            new SortClues().exec(puzzle);
+
+            puzzle.clues = [...puzzle.clues];
+
         }
     }
 }

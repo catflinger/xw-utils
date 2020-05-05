@@ -70,6 +70,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             .then(cancel => {
                 if (!cancel) {
                     this.closeAndCommit();
+                    this.detRef.detectChanges();
                 }
             });
         }

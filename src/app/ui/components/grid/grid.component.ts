@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
@@ -47,7 +47,8 @@ const gridInputDefaults: GridInput = {
 @Component({
     selector: 'app-grid',
     templateUrl: './grid.component.html',
-    styleUrls: ['./grid.component.css']
+    styleUrls: ['./grid.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridComponent implements OnInit, AfterViewInit {
 
@@ -74,7 +75,8 @@ export class GridComponent implements OnInit, AfterViewInit {
 
     constructor(
         private activePuzzle: IActivePuzzle,
-        private gridPainter: GridPainterService) {
+        private gridPainter: GridPainterService,
+        private detRef: ChangeDetectorRef) {
     }
 
     public ngOnInit() {
@@ -99,7 +101,10 @@ export class GridComponent implements OnInit, AfterViewInit {
                         }
 
                         // don't draw the grid until the native canvas has had a chance to resize
-                        setTimeout(() => this.drawGrid() , 0);
+                        setTimeout(() => { 
+                            this.drawGrid(); 
+                            //this.detRef.detectChanges() 
+                        }, 0);
                     }
                 },
                 (err) => {

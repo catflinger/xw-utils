@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Direction } from 'src/app/model/interfaces';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/puzzle-model/clue';
@@ -10,7 +10,8 @@ import { AppSettings } from 'src/app/services/common';
 @Component({
     selector: 'app-clue-list',
     templateUrl: './clue-list.component.html',
-    styleUrls: ['./clue-list.component.css']
+    styleUrls: ['./clue-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClueListComponent implements OnInit {
     @Input() public direction: Direction;
@@ -23,6 +24,7 @@ export class ClueListComponent implements OnInit {
     constructor(
         private appSettingsService: AppSettingsService,
         private activePuzzle: IActivePuzzle,
+        private detRef: ChangeDetectorRef,
         ) { }
 
     ngOnInit() {
@@ -34,6 +36,7 @@ export class ClueListComponent implements OnInit {
                 if (puzzle && puzzle.clues) {
                     this.clues = puzzle.clues.filter((clue) => clue.group === this.direction)
                 }
+                this.detRef.detectChanges();
             }
         ));
     }

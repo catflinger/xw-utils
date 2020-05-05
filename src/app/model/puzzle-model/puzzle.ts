@@ -31,7 +31,6 @@ export class Puzzle implements IPuzzle {
 
         this.uncommitted = !!data.uncommitted;
 
-
         this.options = new PuzzleOptions(data.options);
 
         if (data.grid) {

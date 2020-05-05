@@ -120,6 +120,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
     public onEditorClose() {
         this._showEditor = false;
+        this.changeDetector.detectChanges();
     }
 
     private openEditor() {

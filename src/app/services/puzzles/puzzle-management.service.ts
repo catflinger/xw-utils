@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { Injectable } from '@angular/core';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
@@ -58,6 +58,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     constructor(
         private localStorageService: LocalStorageService,
         private httpPuzzleService: HttpPuzzleSourceService,
+        //private changeDetector: ChangeDetectorRef,
     ) {
         this.bsList = new BehaviorSubject<IPuzzleSummary[]>([]);
         this.bsActive = new BehaviorSubject<Puzzle>(null);

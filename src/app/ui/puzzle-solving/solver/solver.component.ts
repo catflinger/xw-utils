@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle'; 
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
@@ -13,12 +13,13 @@ import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { ClueEditorComponent } from '../../components/editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PuzzleEditorComponent } from '../../components/editor/puzzle-editor/puzzle-editor.component';
 
 @Component({
   selector: 'app-solver',
   templateUrl: './solver.component.html',
   styleUrls: ['./solver.component.css'],
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SolverComponent implements OnInit {
 
@@ -34,6 +35,7 @@ export class SolverComponent implements OnInit {
         private appSettingsService: AppSettingsService,
         private editorService: ClueEditorService,
         private modalService: NgbModal,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     ngOnInit() {
@@ -59,6 +61,8 @@ export class SolverComponent implements OnInit {
                             this.puzzle = puzzle;
                             this.appSettings = appSettings;
                         }
+
+                        this.detRef.detectChanges();
                     }
             ));
         }
@@ -73,9 +77,12 @@ export class SolverComponent implements OnInit {
                 if (clue) { 
                     this.openEditor();
                 }
+                this.detRef.detectChanges();
+
             } else if (event.key === "Escape") {
                 event.stopPropagation();
                 this.activePuzzle.updateAndCommit(new Clear());
+                this.detRef.detectChanges();
             }
             // } else if (/^[a-zA-Z]$/.test(event.key)) {
             //     event.stopPropagation();
@@ -140,6 +147,17 @@ export class SolverComponent implements OnInit {
             }
         }
     }
+
+    public onFix() {
+        let modalRef = this.modalService.open(PuzzleEditorComponent, { 
+            backdrop: "static",
+            size: "lg",
+        });
+        
+        modalRef.componentInstance.close.subscribe(() => {
+            modalRef.close();
+        });
+}
 
     public onClueClick(clue: Clue) {
         this.openEditor();

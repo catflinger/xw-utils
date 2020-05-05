@@ -4,6 +4,9 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { ClueEditorService } from '../../clue-editor.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { DeleteClue } from 'src/app/modifiers/clue-modifiers/delete-clue';
+import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
+import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 
 @Component({
     selector: 'app-add-remove-clue',
@@ -19,6 +22,7 @@ export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorFor
     public letters: string[];
 
     @Output() dirty = new EventEmitter<void>();
+    @Output() close = new EventEmitter<void>();
 
     constructor(
         private activePuzzle: IActivePuzzle,
@@ -52,5 +56,15 @@ export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorFor
 
     public onLetterClick(index: number) {
         console.log("You clicked " + index)
+    }
+
+    public onRemoveClue() {
+        this.activePuzzle.update(
+            new DeleteClue(this.clue.id),
+            new SyncGridContent(),
+            new Clear(),
+        );
+        
+        this.close.emit();
     }
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 import { ArchiveItem } from 'src/app/model/archive-model/archive-item';
@@ -14,7 +14,8 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 @Component({
     selector: 'app-archive',
     templateUrl: './archive.component.html',
-    styleUrls: ['./archive.component.css']
+    styleUrls: ['./archive.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArchiveComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
@@ -30,7 +31,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         private archiveService: ArchiveService,
         private activeRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
-
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -41,23 +42,27 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
         this.appService.clearAlerts();
 
-        this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
+        this.subs.push(
+            combineLatest(
+                this.appService.getObservable(),
+                this.archiveService.observe(),
+            ).subscribe(result => {
+                this.appStatus = result[0];
+                this.archive = result[1];
+            })
+        );
 
-        this.subs.push(this.archiveService.observe().subscribe(archive => {
-            this.archive = archive;
-        }));
-
-        this.subs.push(this.activeRoute.params.subscribe((params) => {
-
+        this.subs.push(this.activeRoute.params.subscribe(params => {
             this.provider = params.provider;
             this.appService.setBusy();
 
             this.archiveService.getList(params.provider)
-            .catch((error) => {
-                this.appService.setAlert("danger", error);
-            })
-            .finally(() => this.appService.clearBusy());
-        }));
+            .catch((error) => this.appService.setAlert("danger", error))
+            .finally(() => {
+                this.appService.clearBusy();
+                this.detRef.detectChanges()
+            });
+        }))
     }
 
     public ngOnDestroy() {
