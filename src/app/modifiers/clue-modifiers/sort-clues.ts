@@ -38,7 +38,7 @@ export class SortClues implements IPuzzleModifier {
                 return result;
             });
 
-            puzzle.clues = puzzle.clues.slice();
+            puzzle.clues = [...puzzle.clues];
         }
     }
 }

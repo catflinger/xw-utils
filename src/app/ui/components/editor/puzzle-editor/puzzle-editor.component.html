@@ -1,25 +1,25 @@
 <div class="modal-body" *ngIf="puzzle">
 
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs" (navChange)="onNavChange($event)">
-
-        <li ngbNavItem="AddClueComponent">
-            <a ngbNavLink>Add remove</a>
-            <ng-template ngbNavContent>
-                <app-add-clue (dirty)="onDirty()" (close)="onClose()"></app-add-clue>
-            </ng-template>
-        </li>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs">
 
         <li ngbNavItem="PuzzleOptionsComponent">
             <a ngbNavLink>Annotation otions</a>
             <ng-template ngbNavContent>
-                <app-puzzle-options (dirty)="onDirty()" (close)="onClose()"></app-puzzle-options>
+                <app-puzzle-options (close)="onClose()"></app-puzzle-options>
+            </ng-template>
+        </li>
+
+        <li ngbNavItem="AddClueComponent">
+            <a ngbNavLink>Add another clue</a>
+            <ng-template ngbNavContent>
+                <app-add-clue (close)="onClose()"></app-add-clue>
             </ng-template>
         </li>
 
         <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
-            <a ngbNavLink>Grid</a>
+            <a ngbNavLink>Edit the grid</a>
             <ng-template ngbNavContent>
-                <app-grid-form (dirty)="onDirty()" (close)="onClose()"></app-grid-form>
+                <app-grid-form (close)="onClose()"></app-grid-form>
             </ng-template>
         </li>
     </ul>
@@ -29,7 +29,5 @@
 </div>
 
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onSave()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Save</button>
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onCancel()" [ngClass]="{ 'd-none': hideSaveCancelButtons }">Discard changes</button>
-    <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()" [ngClass]="{ 'd-none': !hideSaveCancelButtons }">Close</button>
+    <button type="button" class="btn btn-outline-dark mr-3" (click)="onClose()">Close</button>
 </div>

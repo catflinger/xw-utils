@@ -12,10 +12,9 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 export class PuzzleEditorComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
-    public activeId: string = "AddClueComponent";
+    public activeId: string = "PuzzleOptionsComponent";
     
     public puzzle: Puzzle = null;
-    public dirty: boolean = false;
 
     private subs: Subscription[] = [];
 
@@ -28,8 +27,6 @@ export class PuzzleEditorComponent implements OnInit {
         this.subs.push(
             this.activePuzzle.observe().subscribe(puzzle => {
                 this.puzzle = puzzle;
-                this.dirty = false;
-                
                 this.detRef.detectChanges();
             })
         );
@@ -39,34 +36,8 @@ export class PuzzleEditorComponent implements OnInit {
         this.subs.forEach(s => s.unsubscribe());
     }
 
-    public onDirty() {
-        this.dirty = true;
-    }
-
-    public onNavChange(event: NgbNavChangeEvent) {
-    }
-
-    public onSave() {
-        this.closeAndCommit();
-    }
-
-    public onCancel() {
-        this.closeAndDiscard();
-    }
-
     public onClose() {
-        this.closeAndCommit();
-    }
-
-    private closeAndCommit() {
-        this.dirty = false;
-        this.activePuzzle.commit();
-        this.close.emit();
-    }
-
-    private closeAndDiscard() {
-        this.dirty = false;
-        this.activePuzzle.discard();
+        //this.activePuzzle.commit();
         this.close.emit();
     }
 

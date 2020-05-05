@@ -11,14 +11,14 @@
         </li>
 
         <li ngbNavItem="ClueTextEditorComponent">
-            <a ngbNavLink>Edit clue</a>
+            <a ngbNavLink>Edit clue text</a>
             <ng-template ngbNavContent>
                 <app-clue-text-editor (dirty)="onDirty()"></app-clue-text-editor>
             </ng-template>
         </li>
 
         <li ngbNavItem="AddRemoveClueComponent">
-            <a ngbNavLink>Add remove</a>
+            <a ngbNavLink>Remove this clue</a>
             <ng-template ngbNavContent>
                 <app-add-remove-clue (dirty)="onDirty()" (close)="onSave()"></app-add-remove-clue>
             </ng-template>
@@ -28,20 +28,6 @@
             <a ngbNavLink>Grid entries</a>
             <ng-template ngbNavContent>
                 <app-grid-linker (dirty)="onDirty()"></app-grid-linker>
-            </ng-template>
-        </li>
-
-        <li ngbNavItem="PuzzleOptionsComponent">
-            <a ngbNavLink>Annotation otions</a>
-            <ng-template ngbNavContent>
-                <app-puzzle-options (dirty)="onDirty()"></app-puzzle-options>
-            </ng-template>
-        </li>
-
-        <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
-            <a ngbNavLink>Grid</a>
-            <ng-template ngbNavContent>
-                <app-grid-form (dirty)="onDirty()"></app-grid-form>
             </ng-template>
         </li>
     </ul>

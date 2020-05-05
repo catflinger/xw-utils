@@ -21,7 +21,6 @@ export class AddClueComponent implements OnInit {
     public  puzzle: Puzzle;
     public letters: string[];
 
-    @Output() dirty = new EventEmitter<void>();
     @Output() close = new EventEmitter<void>();
 
     constructor(

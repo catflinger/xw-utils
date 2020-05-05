@@ -23,7 +23,6 @@ export class AddClue implements IPuzzleModifier {
             puzzle.clues.push(clue);
 
             puzzle.clues = [...puzzle.clues];
-
         }
     }
 }

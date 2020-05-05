@@ -46,6 +46,7 @@ export class ClueListComponent implements OnInit {
             this.clueClick.emit(clue);
         } else {
             this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
+            this.detRef.markForCheck();
         }
     }
 }
