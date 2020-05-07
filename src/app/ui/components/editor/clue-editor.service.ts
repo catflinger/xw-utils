@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { v4 as uuid } from "uuid";
-import { BehaviorSubject, Observable } from 'rxjs';
 
 interface IEditorInstance {
     id: string,
@@ -12,22 +11,22 @@ interface IEditorInstance {
 })
 export class ClueEditorService {
     private currentInstance: IEditorInstance = null;
-    private bsSelectedClue = new BehaviorSubject<string>(null);
+    //private bsSelectedClue = new BehaviorSubject<string>(null);
 
     constructor() {
     }
 
-    public observe(): Observable<string> {
-        return this.bsSelectedClue.asObservable();
-    }
+    // public observe(): Observable<string> {
+    //     return this.bsSelectedClue.asObservable();
+    // }
 
-    public setSelectedClue(clueId): void {
-        this.bsSelectedClue.next(clueId);
-    }
+    // public setSelectedClue(clueId): void {
+    //     this.bsSelectedClue.next(clueId);
+    // }
 
-    public clearSelection() {
-        this.setSelectedClue(null);
-    }
+    // public clearSelection() {
+    //     this.setSelectedClue(null);
+    // }
 
     public register(save: () => Promise<boolean>): string {
         const id = uuid();

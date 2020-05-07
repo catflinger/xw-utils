@@ -105,6 +105,8 @@ export class GridComponent implements OnInit, AfterViewInit {
                             this.drawGrid(); 
                             //this.detRef.detectChanges() 
                         }, 0);
+
+                        this.detRef.detectChanges();
                     }
                 },
                 (err) => {

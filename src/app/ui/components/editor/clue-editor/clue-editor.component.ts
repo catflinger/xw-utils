@@ -60,6 +60,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
                 } else {
                     this.dirty = false;
                 }
+                this.detRef.detectChanges();
+
             });
         }
     }

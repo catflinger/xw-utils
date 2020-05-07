@@ -123,7 +123,7 @@ export class ParseText implements IPuzzleModifier {
             options.allowTypos = true;
         }
 
-        if (provider === "azed") {
+        if (provider === "azed" || provider === "pdf") {
             options.azedFeatures = true;
         }
 

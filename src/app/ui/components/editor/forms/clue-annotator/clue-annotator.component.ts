@@ -66,7 +66,6 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     ) { }
 
     public ngOnInit() {
-
         this.instanceId = this.editorService.register(() => this.onSave());
 
         this.form = this.formBuilder.group({
@@ -217,13 +216,14 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     private onSave(): Promise<boolean> {
+
         let result = Promise.resolve(true);
 
         if (!this.form.dirty) {
-
             result = Promise.resolve(false);
 
         } else {
+
             if (this.appSettings.tips.definitionWarning.enabled &&
                 !this.tipStatus.show &&
                 this.form.value.chunks.length < 2) {

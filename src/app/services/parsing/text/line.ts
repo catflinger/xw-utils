@@ -21,7 +21,7 @@ export class Line {
             result = "clue";
         } else if (this.hasStartMarker) {
             result = "partialClueStart";
-        } else if (this.hasEndMarker) {
+        } else if (this.hasEndMarker || this.hasPartialEndMarker) {
             result = "partialClueEnd";
         }
 
@@ -32,11 +32,11 @@ export class Line {
         return this.rawText.trim();
     }
 
-    protected get isEmpty(): boolean {
+    private get isEmpty(): boolean {
         return this.rawText.trim().length === 0;
     }
 
-    protected get hasStartMarker(): boolean {
+    private get hasStartMarker(): boolean {
         if (this.options && this.options && this.options.azedFeatures) {
             return /^\*?\s*\d{1,2}\D/i.test(this.text);
         } else {
@@ -44,11 +44,15 @@ export class Line {
         }
     }
 
-    protected get hasEndMarker(): boolean {
-        return /\(\d[,0-9- ]*( words)?\s?\)$/i.test(this.text);
+    private get hasEndMarker(): boolean {
+        return /\(\d[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
     }
 
-    protected get hasAcrossMarker(): boolean {
+    private get hasPartialEndMarker(): boolean {
+        return !this.text.includes("(") && /[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
+    }
+
+    private get hasAcrossMarker(): boolean {
         if (this.options && this.options.allowTypos) {
             return /^(ACROSS|ACROS|AROSS|ACRPSS)$/i.test(this.text);
         } else {
@@ -56,7 +60,7 @@ export class Line {
         }
     }
 
-    protected get hasDownMarker(): boolean {
+    private get hasDownMarker(): boolean {
         return /^DOWN$/i.test(this.text);
     }
 

@@ -26,11 +26,13 @@
     </div>
 
     <div class="row  mb-5" *ngIf="showPuzzle">
-        <div class="col">
+        <div class="col text-left">
             <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBlogger()">Open in blogger</button>
-            <button type="button" class="btn btn-primary mr-3" (click)="onFix()">Fix</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
+        </div>
+        <div class="col text-right">
+            <button type="button" class="btn btn-link mr-3" (click)="onFix()">puzzle options...</button>
         </div>
     </div>
 
