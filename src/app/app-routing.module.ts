@@ -28,6 +28,7 @@ import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.compo
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
+import { BackupComponent } from './ui/app-general/backup/backup.component';
 
 const routes: Routes = [
 
@@ -67,6 +68,7 @@ const routes: Routes = [
     { path: "diary", component: DiaryComponent },
     { path: "readme", component: ReadmeComponent },
     { path: "settings", component: SettingsComponent },
+    { path: "backup", component: BackupComponent },
 
     // default routes
     { path: "", redirectTo: "/home", pathMatch: "full" },

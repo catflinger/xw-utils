@@ -1,0 +1,23 @@
+<h3>Backups</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Backup</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let backup of backups">
+            <td>{{backup.date | date:'mediumDate'}}</td>
+            <td>{{backup.date | date:'mediumTime'}}</td>
+            <td>{{backup.caption}}</td>
+            <td><button type="button" class="btn btn-primary">Restore</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <button type="button" class="btn btn-primary" (click)="onRefresh()">Refresh</button>
+</div>

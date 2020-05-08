@@ -6,6 +6,7 @@ import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
+import { BackupService } from 'src/app/services/storage/backup.service';
 
 @Component({
     selector: 'app-home',
@@ -24,9 +25,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private puzzleManagement: IPuzzleManager,
         private authService: AuthService,
+        private backupService: BackupService,
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
         this.subs.push(this.authService.observe().subscribe(credentials => this.credentials = credentials));
 
@@ -41,7 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         ));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
     }
 
@@ -98,5 +100,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     public onDelete(id: string) {
         this.puzzleManagement.deletePuzzle(id);
+    }
+
+    public onBackup(id: string) {
+        this.backupService.backupPuzzle(id)
+        .then(() => console.log("done"))
+        .catch(() => console.log("failed"));
     }
 }

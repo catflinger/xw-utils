@@ -87,6 +87,7 @@ import { GridFormComponent } from './ui/components/editor/forms/grid-form/grid-f
 import { AddRemoveClueComponent } from './ui/components/editor/forms/add-remove-clue/add-remove-clue.component';
 import { PuzzleEditorComponent } from './ui/components/editor/puzzle-editor/puzzle-editor.component';
 import { AddClueComponent } from './ui/components/editor/forms/add-clue/add-clue.component';
+import { BackupComponent } from './ui/app-general/backup/backup.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -176,6 +177,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         AddRemoveClueComponent,
         PuzzleEditorComponent,
         AddClueComponent,
+        BackupComponent,
     ],
     imports: [
         BrowserModule,

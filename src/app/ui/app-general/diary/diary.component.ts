@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { DiaryService } from 'src/app/services/app/diary.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService } from '../../services/app.service';
@@ -19,6 +19,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
         private diaryService: DiaryService,
         private appService: AppService,
         private settingsService: AppSettingsService,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -55,6 +56,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
                         this.onRefresh();
                     }
                 }
+                this.detRef.detectChanges();
             },
             error => {
                 this.appService.clear();
@@ -63,6 +65,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
                 } else {
                     this.appService.setAlert("danger", "Failed to get Google diary.");
                 }
+                this.detRef.detectChanges();
             }
         ));
     }
@@ -82,6 +85,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
             } else if (result != ApiSymbols.OK) {
                 this.appService.setAlert("danger", "Failed to get Google diary.");
             }
+            this.detRef.detectChanges();
         })
         .catch((error) => {
             this.appService.clear();
@@ -90,6 +94,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
             } else {
                 this.appService.setAlert("danger", "Failed to get Google diary.");
             }
+            this.detRef.detectChanges();
         });
     }
 

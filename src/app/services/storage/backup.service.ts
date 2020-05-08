@@ -1,64 +1,74 @@
 import { Injectable } from '@angular/core';
-import { IPuzzleManager } from '../puzzles/puzzle-management.service';
-import { AppSettingsService } from '../app/app-settings.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PuzzleInfo } from '../../model/puzzle-model/puzzle-info';
 import { HttpBackupSourceService } from './http-backup-source.service';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
+import { BackupInfo } from './backup-info';
+import { LocalStorageService } from './local-storage.service';
+import { AuthService } from '../app/auth.service';
 
-export type MergeAction = "skip" | "replace";
+// export type MergeAction = "skip" | "replace";
 
-export interface BackupOptions {
-    foo: boolean;
-}
+// export interface BackupOptions {
+//     foo: boolean;
+// }
 
-export interface RestoreOptions {
-    mergeAction: MergeAction; // what to do for conflicts
-}
-
-export class BackupPackageInfo {
-    id: string;
-    date: Date;
-    hostname: string;
-    notes: string;
-    hasUserSettings: boolean;
-    puzzles: PuzzleInfo[];
-}
+// export interface RestoreOptions {
+//     mergeAction: MergeAction; // what to do for conflicts
+// }
 
 @Injectable({
     providedIn: 'root'
 })
 export class BackupService {
 
-    private _bsBackupList = new BehaviorSubject<BackupPackageInfo[]>(null);
+    private _bsBackupList = new BehaviorSubject<BackupInfo[]>([]);
 
     constructor(
-        private puzzleManager: IPuzzleManager,
-        private appSettingsService: AppSettingsService,
         private backupStore: HttpBackupSourceService,
-    ) { }
-
-    public refresh() {
-        // 1) get the backup info from the store
-        // 2) push it into the behaviour subject
+        private localStorage: LocalStorageService,
+        private authService: AuthService,
+    ) {
+        this.refresh();
     }
 
-    public observe(): Observable<BackupPackageInfo[]> {
+    public refresh() {
+        const creds = this.authService.getCredentials();
+
+        if (creds.authenticated) {
+            this.backupStore.getBackupList(creds.username)
+            .then(list => {
+                this._bsBackupList.next(list);
+            })
+        }
+    }
+
+    public observe(): Observable<BackupInfo[]> {
         return this._bsBackupList.asObservable();
     }
 
-    public makeBackup(options: BackupOptions): Promise<void> {
-        // 0) check if logged in
-        // 1) get the details of the local machine etc
-        // 2) make a backup the user settings
-        // 3) make a backup of the puzzles
-        // 4) package this into a bundle
-        // 5) send it somewhere
-        // 6) refresh the backup list
+    public backupPuzzle(id: string): Promise<void> {
 
+        const creds = this.authService.getCredentials();
+
+        if (creds.authenticated) {
+            return this.localStorage.getPuzzle(id)
+            .then(puzzle => {
+                return this.backupStore.addBackup(
+                    puzzle.info.title, 
+                    "my computer", 
+                    "json", 
+                    JSON.stringify(puzzle));
+            })
+            .then(()=> this.refresh());
+    
+        } else {
+            console.log("NOT AUTHENTICATED!")
+            // TO DO
+        }
         return Promise.resolve();
     }
 
-    public restoreFromBackup(id: string, options: BackupOptions): Promise<void> {
+    public restorePuzzle(id: string): Promise<void> {
         // 0) check if logged in
         // 1) find the package info matching the id
         // 2) get the payload for this package from the backpStore
@@ -66,4 +76,5 @@ export class BackupService {
 
         return Promise.resolve();
     }
+
 }
