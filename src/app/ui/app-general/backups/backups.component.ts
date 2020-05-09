@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrateg
 import { BackupService } from 'src/app/services/storage/backup.service';
 import { Subscription } from 'rxjs';
 import { BackupInfo } from 'src/app/services/storage/backup-info';
-import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
+import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 
 @Component({
     selector: 'app-backups',
@@ -16,18 +16,27 @@ export class BackupsComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     public backups: BackupInfo[] = [];
+    public creds: Credentials;
     
     constructor(
         private backupService: BackupService,
         private navService: NavService<AppTrackData>,
         private detRef: ChangeDetectorRef,
+        private authService: AuthService,
     ) { }
 
     public ngOnInit(): void {
+        this.subs.push(this.authService.observe().subscribe(creds => {
+            this.creds = creds;
+            this.detRef.detectChanges();
+        }));
+        
         this.subs.push(this.backupService.observe().subscribe(backups => {
             this.backups = backups;
             this.detRef.detectChanges();
         }));
+
+        this.backupService.refresh();
     }
 
     public ngOnDestroy() {
@@ -43,5 +52,9 @@ export class BackupsComponent implements OnInit, OnDestroy {
         .then(() => {
             this.navService.beginTrack("solveTrack", {});
         });
+    }
+
+    public onDelete(backup: BackupInfo) {
+        this.backupService.deleteBackup(backup);
     }
 }

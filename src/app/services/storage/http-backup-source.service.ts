@@ -59,7 +59,9 @@ export class HttpBackupSourceService {
         .then((response: IPuzzleBackupResult) => {
 
             if (response.success === ApiResponseStatus.OK) {
-                return response.backups.map(b => new BackupInfo(b));
+                return response.backups
+                    .map(b => new BackupInfo(b))
+                    .sort((a,b) => b.date.getTime() - a.date.getTime());
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {
@@ -117,7 +119,17 @@ export class HttpBackupSourceService {
     }
 
     public deleteBackup(id: string): Promise<void> {
-        return Promise.resolve();
+        return this.http.delete(environment.apiRoot + `backup/${id}`)
+        .toPromise()
+        .then((response: IApiResult) => {
+            if (response.success === ApiResponseStatus.OK) {
+                return null;
+            } else if (response.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw "Error trying to get delete backup: " + response.message;
+            }
+        });
     }
 
 }

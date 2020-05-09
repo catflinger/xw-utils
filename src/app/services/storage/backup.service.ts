@@ -91,4 +91,9 @@ export class BackupService {
         });
     }
 
+    public deleteBackup(backup: BackupInfo): Promise<void> {
+        return this.backupStore.deleteBackup(backup.id)
+        .then(() => this.refresh());
+    }
+
 }
