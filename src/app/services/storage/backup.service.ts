@@ -5,6 +5,8 @@ import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { BackupInfo } from './backup-info';
 import { LocalStorageService } from './local-storage.service';
 import { AuthService } from '../app/auth.service';
+import { v4 as uuid } from "uuid";
+import { IPuzzleManager } from '../puzzles/puzzle-management.service';
 
 // export type MergeAction = "skip" | "replace";
 
@@ -26,6 +28,7 @@ export class BackupService {
     constructor(
         private backupStore: HttpBackupSourceService,
         private localStorage: LocalStorageService,
+        private puzzleManager: IPuzzleManager,
         private authService: AuthService,
     ) {
         this.refresh();
@@ -68,13 +71,24 @@ export class BackupService {
         return Promise.resolve();
     }
 
-    public restorePuzzle(id: string): Promise<void> {
+    public restorePuzzle(backup: BackupInfo): Promise<void> {
         // 0) check if logged in
         // 1) find the package info matching the id
         // 2) get the payload for this package from the backpStore
         // 3) apply the changes requested in the options
 
-        return Promise.resolve();
+        return this.backupStore.getBackup(backup.id)
+        .then(backup => {
+            let data: any = JSON.parse(backup.content);
+            if (data.info.id) {
+                data.info.id = uuid();
+                let puzzle = new Puzzle(data);
+                this.puzzleManager.addPuzzle(puzzle);
+            } else {
+                throw "not a backup of a puzzle!";
+                //error! doesn't look like a puzzle to me
+            }
+        });
     }
 
 }

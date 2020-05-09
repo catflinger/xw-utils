@@ -43,10 +43,6 @@ export abstract class IPuzzleManager {
 
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
-
-    abstract makeBackup(): Promise<any>;
-    abstract restoreFromBackup(options: any): Promise<any>;
-
 }
 
 @Injectable()
@@ -184,14 +180,6 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     //#endregion
 
     //#region General Puzzle management
-
-    public makeBackup(): Promise<any> {
-        return Promise.resolve({foo: "bar"});
-    }
-
-    public restoreFromBackup(options: any): Promise<any> {
-        return Promise.resolve({foo: "bar"});
-    }
 
     public getPuzzleList(): Observable<IPuzzleSummary[]> {
         return this.bsList.asObservable();

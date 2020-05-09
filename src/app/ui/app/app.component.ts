@@ -90,6 +90,17 @@ export class AppComponent implements OnInit, OnDestroy {
         this.navService.gotoRoute([route]);
     }
 
+    public onGoToA(route: string) {
+        this.appService.clear();
+
+        if (this.credentials.authenticated) {
+            this.navService.gotoRoute([route]);
+        } else {
+            this.appService.redirect = [route];
+            this.navService.gotoRoute(["login"]);
+        }
+    }
+
     public onLogout() {
         this.authService.clearCredentials();
         this.appService.clear();

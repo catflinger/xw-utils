@@ -1,6 +1,6 @@
 
-import { Injectable, OnDestroy, Type } from '@angular/core';
-import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { Alert, AlertType } from '../common';
 import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
 
@@ -69,9 +69,9 @@ class ActivityMonitor {
 export class AppService implements OnDestroy {
     private _activityMonitor: ActivityMonitor = new ActivityMonitor();
     private alerts: Alert[] = [];
-    private _onLogin: LoginCallback = null;
     private subs: Subscription[] = [];
     private _openPuzzleParameters: OpenPuzzleParamters;
+    private _redirectToRoute: string[] = null;
 
     private bs: BehaviorSubject<AppStatus>;
 
@@ -85,11 +85,11 @@ export class AppService implements OnDestroy {
         // add a timer that records how long the app has been busy
         // when this time passes a threshold mark the app as late
 
-        // this.subs.push(timer(950, 950).subscribe((t) => {
-        //     if (this._activityMonitor.onTick()) {
-        //         this.emitNext();
-        //     }
-        // }));
+        this.subs.push(timer(510, 510).subscribe((t) => {
+            if (this._activityMonitor.onTick()) {
+                this.emitNext();
+            }
+        }));
     }
 
     public ngOnDestroy() {
@@ -104,14 +104,21 @@ export class AppService implements OnDestroy {
         return this._openPuzzleParameters;
     }
 
-    public get loginCallback(): LoginCallback {
-        return this._onLogin;
-    }
-
     public clear() {
-        this.clearLoginCallback();
         this.clearAlerts();
         this.clearBusy();
+    }
+
+    public get redirect(): string[] {
+        return this._redirectToRoute;
+    }
+
+    public set redirect(route: string[]) {
+        this._redirectToRoute = route;
+    }
+
+    public clearRedirect() {
+        this._redirectToRoute = null;
     }
 
     public setOpenPuzzleParams(params: OpenPuzzleParamters) {
@@ -120,14 +127,6 @@ export class AppService implements OnDestroy {
 
     public clearOpenPuzzleParams() {
         this._openPuzzleParameters = null;
-    }
-
-    public setLoginCallback(fn: LoginCallback) {
-        this._onLogin = fn;
-    }
-
-    public clearLoginCallback() {
-        this._onLogin = null;
     }
 
     public setBusy() {

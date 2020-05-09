@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -25,22 +25,30 @@ export class HomeComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private puzzleManagement: IPuzzleManager,
         private authService: AuthService,
-        private backupService: BackupService,
     ) { }
 
     public ngOnInit() {
-        this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
-        this.subs.push(this.authService.observe().subscribe(credentials => this.credentials = credentials));
 
-        this.subs.push(this.puzzleManagement.getPuzzleList().subscribe(
-            (list) => {
-                this.puzzleList = list.filter(p => p.info.provider !== "grid")
-                    .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
-                this.gridList = list.filter(p => p.info.provider === "grid")
-                    .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
-            },
-            (error) => this.appService.setAlert("danger", error.toString())
-        ));
+        this.subs.push(combineLatest(
+            this.appService.getObservable(),
+            this.authService.observe(),
+            this.puzzleManagement.getPuzzleList())
+            .subscribe(
+                result => {
+                    this.appStatus = result[0];
+                    this.credentials = result[1];
+                    const list = result[2];
+            
+                    this.puzzleList = list.filter(p => p.info.provider !== "grid")
+                        .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
+                    this.gridList = list.filter(p => p.info.provider === "grid")
+                        .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
+                },
+                error => {
+                    this.appService.setAlert("danger", error.toString()); 
+                }
+            )
+        );
     }
 
     public ngOnDestroy() {
@@ -103,8 +111,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onBackup(id: string) {
-        this.backupService.backupPuzzle(id)
-        .then(() => console.log("done"))
-        .catch(() => console.log("failed"));
+        const route = ["backup", id];
+
+        if (this.credentials.authenticated) {
+            this.navService.gotoRoute(route);
+        } else {
+            this.appService.redirect = route;
+            this.navService.gotoRoute(["login"]);
+        }
+
     }
 }

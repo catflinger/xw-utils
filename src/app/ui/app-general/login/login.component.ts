@@ -36,8 +36,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public onLoginClose() {
-        if (this.appService.loginCallback) {
-            this.appService.loginCallback();
+        if (this.appService.redirect) {
+            const route = this.appService.redirect;
+            this.appService.redirect = null;
+            this.navService.gotoRoute(route);
         } else {
             this.navService.goHome();
         }

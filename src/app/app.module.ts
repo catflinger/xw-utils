@@ -88,6 +88,7 @@ import { AddRemoveClueComponent } from './ui/components/editor/forms/add-remove-
 import { PuzzleEditorComponent } from './ui/components/editor/puzzle-editor/puzzle-editor.component';
 import { AddClueComponent } from './ui/components/editor/forms/add-clue/add-clue.component';
 import { BackupComponent } from './ui/app-general/backup/backup.component';
+import { BackupsComponent } from './ui/app-general/backups/backups.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -178,6 +179,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         PuzzleEditorComponent,
         AddClueComponent,
         BackupComponent,
+        BackupsComponent,
     ],
     imports: [
         BrowserModule,

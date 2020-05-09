@@ -68,8 +68,22 @@ export class HttpBackupSourceService {
         });
     }
 
-    public getBackup(id: string): Promise<any> {
-        return Promise.resolve();
+    public getBackup(id: string): Promise<IPuzzleBackupInfo> {
+        return this.http.get(environment.apiRoot + `backup/${id}`)
+        .toPromise()
+        .then((response: IPuzzleBackupResult) => {
+            
+            if (response.success === ApiResponseStatus.OK) {
+                if (response.backups.length === 0) {
+                    throw "No backup found with this id";
+                }
+                return response.backups[0];
+            } else if (response.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw "Error trying to get backups: " + response.message;
+            }
+        });
     }
 
     public addBackup(caption: string, origin: string, contentType: string, content: string): Promise<any> {
