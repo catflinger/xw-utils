@@ -5,6 +5,11 @@ import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.servi
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
+import * as Bowser from "bowser";
+import { AuthService } from 'src/app/services/app/auth.service';
+import { AppService } from '../../services/app.service';
+import { NavService } from 'src/app/services/navigation/nav.service';
+import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-backup',
@@ -22,6 +27,8 @@ export class BackupComponent implements OnInit, OnDestroy {
     constructor(
         private backupService: BackupService,
         private puzzleManager: IPuzzleManager,
+        private authService: AuthService,
+        private navService: NavService<AppTrackData>,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -30,8 +37,17 @@ export class BackupComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
+        //if not authenticated bail out
+        if (!this.authService.getCredentials().authenticated) {
+            this.navService.goHome();
+        }
+
+        const browser = Bowser.getParser(window.navigator.userAgent);
+
         this.form = this.formBuilder.group({
             caption: ["", Validators.required],
+            browser: [browser.getBrowserName(), Validators.required],
+            computer: ["", Validators.required],
         });
 
         this.subs.push(
@@ -61,7 +77,12 @@ export class BackupComponent implements OnInit, OnDestroy {
     }
 
     public onBackup() {
-        this.backupService.backupPuzzle(this.puzzleId)
+        const origin = this.form.value.browser + " on " + this.form.value.computer;
+        
+        this.backupService.backupPuzzle(
+            this.puzzleId, 
+            origin, 
+            this.form.value.caption)
         .then(() => this.router.navigate(["backups"]))
         .catch(() => console.log("failed"));
     }

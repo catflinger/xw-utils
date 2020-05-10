@@ -49,7 +49,7 @@ export class BackupService {
         return this._bsBackupList.asObservable();
     }
 
-    public backupPuzzle(id: string): Promise<void> {
+    public backupPuzzle(id: string, origin: string, caption: string): Promise<void> {
 
         const creds = this.authService.getCredentials();
 
@@ -57,8 +57,9 @@ export class BackupService {
             return this.localStorage.getPuzzle(id)
             .then(puzzle => {
                 return this.backupStore.addBackup(
-                    puzzle.info.title, 
-                    "my computer", 
+                    caption, 
+                    origin,
+                    "puzzle",
                     "json", 
                     JSON.stringify(puzzle));
             })

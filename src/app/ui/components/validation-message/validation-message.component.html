@@ -1,1 +1,4 @@
-<span *ngIf="control.hasError('required') && (control.dirty || control.touched)" class="alert-danger">required</span>
+<ng-container *ngIf="control.hasError('required') && (control.dirty || control.touched)" class="alert-danger">
+    <span>&nbsp;</span>
+    <span class="alert-danger font-italic">required</span>
+</ng-container>

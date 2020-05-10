@@ -1,16 +1,13 @@
 <h3>Backups</h3>
 
-<p *ngIf="creds && !creds.authenticated">
-    Please login to see backups
-</p>
-
 <ng-container *ngIf="creds && creds.authenticated">
     <table class="table">
         <thead>
             <tr>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Backup</th>
+                <th>Title</th>
+                <th>Origin</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -20,6 +17,7 @@
                 <td>{{backup.date | date:'mediumDate'}}</td>
                 <td>{{backup.date | date:'mediumTime'}}</td>
                 <td>{{backup.caption}}</td>
+                <td>{{backup.origin}}</td>
                 <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
                 <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
             </tr>

@@ -4,9 +4,6 @@ import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { Alert, AlertType } from '../common';
 import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
 
-// TO DO: do we still need this?
-export type LoginCallback = () => void;
-
 export type OpenPuzzleAction = "openByDate" | "openLatest";
 
 export class AppStatus {
@@ -71,6 +68,10 @@ export class AppService implements OnDestroy {
     private alerts: Alert[] = [];
     private subs: Subscription[] = [];
     private _openPuzzleParameters: OpenPuzzleParamters;
+
+
+
+    // TO DO: move this to nav service
     private _redirectToRoute: string[] = null;
 
     private bs: BehaviorSubject<AppStatus>;

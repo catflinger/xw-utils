@@ -3,37 +3,39 @@ import { AuthService } from '../app/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ApiResponseStatus, ApiSymbols } from '../common';
-import { BackupInfo } from './backup-info';
+import { BackupInfo, BackupType, BackupContentType } from './backup-info';
 
-interface IPuzzleBackupInfo
+interface HttpPuzzleBackupInfo
 {
     id: string;
     caption: string;
     origin: string;
     owner: string;
     date: string;
+    backupType: BackupType;
     contentType: string;
     content?: string;
 }
 
-interface IApiResult {
+interface HttpApiResult {
     success: ApiResponseStatus;
     message: string;
 }
 
-interface IPuzzleBackupResult {
+interface HttpPuzzleBackupResult {
     success: ApiResponseStatus;
     message: string;
-    backups: IPuzzleBackupInfo[];
+    backups: HttpPuzzleBackupInfo[];
 }
 
-interface IPuzzleBackupRequest {
+interface HttpPuzzleBackupRequest {
     username: string;
     password: string;
     backup: {
         caption: string;
         origin: string;
         owner: string;
+        backupType: string;
         contentType: string;
         content: string;
     }
@@ -56,7 +58,7 @@ export class HttpBackupSourceService {
         
         return this.http.get(environment.apiRoot + `user/${owner}/backup`)
         .toPromise()
-        .then((response: IPuzzleBackupResult) => {
+        .then((response: HttpPuzzleBackupResult) => {
 
             if (response.success === ApiResponseStatus.OK) {
                 return response.backups
@@ -70,16 +72,16 @@ export class HttpBackupSourceService {
         });
     }
 
-    public getBackup(id: string): Promise<IPuzzleBackupInfo> {
+    public getBackup(id: string): Promise<BackupInfo> {
         return this.http.get(environment.apiRoot + `backup/${id}`)
         .toPromise()
-        .then((response: IPuzzleBackupResult) => {
+        .then((response: HttpPuzzleBackupResult) => {
             
             if (response.success === ApiResponseStatus.OK) {
                 if (response.backups.length === 0) {
                     throw "No backup found with this id";
                 }
-                return response.backups[0];
+                return new BackupInfo(response.backups[0]);
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
                 throw ApiSymbols.AuthorizationFailure;
             } else {
@@ -88,26 +90,25 @@ export class HttpBackupSourceService {
         });
     }
 
-    public addBackup(caption: string, origin: string, contentType: string, content: string): Promise<any> {
+    public addBackup(caption: string, origin: string, backupType: BackupType, contentType: BackupContentType, content: string): Promise<any> {
         const creds = this.authService.getCredentials();
 
-        const data: IPuzzleBackupRequest = {
+        const data: HttpPuzzleBackupRequest = {
             username: creds.username,
             password: creds.password,
             backup: {
                 owner: creds.username,
-                caption: caption,
-                origin: origin,
-                contentType: contentType,
-                content: content
+                caption,
+                origin,
+                backupType,
+                contentType,
+                content,
             }
         }
 
-        console.log("Sending backup...");
-        
         return this.http.post(environment.apiRoot + "backup", data)
         .toPromise()
-        .then((response: IApiResult) => {
+        .then((response: HttpApiResult) => {
             if (response.success === ApiResponseStatus.OK) {
                 return null;
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
@@ -121,7 +122,7 @@ export class HttpBackupSourceService {
     public deleteBackup(id: string): Promise<void> {
         return this.http.delete(environment.apiRoot + `backup/${id}`)
         .toPromise()
-        .then((response: IApiResult) => {
+        .then((response: HttpApiResult) => {
             if (response.success === ApiResponseStatus.OK) {
                 return null;
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
