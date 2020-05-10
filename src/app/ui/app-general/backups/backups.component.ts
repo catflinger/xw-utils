@@ -6,6 +6,7 @@ import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { AppService } from '../../services/app.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 
 @Component({
     selector: 'app-backups',
@@ -61,6 +62,13 @@ export class BackupsComponent implements OnInit, OnDestroy {
     public onMakeBackup() {
         this.navService.gotoRoute(["backup"]);
     }
+
+    public onRestoreSettings(backup: BackupInfo) {
+        this.backupService.restoreSettings(backup)
+        .then(() => {
+            this.navService.goHome();
+        });
+}
 
     public onRestore(backup: BackupInfo) {
 

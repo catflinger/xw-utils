@@ -126,4 +126,16 @@ export class BackupService {
         .then(() => this.refresh());
     }
 
+    public restoreSettings(backup: BackupInfo): Promise<void> {
+        return this.backupStore.getBackup(backup.id)
+        .then(backup => {
+            if (backup.backupType === "settings") {
+                let data: any = JSON.parse(backup.content);
+                this.settingsService.update(data);
+            } else {
+                throw "Backup does not contain settings data";
+            }
+        });
+    }
+
 }

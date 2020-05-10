@@ -1,5 +1,18 @@
 <h3>Backups</h3>
 
+<ngb-alert [dismissible]="false">
+    <p>
+        By default puzzles are only visible on the computer and the browser that created them.  
+        For example: if you open a puzzle in Chrome then it won't be visible in Internet Explorer.
+        If you open a puzzle on your laptop then it will not be visible on your phone.
+        Also, if you delete your browser's local data then you will lose all your puzzles in that browser.
+    </p>
+    <p>
+    Backups are useful if you want to move a puzzle between computer, or to keep a puzzle after deleteing
+    the browser's local storage.  You can backup a puzzle from one location and restore it at another.
+    </p>
+</ngb-alert>
+
 <ng-container *ngIf="creds && creds.authenticated">
     <div class="mt-5">
         <button type="button" class="btn btn-primary" (click)="onMakeBackup()">Make a backup</button>
@@ -50,7 +63,7 @@
                     <td>{{backup.date | date:'mediumTime'}}</td>
                     <td>{{backup.caption}}</td>
                     <td>{{backup.origin}}</td>
-                    <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
+                    <td><button type="button" class="btn btn-primary" (click)="onRestoreSettings(backup)">Restore</button></td>
                     <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
                 </tr>
             </tbody>
