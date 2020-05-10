@@ -56,6 +56,11 @@ export class BackupsComponent implements OnInit, OnDestroy {
         this.backupService.refresh();
     }
 
+
+    public onMakeBackup() {
+        this.navService.gotoRoute(["backup"]);
+    }
+
     public onRestore(backup: BackupInfo) {
         this.backupService.restorePuzzle(backup)
         .then(() => {

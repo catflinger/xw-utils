@@ -3,11 +3,10 @@ import { BackupService } from 'src/app/services/storage/backup.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 import * as Bowser from "bowser";
 import { AuthService } from 'src/app/services/app/auth.service';
-import { AppService } from '../../services/app.service';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 
@@ -31,13 +30,11 @@ export class BackupComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
         private router: Router,
     ) { }
 
     public ngOnInit(): void {
 
-        //if not authenticated bail out
         if (!this.authService.getCredentials().authenticated) {
             this.navService.goHome();
         }
@@ -45,28 +42,15 @@ export class BackupComponent implements OnInit, OnDestroy {
         const browser = Bowser.getParser(window.navigator.userAgent);
 
         this.form = this.formBuilder.group({
+            puzzle: [null, Validators.required],
             caption: ["", Validators.required],
             browser: [browser.getBrowserName(), Validators.required],
             computer: ["", Validators.required],
         });
 
         this.subs.push(
-            combineLatest(this.puzzleManager.getPuzzleList(), this.route.paramMap)
-            .subscribe(result => {
-                this.puzzles = result[0];
-                const paramMap = result[1];
-
-                if (this.puzzles) {
-                    this.puzzleId = paramMap.get("id");
-
-                    const puzzle = this.puzzles.find(p => p.info.id === this.puzzleId);
-
-                    if (puzzle) {
-                        this.form.patchValue({
-                            caption: puzzle.info.title, 
-                        });
-                    }
-                }
+            this.puzzleManager.getPuzzleList().subscribe(puzzles => {
+                this.puzzles = puzzles;
                 this.detRef.detectChanges();
             })
         );
@@ -85,5 +69,10 @@ export class BackupComponent implements OnInit, OnDestroy {
             this.form.value.caption)
         .then(() => this.router.navigate(["backups"]))
         .catch(() => console.log("failed"));
+    }
+
+    public onPuzzleChange() {
+        //console.log("SELECT " + this.form.value.puzzle.info.title);
+        this.form.patchValue({ caption: this.form.value.puzzle.info.title});
     }
 }

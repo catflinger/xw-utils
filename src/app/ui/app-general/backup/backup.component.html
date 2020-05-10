@@ -3,26 +3,38 @@
 <form class="form" [formGroup]="form">
 
     <div class="form-group">
-        <label for="caption" class="form-label">Title for this backup</label>
-        <app-validation-message [control]="form.get('caption')"></app-validation-message>
-        <input type="text" id="caption" class="form-control" placeholder="un-named puzzle" formControlName="caption">
+        <label for="puzzle" class="form-label">Select the puzzle you want to back up</label>
+
+        <select class="form-control" id="puzzle" formControlName="puzzle" (change)="onPuzzleChange()">
+            <option *ngFor="let item of puzzles" [ngValue]="item">{{item.info.title}}</option>
+        </select>
     </div>
 
-    <div class="form-group">
-        <label for="browser" class="form-label">Browser name</label>
-        <app-validation-message [control]="form.get('browser')"></app-validation-message>
-        <input type="text" id="browser" class="form-control" placeholder="eg Chrome" formControlName="browser">
-    </div>
+    <ng-container *ngIf="form.value.puzzle">
 
-    <div class="form-group">
-        <label for="computer" class="form-label">A name for this computer</label>
-        <app-validation-message [control]="form.get('computer')"></app-validation-message>
-        <input type="text" id="computer" class="form-control" placeholder="eg my laptop" formControlName="computer">
+        <div class="form-group">
+            <label for="caption" class="form-label">Title for this backup</label>
+            <app-validation-message [control]="form.get('caption')"></app-validation-message>
+            <input type="text" id="caption" class="form-control" placeholder="un-named puzzle" formControlName="caption">
+        </div>
 
-    </div>
+        <div class="form-group">
+            <label for="browser" class="form-label">Browser name</label>
+            <app-validation-message [control]="form.get('browser')"></app-validation-message>
+            <input type="text" id="browser" class="form-control" placeholder="eg Chrome" formControlName="browser">
+        </div>
 
+        <div class="form-group">
+            <label for="computer" class="form-label">A name for this computer</label>
+            <app-validation-message [control]="form.get('computer')"></app-validation-message>
+            <input type="text" id="computer" class="form-control" placeholder="eg my laptop" formControlName="computer">
+
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-primary" [disabled]="!form.valid" (click)="onBackup()">Backup</button>
+        </div>
+        
+    </ng-container>
 </form>
 
-<div>
-    <button type="button" class="btn btn-primary" [disabled]="!form.valid" (click)="onBackup()">Backup</button>
-</div>

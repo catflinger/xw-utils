@@ -21,7 +21,7 @@
                         <th>Title</th>
                         <th>Date</th>
                         <th></th>
-                        <th colspan="3">Actions</th>
+                        <th colspan="2">Actions</th>
                     </tr>
                 </thead>
 
@@ -33,7 +33,6 @@
                         <td>{{item.info.wordpressId | wordpressId}}</td>
                         <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(item.info.id)">Open</button></td>
                         <td><button type="button" class="btn btn-primary" (click)="onDelete(item.info.id)">Delete</button></td>
-                        <td><button type="button" class="btn btn-primary" (click)="onBackup(item.info.id)">Backup</button></td>
                     </tr>
 
                 </tbody>

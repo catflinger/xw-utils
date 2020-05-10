@@ -70,7 +70,7 @@ const routes: Routes = [
     { path: "readme", component: ReadmeComponent },
     { path: "settings", component: SettingsComponent },
     { path: "backups", component: BackupsComponent },
-    { path: "backup/:id", component: BackupComponent },
+    { path: "backup", component: BackupComponent },
 
     // default routes
     { path: "", redirectTo: "/home", pathMatch: "full" },

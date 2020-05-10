@@ -22,6 +22,11 @@ interface HttpApiResult {
     message: string;
 }
 
+interface HttpApiRequest {
+    username: string;
+    password: string;
+}
+
 interface HttpPuzzleBackupResult {
     success: ApiResponseStatus;
     message: string;
@@ -120,8 +125,16 @@ export class HttpBackupSourceService {
     }
 
     public deleteBackup(id: string): Promise<void> {
-        return this.http.delete(environment.apiRoot + `backup/${id}`)
-        .toPromise()
+        const creds = this.authService.getCredentials();
+        const body: HttpApiRequest = {
+            username: creds.username,
+            password: creds.password,
+        }
+        return this.http.request(
+            "delete", 
+            environment.apiRoot + `backup/${id}`, 
+            {body: body}
+        ).toPromise()
         .then((response: HttpApiResult) => {
             if (response.success === ApiResponseStatus.OK) {
                 return null;

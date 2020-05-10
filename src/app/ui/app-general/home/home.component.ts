@@ -109,16 +109,4 @@ export class HomeComponent implements OnInit, OnDestroy {
     public onDelete(id: string) {
         this.puzzleManagement.deletePuzzle(id);
     }
-
-    public onBackup(id: string) {
-        const route = ["backup", id];
-
-        if (this.credentials.authenticated) {
-            this.navService.gotoRoute(route);
-        } else {
-            this.appService.redirect = route;
-            this.navService.gotoRoute(["login"]);
-        }
-
-    }
 }
