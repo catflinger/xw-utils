@@ -90,6 +90,7 @@ import { AddClueComponent } from './ui/components/editor/forms/add-clue/add-clue
 import { BackupComponent } from './ui/app-general/backup/backup.component';
 import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
+import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -182,6 +183,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         BackupComponent,
         BackupsComponent,
         BackupSettingsComponent,
+        BackupOptionsComponent,
     ],
     imports: [
         BrowserModule,

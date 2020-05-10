@@ -9,6 +9,7 @@ export class BackupInfo {
     readonly date: Date;
     readonly backupType: BackupType;
     readonly contentType: BackupContentType;
+    readonly contentId: string;
     readonly content?: string;
 
     constructor(data: any) {
@@ -17,6 +18,7 @@ export class BackupInfo {
         this.origin = data.origin;
         this.caption = data.caption;
         this.backupType = data.backupType;
+        this.contentId = data.contentId;
         this.contentType = data.contentType;
         this.date = new Date(data.date);
         this.content = data.content;

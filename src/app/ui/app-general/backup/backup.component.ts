@@ -18,7 +18,7 @@ import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data'
 })
 export class BackupComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
-    private puzzleId: string;
+    //private puzzleId: string;
 
     public puzzles: IPuzzleSummary[] = [];
     public form: FormGroup;
@@ -64,11 +64,15 @@ export class BackupComponent implements OnInit, OnDestroy {
         const origin = this.form.value.browser + " on " + this.form.value.computer;
         
         this.backupService.backupPuzzle(
-            this.puzzleId, 
+            this.form.value.puzzle.info.id, 
             origin, 
             this.form.value.caption)
-        .then(() => this.router.navigate(["backups"]))
-        .catch(() => console.log("failed"));
+        .then(() => {
+            this.router.navigate(["backups"]);
+        })
+        .catch((error) => {
+            console.log("failed " + error);
+        });
     }
 
     public onPuzzleChange() {

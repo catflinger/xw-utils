@@ -1,0 +1,14 @@
+<h3>Restore options</h3>
+
+<ngb-alert class="mt-5" [dismissible]="false">
+    <p>You already have a puzzle matching the one in this backup. You can replace the current puzzle or you can keep the existing 
+        puzzle and restore the backup along side it.</p>
+    
+</ngb-alert>
+
+<p class="mt-5">What would you like to do?</p>
+<div class="mt-3">
+    <button type="button" class="btn btn-primary mr-3" (click)="onKeep()">Keep existing puzzle</button>
+    <button type="button" class="btn btn-primary mr-3" (click)="onReplace()">Replace existing puzzle</button>
+    <button type="button" class="btn btn-primary mr-3" (click)="onCancel()">Cancel</button>
+</div>

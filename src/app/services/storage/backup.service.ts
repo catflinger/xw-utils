@@ -52,6 +52,10 @@ export class BackupService {
         return this._bsBackupList.asObservable();
     }
 
+    public get backups(): BackupInfo[] {
+        return this._bsBackupList.value;
+    }
+
     public backupSettings(origin: string, caption: string): Promise<void> {
         let result: Promise<any>;
         const creds = this.authService.getCredentials();
@@ -62,6 +66,7 @@ export class BackupService {
                 caption, 
                 origin,
                 "settings",
+                "",
                 "json", 
                 JSON.stringify(this.settingsService.settings));
     
@@ -79,12 +84,17 @@ export class BackupService {
         if (creds.authenticated) {
             return this.localStorage.getPuzzle(id)
             .then(puzzle => {
-                return this.backupStore.addBackup(
-                    caption, 
-                    origin,
-                    "puzzle",
-                    "json", 
-                    JSON.stringify(puzzle));
+                if (puzzle) {
+                    return this.backupStore.addBackup(
+                        caption, 
+                        origin,
+                        "puzzle",
+                        puzzle.info.id,
+                        "json", 
+                        JSON.stringify(puzzle));
+                } else {
+                    throw "Could not find puzzle with id=" + id;
+                }
             })
             .then(()=> this.refresh());
     
@@ -96,10 +106,6 @@ export class BackupService {
     }
 
     public restorePuzzle(backup: BackupInfo): Promise<void> {
-        // 0) check if logged in
-        // 1) find the package info matching the id
-        // 2) get the payload for this package from the backpStore
-        // 3) apply the changes requested in the options
 
         return this.backupStore.getBackup(backup.id)
         .then(backup => {

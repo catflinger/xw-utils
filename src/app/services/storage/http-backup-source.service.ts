@@ -13,6 +13,7 @@ interface HttpPuzzleBackupInfo
     owner: string;
     date: string;
     backupType: BackupType;
+    contentId: string;
     contentType: string;
     content?: string;
 }
@@ -41,6 +42,7 @@ interface HttpPuzzleBackupRequest {
         origin: string;
         owner: string;
         backupType: string;
+        contentId: string;
         contentType: string;
         content: string;
     }
@@ -95,8 +97,16 @@ export class HttpBackupSourceService {
         });
     }
 
-    public addBackup(caption: string, origin: string, backupType: BackupType, contentType: BackupContentType, content: string): Promise<any> {
-        const creds = this.authService.getCredentials();
+    public addBackup(
+        caption: string, 
+        origin: string, 
+        backupType: BackupType, 
+        contentId: string, 
+        contentType: BackupContentType, 
+        content: string,
+        ): Promise<any> {
+        
+            const creds = this.authService.getCredentials();
 
         const data: HttpPuzzleBackupRequest = {
             username: creds.username,
@@ -106,6 +116,7 @@ export class HttpBackupSourceService {
                 caption,
                 origin,
                 backupType,
+                contentId,
                 contentType,
                 content,
             }

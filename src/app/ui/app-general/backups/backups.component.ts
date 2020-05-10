@@ -63,13 +63,24 @@ export class BackupsComponent implements OnInit, OnDestroy {
     }
 
     public onRestore(backup: BackupInfo) {
-        this.backupService.restorePuzzle(backup)
-        .then(() => {
-            this.navService.beginTrack("solveTrack", {});
-        });
+
+        if (this.localCopyExists(backup)) {
+            this.navService.gotoRoute(["backup-options", backup.id]);
+        } else {
+            this.backupService.restorePuzzle(backup)
+            .then(() => {
+                this.navService.beginTrack("solveTrack", {});
+            });
+        }
     }
 
     public onDelete(backup: BackupInfo) {
         this.backupService.deleteBackup(backup);
+    }
+
+    private localCopyExists(backup: BackupInfo): boolean {
+        let exists = true;
+
+        return exists;
     }
 }
