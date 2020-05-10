@@ -1,4 +1,4 @@
-<h3>Make Backup</h3>
+<h3>Puzzle Backup</h3>
 
 <form class="form" [formGroup]="form">
 
@@ -30,11 +30,12 @@
             <input type="text" id="computer" class="form-control" placeholder="eg my laptop" formControlName="computer">
 
         </div>
-
-        <div>
-            <button type="button" class="btn btn-primary" [disabled]="!form.valid" (click)="onBackup()">Backup</button>
-        </div>
-        
     </ng-container>
+
+    <div>
+        <button type="button" class="btn btn-primary mr-3" [disabled]="!form.valid" (click)="onBackup()" *ngIf="form.value.puzzle">Backup</button>
+        <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+    </div>
+
 </form>
 

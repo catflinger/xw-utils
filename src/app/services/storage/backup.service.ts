@@ -7,6 +7,8 @@ import { LocalStorageService } from './local-storage.service';
 import { AuthService } from '../app/auth.service';
 import { v4 as uuid } from "uuid";
 import { IPuzzleManager } from '../puzzles/puzzle-management.service';
+import { AppSettingsService } from '../app/app-settings.service';
+import { ApiSymbols } from '../common';
 
 // export type MergeAction = "skip" | "replace";
 
@@ -29,6 +31,7 @@ export class BackupService {
         private backupStore: HttpBackupSourceService,
         private localStorage: LocalStorageService,
         private puzzleManager: IPuzzleManager,
+        private settingsService: AppSettingsService,
         private authService: AuthService,
     ) {
         this.refresh();
@@ -47,6 +50,26 @@ export class BackupService {
 
     public observe(): Observable<BackupInfo[]> {
         return this._bsBackupList.asObservable();
+    }
+
+    public backupSettings(origin: string, caption: string): Promise<void> {
+        let result: Promise<any>;
+        const creds = this.authService.getCredentials();
+
+        if (creds.authenticated) {
+
+            result = this.backupStore.addBackup(
+                caption, 
+                origin,
+                "settings",
+                "json", 
+                JSON.stringify(this.settingsService.settings));
+    
+        } else {
+            result = Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        return result;
     }
 
     public backupPuzzle(id: string, origin: string, caption: string): Promise<void> {

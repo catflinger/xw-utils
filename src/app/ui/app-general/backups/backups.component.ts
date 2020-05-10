@@ -16,7 +16,8 @@ import { AppService } from '../../services/app.service';
 export class BackupsComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
-    public backups: BackupInfo[] = [];
+    public puzzleBackups: BackupInfo[] = [];
+    public settingsBackups: BackupInfo[] = [];
     public creds: Credentials;
     
     constructor(
@@ -41,7 +42,8 @@ export class BackupsComponent implements OnInit, OnDestroy {
         }));
         
         this.subs.push(this.backupService.observe().subscribe(backups => {
-            this.backups = backups.filter(b => b.backupType === "puzzle");
+            this.puzzleBackups = backups.filter(b => b.backupType === "puzzle");
+            this.settingsBackups = backups.filter(b => b.backupType === "settings");
             this.detRef.detectChanges();
         }));
 
@@ -55,7 +57,6 @@ export class BackupsComponent implements OnInit, OnDestroy {
     public onRefresh() {
         this.backupService.refresh();
     }
-
 
     public onMakeBackup() {
         this.navService.gotoRoute(["backup"]);

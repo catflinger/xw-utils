@@ -1,4 +1,4 @@
-export type BackupType = "puzzle" | "setttings";
+export type BackupType = "puzzle" | "settings";
 export type BackupContentType = "json";
 
 export class BackupInfo {

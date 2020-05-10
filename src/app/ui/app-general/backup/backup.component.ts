@@ -75,4 +75,8 @@ export class BackupComponent implements OnInit, OnDestroy {
         //console.log("SELECT " + this.form.value.puzzle.info.title);
         this.form.patchValue({ caption: this.form.value.puzzle.info.title});
     }
+
+    public onCancel() {
+        this.navService.goHome();
+    }
 }

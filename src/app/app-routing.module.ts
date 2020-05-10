@@ -30,6 +30,7 @@ import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-edi
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupComponent } from './ui/app-general/backup/backup.component';
+import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 
 const routes: Routes = [
 
@@ -71,6 +72,7 @@ const routes: Routes = [
     { path: "settings", component: SettingsComponent },
     { path: "backups", component: BackupsComponent },
     { path: "backup", component: BackupComponent },
+    { path: "backup-settings", component: BackupSettingsComponent },
 
     // default routes
     { path: "", redirectTo: "/home", pathMatch: "full" },

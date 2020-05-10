@@ -1,34 +1,63 @@
 <h3>Backups</h3>
 
 <ng-container *ngIf="creds && creds.authenticated">
-    <div class="mt-3">
+    <div class="mt-5">
         <button type="button" class="btn btn-primary" (click)="onMakeBackup()">Make a backup</button>
     </div>
 
-    <table class="table mt-5">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Title</th>
-                <th>Origin</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let backup of backups">
-                <td>{{backup.date | date:'mediumDate'}}</td>
-                <td>{{backup.date | date:'mediumTime'}}</td>
-                <td>{{backup.caption}}</td>
-                <td>{{backup.origin}}</td>
-                <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
-                <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="mt-5" *ngIf="puzzleBackups.length">
+        <h4>Puzzle backups</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Title</th>
+                    <th>Origin</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let backup of puzzleBackups">
+                    <td>{{backup.date | date:'mediumDate'}}</td>
+                    <td>{{backup.date | date:'mediumTime'}}</td>
+                    <td>{{backup.caption}}</td>
+                    <td>{{backup.origin}}</td>
+                    <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
+                    <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <div>
+    <div class="mt-5" *ngIf="settingsBackups.length">
+        <h4>Settings backups</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Title</th>
+                    <th>Origin</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let backup of settingsBackups">
+                    <td>{{backup.date | date:'mediumDate'}}</td>
+                    <td>{{backup.date | date:'mediumTime'}}</td>
+                    <td>{{backup.caption}}</td>
+                    <td>{{backup.origin}}</td>
+                    <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
+                    <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-5">
         <button type="button" class="btn btn-primary" (click)="onRefresh()">Refresh</button>
     </div>
 </ng-container>

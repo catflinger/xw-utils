@@ -6,6 +6,7 @@ import { AppService } from 'src/app/ui/services/app.service';
 import { AppSettings, BooleanSettingsGroupKey, EditorMode, editorModes } from 'src/app/services/common';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { AuthService } from 'src/app/services/app/auth.service';
 
 @Component({
     selector: 'app-settings',
@@ -23,6 +24,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private appService: AppService,
         private settingsService: AppSettingsService,
+        private authService: AuthService,
         private formBuilder: FormBuilder,
     ) { }
 
@@ -86,8 +88,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        //this.navService.returnToSender();
         this.navService.goHome();
+    }
+
+    public onBackup() {
+        if (!this.authService.getCredentials().authenticated) {
+            this.appService.redirect = ["backup-settings"];
+            this.navService.gotoRoute(["login"]);
+        } else {
+            this.navService.gotoRoute(["backup-settings"]);
+        }
     }
 
     public get tipKeys() {
