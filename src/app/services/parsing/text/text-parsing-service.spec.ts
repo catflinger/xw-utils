@@ -54,9 +54,11 @@ describe('TextParsingService', () => {
 
 function runParser(data: IParseToken[]) {
     mockTokeniser.setTestData(data);
+
     const service: TextParsingService = new TextParsingService(mockTokeniser);
 
     let parser = service.parser(new ParseData(), null);
+
     let context = parser.next();
 
     while(!context.done) {

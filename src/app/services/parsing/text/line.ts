@@ -49,7 +49,7 @@ export class Line {
     }
 
     private get hasPartialEndMarker(): boolean {
-        return !this.text.includes("(") && /[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
+        return /^\s*[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
     }
 
     private get hasAcrossMarker(): boolean {

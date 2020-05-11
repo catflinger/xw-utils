@@ -1,28 +1,14 @@
 import { Line } from '../line';
-import { IParseToken } from 'src/app/model/interfaces';
+import { IParseToken, ParseTokenType } from 'src/app/model/interfaces';
 
-export const parseTokenTypes = {
 
-    StartMarker: Symbol("StartMarkerToken"),
-    AcrossMarker: Symbol("AcrossMarkerToken"),
-    DownMarker: Symbol("DownMarkerToken"),
-    EndMarker: Symbol("EndMarkerToken"),
-
-    ClueStart: Symbol("ClueStartToken"),
-    Clue: Symbol("ClueToken"),
-    ClueEnd: Symbol("ClueEndToken"),
-
-    Text: Symbol("TextToken"),
-
-    Null: Symbol("NullToken"),
-} 
 
 abstract class ParseToken implements IParseToken {
     public readonly text: string; 
     public readonly lineNumber: number;
-    public readonly type: Symbol;
+    public readonly type: ParseTokenType;
 
-    constructor(line: Line, type: Symbol) {
+    constructor(line: Line, type: ParseTokenType) {
         this.text = line.rawText;
         this.lineNumber= line.lineNumber;
         this.type = type;
@@ -43,54 +29,54 @@ abstract class ParseToken implements IParseToken {
 
 export class AcrossMarkerToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.AcrossMarker);
+        super(line, "AcrossMarkerToken");
     }
 }
 
 export class DownMarkerToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.DownMarker);
+        super(line, "DownMarkerToken");
     }
 }
 
 export class ClueStartToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.ClueStart);
+        super(line, "ClueStartToken");
     }
 }
 
 export class ClueEndToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.ClueEnd);
+        super(line, "ClueEndToken");
     }
 }
 
 export class ClueToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.Clue);
+        super(line, "ClueToken");
     }
 }
 
 export class TextToken extends ParseToken {
     constructor(line: Line) {
-        super(line, parseTokenTypes.Text);
+        super(line, "TextToken");
     }
 }
 
 export class StartMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[start-of-file]", NaN, {}), parseTokenTypes.StartMarker);
+        super(new Line("[start-of-file]", NaN, {}), "StartMarkerToken");
     }
 }
 
 export class EndMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[end-of-file]", NaN, {}), parseTokenTypes.EndMarker);
+        super(new Line("[end-of-file]", NaN, {}), "EndMarkerToken");
     }
 }
 
 export class NullToken extends ParseToken {
     constructor() {
-        super(new Line("", NaN, {}), parseTokenTypes.Null);
+        super(new Line("", NaN, {}), "NullToken");
     }
 }

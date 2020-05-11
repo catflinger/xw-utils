@@ -1,5 +1,5 @@
 // one or two digits
-export const clueCaptionExpressionFirstPart = String.raw`^\s*\d{1,2}`;
+export const clueCaptionExpressionFirstPart = String.raw`\s*\d{1,2}`;
 
 // optional space, a comma or slash, optional space, one or two digits, then an optioanl "across" or "down"
 // TO DO: should be followed by a lookahead for a space (ie a space comes next but is not included in the match)
@@ -7,7 +7,7 @@ export const clueCaptionExpressionFirstPart = String.raw`^\s*\d{1,2}`;
 export const clueCaptionExpressionAdditionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across|down|ac|dn))?`;
 
 // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
-export const clueCaptionExpression = String.raw`(?<caption>\*?\s*${clueCaptionExpressionFirstPart}(${clueCaptionExpressionAdditionalPart})*)`;
+export const clueCaptionExpression = String.raw`^\s*\*?\s*(?<caption>\s*${clueCaptionExpressionFirstPart}(${clueCaptionExpressionAdditionalPart})*)`;
 
 export const clueLetterCountExpression = String.raw`(?<letterCount>\((words|[0-9, -])+?\)\s*$)`;
 

@@ -24,6 +24,7 @@ export class SetGridReferences implements IPuzzleModifier {
 
             clues.forEach(clue => {
                 clue.link.entries = [];
+
                 let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group);
 
                 // TO DO: check that all clues except redirects have references?

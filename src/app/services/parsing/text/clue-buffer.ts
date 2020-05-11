@@ -1,7 +1,7 @@
 import { ClueGroup, Direction } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { Clue } from 'src/app/model/puzzle-model/clue';
-import { clueCaptionExpression, clueCaptionExpressionAdditionalPart } from './types';
+import { clueCaptionExpression } from './types';
 
 export class ClueBuffer {
     private _rawText: string;
@@ -54,16 +54,7 @@ export class ClueBuffer {
         if (!this._rawText || this._rawText.trim().length === 0) {
             this._caption = null;
         }
-/*
-        // one or two digits
-        const firstPart = String.raw`^\s*\d{1,2}`;
-        
-        // optional space, a comma or slash, optional space, one or two digits, then an optioanl "across" or "down" or "/""
-        const additionalPart = String.raw`\s*(,|/)\s*\d{1,2}(\s?(across|down|ac|dn))?`;
-        
-        // optional asterisk, optional space, (the first grid reference) then zero or more additional grid references
-        const captionGroup = String.raw`(?<caption>\*?\s*${firstPart}(${additionalPart})*)`;
-*/
+
         // any characters up to the end of the line
         const clueGroupExpression = String.raw`(?<clue>.*$)`;
         
@@ -81,9 +72,8 @@ export class ClueBuffer {
 
     static makeGridReferences(clueCaption: string, group: ClueGroup): ReadonlyArray<GridReference> {
         let result: GridReference[] = [];
-        const expression = new RegExp(String.raw`\s*(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
-        //const expression = new RegExp(clueCaptionExpressionAdditionalPart);
-
+        const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
+        
         let parts = clueCaption.split(",");
 
         parts.forEach((part) => {

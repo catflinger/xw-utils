@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ParseData } from "./parse-data";
 import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
-import { parseTokenTypes, ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
+import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
 import { IParseContext, ParseContext } from './text-parsing-context';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { ClueBuffer } from './clue-buffer';
@@ -15,7 +15,9 @@ import { Clue } from 'src/app/model/puzzle-model/clue';
 })
 export class TextParsingService {
 
-    constructor(private tokeniser: TokeniserService) {}
+    constructor(
+        private tokeniser: TokeniserService,
+        ) {}
 
     public *parser(data: ParseData, options: TextParsingOptions) {
 
@@ -33,32 +35,33 @@ export class TextParsingService {
         let item = tokeniser.next();
 
         while(!item.done) {
+
             context.setGroup(item.value);
 
             try {
                 switch (context.tokenGroup.current.type) {
-                    case parseTokenTypes.StartMarker:
+                    case "StartMarkerToken":
                         //ignore this
                         break;
-                    case parseTokenTypes.AcrossMarker:
+                    case "AcrossMarkerToken":
                         this.onAcrossMarker(context, _options);
                         break;
-                    case parseTokenTypes.DownMarker:
+                    case "DownMarkerToken":
                         this.onDownMarker(context, _options);
                         break;
-                    case parseTokenTypes.EndMarker:
+                    case "EndMarkerToken":
                         this.onEndMarker(context, _options);
                         break;
-                    case parseTokenTypes.Clue:
+                    case "ClueToken":
                         this.onClueToken(context, _options, data.grid);
                         break;
-                    case parseTokenTypes.ClueStart:
+                    case "ClueStartToken":
                         this.onClueStartToken(context, _options, data.grid);
                         break;
-                    case parseTokenTypes.Text:
+                    case "TextToken":
                         this.onTextToken(context, _options);
                         break;
-                    case parseTokenTypes.ClueEnd:
+                    case "ClueEndToken":
                         this.onClueEndToken(context, _options);
                         break;
                     default:
@@ -407,7 +410,7 @@ export class TextParsingService {
                 // of the text that by chance has word-wrapped to the start of a new line
             }
             
-            if (token.type === parseTokenTypes.Clue) {
+            if (token.type === "ClueToken") {
                 context.addClueText(token.text);
                 context.save();
             } else {

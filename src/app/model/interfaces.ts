@@ -46,6 +46,17 @@ export type TextParsingErrorCode =
     "text_across" | 
     "text_down";
 
+export type ParseTokenType = 
+    "StartMarkerToken" | 
+    "AcrossMarkerToken" |
+    "DownMarkerToken" |
+    "EndMarkerToken" |
+    "ClueStartToken" |
+    "ClueToken" |
+    "ClueEndToken" |
+    "TextToken" |
+    "NullToken"; 
+
 export const GridStyles: {standard: GridStyle, barred: GridStyle} = {
     standard: "standard",
     barred: "barred",
@@ -72,7 +83,7 @@ export interface IQuillDelta {
 export interface IParseToken {
     text: string; 
     lineNumber: number;
-    type: Symbol;
+    type: ParseTokenType;
 }
 
 export interface ITokenGroup {
