@@ -15,8 +15,6 @@ export class AnnotateClue implements IPuzzleModifier {
         private warnings: ClueValidationWarning[]) { }
 
     exec(puzzle: IPuzzle) {
-        //console.log("MODIFIER annotate clue:  " + JSON.stringify({id: this.id, answers: this.answers, comment: this.comment}))
-
         let clue = puzzle.clues.find((c) => c.id === this.id);
 
         if (clue) {

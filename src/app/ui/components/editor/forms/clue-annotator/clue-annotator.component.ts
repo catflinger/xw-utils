@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Subscription } from 'rxjs';
@@ -63,6 +63,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         private editorService: ClueEditorService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -118,6 +119,8 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                             this.setLatestAnswer();
                         }
                     }
+                    this.detRef.detectChanges();
+
                 }
             )
         );
@@ -125,12 +128,14 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         this.subs.push(
             this.appSettingsService.observe().subscribe(settings => {
                 this.appSettings = settings;
+                this.detRef.detectChanges();
             }));
 
         this.subs.push(this.form.valueChanges.subscribe(x => {
             if (this.form.dirty) {
                 this.dirty.emit();
             }
+            this.detRef.detectChanges();
         }));
     }
 
@@ -170,6 +175,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         this.form.patchValue({
             chunks: [new ClueTextChunk(0, this.clue.text, false)]
         });
+        this.form.markAsDirty();
         this.validate();
 
     }
@@ -187,15 +193,20 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     public onTipInstance(instance: TipInstance) {
         this.tipInstance = instance;
         this.tipInstance.activated = false;
-        this.tipInstance.observe().subscribe(ts => this.tipStatus = ts);
+        this.subs.push(this.tipInstance.observe().subscribe(ts => {
+            this.tipStatus = ts;
+            this.detRef.detectChanges();
+        }));
     }
 
     public onCheat() {
         const formArray = this.form.get("answers") as FormArray;
         formArray.controls[0].patchValue({ answer: this.clue.solution });
+        this.form.markAsDirty();
 
         this.validate();
         this.setLatestAnswer();
+        this.dirty.emit();
     }
 
     public onAnnotation() {
@@ -216,7 +227,6 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     private onSave(): Promise<boolean> {
-
         let result = Promise.resolve(true);
 
         if (!this.form.dirty) {
@@ -227,14 +237,15 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
             if (this.appSettings.tips.definitionWarning.enabled &&
                 !this.tipStatus.show &&
                 this.form.value.chunks.length < 2) {
-
-                this.tipInstance.activated = true;
-
+ 
+                    this.tipInstance.activated = true;
             } else {
+ 
                 let answer = this.clean(this.form.value.answers[0].answer);
                 let lengthAvailable = 0;
 
                 if (this.grid) {
+ 
                     this.clue.link.entries.forEach(entry => {
                         let ge = this.grid.getGridEntryFromReference(entry.gridRef);
                         if (ge) {
@@ -244,11 +255,13 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                 }
 
                 if (answer && lengthAvailable && answer.length !== lengthAvailable) {
+ 
                     result = this.showSaveWarning("Warning: the answer does not fit the space available in the grid")
                         .then((cancel): boolean => {
                             if (!cancel) {
                                 this.save();
                             }
+                            this.detRef.detectChanges();
                             return cancel;
                         });
                 } else if (this.clue.solution && answer !== this.clean(this.clue.solution)) {
@@ -257,6 +270,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                             if (!cancel) {
                                 this.save();
                             }
+                            this.detRef.detectChanges();
                             return cancel;
                         });
                 } else {

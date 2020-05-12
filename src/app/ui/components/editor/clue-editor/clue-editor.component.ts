@@ -49,6 +49,7 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public onDirty() {
         this.dirty = true;
+        this.detRef.detectChanges();
     }
 
     public onNavChange(event: NgbNavChangeEvent) {
@@ -72,8 +73,8 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
             .then(cancel => {
                 if (!cancel) {
                     this.closeAndCommit();
-                    this.detRef.detectChanges();
                 }
+                this.detRef.detectChanges();
             });
         }
     }

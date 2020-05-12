@@ -55,6 +55,7 @@ export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorFor
     }
 
     public onLetterClick(index: number) {
+        // TO DO: ...
         console.log("You clicked " + index)
     }
 

@@ -99,8 +99,8 @@ export class BackupService {
             .then(()=> this.refresh());
     
         } else {
+            // TO DO ...
             console.log("NOT AUTHENTICATED!")
-            // TO DO
         }
         return Promise.resolve();
     }

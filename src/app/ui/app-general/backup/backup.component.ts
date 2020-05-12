@@ -71,12 +71,12 @@ export class BackupComponent implements OnInit, OnDestroy {
             this.router.navigate(["backups"]);
         })
         .catch((error) => {
+            // TO DO: ...
             console.log("failed " + error);
         });
     }
 
     public onPuzzleChange() {
-        //console.log("SELECT " + this.form.value.puzzle.info.title);
         this.form.patchValue({ caption: this.form.value.puzzle.info.title});
     }
 
