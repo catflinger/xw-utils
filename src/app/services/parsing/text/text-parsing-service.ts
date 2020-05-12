@@ -91,7 +91,6 @@ export class TextParsingService {
     }
 
     private onAcrossMarker(context: ParseContext, options: TextParsingOptions) {
-        const token = context.tokenGroup.current as AcrossMarkerToken;
 
         switch (context.state) {
             case null:
@@ -124,7 +123,6 @@ export class TextParsingService {
     }
 
     private onDownMarker(context: ParseContext, options: TextParsingOptions) {
-        const token = context.tokenGroup.current as DownMarkerToken;
 
         switch (context.state) {
             case "across":
@@ -166,7 +164,6 @@ export class TextParsingService {
     }
 
     private onEndMarker(context: ParseContext, options: TextParsingOptions) {
-        const token = context.tokenGroup.current as EndMarkerToken;
 
         switch (context.state) {
             case null:

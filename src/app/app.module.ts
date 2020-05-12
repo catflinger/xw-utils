@@ -13,44 +13,44 @@ import { PublishOptionsComponent } from './ui/puzzle-publishing/publish-options/
 import { PublishComponent } from './ui/puzzle-publishing/publish/publish.component';
 import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complete/publish-complete.component';
 import { PublishPreambleComponent } from './ui/puzzle-publishing/publish-preamble/publish-preamble.component';
-import { ClueListComponent } from './ui/components/clue-list/clue-list.component';
+import { ClueListComponent } from './ui/components/clues/clue-list/clue-list.component';
 import { SolverComponent } from './ui/puzzle-solving/solver/solver.component';
 import { ClueAnnotationComponent } from './ui/components/editor/forms/clue-annotator/clue-annotator.component';
-import { ClueTextChunkComponent } from './ui/components/clue-text-chunk/clue-text-chunk.component';
+import { ClueTextChunkComponent } from './ui/components/clues/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/components/grid/grid.component';
 
 import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzles/puzzle-management.service';
-import { AlertComponent } from './ui/components/alert/alert.component';
-import { TextStyleComponent } from './ui/components/text-style/text-style.component';
+import { AlertComponent } from './ui/components/guides/alert/alert.component';
+import { TextStyleComponent } from './ui/components/publishing/text-style/text-style.component';
 import { BloggerComponent } from './ui/puzzle-solving/blogger/blogger.component';
-import { ClueTextControlComponent } from './ui/components/clue-text-control/clue-text-control.component';
-import { ClueTextComponent } from './ui/components/clue-text/clue-text.component';
-import { CluesPreviewComponent } from './ui/components/clues-preview/clues-preview.component';
-import { ContentPreviewComponent } from './ui/components/content-preview/content-preview.component';
+import { ClueTextControlComponent } from './ui/components/clues/clue-text-control/clue-text-control.component';
+import { ClueTextComponent } from './ui/components/clues/clue-text/clue-text.component';
+import { CluesPreviewComponent } from './ui/components/publishing/clues-preview/clues-preview.component';
+import { ContentPreviewComponent } from './ui/components/publishing/content-preview/content-preview.component';
 import { HtmlAsIsPipe } from './ui/pipes/html-as-is.pipe';
-import { ValidationMessageComponent } from './ui/components/validation-message/validation-message.component';
-import { LoginControlComponent } from './ui/components/login-control/login-control.component';
+import { ValidationMessageComponent } from './ui/components/general/validation-message/validation-message.component';
+import { LoginControlComponent } from './ui/components/general/login-control/login-control.component';
 import { ArchiveComponent } from './ui/puzzle-editing/archive/archive.component';
 import { ProviderPipe } from './ui/pipes/provider.pipe';
 import { PublishGridComponent } from './ui/puzzle-publishing/publish-grid/publish-grid.component';
-import { ColorControlComponent } from './ui/components/color-control/color-control.component';
+import { ColorControlComponent } from './ui/components/publishing/color-control/color-control.component';
 import { PublishLoginComponent } from './ui/puzzle-publishing/publish-login/publish-login.component';
-import { TipComponent } from './ui/components/tip/tip.component';
-import { TipInstanceFactory } from './ui/components/tip/tip-instance';
+import { TipComponent } from './ui/components/guides/tip/tip.component';
+import { TipInstanceFactory } from './ui/components/guides/tip/tip-instance';
 import { OpenPuzzleComponent } from './ui/puzzle-editing/open-puzzle/open-puzzle.component';
 import { WordpressIdPipe } from './ui/pipes/wordpress-id.pipe';
 import { IndyComponent } from './ui/puzzle-editing/indy/indy.component';
-import { ConfirmModalComponent } from './ui/components/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from './ui/components/general/confirm-modal/confirm-modal.component';
 import { GridEditorComponent } from './ui/puzzle-editing/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/puzzle-editing/grid-start/grid-start.component';
-import { DownloadButtonComponent } from './ui/components/download-button/download-button.component';
-import { DiaryAliasControlComponent } from './ui/components/diary-alias-control/diary-alias-control.component';
-import { DiarySettingsEditorComponent } from './ui/components/diary-settings-editor/diary-settings-editor.component';
+import { DownloadButtonComponent } from './ui/components/general/download-button/download-button.component';
+import { DiaryAliasControlComponent } from './ui/components/diary/diary-alias-control/diary-alias-control.component';
+import { DiarySettingsEditorComponent } from './ui/components/diary/diary-settings-editor/diary-settings-editor.component';
 import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf.component';
 import { SpecialComponent } from './ui/puzzle-editing/special/special.component';
 import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-text.component';
 import { ParseResultComponent } from './ui/components/parse-result/parse-result.component';
-import { ParseErrorHintComponent } from './ui/components/parse-error-hint/parse-error-hint.component';
+import { ParseErrorHintComponent } from './ui/components/guides/parse-error-hint/parse-error-hint.component';
 import { NavTrack } from './services/navigation/interfaces';
 import { publishPostTrack } from './services/navigation/tracks/publish-post-track';
 import { publishGridTrack } from './services/navigation/tracks/publish-grid-track';
@@ -68,14 +68,14 @@ import { SettingsComponent } from './ui/app-general/settings/settings.component'
 import { DiaryComponent } from './ui/app-general/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
-import { ClueListItemComponent } from './ui/components/clue-list-item/clue-list-item.component';
+import { ClueListItemComponent } from './ui/components/clues/clue-list-item/clue-list-item.component';
 import { solveTrack } from './services/navigation/tracks/solve-track';
 import { createPdfTrack } from './services/navigation/tracks/create-pdf-track';
 import { createGridAndTextTrack } from './services/navigation/tracks/create-grid-and-text-track';
 import { createGridTrack } from './services/navigation/tracks/create-grid-track';
 import { createTextTrack } from './services/navigation/tracks/create-text-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
-import { NavLogComponent } from './ui/components/nav-log/nav-log.component';
+import { NavLogComponent } from './ui/components/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 import { ClueTextEditorComponent } from './ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
 import { PuzzleOptionsComponent } from './ui/components/editor/forms/puzzle-options/puzzle-options.component';
@@ -90,6 +90,7 @@ import { BackupComponent } from './ui/app-general/backup/backup.component';
 import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
+import { InfoPanelComponent } from './ui/components/guides/info-panel/info-panel.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -183,6 +184,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         BackupsComponent,
         BackupSettingsComponent,
         BackupOptionsComponent,
+        InfoPanelComponent,
     ],
     imports: [
         BrowserModule,

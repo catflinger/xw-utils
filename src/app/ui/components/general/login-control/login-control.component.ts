@@ -5,7 +5,7 @@ import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { ApiSymbols, AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
-import { UIResult } from '../../common';
+import { UIResult } from '../../../common';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 
 export interface LoginControlOptions {

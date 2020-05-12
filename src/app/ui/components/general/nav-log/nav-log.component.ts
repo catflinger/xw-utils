@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NavService } from '../../../services/navigation/nav.service';
-import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { NavService } from '../../../../services/navigation/nav.service';
+import { AppTrackData } from '../../../../services/navigation/tracks/app-track-data';
 
 @Component({
     selector: 'app-nav-log',

@@ -2,14 +2,14 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, 
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Subscription } from 'rxjs';
-import { ClueTextChunk } from '../../../clue-text-control/clue-text-control.component';
+import { ClueTextChunk } from '../../../clues/clue-text-control/clue-text-control.component';
 import { AnnotateClue } from 'src/app//modifiers/clue-modifiers/annotate-clue';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
-import { TipInstance, TipStatus } from '../../../tip/tip-instance';
+import { TipInstance, TipStatus } from '../../../guides/tip/tip-instance';
 import { ClueValidationWarning, IPuzzle } from 'src/app/model/interfaces';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmModalComponent } from '../../../confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../../general/confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
@@ -192,7 +192,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
     public onCheat() {
         const formArray = this.form.get("answers") as FormArray;
-        formArray[0].patchValue({ answer: this.clue.solution });
+        formArray.controls[0].patchValue({ answer: this.clue.solution });
 
         this.validate();
         this.setLatestAnswer();

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../../services/app.service';
 
 export interface DownloadInstance {
     download(filename: string, dataUrl: string): void;

@@ -17,7 +17,7 @@ import { GridEditor } from '../../services/grid-editors/grid-editor';
 import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
 import { AppService } from '../../services/app.service';
-import { DownloadInstance } from '../../components/download-button/download-button.component';
+import { DownloadInstance } from '../../components/general/download-button/download-button.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 

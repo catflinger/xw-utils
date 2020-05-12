@@ -6,7 +6,7 @@ import { Router, ChildActivationStart } from '@angular/router';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
-import { DownloadInstance } from '../../components/download-button/download-button.component';
+import { DownloadInstance } from '../../components/general/download-button/download-button.component';
 import { AppService } from '../../services/app.service';
 import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../../services/navigation/nav.service';
