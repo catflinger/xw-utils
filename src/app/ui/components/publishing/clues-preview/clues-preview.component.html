@@ -1,4 +1,4 @@
-<div *ngIf="includeGrid">
+<div *ngIf="clues && includeGrid">
     <app-grid [options]="{ readonly: true, showShading: true }"></app-grid>
 </div>
 
@@ -20,7 +20,7 @@
                     <span class="text-nowrap" [ngStyle]="makeAnswerStyle()">{{clue.answers[i]}} </span>
                 </td>
                 <td [ngClass]="tdClass">
-                    <app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
+                    <app-clue-text [clueId]="clue.id"></app-clue-text>
                 </td>
             </tr>
             <tr>
@@ -37,7 +37,7 @@
     <ng-container *ngFor="let clue of clues">
 
         <div [ngStyle]="makeClueStyle()" [ngClass]="tdClass">
-            <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clue]="clue" [publishOptions]="publishOptions"></app-clue-text>
+            <span class="text-nowrap">{{clue.caption}}.</span>&nbsp;&nbsp;<app-clue-text [clueId]="clue.id"></app-clue-text>
         </div>
 
         <ng-container *ngIf="publishOptions.textCols.length > 1; then multiRow; else singleRow"></ng-container>

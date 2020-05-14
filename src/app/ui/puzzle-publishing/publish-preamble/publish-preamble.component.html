@@ -26,7 +26,8 @@
                 </div>
                 <div class="float-left">
                     <div>
-                        <app-content-preview [content]="form.value.header"></app-content-preview>
+                        <!-- <app-content-preview [content]="form.value.header"></app-content-preview> -->
+                        <quill-view [content]="form.value.header" format="object" theme="snow"></quill-view>
                     </div>
                     <div class="anchor-like">Read the rest of this entry >></div>
                 </div>
@@ -68,11 +69,7 @@
                     <div>
                         <app-content-preview [content]="form.value.body"></app-content-preview>
                     </div>
-                    <app-clues-preview 
-                        [includeGrid]="puzzle.publishOptions.includeGrid" 
-                        [clues]="sample"
-                        [publishOptions]="puzzle.publishOptions">
-                    </app-clues-preview>
+                    <app-clues-preview></app-clues-preview>
                     <div>
                         <app-content-preview [content]="appSettings.footer"></app-content-preview>
                     </div>

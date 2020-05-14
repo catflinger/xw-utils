@@ -17,7 +17,7 @@ export class SyncGridContent implements IPuzzleModifier {
         puzzle.grid.cells.forEach(cell => cell.content = "");
 
         puzzle.clues.forEach((clue) => {
-            let answer = clue.answers[0].toUpperCase().replace(/[^A-Z]/g, "");
+            let answer = clue.answers[0].toUpperCase().replace(/[^A-Z?]/g, "").replace(/[?]/g, " ");
             let index = 0;
 
             if (answer) {

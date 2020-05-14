@@ -93,8 +93,13 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                             puzzle.publishOptions.textCols.forEach((col, index) => {
                                 let answerText = "";
                                 
-                                if (index < this.clue.answers.length){
+                                if (index  === 0) {
+                                    const key = this.editorService.lastKeyPress.take();
+                                    answerText = key ? key : this.clue.answers[0];
+                                
+                                } else if (index < this.clue.answers.length){
                                     answerText = this.clue.answers[index];
+                                
                                 } else {
                                     answerText = "";
                                 }
@@ -112,6 +117,13 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                                 comment: this.clue.comment,
                                 chunks: this.clue.chunks,
                             });
+
+                            this.subs.push(
+                                this.form.valueChanges.subscribe(() => {
+                                    this.setLatestAnswer();
+                                    //this.detRef.detectChanges();
+                                })
+                            );
 
                             this.warnings = [];
                             this.clue.warnings.forEach(warning => this.warnings.push(warning));
@@ -306,7 +318,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
     private clean(answer: string): string {
         return answer ?
-            answer.toUpperCase().replace(/[^A-Z]/g, "") :
+            answer.toUpperCase().replace(/[^A-Z?]/g, "") :
             "";
     }
 
@@ -341,49 +353,54 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
     private getLatestAnswer(grid: Grid): AnswerTextChunk[] {
         let result: AnswerTextChunk[] = [];
-        let answer = this.clean(this.form.value.answers[0].answer);
-        let index = 0;
+        const answers = this.form.value.answers;
 
-        this.clue.link.entries.forEach((entry) => {
-            let ge = grid.getGridEntryFromReference(entry.gridRef);
+        if (Array.isArray(answers) && answers.length > 0) {
 
-            if (ge) {
-                ge.map(c => c.id)
-                .forEach((id) => {
-                    let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
+            let answer = this.clean(answers[0].answer);
+            let index = 0;
 
-                    // choose in order of preference:
-                    //     - a letter from the answer
-                    //     - a letter from the grid
-                    //     - a placeholder
+            this.clue.link.entries.forEach((entry) => {
+                let ge = grid.getGridEntryFromReference(entry.gridRef);
 
-                    let letter = "_";
-                    let klass: AnswerTextKlass = "placeholder";
+                if (ge) {
+                    ge.map(c => c.id)
+                    .forEach((id) => {
+                        let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
-                    let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
-                    let editorEntry = answer.length > index ? answer.charAt(index) : null;
+                        // choose in order of preference:
+                        //     - a letter from the answer
+                        //     - a letter from the grid
+                        //     - a placeholder
 
-                    if (!gridEntry) {
-                        if (editorEntry) {
-                            letter = editorEntry;
-                            klass = "editorEntry";
-                        }
-                    } else {
-                        if (editorEntry && gridEntry !== editorEntry) {
-                            letter = editorEntry;
-                            klass = "clash";
+                        let letter = "_";
+                        let klass: AnswerTextKlass = "placeholder";
+
+                        let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
+                        let editorEntry = answer.length > index ? answer.charAt(index) : null;
+
+                        if (!gridEntry) {
+                            if (editorEntry) {
+                                letter = editorEntry;
+                                klass = "editorEntry";
+                            }
                         } else {
-                            letter = gridEntry;
-                            klass = "gridEntry";
+                            if (editorEntry && gridEntry !== editorEntry) {
+                                letter = editorEntry;
+                                klass = "clash";
+                            } else {
+                                letter = gridEntry;
+                                klass = "gridEntry";
+                            }
                         }
-                    }
 
-                    result.push(new AnswerTextChunk(letter, klass));
-                    index++;
-                });
-            }
-        });
-
+                        result.push(new AnswerTextChunk(letter, klass));
+                        index++;
+                    });
+                }
+            });
+        }
+        
         return result;
     }
 
@@ -403,7 +420,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                 let index = 0;
 
                 if (clue.id !== clueId) {
-                    answer = clue.answers[0].toUpperCase().replace(/[^A-Z]/g, "");
+                    answer = clue.answers[0].toUpperCase().replace(/[^A-Z?]/g, "");
                 }
 
                 if (answer) {

@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { TextStyle } from 'src/app/model/puzzle-model/text-style';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
+import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-clue-text',
@@ -10,13 +12,31 @@ import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
     styleUrls: ['./clue-text.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueTextComponent implements OnInit {
-    @Input() clue: Clue;
-    @Input() publishOptions: PublishOptions;
+export class ClueTextComponent implements OnInit, OnDestroy {
+    private subs: Subscription[] = [];
 
-    constructor() { }
+    @Input() clueId: string;
+    
+    public publishOptions: PublishOptions;
+    public clue: Clue;
+
+    constructor(
+        private activePuzzle: IActivePuzzle,
+        private detRef: ChangeDetectorRef,
+    ) { }
 
     ngOnInit() {
+        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            if (puzzle) {
+                this.clue = puzzle.clues.find(c => c.id === this.clueId);
+                this.publishOptions = puzzle.publishOptions;
+            }
+            this.detRef.detectChanges();
+        }));
+    }
+
+    ngOnDestroy() {
+        this.subs.forEach(s => s.unsubscribe());
     }
 
     makeChunkStyle(chunk: TextChunk): any {

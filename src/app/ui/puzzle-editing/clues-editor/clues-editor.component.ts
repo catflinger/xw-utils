@@ -30,7 +30,9 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
     handleKeyboardEvent(event: KeyboardEvent) {
         if (event.key === "Escape") {
             event.stopPropagation();
-            this.activePuzzle.updateAndCommit(new Clear());
+            Promise.resolve(() => {
+                this.activePuzzle.updateAndCommit(new Clear());
+            });
         }
     }
 

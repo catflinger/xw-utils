@@ -8,7 +8,7 @@
     <div class="col col-auto">
 
         <div class="row">
-            <div class="col btn-group btn-group-toggle" ngbRadioGroup name="radioLayout" [(ngModel)]="publishOptions.layout">
+            <div class="col btn-group btn-group-toggle" ngbRadioGroup name="radioLayout" [(ngModel)]="publishOptions.layout" (change)="onChange()">
                 <label ngbButtonLabel class="btn btn-light">
                     <input ngbButton type="radio" value="table"> Table layout
                 </label>
@@ -20,9 +20,7 @@
 
         <div class="row mt-3">
             <div class="col bg-light">
-                <app-clues-preview [includeGrid]="publishOptions.includeGrid" [clues]="sample"
-                    [publishOptions]="puzzle.publishOptions">
-                </app-clues-preview>
+                <app-clues-preview></app-clues-preview>
             </div>
         </div>
 
@@ -36,21 +34,21 @@
             <div class="card">
                 <h5 class="card-header">Answer</h5>
                 <div class="card-body">
-                    <app-text-style textStyleName="answer" caption="answer"></app-text-style>
+                    <app-text-style textStyleName="answer" caption="answer" (change)="onChange()"></app-text-style>
                 </div>
             </div>
 
             <div class="card">
                 <h5 class="card-header">Clue</h5>
                 <div class="card-body">
-                    <app-text-style textStyleName="clue" caption="clue text"></app-text-style>
+                    <app-text-style textStyleName="clue" caption="clue text" (change)="onChange()"></app-text-style>
                 </div>
             </div>
 
             <div class="card">
                 <h5 class="card-header">Definition</h5>
                 <div class="card-body">
-                    <app-text-style textStyleName="definition" caption="definition"></app-text-style>
+                    <app-text-style textStyleName="definition" caption="definition" (change)="onChange()"></app-text-style>
                 </div>
             </div>
 
@@ -65,17 +63,17 @@
         </div>
         <div class="form-check-inline">
             <label class="form-check-label" for="spacing1">
-                <input id="spacing1" type="radio" class="form-check-input" name="spacing" value="small" [(ngModel)]="publishOptions.spacing"> small
+                <input id="spacing1" type="radio" class="form-check-input" name="spacing" value="small" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> small
             </label>
         </div>
         <div class="form-check-inline">
             <label class="form-check-label" for="spacing2">
-                <input id="spacing2" type="radio" class="form-check-input" name="spacing" value="medium" [(ngModel)]="publishOptions.spacing"> medium
+                <input id="spacing2" type="radio" class="form-check-input" name="spacing" value="medium" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> medium
             </label>
         </div>
         <div class="form-check-inline">
             <label class="form-check-label" for="spacing3">
-                <input id="spacing3" type="radio" class="form-check-input" name="spacing" value="large" [(ngModel)]="publishOptions.spacing"> large
+                <input id="spacing3" type="radio" class="form-check-input" name="spacing" value="large" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> large
             </label>
         </div>
     </div>
@@ -84,7 +82,7 @@
 <div class="row mt-3" *ngIf="puzzle && puzzle.grid">
     <div class="col">
         <label>
-            <input type="checkbox" [(ngModel)]="publishOptions.includeGrid">
+            <input type="checkbox" [(ngModel)]="publishOptions.includeGrid" (change)="onChange()">
             include grid image
         </label>
     </div>

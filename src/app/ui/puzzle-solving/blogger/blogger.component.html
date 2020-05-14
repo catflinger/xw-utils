@@ -24,7 +24,7 @@
                             {{ clue.answers[i] }}
                         </td>
                         <td class="py-0">
-                            <app-clue-text [clue]="clue" [publishOptions]="puzzle.publishOptions"></app-clue-text>
+                            <app-clue-text [clueId]="clueId"></app-clue-text>
                         </td>
                         <td class="py-0">
                             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>

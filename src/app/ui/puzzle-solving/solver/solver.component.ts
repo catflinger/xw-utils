@@ -68,29 +68,39 @@ export class SolverComponent implements OnInit {
         }
     }
     
-    @HostListener('window:keydown', ['$event'])
+    @HostListener('window:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (this.puzzle && !this.editorService.isActive) {
-            if (event.key === "Enter") {
-                event.stopPropagation();
-                let clue = this.puzzle.getSelectedClue();
-                if (clue) { 
-                    this.openEditor();
-                }
-                this.detRef.detectChanges();
+        let key = event.key;
 
-            } else if (event.key === "Escape") {
-                event.stopPropagation();
-                this.activePuzzle.updateAndCommit(new Clear());
-                this.detRef.detectChanges();
+        if (key && typeof key === "string") {
+            key = key.toUpperCase();
+
+            if (this.puzzle && !this.editorService.isActive) {
+                if (key === "ENTER") {
+                    event.stopPropagation();
+                    let clue = this.puzzle.getSelectedClue();
+                    if (clue) { 
+                        Promise.resolve(() => {
+                            this.openEditor(null);
+                            this.detRef.detectChanges();
+                        });
+                    }
+
+                } else if (key === "ESCAPE") {
+                    event.stopPropagation();
+                    Promise.resolve(() => {
+                        this.activePuzzle.updateAndCommit(new Clear());
+                        this.detRef.detectChanges();
+                    });
+
+                } else if (/^[A-Z?]$/.test(key)) {
+                    event.stopPropagation();
+                    let clue = this.puzzle.getSelectedClue();
+                    if (clue) {
+                        this.openEditor(key);
+                    }
+                }
             }
-            // } else if (/^[a-zA-Z]$/.test(event.key)) {
-            //     event.stopPropagation();
-            //     let clue = this.puzzle.getSelectedClue();
-            //     if (clue) {
-            //         this.openEditor(event.key);
-            //     }
-            // }
         }
     }
 
@@ -143,7 +153,7 @@ export class SolverComponent implements OnInit {
             let clue = this.puzzle.getSelectedClue();
 
             if (clue) {
-                this.openEditor();
+                this.openEditor(null);
             }
         }
     }
@@ -160,25 +170,29 @@ export class SolverComponent implements OnInit {
 }
 
     public onClueClick(clue: Clue) {
-        this.openEditor();
+        this.openEditor(null);
     }
 
     public onEditorClose() {
         this._showEditor = false;
     }
 
-    private openEditor() {
+    private openEditor(key: string) {
         if (this._showEditor) {
             //???????
+
+            //this.editorService.lastKeyPress.clear(key);
         } else {
             this._showEditor = true;
+
+            this.editorService.lastKeyPress.put(key);
 
             if (this.appSettings.editorMode === "modal") {
                 let modalRef = this.modalService.open(ClueEditorComponent, { 
                     backdrop: "static",
                     size: "lg",
                 });
-                
+
                 modalRef.componentInstance.close.subscribe(() => {
                     modalRef.close();
                     this.onEditorClose();

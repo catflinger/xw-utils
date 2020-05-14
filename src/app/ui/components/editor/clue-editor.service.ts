@@ -6,27 +6,34 @@ interface IEditorInstance {
     save: () => Promise<boolean>,
 }
 
+class LastKeypress {
+    private last: string = null;
+
+    public put(key: string): void {
+        this.last = key;
+    };
+    public take(): string {
+        const key = this.last;
+        this.last = null;
+        return key;
+    };
+    public clear(): void
+    {
+        this.last = null;
+    }
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class ClueEditorService {
     private currentInstance: IEditorInstance = null;
-    //private bsSelectedClue = new BehaviorSubject<string>(null);
+
+    public readonly lastKeyPress: LastKeypress;
 
     constructor() {
+        this.lastKeyPress = new LastKeypress();
     }
-
-    // public observe(): Observable<string> {
-    //     return this.bsSelectedClue.asObservable();
-    // }
-
-    // public setSelectedClue(clueId): void {
-    //     this.bsSelectedClue.next(clueId);
-    // }
-
-    // public clearSelection() {
-    //     this.setSelectedClue(null);
-    // }
 
     public register(save: () => Promise<boolean>): string {
         const id = uuid();

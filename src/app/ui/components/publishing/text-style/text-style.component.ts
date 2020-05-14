@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, combineLatest } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
@@ -10,7 +10,8 @@ import { TextStyleName } from 'src/app/model/interfaces';
 @Component({
     selector: 'app-text-style',
     templateUrl: './text-style.component.html',
-    styleUrls: ['./text-style.component.css']
+    styleUrls: ['./text-style.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextStyleComponent implements OnInit, OnDestroy {
     public form: FormGroup;
@@ -21,11 +22,13 @@ export class TextStyleComponent implements OnInit, OnDestroy {
 
     @Input() textStyleName: TextStyleName;
     @Input() caption: string;
+    @Output() change = new EventEmitter<void>();
 
     constructor(
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private detRef: ChangeDetectorRef,
         ) { }
 
     ngOnInit() {
@@ -40,13 +43,18 @@ export class TextStyleComponent implements OnInit, OnDestroy {
         this.subs.push(this.form.valueChanges.subscribe((val) => {
             if (this.puzzle && this.appStatus) {
 
+                console.log("changing text style...")
+
                 this.activePuzzle.updateAndCommit(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
                     val.color,
                     val.bold,
                     val.italic,
                     val.underline));
+
             }
+            this.change.emit();
+            this.detRef.detectChanges();
         }));
 
         let latest = combineLatest(this.appService.getObservable(), this.activePuzzle.observe());
@@ -68,7 +76,9 @@ export class TextStyleComponent implements OnInit, OnDestroy {
                 this.form.controls["italic"].patchValue(ts.italic, { emitEvent: false});
                 this.form.controls["underline"].patchValue(ts.underline, { emitEvent: false});
                 this.form.controls["color"].patchValue(ts.color, { emitEvent: false});
+
             }
+            this.detRef.detectChanges();
         }));
 
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -15,7 +15,8 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 @Component({
     selector: 'app-publish-preamble',
     templateUrl: './publish-preamble.component.html',
-    styleUrls: ['./publish-preamble.component.css']
+    styleUrls: ['./publish-preamble.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PublishPreambleComponent implements OnInit {
     public puzzle = null;
@@ -33,13 +34,20 @@ export class PublishPreambleComponent implements OnInit {
         private authService: AuthService,
         private appSettingsService: AppSettingsService,
         private activePuzzle: IActivePuzzle,
-        private formBuilder: FormBuilder) { }
+        private formBuilder: FormBuilder,
+        private detRef: ChangeDetectorRef,) { }
 
     ngOnInit() {
         window.scrollTo(0, 0);
         
-        this.subs.push(this.appService.getObservable().subscribe(appStatus => this.appStatus = appStatus));
-        this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
+        this.subs.push(this.appService.getObservable().subscribe(appStatus => {
+            this.appStatus = appStatus;
+            this.detRef.detectChanges();
+        }));
+        this.subs.push(this.appSettingsService.observe().subscribe(settings => {
+            this.appSettings = settings;
+            this.detRef.detectChanges();
+        }));
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
@@ -52,6 +60,10 @@ export class PublishPreambleComponent implements OnInit {
                 body: { ops: [] }
             });
 
+            this.subs.push(this.form.valueChanges.subscribe(() => {
+                this.detRef.detectChanges();
+            }));
+
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
@@ -62,6 +74,7 @@ export class PublishPreambleComponent implements OnInit {
                             this.form.patchValue(puzzle.notes);
                             this.form.patchValue({ title: puzzle.info.title});
                         }
+                        this.detRef.detectChanges();
                     }
                 ));
         }
