@@ -11,6 +11,12 @@
         </div>
     </div>
 
+    <div class="row" *ngIf="showPuzzle && puzzle.info.instructions">
+        <div class="col">
+            {{puzzle.info.instructions}}
+        </div>
+    </div>
+
     <div class="row" *ngIf="showPuzzle">
         <div class="col" *ngIf="puzzle.grid">
             <app-grid (cellClick)="onCellClick($event)"></app-grid>

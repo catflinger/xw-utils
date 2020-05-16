@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, DoCheck, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { AppService, AppStatus } from 'src/app/ui/services/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -7,6 +7,9 @@ import { NavService } from '../../services/navigation/nav.service';
 import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
 import { Router, NavigationStart } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HtmlAsIsPipe } from '../pipes/html-as-is.pipe';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-root',
@@ -18,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public credentials: Credentials;
     public isNavbarCollapsed: boolean;
+    public containerFluid: Boolean = false;
 
     private subs: Subscription[] = [];
 
@@ -28,6 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
+        private settingsService: AppSettingsService,
+        private detref: ChangeDetectorRef,
         ) {
     }
 
@@ -35,13 +41,22 @@ export class AppComponent implements OnInit, OnDestroy {
         
         this.appService.clearBusy();
         
+        this.subs.push(this.settingsService.observe().subscribe(settings => {
+            if (settings) {
+                this.containerFluid = settings.general.containerFluid.enabled;
+            }
+
+            this.detref.detectChanges();
+        }));
+
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
-
+            this.detref.detectChanges();
         }));
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
+            this.detref.detectChanges();
         }));
 
         this.subs.push(this.router.events.subscribe(event => {

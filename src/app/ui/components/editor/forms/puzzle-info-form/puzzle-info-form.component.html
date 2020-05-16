@@ -1,0 +1,33 @@
+<app-info-panel>
+    <p>You can change the title and other attributes of the puzzle here.
+    These items are for display purposes only and do not change the content of the puzzle
+    or the way ot behaves.
+    </p>
+</app-info-panel>
+
+<form [formGroup]="form" class="form mt-3">
+    <div class="form-group mt-3">
+        <label for="title" class="form-label">Puzzle title</label>
+        <input id="title" type="text" class="form-control" formControlName="title">
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="setter" class="form-label">Setter</label>
+        <input id="setter" type="text" class="form-control" formControlName="setter">
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="instructions" class="form-label">Special instructions</label>
+        <input id="instructions" type="text" class="form-control" formControlName="instructions">
+    </div>
+
+    <div class="form-group">
+        <label for="datePicker">Puzzle date</label>
+        <input id="datePicker" type="text" class="form-control" formControlName="date"
+            [bsConfig]="{ dateInputFormat: 'dddd Do MMMM YYYY' }" bsDatepicker>
+    </div>
+
+    <div class="form-group mt-5">
+        <button type="button" class="btn btn-primary mr-3" (click)="onSave()">Save</button>
+    </div>
+</form>

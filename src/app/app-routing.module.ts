@@ -32,12 +32,14 @@ import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupComponent } from './ui/app-general/backup/backup.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
+import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
 
 const routes: Routes = [
 
     // landing pages
     { path: "home", component: HomeComponent },
     { path: "login", component: LoginComponent },
+    { path: "announcements", component: AnnouncementsComponent },
 
     // solving and blogging puzzles
     { path: "solver", component: SolverComponent },

@@ -12,7 +12,7 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 export class PuzzleEditorComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
-    public activeId: string = "PuzzleOptionsComponent";
+    public activeId: string = "PuzzleInfoFormComponent";
     
     public puzzle: Puzzle = null;
 

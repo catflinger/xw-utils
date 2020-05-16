@@ -1,10 +1,11 @@
 <h3>Open puzzle</h3>
+<div *ngIf="credentials">
+    <div *ngIf="credentials.authenticated">
+        <p>Opening puzzle...</p>
+    </div>
 
-<div *ngIf="credentials.authenticated">
-    <p>Opening puzzle...</p>
-</div>
-
-<div *ngIf="!credentials.authenticated">
-    <p>Enter your fifteensquared username and password</p>
-    <app-login-control (close)="onLoginClose($event)"></app-login-control>
+    <div *ngIf="!credentials.authenticated">
+        <p>Enter your fifteensquared username and password</p>
+        <app-login-control (close)="onLoginClose($event)"></app-login-control>
+    </div>
 </div>

@@ -7,6 +7,7 @@ import { QuillModule } from "ngx-quill";
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './ui/app/app.component';
 import { PublishOptionsComponent } from './ui/puzzle-publishing/publish-options/publish-options.component';
@@ -91,6 +92,8 @@ import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
 import { InfoPanelComponent } from './ui/components/guides/info-panel/info-panel.component';
+import { PuzzleInfoFormComponent } from './ui/components/editor/forms/puzzle-info-form/puzzle-info-form.component';
+import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -185,6 +188,8 @@ const tracks: ReadonlyArray<NavTrack> = [
         BackupSettingsComponent,
         BackupOptionsComponent,
         InfoPanelComponent,
+        PuzzleInfoFormComponent,
+        AnnouncementsComponent,
     ],
     imports: [
         BrowserModule,
@@ -196,6 +201,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         HttpClientModule,
         QuillModule.forRoot(quillGlobalConfig),
         AppRoutingModule,
+        MarkdownModule.forRoot(),
     ],
     providers: [
         PuzzleManagementService,

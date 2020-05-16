@@ -127,6 +127,7 @@ function getEmptyPuzzle(): IPuzzle {
             provider: "text",
             setter: "anon",
             wordpressId: null,
+            instructions: null,
         },
         capability: {
             ready: true,

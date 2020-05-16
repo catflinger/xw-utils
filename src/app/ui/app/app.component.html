@@ -1,4 +1,4 @@
-<div *ngIf="appStatus" class="container" style="padding-left: 0; padding-right: 0;">
+<div *ngIf="appStatus && credentials" [ngClass]="{'container': !containerFluid, 'container-fluid': containerFluid}">
 
     <div class="row">
         <div class="col">
@@ -29,7 +29,7 @@
                                 <button class="dropdown-item btn btn-link" (click)="onArchive('prize')">Guardian Prize</button>
                                 <button class="dropdown-item btn btn-link" (click)="onArchive('quiptic')">Guardian Quiptic</button>
                                 <button class="dropdown-item btn btn-link" (click)="onArchive('everyman')">Everyman</button>
-                                <button class="dropdown-item btn btn-link" (click)="onArchive('special')">Special</button>
+                                <button class="dropdown-item btn btn-link" (click)="onArchive('special')">More...</button>
                             </div>
                         </li>
 
@@ -51,6 +51,10 @@
 
                         <li class="nav-item">
                             <button type="button" class="nav-link btn btn-link" (click)="onGoTo('readme')">Readme</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button type="button" class="nav-link btn btn-link text-white" (click)="onGoTo('announcements')">*beta*</button>
                         </li>
 
                         <li class="nav-item" *ngIf="!credentials.authenticated">

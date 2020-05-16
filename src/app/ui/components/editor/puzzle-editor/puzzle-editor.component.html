@@ -2,6 +2,13 @@
 
     <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav-tabs">
 
+        <li ngbNavItem="PuzzleInfoFormComponent">
+            <a ngbNavLink>General</a>
+            <ng-template ngbNavContent>
+                <app-puzzle-info-form (close)="onClose()"></app-puzzle-info-form>
+            </ng-template>
+        </li>
+
         <li ngbNavItem="PuzzleOptionsComponent">
             <a ngbNavLink>Annotation otions</a>
             <ng-template ngbNavContent>

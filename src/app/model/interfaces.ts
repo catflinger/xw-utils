@@ -150,6 +150,7 @@ export interface IPuzzleInfo {
     provider: PuzzleProvider;
     setter: string;
     wordpressId: number;
+    instructions: string;
 } 
 
 export interface IPuzzleOptions {

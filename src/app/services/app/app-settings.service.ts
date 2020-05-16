@@ -19,6 +19,7 @@ class _GeneralSettings implements GeneralSettings {
     //public showCommentEditor: _BooleanSetting;
     public showCommentValidation: _BooleanSetting;
     public showCheat: _BooleanSetting;
+    public containerFluid: _BooleanSetting;
 }
 
 class _TipSettings implements TipSettings {
@@ -67,6 +68,7 @@ const _defaultSettings: _AppSettings = {
         //showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
+        containerFluid: { caption: "display app full-width inside the browser", enabled: true },
     },
     tips: {
         general: { caption: "show general tips", enabled: true },

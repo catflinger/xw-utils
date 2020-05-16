@@ -20,6 +20,7 @@ import { AppService } from '../../services/app.service';
 import { DownloadInstance } from '../../components/general/download-button/download-button.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 
@@ -150,9 +151,11 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             case "grid":
                 const symCell = this.getSymCell(cell);
                 if (this.puzzle.grid.properties.style === "standard") {
-                    this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { light: !cell.light }));
+                    const newVal = !cell.light;
+
+                    this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { light: newVal }));
                     if (symCell) {
-                        this.activePuzzle.updateAndCommit(new UpdateCell(symCell.id, { light: !cell.light }));
+                        this.activePuzzle.updateAndCommit(new UpdateCell(symCell.id, { light: newVal }));
                     }
                     this.activePuzzle.updateAndCommit(new RenumberGid());
                 }
@@ -188,14 +191,25 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     public onBarClick(event: BarClickEvent) {
         this.appService.clear();
+        let updates: IPuzzleModifier[] = [];
 
         if (this.tool === "grid" && this.puzzle.grid.properties.style === "barred") {
+            const cell = event.cell;
+            const symCell = this.getSymCell(cell);
+
             if (event.bar === "rightBar") {
-                this.activePuzzle.updateAndCommit(new UpdateCell(event.cell.id, { rightBar: !event.cell.rightBar }));
+                updates.push(new UpdateCell(cell.id, { rightBar: !cell.rightBar }));
+                if (symCell) {
+                    updates.push(new UpdateCell(symCell.id, { rightBar: !cell.rightBar }));
+                }
             } else {
-                this.activePuzzle.updateAndCommit(new UpdateCell(event.cell.id, { bottomBar: !event.cell.bottomBar }));
+                if (symCell) {
+                    updates.push(new UpdateCell(cell.id, { bottomBar: !cell.bottomBar }));
+                }
             }
-            this.activePuzzle.updateAndCommit(new RenumberGid());
+            updates.push(new RenumberGid());
+
+            this.activePuzzle.updateAndCommit(...updates);
         }
     }
 
