@@ -21,12 +21,6 @@ export class CreateClues implements IPuzzleModifier {
             this.makeClues(puzzle, grid, "across");
             this.makeClues(puzzle, grid, "down");
 
-            puzzle.capability.solveable = true;
-            puzzle.capability.blogable = true;
-            puzzle.capability.ready = true;
-            puzzle.capability.gridable = true;
-
-            //puzzle.linked = true;
         }
     }
 
@@ -41,7 +35,7 @@ export class CreateClues implements IPuzzleModifier {
             });
             
             let cells: ReadonlyArray<GridCell> = grid.getGridEntryFromReference(gridRef);
-            
+ 
             if (cells && cells.length) {
                 let clue = this.makeClue(group, clueNumber, gridRef, cells.length);
                 puzzle.clues.push(clue);
@@ -51,8 +45,7 @@ export class CreateClues implements IPuzzleModifier {
     }
 
     private makeClue(clueGroup: ClueGroup, clueNumber: number, gridRef: GridReference, entryLength: number): IClue {
-        let clueText = "Clue text...";
-
+        const clueText = `Clue text (${entryLength})`;
         return {
             id: uuid(),
             group: clueGroup,

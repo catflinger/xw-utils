@@ -60,39 +60,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-
-                // TO DO: see if the puzzle has parse errors and route accordingly
-                switch (puzzle.info.provider) {
-                    // case "grid":
-                    //     this.navService.beginTrack("createGridTrack", new AppTrackData(), "edit-grid");
-                    //     break;
-                    case "text":
-                        if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", {});
-                        } else {
-                            this.navService.beginTrack("createTextTrack", {}, "parser");
-                        }
-                        break;
-                    case "grid-text":
-                        if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", {});
-                        } else {
-                            this.navService.beginTrack("createGridAndTextTrack", {}, "edit-grid");
-                        }
-                        break;
-                    case "pdf":
-                        if (puzzle.capability.ready) {
-                            this.navService.beginTrack("solveTrack", {});
-                        } else {
-                            this.navService.beginTrack("createPdfTrack", {}, "parser");
-                        }
-                        break;
-                    default:
-                        // TO DO: think about what happens to a downlaoded puzzle that fails to parse
-                        this.navService.beginTrack("solveTrack", {});
-                        break;
+                if (puzzle.capability.ready) {
+                    this.navService.beginTrack("solveTrack", {});
+                } else {
+                    this.navService.beginTrack("createPuzzleTrack", {}, "hub");
                 }
-
             }
         });
     }

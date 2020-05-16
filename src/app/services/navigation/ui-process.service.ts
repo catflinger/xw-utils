@@ -29,10 +29,39 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
         switch (processName) {
 
+            case "editor-select":
+                // TO DO: think if this test needs to be more sophisticated
+                action = this.activePuzzle.puzzle.grid ?
+                    Promise.resolve("solve") :
+                    Promise.resolve("blog");
+                    break;
+
+            case "grid-captions":
+                try {
+                    this.activePuzzle.updateAndCommit(new RenumberGid());
+                    action = Promise.resolve("ok");
+                } catch (error) {
+                    action = Promise.resolve("error");
+                }
+                break; 
+
+            case "link":
+                try {
+                    this.activePuzzle.updateAndCommit(new SetGridReferences());
+                    action = Promise.resolve("ok");
+                } catch (error) {
+                    action = Promise.resolve("error");
+                }
+                break;
+
             case "make-clues":
                 // TO DO: work out what to do if puzzle aready has clues
                 this.activePuzzle.updateAndCommit(new CreateClues(), new InitAnnotationWarnings());
                 action = Promise.resolve("ok");
+                break;
+
+            case "parse":
+                action = this.parse();
                 break;
 
             case "pdf-extract":
@@ -46,43 +75,14 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 }
                 break; 
 
-            case "grid-captions":
-                try {
-                    this.activePuzzle.updateAndCommit(new RenumberGid());
-                    action = Promise.resolve("ok");
-                } catch (error) {
-                    action = Promise.resolve("error");
-                }
-                break; 
-
-            case "parse":
-                action = this.parse();
-                break;
-
             case "set-grid-refs":
                 this.activePuzzle.updateAndCommit(new SetGridReferences());
                 action = Promise.resolve("ok");
                 break;
     
-            case "link":
-                // try {
-                //     this.activePuzzle.updateAndCommit(new LinkCluesToGrid());
-                    action = Promise.resolve("ok");
-                // } catch (error) {
-                //     action = Promise.resolve("error");
-                // }
-                break;
-
             case "validate":
                 action = this.validate();
                 break;
-
-            case "editor-select":
-                // TO DO: think if this test needs to be more sophisticated
-                action = this.activePuzzle.puzzle.grid ?
-                    Promise.resolve("solve") :
-                    Promise.resolve("blog");
-                    break;
 
             default:
                 action = Promise.reject("Could not find navivgation process with name " + processName);

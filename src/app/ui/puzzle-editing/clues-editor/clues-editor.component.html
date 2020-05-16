@@ -36,7 +36,7 @@
             <table>
                 <tbody>
                     <tr *ngFor="let clue of acrossClues" (click)="onClueClick(clue)">
-                        <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)" (close)="onEditorClose()">
+                        <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)">
                         </app-clue-list-item>
                     </tr>
                 </tbody>
@@ -49,7 +49,7 @@
         <table>
             <tbody>
                 <tr *ngFor="let clue of downClues" (click)="onClueClick(clue)">
-                    <app-clue-list-item [clue]="clue" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)" (close)="onEditorClose()">
+                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)">
                     </app-clue-list-item>
                 </tr>
             </tbody>

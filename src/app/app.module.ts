@@ -94,6 +94,8 @@ import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-o
 import { InfoPanelComponent } from './ui/components/guides/info-panel/info-panel.component';
 import { PuzzleInfoFormComponent } from './ui/components/editor/forms/puzzle-info-form/puzzle-info-form.component';
 import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
+import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
+import { createPuzzleTrack } from './services/navigation/tracks/create-puzzle-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -107,6 +109,7 @@ const quillGlobalConfig = {
 };
 
 const tracks: ReadonlyArray<NavTrack> = [
+    createPuzzleTrack,
     createTextTrack,
     createGridTrack,
     createGridAndTextTrack,
@@ -190,6 +193,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         InfoPanelComponent,
         PuzzleInfoFormComponent,
         AnnouncementsComponent,
+        PuzzleHubComponent,
     ],
     imports: [
         BrowserModule,

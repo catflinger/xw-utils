@@ -25,15 +25,7 @@ export class SpecialComponent implements OnInit {
         this.navService.beginTrack("createPdfTrack", {});
     }
 
-    public onText() {
-        this.puzzleManager.newPuzzle("text", [new UpdateInfo({blogable: true})]);
-        this.navService.beginTrack("createTextTrack", { provider: "text"});
-    }
-
-    public onGridText() {
-        this.appService.setOpenPuzzleParams({
-            provider: "grid-text",
-        });
-        this.navService.beginTrack("createGridAndTextTrack", { provider: "grid-text"});
+    public onStart() {
+        this.navService.beginTrack("createPuzzleTrack", { provider: "local"});
     }
 }

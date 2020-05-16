@@ -33,6 +33,7 @@ import { BackupComponent } from './ui/app-general/backup/backup.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
 import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
+import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 
 const routes: Routes = [
 
@@ -59,6 +60,8 @@ const routes: Routes = [
     { path: "special", component: SpecialComponent },
     { path: "special-pdf", component: SpecialPdfComponent },
     { path: "special-login", component: SpecialLoginComponent },
+    { path: "puzzle-hub", component: PuzzleHubComponent },
+    
     { path: "open-puzzle", component: OpenPuzzleComponent },
     { path: "create-puzzle", component: CreatePuzzleComponent },
     { path: "special-text", component: SpecialTextComponent },

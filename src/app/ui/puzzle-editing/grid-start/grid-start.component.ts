@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
+import { IPuzzleManager, IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
@@ -29,14 +29,17 @@ export class GridStartComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private navService: NavService<AppTrackData>,
-        private puzzleManager: IPuzzleManager,
+        private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder,
     ) { }
 
     ngOnInit() {
 
+        if (!this.activePuzzle.hasPuzzle) {
+            this.navService.goHome();
+        }
+
         this.form = this.formBuilder.group({
-            title: ["", Validators.required],
             gridStyle: [
                 GridStyles.standard, 
                 [Validators.required]
@@ -72,7 +75,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
-        this.navService.goHome();
+        this.navService.navigate("cancel");
     }
 
     public onContinue() {
@@ -86,15 +89,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
             symmetrical: this.form.value.symmetrical,
         });
 
-        this.puzzleManager.newPuzzle(this.navService.appData.provider, [
-            new AddGrid({ grid }), 
-            new UpdateInfo({ 
-                title: this.form.value.title,
-                provider: this.appService.openPuzzleParameters.provider,
-                gridable: true,
-            }),
-        ]);
-
+        this.activePuzzle.updateAndCommit(new AddGrid({ grid }));
         this.navService.navigate("continue");
     }
 

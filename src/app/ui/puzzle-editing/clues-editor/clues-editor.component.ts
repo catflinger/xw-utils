@@ -51,7 +51,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         if (puzzle) {
-                            if (!puzzle.capability.solveable) {
+                            if (!puzzle.clues) {
                                 this.navService.goHome();
                             }
                             this.puzzle = puzzle;

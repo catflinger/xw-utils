@@ -70,7 +70,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
-                        if (!puzzle.capability.gridable) {
+                        if (!puzzle.grid) {
                             this.navService.goHome();
                         }
                         this.form.patchValue({title: puzzle.info.title});

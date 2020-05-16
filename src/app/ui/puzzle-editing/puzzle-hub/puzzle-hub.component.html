@@ -1,0 +1,82 @@
+<div class="row mt-3">
+    <div class="col">
+        <h3>Puzzle Manager</h3>
+    </div>
+    <div class="col">
+        <strong *ngIf="puzzle"> {{puzzle.info.title}}</strong>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">Step 1: Add some more information about this puzzle</div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" (click)="onEditInfo()">Add Info</button>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">Step 2: Add a grid</div>
+    <div class="col" *ngIf="!puzzle.grid">
+        <button type="button" class="btn btn-primary" (click)="onAddGrid()">Add grid</button>
+    </div>
+    <div class="col" *ngIf="puzzle.grid">
+        <button type="button" class="btn btn-outline-primary mr-3" (click)="onEditGrid()">Edit grid</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onDeleteGrid()">Delete grid</button>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">Step 3: Add a clues</div>
+    <div class="col" *ngIf="!puzzle.clues">
+        <button type="button" class="btn btn-primary" (click)="onAddClues()">Add clues</button>
+    </div>
+    <div class="col" *ngIf="puzzle.clues">
+        <button type="button" class="btn btn-outline-primary mr-3" (click)="onEditClues()">Edit clues</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onDeleteClues()">Delete clues</button>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">Step 4: When you are happy that everything is ready mark the puzzle as finished.</div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" (click)="onMarkFinished()">Mark as finished</button>
+    </div>
+</div>
+
+<div class="row mt-5" *ngIf="puzzle">
+
+    <div class="col" *ngIf="puzzle.grid">
+        <app-grid [options]="{ readonly: true, showShading: false }"></app-grid>
+    </div>
+
+    <div class="col" *ngIf="puzzle.clues">
+        <h3>across</h3>
+        <table>
+            <tbody>
+                <tr *ngFor="let clue of acrossClues">
+                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: false}">
+                    </app-clue-list-item>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col" *ngIf="puzzle.clues">
+        <h3>down</h3>
+        <table>
+            <tbody>
+                <tr *ngFor="let clue of downClues">
+                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: false}">
+                    </app-clue-list-item>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col"></div>
+    <div class="col">
+        <button type="button" class="btn btn-outline-primary" (click)="onClose()">Close</button>
+    </div>
+</div>

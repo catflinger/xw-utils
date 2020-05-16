@@ -10,8 +10,9 @@ export class AddGrid implements IPuzzleModifier {
     exec(puzzle: IPuzzle) {
         if (puzzle) {
             if (typeof this.args.grid !== "undefined") {
-                puzzle.grid = JSON.parse(JSON.stringify(this.args.grid));
-                //puzzle.linked = false;
+                puzzle.grid = this.args.grid;
+                puzzle.capability.gridable = true;
+                puzzle.capability.solveable = !!puzzle.clues;
             }
         }
     }
