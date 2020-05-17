@@ -14,7 +14,10 @@ export class ValidateLetterCounts implements IPuzzleModifier {
                 let cellCount = 0;
 
                 clue.link.entries.forEach(entry => {
-                    grid.getGridEntryFromReference(entry.gridRef).forEach(() => cellCount++);
+                    let gridRef = grid.getGridEntryFromReference(entry.gridRef);
+                    if (gridRef) {
+                        gridRef.forEach(() => cellCount++);
+                    }
                 });
 
                 if (cellCount != letterCountSum) {

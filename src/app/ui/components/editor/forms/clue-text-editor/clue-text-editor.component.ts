@@ -37,7 +37,9 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
 
+    @Input() showHelp: boolean = true;
     @Output() dirty = new EventEmitter<void>();
+
 
     constructor(
         private activePuzzle:IActivePuzzle,
@@ -118,12 +120,12 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
             
             if (this.clue) {
                 mods.push(
-                    new UpdateClue(
-                        this.clue.id, 
-                        this.form.value.caption,
-                        this.form.value.group,
-                        this.form.value.text,
-                    )
+                    new UpdateClue({
+                        id: this.clue.id, 
+                        caption: this.form.value.caption,
+                        group: this.form.value.group,
+                        text: this.form.value.text,
+                    })
                 );
             } else {
                 const clueId = uuid();

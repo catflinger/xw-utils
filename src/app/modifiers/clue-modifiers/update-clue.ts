@@ -2,26 +2,35 @@ import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, ClueGroup } from '../../model/interfaces';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 
+interface UpdateClueArgs {
+    id: string;
+    caption?: string;
+    group?: ClueGroup;
+    text?: string;
+}
+
 export class UpdateClue implements IPuzzleModifier {
-    constructor(
-        private id: string,
-        private caption: string,
-        private group: ClueGroup,
-        private text: string,
-    ) { }
+    constructor(private args: UpdateClueArgs) { }
 
     exec(puzzle: IPuzzle) {
-        if (puzzle) {
-            let clue = puzzle.clues.find((c) => c.id === this.id);
+        if (puzzle && this.args) {
+            let clue = puzzle.clues.find((c) => c.id === this.args.id);
 
             if (clue) {
-                clue.caption = this.caption;
-                clue.group = this.group,
-                clue.text = this.text;
-                clue.letterCount = Clue.getLetterCount(this.text);
+                if (this.args.caption !== undefined) {
+                    clue.caption = this.args.caption;
+                }
+                if (this.args.group !== undefined) {
+                    clue.group = this.args.group;
+                }
+                if (this.args.text !== undefined) {
+                    clue.text = this.args.text;
+                }
+
+                clue.letterCount = Clue.getLetterCount(clue.text);
                 clue.format = Clue.getAnswerFormat(clue.letterCount);
                 clue.chunks = [{
-                    text: this.text,
+                    text: clue.text,
                     isDefinition: false,
                 }];
 

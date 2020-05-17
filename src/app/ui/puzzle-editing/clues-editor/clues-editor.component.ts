@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { v4 as uuid } from "uuid";
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
@@ -8,30 +8,28 @@ import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { SelectClue } from 'src/app//modifiers/clue-modifiers/select-clue';
-import { ClueListAction } from '../../components/clues/clue-list-item/clue-list-item.component';
-import { ClueTextEditorComponent } from '../../components/editor/forms/clue-text-editor/clue-text-editor.component';
-import { DeleteClue } from 'src/app//modifiers/clue-modifiers/delete-clue';
+import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
+import { ClueGroup } from 'src/app/model/interfaces';
+import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 
 @Component({
     selector: 'app-clues-editor',
     templateUrl: './clues-editor.component.html',
-    styleUrls: ['./clues-editor.component.css']
+    styleUrls: ['./clues-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CluesEditorComponent implements OnInit, OnDestroy {
-    private modalRef: NgbModalRef = null;
-    public puzzle: Puzzle = null;
-    public acrossClues: ReadonlyArray<Clue> = [];
-    public downClues: ReadonlyArray<Clue> = [];
     private subs: Subscription[] = [];
 
-    @ViewChild('confirmation', { static: true}) confirmation: ElementRef;
-    
+    public puzzle: Puzzle = null;
+
     @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) {
         if (event.key === "Escape") {
             event.stopPropagation();
             Promise.resolve(() => {
                 this.activePuzzle.updateAndCommit(new Clear());
+                this.detRef.detectChanges();
             });
         }
     }
@@ -39,7 +37,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
    constructor(
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
-        private modalService: NgbModal,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -55,9 +53,8 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
                                 this.navService.goHome();
                             }
                             this.puzzle = puzzle;
-                            this.acrossClues = puzzle.clues.filter(c => c.group === "across");
-                            this.downClues = puzzle.clues.filter(c => c.group === "down");
                         }
+                        this.detRef.detectChanges();
                     }
                 ));
         }
@@ -67,62 +64,26 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    public onContinue() {
-        this.activePuzzle.updateAndCommit(new Clear());
-        this.navService.navigate("continue");
-    }
-
     public onClueClick(clue: Clue) {
+        
         if (!clue.highlight) {
             this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
         }
     }
 
-    public onAction(clue: Clue, action: ClueListAction) {
-        if (action === "edit") {
-            this.openEditor(clue);
-        } else if (action === "delete") {
-            // TO DO: prompt for confirmation first...
+    public onAddClue(group: ClueGroup) {
+        const id = uuid();
 
-            this.modalService.open(this.confirmation, {}).result.then(
-                (result) => {
-                    if (result === "delete") {
-                        this.activePuzzle.updateAndCommit(new DeleteClue(clue.id));
-                    }
-                }, 
-                (reason) => {}
-            );
-        }
-    }
-
-    public onEditorClose() {
-        if (this.modalRef) {
-            this.modalRef.close();
-            this.modalRef = null;
-        }
-    }
-
-    public onAddClue() {
-        this.openEditor(null);
-    }
-
-    private openEditor(clue) {
-        setTimeout(
-            () => {
-                this.modalRef = this.modalService.open(ClueTextEditorComponent, { 
-                    backdrop: "static",
-                    size: "lg",
-                 });
-                this.modalRef.componentInstance.clue = clue;
-                this.subs.push(this.modalRef.componentInstance.close.subscribe((result) => {
-                    this.modalRef.close();
-                    this.modalRef = null;
-                }));
-            },
-            0
+        this.activePuzzle.updateAndCommit(
+            new AddClue("", group, "New clue...", id),
+            new SortClues(),
+            new SelectClue(id)
         );
     }
 
+    public onContinue() {
+        this.navService.navigate("continue");
+    }
 
 }
 

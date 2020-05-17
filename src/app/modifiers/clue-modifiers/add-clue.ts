@@ -1,7 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle, ClueGroup } from '../../model/interfaces';
 import { Clue } from 'src/app/model/puzzle-model/clue';
-import { SortClues } from './sort-clues';
 import { ClueBuffer } from 'src/app/services/parsing/text/clue-buffer';
 
 export class AddClue implements IPuzzleModifier {

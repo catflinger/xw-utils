@@ -1,0 +1,25 @@
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">
+        <div>
+            <h5>{{group}}</h5>
+            <table>
+                <tbody>
+                    <tr *ngFor="let clue of clues" [ngClass]="{'bg-light': clue.highlight}">
+
+                        <td *ngIf="!clue.highlight" (click)="onClueClick(clue)">{{clue.caption}}</td>
+                        <td *ngIf="!clue.highlight" (click)="onClueClick(clue)">{{clue.text}}</td>
+
+                        <td *ngIf="clue.highlight" colspan="2">
+                            <app-clue-text-editor [showHelp]="false"></app-clue-text-editor>
+                            <div class="mt-3 text-right">
+                                <button type="button" class="btn btn-primary mr-3" (click)="onSaveEdit()">Save</button>
+                                <button type="button" class="btn btn-primary mr-3" (click)="onCancelEdit()">Cancel</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

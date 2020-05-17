@@ -6,10 +6,7 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 
 export interface ClueListItemOptions {
     showSolved?: boolean;
-    showEditButtons?: boolean;
 }
-
-export type ClueListAction = "edit" | "link" | "delete";
 
 @Component({
     selector: 'app-clue-list-item',
@@ -23,8 +20,6 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
     @Input() public clueId: string;
     @Input() public options: ClueListItemOptions;
     
-    @Output() public action = new EventEmitter<ClueListAction>();
-
     public klasses: string[];
     public clue: Clue = null;
 
@@ -82,8 +77,4 @@ export class ClueListItemComponent implements OnInit, OnDestroy {
     public ngOnDestroy(){
         this.subs.forEach(sub => sub.unsubscribe());
     }
-
-    public onAction(action: ClueListAction) {
-        this.action.emit(action);
-    } 
 }

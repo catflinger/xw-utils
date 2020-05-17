@@ -1,70 +1,22 @@
-<ng-template #confirmation let-modal>
-    <div class="modal-header">
-      <h3 class="modal-title" id="modal-basic-title">Confirm delete</h3>
-    </div>
-    <div class="modal-body">
-        Are you sure you want to delete this clue?
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="modal.close('delete')">Delete</button>
-        <button type="button" class="btn btn-primary" ngbAutofocus (click)="modal.close('cancel')">Cancel</button>
-    </div>
-</ng-template>
-
 <div class="row">
     <div class="col">
         <h3>Clues Editor</h3><strong *ngIf="puzzle">{{puzzle.info.title}}</strong>
     </div>
 </div>
 
-<div class="row" *ngIf="puzzle && puzzle.grid">
+<div class="row">
     <div class="col">
-        <app-grid [options]="{ readonly: true, showShading: false }"></app-grid>
+        <app-clue-edit-list group="across"></app-clue-edit-list>
     </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle">
     <div class="col">
-        Select a clue to edit
-    </div>
-</div>
-
-<div class="row" *ngIf="puzzle">
-    <div class="col">
-        <div *ngIf="acrossClues.length">
-            <h3>across</h3>
-            <table>
-                <tbody>
-                    <tr *ngFor="let clue of acrossClues" (click)="onClueClick(clue)">
-                        <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)">
-                        </app-clue-list-item>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="col">
-        <h3>down</h3>
-        <table>
-            <tbody>
-                <tr *ngFor="let clue of downClues" (click)="onClueClick(clue)">
-                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: true}" (action)="onAction(clue, $event)">
-                    </app-clue-list-item>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle">
-    <div class="col">
-        <button type="button" class="btn btn-primary mr-3" (click)="onAddClue()">Add new clue</button>
+        <app-clue-edit-list group="down"></app-clue-edit-list>
     </div>
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onAddClue('across')">Add across clue</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onAddClue('down')">Add down clue</button>
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Close</button>
     </div>
 </div>

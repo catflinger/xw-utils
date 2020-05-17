@@ -96,6 +96,7 @@ import { PuzzleInfoFormComponent } from './ui/components/editor/forms/puzzle-inf
 import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 import { createPuzzleTrack } from './services/navigation/tracks/create-puzzle-track';
+import { ClueEditListComponent } from './ui/components/clues/clue-edit-list/clue-edit-list.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -194,6 +195,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         PuzzleInfoFormComponent,
         AnnouncementsComponent,
         PuzzleHubComponent,
+        ClueEditListComponent,
     ],
     imports: [
         BrowserModule,

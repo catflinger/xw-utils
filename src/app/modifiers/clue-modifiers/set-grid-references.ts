@@ -25,16 +25,17 @@ export class SetGridReferences implements IPuzzleModifier {
             clues.forEach(clue => {
                 clue.link.entries = [];
 
-                let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group);
+                if (clue.caption && clue.group) {
+                    let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group);
 
-                // TO DO: check that all clues except redirects have references?
-
-                refs.forEach(ref => {
-                    clue.link.entries.push({
-                        gridRef: ref,
-                        //cellIds: [],
-                    });
-                })
+                    if (refs) {
+                        refs.forEach(ref => {
+                            clue.link.entries.push({
+                                gridRef: ref,
+                            });
+                        });
+                    }
+                }
             });
 
         }

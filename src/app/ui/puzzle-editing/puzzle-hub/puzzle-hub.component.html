@@ -46,15 +46,15 @@
 <div class="row mt-5" *ngIf="puzzle">
 
     <div class="col" *ngIf="puzzle.grid">
-        <app-grid [options]="{ readonly: true, showShading: false }"></app-grid>
+        <app-grid [options]="{ readonly: true, showShading: false }" (cellClick)="onCellClick($event)"></app-grid>
     </div>
 
     <div class="col" *ngIf="puzzle.clues">
         <h3>across</h3>
         <table>
             <tbody>
-                <tr *ngFor="let clue of acrossClues">
-                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: false}">
+                <tr *ngFor="let clue of acrossClues" (click)="onRowClick(clue.id)">
+                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false}">
                     </app-clue-list-item>
                 </tr>
             </tbody>
@@ -65,8 +65,8 @@
         <h3>down</h3>
         <table>
             <tbody>
-                <tr *ngFor="let clue of downClues">
-                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false, showEditButtons: false}">
+                <tr *ngFor="let clue of downClues" (click)="onRowClick(clue.id)">
+                    <app-clue-list-item [clueId]="clue.id" [options]="{showSolved: false}">
                     </app-clue-list-item>
                 </tr>
             </tbody>

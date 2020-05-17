@@ -8,6 +8,10 @@ import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { DeleteGrid } from 'src/app/modifiers/grid-modifiers/delete-grid';
 import { DeleteClues } from 'src/app/modifiers/clue-modifiers/delete-clues';
+import { SelectClue } from 'src/app/modifiers/clue-modifiers/select-clue';
+import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
+import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cells-for-edit';
+import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
 
 @Component({
     selector: 'app-puzzle-hub',
@@ -53,6 +57,16 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     }
     public get downClues(): Clue[] {
         return this.puzzle.clues.filter(c => c.group === "down");
+    }
+
+    public onRowClick(clueId: string) {
+        this.activePuzzle.update(new SelectClue(clueId));
+    }
+
+    public onCellClick(cell: GridCell) {
+        if (cell) {
+            this.activePuzzle.update(new SelectClueByCell(cell.id));
+        }
     }
 
     public onEditInfo() {}
