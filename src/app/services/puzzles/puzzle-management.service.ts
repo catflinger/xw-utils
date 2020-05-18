@@ -38,7 +38,7 @@ export abstract class IPuzzleManager {
     // at teh moment some of the name sound quite similar
     abstract newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): void;
     abstract getPuzzleList(): Observable<IPuzzleSummary[]>;
-    abstract openPuzzle(id: string): Promise<Puzzle>;
+    abstract openPuzzle(id: string, modifiers?: IPuzzleModifier[]): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
     abstract loadPuzzleFromPdf(params: OpenPuzzleParamters): Promise<string>;
 
@@ -186,7 +186,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return this.bsList.asObservable();
     }
 
-    public openPuzzle(id: string): Promise<Puzzle> {
+    public openPuzzle(id: string, modifiers?: IPuzzleModifier[]): Promise<Puzzle> {
         return this.localStorageService.getPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
@@ -286,15 +286,16 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         this.bsList.next(list);
     }
 
-    private usePuzzle(puzzle: IPuzzle) {
-        // create a mutable copy
-        //let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
+    private usePuzzle(puzzle: IPuzzle, modifiers?: IPuzzleModifier[]) {
 
         // reset to unused state
         new Clear().exec(puzzle);
         new MarkAsCommitted().exec(puzzle);
 
-        // push a read-only version
+        if (modifiers) {
+            modifiers.forEach(modifier => modifier.exec(puzzle));
+        }
+
         this.bsActive.next(new Puzzle(puzzle));
     }
 

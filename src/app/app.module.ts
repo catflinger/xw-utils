@@ -16,7 +16,7 @@ import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complet
 import { PublishPreambleComponent } from './ui/puzzle-publishing/publish-preamble/publish-preamble.component';
 import { ClueListComponent } from './ui/components/clues/clue-list/clue-list.component';
 import { SolverComponent } from './ui/puzzle-solving/solver/solver.component';
-import { ClueAnnotationComponent } from './ui/components/editor/forms/clue-annotator/clue-annotator.component';
+import { ClueAnnotationComponent } from './ui/components/tabbed-editor/forms/clue-annotator/clue-annotator.component';
 import { ClueTextChunkComponent } from './ui/components/clues/clue-text-chunk/clue-text-chunk.component';
 import { GridComponent } from './ui/components/grid/grid.component';
 
@@ -78,25 +78,26 @@ import { createTextTrack } from './services/navigation/tracks/create-text-track'
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/components/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
-import { ClueTextEditorComponent } from './ui/components/editor/forms/clue-text-editor/clue-text-editor.component';
-import { PuzzleOptionsComponent } from './ui/components/editor/forms/puzzle-options/puzzle-options.component';
-import { GridReferenceComponent } from './ui/components/editor/grid-reference/grid-reference.component';
-import { GridLinkerComponent } from './ui/components/editor/forms/grid-linker/grid-linker.component';
-import { ClueEditorComponent } from './ui/components/editor/clue-editor/clue-editor.component';
-import { GridFormComponent } from './ui/components/editor/forms/grid-form/grid-form.component';
-import { AddRemoveClueComponent } from './ui/components/editor/forms/add-remove-clue/add-remove-clue.component';
-import { PuzzleEditorComponent } from './ui/components/editor/puzzle-editor/puzzle-editor.component';
-import { AddClueComponent } from './ui/components/editor/forms/add-clue/add-clue.component';
+import { ClueTextEditorComponent } from './ui/components/tabbed-editor/forms/clue-text-editor/clue-text-editor.component';
+import { PuzzleOptionsComponent } from './ui/components/tabbed-editor/forms/puzzle-options/puzzle-options.component';
+import { GridReferenceComponent } from './ui/components/tabbed-editor/grid-reference/grid-reference.component';
+import { GridLinkerComponent } from './ui/components/tabbed-editor/forms/grid-linker/grid-linker.component';
+import { ClueEditorComponent } from './ui/components/tabbed-editor/clue-editor/clue-editor.component';
+import { GridFormComponent } from './ui/components/tabbed-editor/forms/grid-form/grid-form.component';
+import { AddRemoveClueComponent } from './ui/components/tabbed-editor/forms/add-remove-clue/add-remove-clue.component';
+import { PuzzleEditorComponent } from './ui/components/tabbed-editor/puzzle-editor/puzzle-editor.component';
+import { AddClueComponent } from './ui/components/tabbed-editor/forms/add-clue/add-clue.component';
 import { BackupComponent } from './ui/app-general/backup/backup.component';
 import { BackupsComponent } from './ui/app-general/backups/backups.component';
 import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
 import { InfoPanelComponent } from './ui/components/guides/info-panel/info-panel.component';
-import { PuzzleInfoFormComponent } from './ui/components/editor/forms/puzzle-info-form/puzzle-info-form.component';
+import { PuzzleInfoFormComponent } from './ui/components/tabbed-editor/forms/puzzle-info-form/puzzle-info-form.component';
 import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 import { createPuzzleTrack } from './services/navigation/tracks/create-puzzle-track';
 import { ClueEditListComponent } from './ui/components/clues/clue-edit-list/clue-edit-list.component';
+import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -196,6 +197,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         AnnouncementsComponent,
         PuzzleHubComponent,
         ClueEditListComponent,
+        PuzzleInfoComponent,
     ],
     imports: [
         BrowserModule,

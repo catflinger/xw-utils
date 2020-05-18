@@ -7,6 +7,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 import { BackupService } from 'src/app/services/storage/backup.service';
+import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 
 @Component({
     selector: 'app-home',
@@ -80,5 +81,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     public onDelete(id: string) {
         this.puzzleManagement.deletePuzzle(id);
+    }
+
+    public onEdit(id: string) {
+        this.puzzleManagement.openPuzzle(id, [new UpdateInfo({ready: false})])
+        .then(() => {
+            this.navService.beginTrack("createPuzzleTrack", {}, "hub");
+        });
     }
 }

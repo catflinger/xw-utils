@@ -8,7 +8,7 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClueEditorComponent } from '../../components/editor/clue-editor/clue-editor.component';
+import { ClueEditorComponent } from '../../components/tabbed-editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

@@ -39,6 +39,7 @@ export interface GeneralSettings {
     readonly showCommentValidation: BooleanSetting;
     readonly showCheat: BooleanSetting;
     readonly containerFluid: BooleanSetting;
+    readonly tabbedEditor: BooleanSetting;
 }
 
 // add new tip settings here first, this will ensure all other missing additions are caught by the compiler

@@ -10,7 +10,7 @@
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">Step 1: Add some more information about this puzzle</div>
     <div class="col">
-        <button type="button" class="btn btn-primary" (click)="onEditInfo()">Add Info</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onEditInfo()">Add Info</button>
     </div>
 </div>
 
@@ -43,14 +43,14 @@
     </div>
 </div>
 
-<div class="row mt-5" *ngIf="puzzle">
+<div class="row mt-5 bg-light" *ngIf="puzzle">
 
     <div class="col" *ngIf="puzzle.grid">
         <app-grid [options]="{ readonly: true, showShading: false }" (cellClick)="onCellClick($event)"></app-grid>
     </div>
 
     <div class="col" *ngIf="puzzle.clues">
-        <h3>across</h3>
+        <h5>across</h5>
         <table>
             <tbody>
                 <tr *ngFor="let clue of acrossClues" (click)="onRowClick(clue.id)">
@@ -62,7 +62,7 @@
     </div>
 
     <div class="col" *ngIf="puzzle.clues">
-        <h3>down</h3>
+        <h5>down</h5>
         <table>
             <tbody>
                 <tr *ngFor="let clue of downClues" (click)="onRowClick(clue.id)">

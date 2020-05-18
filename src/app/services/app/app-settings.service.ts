@@ -20,6 +20,8 @@ class _GeneralSettings implements GeneralSettings {
     public showCommentValidation: _BooleanSetting;
     public showCheat: _BooleanSetting;
     public containerFluid: _BooleanSetting;
+    public tabbedEditor: BooleanSetting;
+
 }
 
 class _TipSettings implements TipSettings {
@@ -69,6 +71,7 @@ const _defaultSettings: _AppSettings = {
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
         containerFluid: { caption: "display app full-width inside the browser", enabled: true },
+        tabbedEditor: { caption: "show edit tabs in the clue editor", enabled: true },
     },
     tips: {
         general: { caption: "show general tips", enabled: true },

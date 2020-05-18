@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { ClueEditorService } from '../../editor/clue-editor.service';
+import { ClueEditorService } from '../../tabbed-editor/clue-editor.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { SelectClue } from 'src/app/modifiers/clue-modifiers/select-clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';

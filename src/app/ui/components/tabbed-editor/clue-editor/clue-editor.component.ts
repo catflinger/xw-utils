@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ClueEditorService } from '../clue-editor.service';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
 
 export interface IClueEditorForm {
     dirty: EventEmitter<void>;
@@ -22,29 +24,45 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
     
     public puzzle: Puzzle = null;
     public dirty: boolean = false;
+    public settings: AppSettings;
 
     private subs: Subscription[] = [];
 
     constructor(
+        private settingsService: AppSettingsService,
         private activePuzzle: IActivePuzzle,
         private editorService: ClueEditorService,
         private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit(): void {
-        this.subs.push(
-            this.activePuzzle.observe().subscribe(puzzle => {
 
-                this.puzzle = puzzle;
-                this.dirty = false;
-                
-                this.detRef.detectChanges();
-            })
-        );
+        this.subs.push(combineLatest(
+            
+            this.settingsService.observe(),
+            this.activePuzzle.observe())
+            .subscribe(result => {
+
+                let settings = result[0];
+                let puzzle = result[1];
+
+                if (settings) {
+                    this.settings = settings;
+                    if (puzzle) {
+                        this.puzzle = puzzle;
+                        this.dirty = false;
+                    }
+                }
+            this.detRef.detectChanges();
+        }));
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+    }
+
+    public get showTabs(): boolean {
+        return this.settings ? this.settings.general.tabbedEditor.enabled : true;
     }
 
     public onDirty() {

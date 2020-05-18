@@ -6,7 +6,10 @@ export class HousekeepClues implements IPuzzleModifier {
 
     exec(puzzle: IPuzzle) {
         if (puzzle && puzzle.clues) {
-            puzzle.clues = puzzle.clues.filter(clue => clue.text.trim().length > 0 );
+            puzzle.clues = puzzle.clues.filter(clue => {
+                return clue.text && 
+                    clue.text.trim().length > 0;
+            });
         }
     }
 }

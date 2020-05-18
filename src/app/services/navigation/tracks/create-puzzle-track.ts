@@ -22,6 +22,7 @@ export const createPuzzleTrack: NavTrack = {
             type: "route",
             route: "/puzzle-hub",
             actions: {
+                "edit-info": "puzzle-info",
                 "add-grid": "grid-start",
                 "edit-grid": "edit-grid",
                 "add-clues": "make-clues",
@@ -31,12 +32,20 @@ export const createPuzzleTrack: NavTrack = {
             }
         },
         {
+            name: "puzzle-info",
+            type: "route",
+            route: "/puzzle-info",
+            actions: {
+                "continue": "hub",
+                "cancel": "hub"
+            }
+        },
+        {
             name: "grid-start",
             type: "route",
             route: "/grid-start",
             actions: {
                 "continue": "edit-grid",
-                "cancel": "hub"
             }
         },
         {

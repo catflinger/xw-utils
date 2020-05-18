@@ -69,7 +69,9 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onEditInfo() {}
+    public onEditInfo() {
+        this.navService.navigate("edit-info");
+    }
 
     public onEditClues() {
         this.navService.navigate("edit-clues");

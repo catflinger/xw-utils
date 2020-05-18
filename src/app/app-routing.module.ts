@@ -34,6 +34,7 @@ import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup
 import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
 import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
+import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
 
 const routes: Routes = [
 
@@ -69,6 +70,7 @@ const routes: Routes = [
     { path: "grid-editor", component: GridEditorComponent },
     { path: "clues-start", component: CluesStartComponent },
     { path: "clues-editor", component: CluesEditorComponent },
+    { path: "puzzle-info", component: PuzzleInfoComponent },
     { path: "nav-error", component: NavErrorComponent },
     { path: "link-error", component: LinkErrorComponent },
 
