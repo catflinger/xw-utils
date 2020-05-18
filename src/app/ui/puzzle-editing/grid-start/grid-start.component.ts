@@ -29,17 +29,19 @@ export class GridStartComponent implements OnInit, OnDestroy {
     constructor(
         private appService: AppService,
         private navService: NavService<AppTrackData>,
-        private activePuzzle: IActivePuzzle,
+        public activePuzzle: IActivePuzzle,
+        private puzzleManager: IPuzzleManager,
         private formBuilder: FormBuilder,
     ) { }
 
     ngOnInit() {
 
-        if (!this.activePuzzle.hasPuzzle) {
-            this.navService.goHome();
-        }
-
         this.form = this.formBuilder.group({
+            title: [
+                "",
+                [Validators.required]
+            ],
+
             gridStyle: [
                 GridStyles.standard, 
                 [Validators.required]
@@ -89,7 +91,17 @@ export class GridStartComponent implements OnInit, OnDestroy {
             symmetrical: this.form.value.symmetrical,
         });
 
-        this.activePuzzle.updateAndCommit(new AddGrid({ grid }));
+        if (this.activePuzzle.hasPuzzle) {
+            this.activePuzzle.updateAndCommit(
+                new AddGrid({ grid })
+            );
+        } else {
+            this.puzzleManager.newPuzzle("grid", [
+                new AddGrid({grid}),
+                new UpdateInfo({title: this.form.value.title})
+            ]);
+        }
+
         this.navService.navigate("continue");
     }
 

@@ -1,2 +1,5 @@
-<button type="button" class="btn btn-primary mr-3" (click)="onClick($event)" *ngIf="enabled">Download</button>
+<button type="button" class="btn btn-primary mr-3" (click)="onClick($event)">
+    <!-- <ng-content></ng-content> -->
+    CLICK ME
+</button>
 <a #downloadLink class="invisible" [download]="filename" [href]="dataUrl"></a>

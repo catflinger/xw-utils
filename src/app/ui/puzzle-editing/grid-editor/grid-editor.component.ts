@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
@@ -17,7 +17,6 @@ import { GridEditor } from '../../services/grid-editors/grid-editor';
 import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
 import { AppService } from '../../services/app.service';
-import { DownloadInstance } from '../../components/general/download-button/download-button.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
@@ -27,7 +26,8 @@ type ToolType = "grid" | "text" | "color" | "properties";
 @Component({
     selector: 'app-grid-editor',
     templateUrl: './grid-editor.component.html',
-    styleUrls: ['./grid-editor.component.css']
+    styleUrls: ['./grid-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
@@ -37,8 +37,11 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public gridEditors = GridEditors;
     public shadingColor: string;
 
-    @ViewChild(GridComponent, { static: false }) 
-    public gridControl: GridComponent;
+    public dataUrl: string;
+    public filename: string;
+
+    @ViewChild("downloadLink", { static: false }) downloadLink: ElementRef;
+    @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
 
     private subs: Subscription[] = [];
     private tool: ToolType = "grid";
@@ -51,6 +54,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private formBuilder: FormBuilder,
         private gridEditorService: GridEditorService,
+        private detRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -70,12 +74,16 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
-                        if (!puzzle.grid) {
-                            this.navService.goHome();
+                        if (puzzle) {
+                            if (!puzzle.grid) {
+                                this.navService.goHome();
+                            }
+                            this.form.patchValue({title: puzzle.info.title});
+                            this.symmetrical = puzzle.grid.properties.symmetrical;
                         }
-                        this.form.patchValue({title: puzzle.info.title});
-                        this.symmetrical = puzzle.grid.properties.symmetrical;
                         this.puzzle = puzzle;
+                        this.detRef.detectChanges();
+
                     }
                 ));
         }
@@ -235,9 +243,16 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.activePuzzle.updateAndCommit(new ClearShading());
     }
 
-    public onDownload(instance: DownloadInstance) {
-        this.appService.clear();
-        instance.download("grid-image.png", this.gridControl.getDataUrl());
+    public onDownload() {
+        this.filename = "grid-image.png";
+        this.dataUrl = this.gridControl.getDataUrl();
+
+        setTimeout(
+            () => {
+                this.downloadLink.nativeElement.click();
+            },
+            250
+        );
     }
 
     private getSymCell(cell: GridCell): GridCell {

@@ -2,28 +2,39 @@ import { NavTrack } from '../interfaces';
 
 /*
 This track is for creating a new puzzle or amending an existing puzzle
-
 Edit refers to the role of a crossword editor, both a commissioner and a modifier of puzzles
 */
 
-export const createGridTrack: NavTrack = {
-    name: "createGridTrack",
-    start: "grid-start",
+export const gridToolTrack: NavTrack = {
+    name: "gridToolTrack",
+    start: "start",
     nodes: [
         {
-            name: "grid-start",
+            name: "start",
             type: "route",
             route: "/grid-start",
             actions: {
-                "continue": "edit-grid",
+                "continue": "edit",
             }
         },
         {
-            name: "edit-grid",
+            name: "edit",
             type: "route",
             route: "/grid-editor",
             actions: {
                 "continue": "publish",
+                "cancel": "home",
+                "back": "home",
+            }
+        },
+        {
+            name: "publish",
+            type: "call",
+            call: {
+                track: "publishGridTrack",
+            },
+            actions: {
+                "back": "edit",
             }
         },
         {
@@ -31,16 +42,12 @@ export const createGridTrack: NavTrack = {
             type: "route",
             route: "/nav-error",
             actions: {
-                "continue": "abandon"
+                "continue": "home"
             }
         },
         {
-            name: "publish",
-            type: "switch",
-            switch: {
-                track: "publishGridTrack",
-                start: "publish",
-            },
+            name: "home",
+            type: "exit",
             actions: {}
         },
     ],

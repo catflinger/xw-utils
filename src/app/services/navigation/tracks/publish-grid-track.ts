@@ -2,24 +2,15 @@ import { NavTrack } from '../interfaces';
 
 export const publishGridTrack: NavTrack = {
     name: "publishGridTrack",
-    start: "publish-grid",
+    start: "publish",
     nodes: [
-        {
-            name: "publish-grid",
-            type: "route",
-            route: "/publish-grid",
-            actions: {
-                "continue": "publish",
-                "authenticate": "publish-login",
-            }
-        },
         {
             name: "publish-login",
             type: "route",
             route: "/publish-login",
             actions: {
                 "continue": "publish",
-                "back": "publish-grid",
+                "back": "return",
             }
         },
         {
@@ -29,13 +20,19 @@ export const publishGridTrack: NavTrack = {
             actions: {
                 "authenticate": "publish-login",
                 "continue": "publish-complete",
-                "back": "publish-grid",
+                "back": "return",
             }
         },
         {
             name: "publish-complete",
             type: "route",
             route: "/publish-complete",
+            actions: {}
+        },
+        {
+            name: "return",
+            type: "return",
+            return: "back",
             actions: {}
         },
 

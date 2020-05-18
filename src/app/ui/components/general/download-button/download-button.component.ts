@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, Input } from '@angular/core';
 import { AppService } from '../../../services/app.service';
 
 export interface DownloadInstance {
-    download(filename: string, dataUrl: string): void;
+    download(filename: string, dataUrl: string): Promise<void>;
 }
 
 @Component({
@@ -10,31 +10,24 @@ export interface DownloadInstance {
     templateUrl: './download-button.component.html',
     styleUrls: ['./download-button.component.css']
 })
-export class DownloadButtonComponent implements AfterViewInit {
-    public dataUrl: string;
-    public filename: string;
+export class DownloadButtonComponent {
     public enabled: boolean;
 
-    @Output() download = new EventEmitter<DownloadInstance>();
+    @Input() dataUrl: string;
+    @Input() filename: string;
+    @Output() download = new EventEmitter<any>()
 
     @ViewChild("downloadLink", { static: false }) downloadLink: ElementRef;
 
     constructor(private appService: AppService) { }
 
-    public ngAfterViewInit() {
-        setTimeout(()=> { this.enabled = typeof this.downloadLink.nativeElement.download !== "undefined"; }, 0);
+    public onClick() {
+        new Promise<void>((resolve) => {
+            this.downloadLink.nativeElement.click();
+            resolve();
+        })
+        .then(() => this.download.emit(null))
+        .catch((error) => this.download.emit(error))
+    ;
     }
-
-    public onClick(event: Event) {
-        this.download.emit({
-            download: (filename: string, dataUrl: string) => {
-                this.dataUrl = dataUrl;
-                this.filename = filename;
-                setTimeout(() => this.downloadLink.nativeElement.click(), 0);
-                this.appService.setAlert("info", "The image has been created.  Check the downloads folder in your browser.");
-            }
-        });
-        event.preventDefault();
-    }
-
 }

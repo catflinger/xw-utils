@@ -72,9 +72,6 @@ import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.compo
 import { ClueListItemComponent } from './ui/components/clues/clue-list-item/clue-list-item.component';
 import { solveTrack } from './services/navigation/tracks/solve-track';
 import { createPdfTrack } from './services/navigation/tracks/create-pdf-track';
-import { createGridAndTextTrack } from './services/navigation/tracks/create-grid-and-text-track';
-import { createGridTrack } from './services/navigation/tracks/create-grid-track';
-import { createTextTrack } from './services/navigation/tracks/create-text-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/components/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
@@ -98,6 +95,7 @@ import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.co
 import { createPuzzleTrack } from './services/navigation/tracks/create-puzzle-track';
 import { ClueEditListComponent } from './ui/components/clues/clue-edit-list/clue-edit-list.component';
 import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
+import { gridToolTrack } from './services/navigation/tracks/grid-tool-track';
 
 const quillGlobalConfig = {
     modules: {
@@ -112,11 +110,9 @@ const quillGlobalConfig = {
 
 const tracks: ReadonlyArray<NavTrack> = [
     createPuzzleTrack,
-    createTextTrack,
-    createGridTrack,
-    createGridAndTextTrack,
     createPdfTrack,
     parseTrack,
+    gridToolTrack,
     solveTrack,
     editPuzzleTrack,
     publishPostTrack,
