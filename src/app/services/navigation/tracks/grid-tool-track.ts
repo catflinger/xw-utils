@@ -23,8 +23,7 @@ export const gridToolTrack: NavTrack = {
             route: "/grid-editor",
             actions: {
                 "continue": "publish",
-                "cancel": "home",
-                "back": "home",
+                "close": "home",
             }
         },
         {

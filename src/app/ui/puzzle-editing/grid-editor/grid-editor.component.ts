@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
@@ -44,7 +44,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
 
     private subs: Subscription[] = [];
-    private tool: ToolType = "grid";
+    public tool: ToolType = "grid";
 
     private gridEditor: GridEditor;
 
@@ -64,7 +64,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         });
 
         // TO DO: record preferences for next time
-        this.shadingColor = "#ffebcd";
+        this.shadingColor = "#f0f8ff";
 
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
@@ -83,7 +83,6 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                         }
                         this.puzzle = puzzle;
                         this.detRef.detectChanges();
-
                     }
                 ));
         }
@@ -123,15 +122,22 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     public onTabChange(event: NgbTabChangeEvent) {
         this.appService.clear();
-        this.tool = event.nextId as ToolType;
+        //this.tool = event.nextId as ToolType;
         this.options.hideShading = event.nextId !== "color";
         this.activePuzzle.updateAndCommit(new Clear());
+        this.detRef.detectChanges();
     }
 
     public onContinue() {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("continue");
+    }
+
+    public onClose() {
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(new Clear());
+        this.navService.navigate("close");
     }
 
     public onSubmit() {

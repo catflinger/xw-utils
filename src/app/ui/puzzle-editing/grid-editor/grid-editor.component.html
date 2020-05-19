@@ -27,11 +27,12 @@
                 <li>Title - change grid title</li>
             </ul>
         </app-tip>
-        
-        <ngb-tabset activeId="grid" (tabChange)="onTabChange($event)">
 
-            <ngb-tab id="grid" title="Grid">
-                <ng-template ngbTabContent>
+        <ul ngbNav #nav="ngbNav" [(activeId)]="tool" class="nav-tabs" (navChange)="onTabChange($event)">
+
+            <li ngbNavItem="grid">
+                <a ngbNavLink>Grid</a>
+                <ng-template ngbNavContent>
                     <div class="w-100 mt-5">
                         Click on the grid to add or remove
                         <span *ngIf="barred">bars</span>
@@ -42,11 +43,11 @@
                         <label for="symmetrical" class="form-check-label">Grid is symmetrical </label>
                     </div>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab id="text" title="Text">
-                <ng-template ngbTabContent>
-                    
+            <li ngbNavItem="text">
+                <a ngbNavLink>Text</a>
+                <ng-template ngbNavContent>
                     <div class="mt-5">
                         <div class="mb-5">
                             Click on a cell in the grid to enter text
@@ -85,24 +86,26 @@
                         </div>
                     </div>
                 </ng-template>
-            </ngb-tab>
+            </li>
 
-            <ngb-tab id="color" title="Colours">
-                <ng-template ngbTabContent>
+            <li ngbNavItem="color">
+                <a ngbNavLink>Colours</a>
+                <ng-template ngbNavContent>
                     <div class="mt-5">
                         Choose a colour then click a cell to apply highlighting
                     </div>
                     <div class="mt-5">
-                        <app-color-control [(ngModel)]="shadingColor"></app-color-control>
+                        <app-color-control [(ngModel)]="shadingColor" [ngModelOptions]="{standalone: true}"></app-color-control>
                     </div>
                     <div class="mt-3">
                         <button type="button" class="btn btn-link pl-1" (click)="onClearAll()">clear all shading</button>
                     </div>
-                    </ng-template>
-            </ngb-tab>
+                </ng-template>
+            </li>
 
-            <ngb-tab id="properties" title="Title">
-                <ng-template ngbTabContent>
+            <li ngbNavItem="properties">
+                <a ngbNavLink>Title</a>
+                <ng-template ngbNavContent>
                     <form [formGroup]="form">
                         <div class="form-group mt-5">
                             <label for="title">Title</label>
@@ -113,17 +116,22 @@
                         </div>
                     </form>
                 </ng-template>
-            </ngb-tab>
+            </li>
+        </ul>
 
-        </ngb-tabset>
+        <div [ngbNavOutlet]="nav" class="my-3"></div>
+
     </div>
 </div>
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onClose()">Close</button>
         <button type="button" class="btn btn-primary mr-3" (click)="onDownload()">Download image</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
     </div>
 </div>
 
 <a #downloadLink class="invisible" target="_self" [download]="filename" [href]="dataUrl"></a>
+
+[{{shadingColor}}]

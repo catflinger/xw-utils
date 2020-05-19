@@ -43,8 +43,6 @@ export class TextStyleComponent implements OnInit, OnDestroy {
         this.subs.push(this.form.valueChanges.subscribe((val) => {
             if (this.puzzle && this.appStatus) {
 
-                console.log("changing text style...")
-
                 this.activePuzzle.updateAndCommit(new UpdatePublsihOptionTextStyle(
                     this.textStyleName,
                     val.color,

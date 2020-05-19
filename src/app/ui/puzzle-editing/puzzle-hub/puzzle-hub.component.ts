@@ -40,7 +40,6 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
                     (puzzle) => {
                         if (puzzle) {
                             this.puzzle = puzzle;
-                            //console.log(JSON.stringify(this.puzzle, null, 2));
                         }
                         this.detRef.detectChanges();
                     }

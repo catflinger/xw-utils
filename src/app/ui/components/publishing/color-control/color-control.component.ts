@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cssNamedColors } from "./colors";
 
@@ -16,13 +16,14 @@ class ColorPickerOption {
         useExisting: forwardRef(() => ColorControlComponent),
         multi: true
     }],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorControlComponent implements ControlValueAccessor, OnInit {
     public color: ColorPickerOption;
     private propagateChange = (_: any) => { };
     public options: ColorPickerOption[];
 
-    constructor() {
+    constructor(private detRef: ChangeDetectorRef) {
         this.options = cssNamedColors;
     }
 
@@ -40,6 +41,7 @@ export class ColorControlComponent implements ControlValueAccessor, OnInit {
         } else {
             this.color = this.options[0];
         }
+        this.detRef.detectChanges();
     }
 
     public registerOnChange(fn) {

@@ -10,6 +10,7 @@ export const editPuzzleTrack: NavTrack = {
             route: "/grid-editor",
             actions: {
                 "continue": "grid-captions",
+                "close": "anabdon",
             }
         },
         {
