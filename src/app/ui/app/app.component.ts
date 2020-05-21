@@ -8,6 +8,7 @@ import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
 import { Router, NavigationStart } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
     public credentials: Credentials;
     public isNavbarCollapsed: boolean;
-    public containerFluid: Boolean = false;
+    public settings: AppSettings;
 
     private subs: Subscription[] = [];
 
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
         private settingsService: AppSettingsService,
-        //private detref: ChangeDetectorRef,
+        private detref: ChangeDetectorRef,
         ) {
     }
 
@@ -40,27 +41,25 @@ export class AppComponent implements OnInit, OnDestroy {
         this.appService.clearBusy();
         
         this.subs.push(this.settingsService.observe().subscribe(settings => {
-            if (settings) {
-                this.containerFluid = settings.general.containerFluid.enabled;
-            }
-
-            //this.detref.detectChanges();
+            this.settings = settings;
+            this.detref.detectChanges();
         }));
 
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
-            //this.detref.detectChanges();
+            this.detref.detectChanges();
         }));
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
-            //this.detref.detectChanges();
+            this.detref.detectChanges();
         }));
 
         this.subs.push(this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.modalService.dismissAll();
             }
+            this.detref.detectChanges();
         }));
 
     }
@@ -68,6 +67,11 @@ export class AppComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
     }
+
+    public get containerFluid(): Boolean {
+        return this.settings ? this.settings.general.containerFluid.enabled : false;
+    };
+
 
     public onArchive(provider: string) {
         this.activePuzzle.clear();

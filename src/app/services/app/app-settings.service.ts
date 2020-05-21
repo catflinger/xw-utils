@@ -21,7 +21,6 @@ class _GeneralSettings implements GeneralSettings {
     public showCheat: _BooleanSetting;
     public containerFluid: _BooleanSetting;
     public tabbedEditor: BooleanSetting;
-
 }
 
 class _TipSettings implements TipSettings {
@@ -46,6 +45,7 @@ class _AppSettings implements AppSettings {
     public footer: QuillDelta;
     public diary: _DiarySettings;
     public editorMode: EditorMode;
+    public traceOutput: boolean;
 }
 
 /*
@@ -65,6 +65,7 @@ const _defaultSettings: _AppSettings = {
     username: null,
     sandbox: false,
     editorMode: "modal",
+    traceOutput: false,
     footer: { ops: []},
     general: {
         //showCommentEditor: { caption: "show comment editor", enabled: true },
@@ -135,6 +136,10 @@ export class AppSettingsService {
 
                 if (changes.editorMode !== undefined && typeof changes.editorMode === "string") {
                     _settings.editorMode = changes.editorMode;
+                }
+
+                if (changes.traceOutput !== undefined && typeof changes.traceOutput === "boolean") {
+                    _settings.traceOutput = changes.traceOutput;
                 }
 
                 if (changes.diary && typeof changes.diary.showEverybody === "boolean") {

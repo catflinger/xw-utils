@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.form = this.formBuilder.group({
             sandbox: [false],
             editorMode: "modal",
+            traceOutput: false,
             footer: [""],
             general: this.formBuilder.group({}),
             tips: this.formBuilder.group({}),
@@ -55,6 +56,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 sandbox: settings.sandbox,
                 footer: settings.footer,
                 editorMode: settings.editorMode,
+                traceOutput: settings.traceOutput,
             });
 
             Object.keys(this.settings.general).forEach(key => {
@@ -77,6 +79,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         let changes = {
             sandbox: this.form.value.sandbox,
             editorMode: this.form.value.editorMode,
+            traceOutput: this.form.value.traceOutput,
             general: this.getChanges("general"),
             footer: this.form.value.footer,
             tips: this.getChanges("tips"),

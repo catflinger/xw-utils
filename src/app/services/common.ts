@@ -65,6 +65,7 @@ export interface AppSettings {
     readonly diary: DiarySettings;
     readonly sandbox: boolean;
     readonly editorMode: EditorMode;
+    readonly traceOutput: boolean;
 }
 
 export type TipKey = keyof TipSettings;
