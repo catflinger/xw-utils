@@ -4,7 +4,10 @@ import { IPuzzle } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class SelectClue implements IPuzzleModifier {
-    constructor(public readonly clueId: string) { }
+    constructor(
+        public readonly clueId: string,
+        private followRedirects: boolean = false,
+    ) { }
 
     exec(puzzle: IPuzzle) {
         if (puzzle) {
@@ -15,7 +18,7 @@ export class SelectClue implements IPuzzleModifier {
 
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
 
-            if (clue && !clue.redirect) {
+            if (clue) {
                 clue.highlight = true;
 
                 if (gridX) {
@@ -30,6 +33,9 @@ export class SelectClue implements IPuzzleModifier {
                         }
                     });
                 }
+            } else if (clue.redirect) {
+                // TO DO: ... folow redirect...
+
             }
         }
     }

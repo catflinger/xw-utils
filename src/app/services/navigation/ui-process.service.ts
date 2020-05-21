@@ -10,6 +10,7 @@ import { CreateClues } from 'src/app/modifiers/clue-modifiers/create-clues';
 import { InitAnnotationWarnings } from 'src/app/modifiers/puzzle-modifiers/init-annotation-warnings';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { NavProcessor } from './interfaces';
+import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 
 @Injectable({
     providedIn: 'root'
@@ -112,6 +113,10 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
     }
 
     private validate(): Promise<string> {
+
+        // TO DO: do some proper validation here...
+        
+        this.activePuzzle.updateAndCommit(new UpdateInfo({ ready: true }));
         return Promise.resolve("ok");
     }
 }

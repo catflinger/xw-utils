@@ -15,7 +15,7 @@ import { AppSettings } from 'src/app/services/common';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
     public appStatus: AppStatus;
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
         private settingsService: AppSettingsService,
-        private detref: ChangeDetectorRef,
+        //private detref: ChangeDetectorRef,
         ) {
     }
 
@@ -46,17 +46,17 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.containerFluid = settings.general.containerFluid.enabled;
             }
 
-            this.detref.detectChanges();
+            //this.detref.detectChanges();
         }));
 
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
-            this.detref.detectChanges();
+            //this.detref.detectChanges();
         }));
         
         this.subs.push(this.authService.observe().subscribe(credentials => {
             this.credentials = credentials;
-            this.detref.detectChanges();
+            //this.detref.detectChanges();
         }));
 
         this.subs.push(this.router.events.subscribe(event => {

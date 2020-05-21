@@ -7,7 +7,8 @@ import { Grid } from 'src/app/model/puzzle-model/grid';
 export class SelectClueByCell implements IPuzzleModifier {
     constructor(
         private cellId: string,
-        ) { }
+        private followRedirects: boolean = false,
+    ) { }
 
     exec(puzzle: IPuzzle) {
         new Clear().exec(puzzle);
@@ -43,7 +44,11 @@ export class SelectClueByCell implements IPuzzleModifier {
             }
 
             if (result) {
-                new SelectClue(result.id).exec(puzzle);
+                if (!result.redirect) {
+                    new SelectClue(result.id).exec(puzzle);
+                } else {
+                    // TO DO: ...folow redirect...
+                }
             }
         }
     }
