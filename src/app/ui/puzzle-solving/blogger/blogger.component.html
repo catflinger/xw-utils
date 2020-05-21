@@ -1,10 +1,22 @@
-<div class="row" *ngIf="showEditor">
+<div class="row">
+    <div class="col">
+        <h3>Blogger</h3>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <h5>{{puzzle.info.title}}</h5>
+    </div>
+</div>
+
+<div class="row mt-3" *ngIf="showEditor">
     <div class="col">
         <app-clue-editor (close)="onEditorClose()"></app-clue-editor>
     </div>
 </div>
 
-<div class="row" *ngIf="showPuzzle">
+<div class="row mt-3" *ngIf="showPuzzle">
     <div class="col">
         <table class="table w-100" *ngIf="puzzle">
             <thead *ngIf="puzzle.publishOptions.textCols.length">
@@ -24,7 +36,7 @@
                             {{ clue.answers[i] }}
                         </td>
                         <td class="py-0">
-                            <app-clue-text [clueId]="clueId"></app-clue-text>
+                            <app-clue-text [clueId]="clue.id"></app-clue-text>
                         </td>
                         <td class="py-0">
                             <quill-view [content]="clue.comment" format="object" theme="snow"></quill-view>

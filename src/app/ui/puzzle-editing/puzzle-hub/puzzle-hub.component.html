@@ -15,7 +15,7 @@
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">
-    <div class="col">Step 2: Add a grid</div>
+    <div class="col">Step 2: Add a grid (optional)</div>
     <div class="col" *ngIf="!puzzle.grid">
         <button type="button" class="btn btn-primary" (click)="onAddGrid()">Add grid</button>
     </div>
@@ -26,14 +26,43 @@
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">
-    <div class="col">Step 3: Add a clues</div>
-    <div class="col" *ngIf="!puzzle.clues">
-        <button type="button" class="btn btn-primary" (click)="onAddClues()">Add clues</button>
-    </div>
+    <div class="col">Step 3: Add some clues</div>
+
     <div class="col" *ngIf="puzzle.clues">
         <button type="button" class="btn btn-outline-primary mr-3" (click)="onEditClues()">Edit clues</button>
         <button type="button" class="btn btn-outline-primary" (click)="onDeleteClues()">Delete clues</button>
     </div>
+
+    <div class="col" *ngIf="!puzzle.clues">
+        <div class="row p-3 border-top" *ngIf="puzzle.grid">
+            <div class="col">
+                Create a set of empty clues numbered to match the grid.
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary mr-3" (click)="onAddCluesGrid()">Grid</button>
+            </div>
+        </div>
+
+        <div class="row p-3 border-top">
+            <div class="col">
+                I already have the clues in text format.  I want to use these.
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary mr-3" (click)="onAddCluesText()">Text</button>
+            </div>
+        </div>
+
+        <div class="row p-3 border-top">
+            <div class="col">
+                I want to enter the clues myself
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary mr-3" (click)="onAddCluesManual()">Manual</button>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">

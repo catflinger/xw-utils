@@ -25,7 +25,7 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
 
     @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.key === "Escape") {
+        if (event && event.key === "Escape") {
             event.stopPropagation();
             Promise.resolve(() => {
                 this.activePuzzle.updateAndCommit(new Clear());

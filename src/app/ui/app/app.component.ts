@@ -7,9 +7,7 @@ import { NavService } from '../../services/navigation/nav.service';
 import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
 import { Router, NavigationStart } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HtmlAsIsPipe } from '../pipes/html-as-is.pipe';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
-import { AppSettings } from 'src/app/services/common';
 
 @Component({
     selector: 'app-root',

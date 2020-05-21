@@ -26,6 +26,8 @@ export const createPuzzleTrack: NavTrack = {
                 "add-grid": "grid-start",
                 "edit-grid": "edit-grid",
                 "add-clues": "make-clues",
+                "add-clues-grid": "make-clues",
+                "add-clues-text": "special-text",
                 "edit-clues": "clues-editor",
                 "add-text": "special-text",
                 "solve": "solver",
@@ -67,15 +69,6 @@ export const createPuzzleTrack: NavTrack = {
             }
         },
         {
-            name: "clues-start",
-            type: "route",
-            route: "/clues-start",
-            actions: {
-                "auto": "make-clues",
-                "text": "special-text",
-            }
-        },
-        {
             name: "make-clues",
             type: "process",
             process: "make-clues",
@@ -97,6 +90,7 @@ export const createPuzzleTrack: NavTrack = {
             route: "/special-text",
             actions: {
                 "parse": "parser",
+                "cancel": "hub",
             }
         },
         {
@@ -123,7 +117,7 @@ export const createPuzzleTrack: NavTrack = {
                 track: "parseTrack"
             },
             actions: {
-                "ok": "solver",
+                "ok": "hub",
                 "error": "special-text",
             }
         },

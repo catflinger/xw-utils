@@ -28,7 +28,7 @@ export interface PuzzleResponse {
 }
 
 export interface PdfExtractResponse {
-    readonly grid: any;
+    readonly grid?: any;
     readonly text: string;
 }
 

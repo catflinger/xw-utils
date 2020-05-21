@@ -92,7 +92,15 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
         this.navService.navigate("add-grid");
     }
 
-    public onAddClues() {
+    public onAddCluesGrid() {
+        this.navService.navigate("add-clues-grid");
+    }
+
+    public onAddCluesText() {
+        this.navService.navigate("add-clues-text");
+    }
+
+    public onAddCluesManual() {
         this.navService.navigate("add-clues");
     }
 

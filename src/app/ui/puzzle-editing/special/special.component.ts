@@ -25,7 +25,7 @@ export class SpecialComponent implements OnInit {
         this.navService.beginTrack("createPdfTrack", {});
     }
 
-    public onStart() {
+    public onLocal() {
         this.navService.beginTrack("createPuzzleTrack", { provider: "local"});
     }
 }

@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Provider } from '@angular/core';
 import { AppService } from '../../services/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IParseContext } from 'src/app/services/parsing/text/text-parsing-context';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
+import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Subscription } from 'rxjs';
@@ -27,12 +26,13 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
+        private puzzleManager: IPuzzleManager,
         private fb: FormBuilder,
     ) { }
 
     public ngOnInit() {
         this.form = this.fb.group({
-            title: ["", Validators.required],
+            //title: ["", Validators.required],
             text: [defaultText, Validators.required],
         });
 
@@ -42,7 +42,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                     this.puzzle = puzzle;
                     if (puzzle) {
                         this.form.patchValue({ 
-                            title: puzzle.info.title,
+                            //title: puzzle.info.title,
                             text: puzzle.provision.source,
                         });
 
@@ -60,24 +60,26 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onParse() {
         this.appService.clear();
 
-        this.activePuzzle.updateAndCommit(new UpdateInfo({
-            title: this.form.value.title,
+        const params = new UpdateInfo({
+            //title: this.form.value.title,
             source: this.form.value.text 
-        }));
+        });
+
+        if (this.puzzle) {
+            this.activePuzzle.updateAndCommit(params);
+        } else {
+            this.puzzleManager.newPuzzle("local", [params]);
+        }
+
         this.navService.navigate("parse");
     }
 
     public onCancel() {
-        this.navService.goHome();
+        this.navService.navigate("cancel");
     }
 
     public onAmend() {
         this.parseError = null;
-    }
-
-    public onKeyDown(event: KeyboardEvent) {
-        // to stop errors from LastPass and other browser add-ons that attach listeners to this control
-        event.stopPropagation();
     }
 
     // private parse(text: string): IParseContext {

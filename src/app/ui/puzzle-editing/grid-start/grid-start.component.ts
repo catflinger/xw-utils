@@ -70,6 +70,14 @@ export class GridStartComponent implements OnInit, OnDestroy {
                 [Validators.required],
             ]
         });
+
+        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            if (puzzle) {
+                this.form.patchValue({title: puzzle.info.title});
+            } else {
+                this.form.patchValue({title: ""});
+            }
+        }));
     }
 
     public ngOnDestroy(){

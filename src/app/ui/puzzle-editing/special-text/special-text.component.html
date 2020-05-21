@@ -4,91 +4,89 @@
     </div>
 </div>
 
-<ng-container *ngIf="puzzle">
-    <form [formGroup]="form">
+<form [formGroup]="form">
 
-        <div class="row">
-            <div class="col form-group">
-                <label for="title" class="form-label">Give this puzzle a title</label>
-                <input id="title" type="text" class="form-control" formControlName="title">
-            </div>
+    <!-- <div class="row">
+        <div class="col form-group">
+            <label for="title" class="form-label">Give this puzzle a title</label>
+            <input id="title" type="text" class="form-control" formControlName="title">
         </div>
-    
-        <div class="row">
-            <div class="col form-group">
-                <app-tip key="specialText">
-        <h5>Notes on formatting the clues:</h5>
-        <p>
-            Clues for a puzzle can be entered manually here.  The format is simple and based on that used
-            by the daily cyptics in a newspaper.  In general, text cut-and-pasted from a newspaper website should
-            work here.
-        </p>
-    
-        The 5 basic rules for entering clues are:
-        <ul>
-            <li>There should be one clue per line</li>
-            <li>Clues should start with the clue number</li>
-            <li>Clues should end with the letter count</li>
-            <li>The across clues are labelled "ACROSS"</li>
-            <li>The down clues are labelled "DOWN"</li>
-        </ul>
-    
-        <pre class="bg-light">
-        ACROSS
-        1 Goodnight ladies (5)
-        2 Ladies goodnight (2, 4)
-        DOWN
-        3 This is a clue (2-2)
-        </pre>
-    
-        Some optional features for more complex clues are:
-        <ul>
-            <li>Optionally, additional clue numbers may be added for linked clues, separated by commas</li>
-            <li>Optionally, numbers for linked clues may be supplemented with "across" or "down" to remove ambiguity</li>
-            <li>Redirections should be of the form "See n" where n is the clue number</li>
-            <li>Optionally, redirection numbers can be supplemented with "across" or down" to remove ambiguity</li>
-        </ul>
-    
-        <pre class="bg-light">
-        ACROSS
-        1,2 down,3 Life in the fast lane (8,2,2 4)
-        2 This is a clue (2, 4)
-        3 See 1
-        4 Another clue on its own (4)
-        DOWN
-        1 this is a clue (4)
-        2 See 1 across
-        </pre>
-        <p>
-            You can cut-and-paste text into here copied from another document, a PDF file for example.
-            Any extaneous text before the first ACROSS marker and after the last down-clue will be ignored, but best to remove it
-            before pressing the "continue" button just in case.
-        </p>
-                </app-tip>
-            </div>
-        </div>
-    
-        <div *ngIf="parseError">
-            <app-parse-result [result]="parseError"></app-parse-result>
+    </div> -->
 
-            <label><input type="checkbox" #showText [checked]="false"> Show the full text</label>
+    <div class="row">
+        <div class="col form-group">
+            <app-tip key="specialText">
+    <h5>Notes on formatting the clues:</h5>
+    <p>
+        Clues for a puzzle can be entered manually here.  The format is simple and based on that used
+        by the daily cyptics in a newspaper.  In general, text cut-and-pasted from a newspaper website should
+        work here.
+    </p>
 
-            <pre *ngIf="showText.checked">{{puzzle.provision.source}}</pre>
+    The 5 basic rules for entering clues are:
+    <ul>
+        <li>There should be one clue per line</li>
+        <li>Clues should start with the clue number</li>
+        <li>Clues should end with the letter count</li>
+        <li>The across clues are labelled "ACROSS"</li>
+        <li>The down clues are labelled "DOWN"</li>
+    </ul>
+
+    <pre class="bg-light">
+    ACROSS
+    1 Goodnight ladies (5)
+    2 Ladies goodnight (2, 4)
+    DOWN
+    3 This is a clue (2-2)
+    </pre>
+
+    Some optional features for more complex clues are:
+    <ul>
+        <li>Optionally, additional clue numbers may be added for linked clues, separated by commas</li>
+        <li>Optionally, numbers for linked clues may be supplemented with "across" or "down" to remove ambiguity</li>
+        <li>Redirections should be of the form "See n" where n is the clue number</li>
+        <li>Optionally, redirection numbers can be supplemented with "across" or down" to remove ambiguity</li>
+    </ul>
+
+    <pre class="bg-light">
+    ACROSS
+    1,2 down,3 Life in the fast lane (8,2,2 4)
+    2 This is a clue (2, 4)
+    3 See 1
+    4 Another clue on its own (4)
+    DOWN
+    1 this is a clue (4)
+    2 See 1 across
+    </pre>
+    <p>
+        You can cut-and-paste text into here copied from another document, a PDF file for example.
+        Any extaneous text before the first ACROSS marker and after the last down-clue will be ignored, but best to remove it
+        before pressing the "continue" button just in case.
+    </p>
+            </app-tip>
         </div>
-    
-        <div class="row" *ngIf="!parseError">
-            <div class="col form-group">
-                <label for="text" class="form-label">Enter text for the clues here</label>
-                <textarea id="text" class="form-control" rows="24" formControlName="text" (keydown)="onKeyDown($event)"></textarea>
-            </div>
+    </div>
+
+    <div *ngIf="parseError">
+        <app-parse-result [result]="parseError"></app-parse-result>
+
+        <label><input type="checkbox" #showText [checked]="false"> Show the full text</label>
+
+        <pre *ngIf="showText.checked">{{puzzle.provision.source}}</pre>
+    </div>
+
+    <div class="row" *ngIf="!parseError">
+        <div class="col form-group">
+            <label for="text" class="form-label">Enter text for the clues here</label>
+            <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
         </div>
-            
-        <div class="row">
-            <div class="col form-group">
-                <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()" [disabled]="!form.valid">Continue</button>
-                <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
-                <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
-            </div>
+    </div>
+        
+    <div class="row">
+        <div class="col form-group">
+            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()" [disabled]="!form.valid">Continue</button>
+            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
+            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
         </div>
-    </form>
-</ng-container>
+    </div>
+</form>
