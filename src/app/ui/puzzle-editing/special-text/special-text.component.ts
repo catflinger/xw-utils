@@ -31,26 +31,32 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
+
         this.form = this.fb.group({
             //title: ["", Validators.required],
             text: [defaultText, Validators.required],
         });
 
-        this.subs.push(
-            this.activePuzzle.observe().subscribe(
-                (puzzle) => {
-                    this.puzzle = puzzle;
-                    if (puzzle) {
-                        this.form.patchValue({ 
-                            //title: puzzle.info.title,
-                            text: puzzle.provision.source,
-                        });
+        if (!this.activePuzzle.hasPuzzle) {
+            this.navService.goHome();
+        } else {
 
-                        const errors = puzzle.provision.parseErrors;
-                        this.parseError = errors && errors.length > 0 ? errors[0] : null;
+            this.subs.push(
+                this.activePuzzle.observe().subscribe(
+                    (puzzle) => {
+                        this.puzzle = puzzle;
+                        if (puzzle) {
+                            this.form.patchValue({ 
+                                //title: puzzle.info.title,
+                                text: puzzle.provision.source,
+                            });
+
+                            const errors = puzzle.provision.parseErrors;
+                            this.parseError = errors && errors.length > 0 ? errors[0] : null;
+                        }
                     }
-                }
-        ));
+            ));
+        }
     }
 
     public ngOnDestroy(){

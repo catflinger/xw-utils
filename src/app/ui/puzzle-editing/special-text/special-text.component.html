@@ -13,6 +13,30 @@
         </div>
     </div> -->
 
+
+    <div *ngIf="parseError">
+        <app-parse-result [result]="parseError"></app-parse-result>
+
+        <!-- <label><input type="checkbox" #showText [checked]="false"> Show the full text</label> -->
+
+        <pre>{{puzzle.provision.source}}</pre>
+    </div>
+
+    <div class="row" *ngIf="!parseError">
+        <div class="col form-group">
+            <label for="text" class="form-label">Enter text for the clues here</label>
+            <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="col form-group">
+            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()" [disabled]="!form.valid">Continue</button>
+            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
+            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col form-group">
             <app-tip key="specialText">
@@ -67,26 +91,4 @@
         </div>
     </div>
 
-    <div *ngIf="parseError">
-        <app-parse-result [result]="parseError"></app-parse-result>
-
-        <label><input type="checkbox" #showText [checked]="false"> Show the full text</label>
-
-        <pre *ngIf="showText.checked">{{puzzle.provision.source}}</pre>
-    </div>
-
-    <div class="row" *ngIf="!parseError">
-        <div class="col form-group">
-            <label for="text" class="form-label">Enter text for the clues here</label>
-            <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
-        </div>
-    </div>
-        
-    <div class="row">
-        <div class="col form-group">
-            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()" [disabled]="!form.valid">Continue</button>
-            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
-            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
-        </div>
-    </div>
 </form>

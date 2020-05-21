@@ -5,9 +5,14 @@
 </div>
 
 <app-info-panel>
-    <p>Need to write something here...
+    <p>
+        You can load puzzles of your own here.
     </p><p>
-        And write more here...
+        To open a puzzle in a PDF file you must first copy or download the PDF to a file on your computer. 
+        If the PDF is laid out in fairly typical way, say that used in the Guardian for the FT,
+        then the app should be able to automatically extract both the grid and clues form the text.
+    </p><p>
+        Alternatively, you can create the gid yourself and enter the clues as plain text. 
     </p>
 </app-info-panel>
     
@@ -17,7 +22,7 @@
         <div>I want to load a puzzle from a PDF file on my computer</div>
         <button class="btn btn-primary mt-3" (click)="onPdf()">Open a PDF</button>
 
-        <div class="mt-5">I will enter the clues as text</div>
+        <div class="mt-5">I will enter the grid and clues myself as text</div>
         <button class="btn btn-primary mt-3" (click)="onLocal()">Clues from text</button>
     </div>
 </div>
