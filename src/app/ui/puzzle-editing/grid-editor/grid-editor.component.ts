@@ -1,25 +1,24 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
-import { BarClickEvent, GridTextEvent, GridNavigationEvent, GridComponent } from '../../components/grid/grid.component';
 import { RenumberGid } from 'src/app//modifiers/grid-modifiers/renumber-grid';
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateGridProperties } from 'src/app//modifiers/grid-modifiers/updare-grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { GridControlOptions, GridEditors } from '../../common';
-import { GridEditor } from '../../services/grid-editors/grid-editor';
-import { GridEditorService } from '../../services/grid-editors/grid-editor.service';
+import { GridEditor } from '../../grid/grid-editors/grid-editor';
+import { GridEditorService } from '../../grid/grid-editors/grid-editor.service';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
+import { GridComponent, BarClickEvent, GridTextEvent, GridNavigationEvent } from '../../grid/grid/grid.component';
 
 type ToolType = "grid" | "text" | "color" | "properties";
 

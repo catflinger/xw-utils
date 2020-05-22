@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PublicationService } from 'src/app/services/puzzles/publication.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 

@@ -1,18 +1,17 @@
 import { Component, OnInit, OnDestroy, ViewChild, } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { PublicationService, PublishGridResult } from 'src/app/services/puzzles/publication.service';
-import { AppStatus, AppService } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/general/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ApiSymbols, PublishStatus, ContentGenerator } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/app/auth.service';
-import { GridComponent } from '../../components/grid/grid.component';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ContentGeneratorListLayout } from 'src/app/services/content-generator/content-generator-list-layout';
 import { ContentGeneratorTableLayout } from 'src/app/services/content-generator/content-generator-table-layout';
+import { GridComponent } from '../../grid/grid/grid.component';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 

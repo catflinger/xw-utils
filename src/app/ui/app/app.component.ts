@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { AppService, AppStatus } from 'src/app/ui/services/app.service';
+import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';

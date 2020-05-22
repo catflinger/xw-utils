@@ -8,7 +8,7 @@ import { Clear } from '../../modifiers/puzzle-modifiers/clear';
 import { IPuzzleModifier } from '../../modifiers/puzzle-modifier';
 import { PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
-import { OpenPuzzleParamters } from '../../ui/services/app.service';
+import { OpenPuzzleParamters } from '../../ui/general/app.service';
 import { ApiSymbols } from '../common';
 import { UpdateInfo } from '../../modifiers/puzzle-modifiers/update-info';
 import { Grid } from '../../model/puzzle-model/grid';

@@ -18,30 +18,31 @@ import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf
 import { SpecialComponent } from './ui/puzzle-editing/special/special.component';
 import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-text.component';
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
-import { HomeComponent } from './ui/app-general/home/home.component';
-import { LoginComponent } from './ui/app-general/login/login.component';
-import { DiaryComponent } from './ui/app-general/diary/diary.component';
-import { ReadmeComponent } from './ui/app-general/readme/readme.component';
-import { SettingsComponent } from './ui/app-general/settings/settings.component';
+import { HomeComponent } from './ui/home/home/home.component';
+import { LoginComponent } from './ui/general/login/login.component';
+import { DiaryComponent } from './ui/diary/diary/diary.component';
+import { ReadmeComponent } from './ui/home/readme/readme.component';
+import { SettingsComponent } from './ui/general/settings/settings.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
 import { CluesEditorComponent } from './ui/puzzle-editing/clues-editor/clues-editor.component';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
-import { BackupsComponent } from './ui/app-general/backups/backups.component';
-import { BackupComponent } from './ui/app-general/backup/backup.component';
-import { BackupSettingsComponent } from './ui/app-general/backup-settings/backup-settings.component';
-import { BackupOptionsComponent } from './ui/app-general/backup-options/backup-options.component';
-import { AnnouncementsComponent } from './ui/app-general/announcements/announcements.component';
+import { BackupsComponent } from './ui/backup/backups/backups.component';
+import { BackupComponent } from './ui/backup/backup/backup.component';
+import { BackupSettingsComponent } from './ui/backup/backup-settings/backup-settings.component';
+import { BackupOptionsComponent } from './ui/backup/backup-options/backup-options.component';
+import { AnnouncementsComponent } from './ui/home/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
+import { AboutComponent } from './ui/home/about/about.component';
+import { IssuesComponent } from './ui/home/issues/issues.component';
 
 const routes: Routes = [
 
     // landing pages
     { path: "home", component: HomeComponent },
     { path: "login", component: LoginComponent },
-    { path: "announcements", component: AnnouncementsComponent },
 
     // solving and blogging puzzles
     { path: "solver", component: SolverComponent },
@@ -75,8 +76,11 @@ const routes: Routes = [
     { path: "link-error", component: LinkErrorComponent },
 
     // general
+    { path: "issues", component: IssuesComponent },
+    { path: "about", component: AboutComponent },
+    { path: "announcements", component: AnnouncementsComponent },
+
     { path: "diary", component: DiaryComponent },
-    { path: "readme", component: ReadmeComponent },
     { path: "settings", component: SettingsComponent },
     { path: "backups", component: BackupsComponent },
     { path: "backup", component: BackupComponent },

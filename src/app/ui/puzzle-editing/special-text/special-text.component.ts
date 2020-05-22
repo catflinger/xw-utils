@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Provider } from '@angular/core';
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../general/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';

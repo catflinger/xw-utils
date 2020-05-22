@@ -9,7 +9,7 @@ import { GridProperties } from 'src/app/model/puzzle-model/grid-properties';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GridStyles, IGridCell } from 'src/app/model/interfaces';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../general/app.service';
 
 @Component({
     selector: 'app-grid-start',

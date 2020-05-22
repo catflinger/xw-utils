@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AppService, OpenPuzzleParamters } from '../../services/app.service';
+import { AppService, OpenPuzzleParamters } from '../../general/app.service';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzles/puzzle-management.service';
 import { ApiSymbols } from 'src/app/services/common';

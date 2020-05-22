@@ -2,15 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { Router, ChildActivationStart } from '@angular/router';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
-import { DownloadInstance } from '../../components/general/download-button/download-button.component';
-import { AppService } from '../../services/app.service';
-import { GridComponent } from '../../components/grid/grid.component';
+import { DownloadInstance } from '../../general/download-button/download-button.component';
+import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
+import { GridComponent } from '../../grid/grid/grid.component';
 
 @Component({
   selector: 'app-publish-grid',

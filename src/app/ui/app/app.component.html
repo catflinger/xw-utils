@@ -49,6 +49,15 @@
                             <button type="button" class="nav-link btn btn-link" (click)="onGoToA('backups')">Backups</button>
                         </li>
 
+                        <li class="nav-item dropdown" ngbDropdown>
+                            <button class="btn btn-link nav-link dropdown-toggle" id="id03" ngbDropdownToggle>Help</button>
+                            <div class="dropdown-menu" aria-labelledby="id03" ngbDropdownMenu>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('announcements')">News</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('about')">About</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('readme')">Known issues</button>
+                            </div>
+                        </li>
+
                         <li class="nav-item">
                             <button type="button" class="nav-link btn btn-link" (click)="onGoTo('readme')">Readme</button>
                         </li>

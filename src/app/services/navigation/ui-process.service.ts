@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppTrackData } from './tracks/app-track-data';
-import { AppService } from '../../ui/services/app.service';
+import { AppService } from '../../ui/general/app.service';
 import { IActivePuzzle, IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { ParseText } from 'src/app//modifiers/parsing-modifiers/parse-text';
 import { RenumberGid } from 'src/app//modifiers/grid-modifiers/renumber-grid';

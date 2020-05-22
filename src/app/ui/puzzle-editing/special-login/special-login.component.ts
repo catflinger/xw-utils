@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppStatus, AppService } from '../../services/app.service';
+import { AppStatus, AppService } from '../../general/app.service';
 import { AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
 import { NavService } from '../../../services/navigation/nav.service';

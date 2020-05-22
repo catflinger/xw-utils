@@ -4,7 +4,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 import { ArchiveItem } from 'src/app/model/archive-model/archive-item';
-import { AppStatus, AppService } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/general/app.service';
 import { ArchiveService } from 'src/app/services/puzzles/archive-source.service';
 import { Archive } from 'src/app/model/archive-model/archive';
 import { PuzzleProvider } from 'src/app/model/interfaces';

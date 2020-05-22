@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AppStatus, AppService } from 'src/app/ui/services/app.service';
+import { AppStatus, AppService } from 'src/app/ui/general/app.service';
 import { UpdatePreamble } from 'src/app//modifiers/publish-options-modifiers/update-preamble';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';

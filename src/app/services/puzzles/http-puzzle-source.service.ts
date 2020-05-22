@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
 import { AuthService } from '../app/auth.service';
 import { environment } from "../../../environments/environment";
-import { OpenPuzzleParamters } from '../../ui/services/app.service';
+import { OpenPuzzleParamters } from '../../ui/general/app.service';
 import { Base64Encoded } from '../../model/interfaces';
 
 abstract class ApiPdfExtractResponse implements ApiResponse {

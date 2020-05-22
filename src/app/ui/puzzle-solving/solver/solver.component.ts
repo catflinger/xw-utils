@@ -8,12 +8,12 @@ import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
-import { ClueEditorService } from '../../components/tabbed-editor/clue-editor.service';
+import { ClueEditorService } from '../../puzzle-editing/tabbed-editor/clue-editor.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
-import { ClueEditorComponent } from '../../components/tabbed-editor/clue-editor/clue-editor.component';
+import { ClueEditorComponent } from '../../puzzle-editing/tabbed-editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PuzzleEditorComponent } from '../../components/tabbed-editor/puzzle-editor/puzzle-editor.component';
+import { PuzzleEditorComponent } from '../../puzzle-editing/tabbed-editor/puzzle-editor/puzzle-editor.component';
 
 @Component({
   selector: 'app-solver',
