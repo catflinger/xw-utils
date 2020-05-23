@@ -37,6 +37,7 @@ import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.co
 import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
 import { AboutComponent } from './ui/home/about/about.component';
 import { IssuesComponent } from './ui/home/issues/issues.component';
+import { AdminComponent } from './ui/general/admin/admin.component';
 
 const routes: Routes = [
 
@@ -80,6 +81,7 @@ const routes: Routes = [
     { path: "announcements", component: AnnouncementsComponent },
     { path: "issues", component: IssuesComponent },
     { path: "readme", component: ReadmeComponent },
+    { path: "admin", component: AdminComponent },
 
     { path: "diary", component: DiaryComponent },
     { path: "settings", component: SettingsComponent },

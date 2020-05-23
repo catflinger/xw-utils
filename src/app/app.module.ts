@@ -98,6 +98,7 @@ import { gridToolTrack } from './services/navigation/tracks/grid-tool-track';
 import { AboutComponent } from './ui/home/about/about.component';
 import { IssuesComponent } from './ui/home/issues/issues.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
+import { AdminComponent } from './ui/general/admin/admin.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -198,6 +199,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         PuzzleInfoComponent,
         AboutComponent,
         IssuesComponent,
+        AdminComponent,
     ],
     imports: [
         BrowserModule,

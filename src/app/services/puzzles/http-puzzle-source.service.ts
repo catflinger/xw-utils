@@ -115,5 +115,31 @@ export class HttpPuzzleSourceService {
             }
         });
     }
+
+    public housekeep(): Promise<void> {
+        const credentials = this.authService.getCredentials();
+
+        if (!credentials.authenticated) {
+            return Promise.reject(ApiSymbols.AuthorizationFailure);
+        }
+
+        let params: any = {
+            username: credentials.username,
+            password: credentials.password,
+        }
+
+        return this.http.post(environment.apiRoot + "admin/", params)
+        .toPromise()
+        .then((data: ApiPdfExtractResponse) => {
+            if (data.success === ApiResponseStatus.OK) {
+                return;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                throw ApiSymbols.AuthorizationFailure;
+            } else {
+                throw data.message;
+            }
+        });
+    }
+
 }
 
