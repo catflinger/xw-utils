@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { IPuzzle, IPuzzleSummary } from 'src/app/model/interfaces';
+import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 
 @Injectable({
     providedIn: 'root'
@@ -56,7 +57,11 @@ export class LocalStorageService {
         const json = localStorage.getItem("xw-puzzle-" + id);
         
         if (json) {
-            return Promise.resolve(new Puzzle(JSON.parse(json)));
+            const temp: IPuzzle = JSON.parse(json);
+            if (temp.version === 0) {
+                new SetGridReferences().exec(temp);
+            }
+            return Promise.resolve(new Puzzle(temp));
         } else {
             return Promise.resolve(null);
         }

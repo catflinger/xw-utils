@@ -56,7 +56,7 @@ export const createPuzzleTrack: NavTrack = {
             route: "/grid-editor",
             actions: {
                 "continue": "link",
-                "cancel": "hub",
+                "close": "hub",
             }
         },
         {

@@ -61,4 +61,8 @@ export class PuzzleInfoFormComponent implements OnInit, OnDestroy {
         this.close.emit();
     }
 
+    public onCancel() {
+        this.close.emit();
+    }
+
 }

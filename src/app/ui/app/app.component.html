@@ -54,16 +54,9 @@
                             <div class="dropdown-menu" aria-labelledby="id03" ngbDropdownMenu>
                                 <button class="dropdown-item btn btn-link" (click)="onGoTo('announcements')">News</button>
                                 <button class="dropdown-item btn btn-link" (click)="onGoTo('about')">About</button>
-                                <button class="dropdown-item btn btn-link" (click)="onGoTo('readme')">Known issues</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('issues')">Known issues</button>
+                                <button class="dropdown-item btn btn-link" (click)="onGoTo('readme')">Feature requests</button>
                             </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <button type="button" class="nav-link btn btn-link" (click)="onGoTo('readme')">Readme</button>
-                        </li>
-
-                        <li class="nav-item">
-                            <button type="button" class="nav-link btn btn-link text-white" (click)="onGoTo('announcements')">*beta*</button>
                         </li>
 
                         <li class="nav-item" *ngIf="!credentials.authenticated">

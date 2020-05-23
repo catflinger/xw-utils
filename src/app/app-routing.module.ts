@@ -76,9 +76,10 @@ const routes: Routes = [
     { path: "link-error", component: LinkErrorComponent },
 
     // general
-    { path: "issues", component: IssuesComponent },
     { path: "about", component: AboutComponent },
     { path: "announcements", component: AnnouncementsComponent },
+    { path: "issues", component: IssuesComponent },
+    { path: "readme", component: ReadmeComponent },
 
     { path: "diary", component: DiaryComponent },
     { path: "settings", component: SettingsComponent },

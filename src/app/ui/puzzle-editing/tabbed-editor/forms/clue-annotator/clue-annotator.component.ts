@@ -66,6 +66,10 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         private detRef: ChangeDetectorRef,
     ) { }
 
+    public get answersFormArray(): FormArray {
+        return this.form.get("answers") as FormArray;
+    }
+
     public ngOnInit() {
         this.instanceId = this.editorService.register(() => this.onSave());
 
@@ -87,8 +91,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                             this.grid = puzzle.grid;
                             this.publishOptions = puzzle.publishOptions;
 
-                            let formArray: FormArray = this.form.get("answers") as FormArray;
-                            formArray.clear();
+                            this.answersFormArray.clear();
 
                             puzzle.publishOptions.textCols.forEach((col, index) => {
                                 let answerText = "";
@@ -104,7 +107,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                                     answerText = "";
                                 }
 
-                                formArray.push(
+                                this.answersFormArray.push(
                                     this.formBuilder.group({
                                         id: ["answer" + index],
                                         caption: [col.caption],
@@ -165,7 +168,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
         this.editorService.unRegister(this.instanceId);
     }
 
-    public trackAnsersBy(index) {
+    public trackAnswersBy(index) {
         return index;
     }
 
@@ -212,8 +215,7 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public onCheat() {
-        const formArray = this.form.get("answers") as FormArray;
-        formArray.controls[0].patchValue({ answer: this.clue.solution });
+        this.answersFormArray.controls[0].patchValue({ answer: this.clue.solution });
         this.form.markAsDirty();
 
         this.validate();

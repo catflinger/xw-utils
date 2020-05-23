@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ApiResponseStatus, ApiSymbols } from '../common';
 import { BackupInfo, BackupType, BackupContentType } from './backup-info';
+import { TraceService } from '../app/trace.service';
 
 interface HttpPuzzleBackupInfo
 {
@@ -56,6 +57,7 @@ export class HttpBackupSourceService {
     constructor(
         private authService: AuthService,
         private http: HttpClient,
+        private trace: TraceService,
     ) { }
 
     public getBackupList(owner: string): Promise<BackupInfo[]> {
@@ -63,10 +65,14 @@ export class HttpBackupSourceService {
         // check the response for auth failure and reject with special error token
         // resolve with data
         
+        this.trace.log("Requesting backup list for [" + owner + "]");
+
         return this.http.get(environment.apiRoot + `user/${owner}/backup`)
         .toPromise()
         .then((response: HttpPuzzleBackupResult) => {
 
+            this.trace.logJason(response);
+            
             if (response.success === ApiResponseStatus.OK) {
                 return response.backups
                     .map(b => new BackupInfo(b))

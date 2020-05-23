@@ -234,6 +234,7 @@ export interface IGrid {
 }
 
 export interface IPuzzle {
+    version?: number;
     revision: number;
     clues: Array<IClue>;
     uncommitted: boolean;
