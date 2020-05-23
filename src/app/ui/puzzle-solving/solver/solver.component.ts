@@ -38,7 +38,7 @@ export class SolverComponent implements OnInit {
         private detRef: ChangeDetectorRef,
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();

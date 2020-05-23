@@ -22,9 +22,9 @@ export class SelectClue implements IPuzzleModifier {
                 clue.highlight = true;
 
                 if (gridX) {
-                    clue.link.entries.forEach((entry) => {
-                        let cells = gridX.getGridEntryFromReference(entry.gridRef);
-                        if (cells) {
+                    clue.link.gridRefs.forEach((gridRef) => {
+                        let cells = gridX.getGridEntryFromReference(gridRef);
+                        if (cells.length) {
                             cells.forEach(cell => {
                                 // find the matching cell in the mutable puzzle
                                 let cellm = puzzle.grid.cells.find(c => c.id === cell.id);

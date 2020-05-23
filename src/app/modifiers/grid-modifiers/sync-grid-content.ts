@@ -21,8 +21,8 @@ export class SyncGridContent implements IPuzzleModifier {
             let index = 0;
 
             if (answer) {
-                clue.link.entries.forEach((entry) => {
-                    gridX.getGridEntryFromReference(entry.gridRef)
+                clue.link.gridRefs.forEach((gridRef) => {
+                    gridX.getGridEntryFromReference(gridRef)
                     .map(cell => cell.id)
                     .forEach(id => {
                         let cell = puzzle.grid.cells.find(c => c.id === id);

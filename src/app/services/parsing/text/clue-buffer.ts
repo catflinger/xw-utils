@@ -2,6 +2,7 @@ import { ClueGroup, Direction } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { clueCaptionExpression } from './types';
+import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class ClueBuffer {
     private _rawText: string;
@@ -11,7 +12,7 @@ export class ClueBuffer {
     private _letterCount: string;
     private _gridRefs: ReadonlyArray<GridReference>;
 
-    constructor (text: string, direction: ClueGroup) {
+    constructor (text: string, direction: ClueGroup, private grid?: Grid) {
         this._rawText = text.trim();
         this._direction = direction;
 
@@ -45,7 +46,7 @@ export class ClueBuffer {
         this.setCaption();
         this._letterCount = Clue.getLetterCount(this.rawText);
         if (this._caption) {
-            this._gridRefs =  ClueBuffer.makeGridReferences(this._caption, this._direction);
+            this._gridRefs =  ClueBuffer.makeGridReferences(this._caption, this._direction, this.grid);
         }
     }
 
@@ -70,26 +71,79 @@ export class ClueBuffer {
 
     }
 
-    static makeGridReferences(clueCaption: string, group: ClueGroup): ReadonlyArray<GridReference> {
+    static makeGridReferences(clueCaption: string, group: ClueGroup, grid?: Grid): ReadonlyArray<GridReference> {
         let result: GridReference[] = [];
         const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
         
         let parts = clueCaption.split(",");
 
         parts.forEach((part) => {
-            let caption;
-            let direction: Direction = group;
+            let caption: number;
 
             let match = expression.exec(part);
 
             if (match && match.groups.caption) {
-                caption = match.groups.caption.toString();
+                caption = parseInt(match.groups.caption.toString());
+
+                //determining direction:
+                // 4.  if still no clue found then what??
+
+                let ref: GridReference = null;
+
                 if (match.groups.direction) {
-                    let directionString = match.groups.direction.toLowerCase();
+                    console.log("A");
                     
-                    direction = directionString.charAt(0) === "a" ? "across" : "down";
+                    // 1. if there is an explicit direction give then use that
+                    let directionString = match.groups.direction.toLowerCase();
+                    let direction = directionString.charAt(0) === "a" ? "across" : "down";
+                    ref = new GridReference({ 
+                        caption, 
+                        direction })
+                
+                } else {
+                    if (grid) {
+                        console.log("B");
+
+                        // 2. there is no explicit direction so first assume the reference direction is same as the clue group
+                        ref = new GridReference({
+                            caption, 
+                            direction: group
+                        });
+
+                        console.log("Looking for " + JSON.stringify(ref));
+                        let cells = grid.getGridEntryFromReference(ref);
+
+                        if (cells.length === 0) {
+                            console.log("C");
+
+                            // 3. if still no clue found so try in the other group
+                            const otherGroup: ClueGroup = group === "across" ? "down" : "across";
+                            ref = new GridReference({
+                                caption, 
+                                direction: otherGroup
+                            });
+                            let cells = grid.getGridEntryFromReference(ref);
+    
+                            if (cells.length === 0) {
+                                console.log("E");
+
+                                ref = null;
+                                // we have a reference to a clue not in the grid
+                                // TO DO: how to handle this?  Is it an error?
+                            }
+                        }
+                    } else {
+                        console.log("F");
+                        ref = new GridReference({
+                            caption, 
+                            direction: group
+                        });
+                    }
                 }
-                result.push(new GridReference({ caption: caption, direction }));
+
+                if (ref) {
+                    result.push(ref);
+                }
             }
         });
 

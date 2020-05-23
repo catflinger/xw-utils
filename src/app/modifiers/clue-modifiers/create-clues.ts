@@ -36,7 +36,7 @@ export class CreateClues implements IPuzzleModifier {
             
             let cells: ReadonlyArray<GridCell> = grid.getGridEntryFromReference(gridRef);
  
-            if (cells && cells.length) {
+            if (cells.length) {
                 let clue = this.makeClue(group, clueNumber, gridRef, cells.length);
                 puzzle.clues.push(clue);
             }
@@ -61,10 +61,7 @@ export class CreateClues implements IPuzzleModifier {
             highlight: false,
             link: {
                 warning: null,
-                entries: [{
-                    gridRef,
-                    //cellIds: entry
-                }],
+                gridRefs: [gridRef],
             },
             warnings: [],
             // gridRefs: [{

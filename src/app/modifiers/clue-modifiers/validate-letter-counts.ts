@@ -13,10 +13,10 @@ export class ValidateLetterCounts implements IPuzzleModifier {
                 let letterCountSum = this.sumLetterCounts(clue.letterCount);
                 let cellCount = 0;
 
-                clue.link.entries.forEach(entry => {
-                    let gridRef = grid.getGridEntryFromReference(entry.gridRef);
-                    if (gridRef) {
-                        gridRef.forEach(() => cellCount++);
+                clue.link.gridRefs.forEach(gridRef => {
+                    let cells = grid.getGridEntryFromReference(gridRef);
+                    if (cells.length) {
+                        cells.forEach(() => cellCount++);
                     }
                 });
 

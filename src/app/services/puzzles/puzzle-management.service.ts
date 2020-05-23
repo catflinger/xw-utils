@@ -312,7 +312,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return new Puzzle({
             clues: null,
             grid: null,
-            //linked: false,
+            version: 1,
             revision: 0,
             uncommitted: false,
             info: {

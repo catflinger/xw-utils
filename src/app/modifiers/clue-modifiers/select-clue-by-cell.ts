@@ -68,11 +68,11 @@ export class SelectClueByCell implements IPuzzleModifier {
             
             if (!clue.redirect) {
                 
-                if (clue.link.entries.length) {
-                    let entry = clue.link.entries[0];
-                    let cells = grid.getGridEntryFromReference(entry.gridRef);
+                if (clue.link.gridRefs.length) {
+                    let gridRef = clue.link.gridRefs[0];
+                    let cells = grid.getGridEntryFromReference(gridRef);
 
-                    if (cells) {
+                    if (cells.length) {
                         cells.map(c => c.id)
                         .forEach(id => {
                             if (id === cellId) {
@@ -97,9 +97,9 @@ export class SelectClueByCell implements IPuzzleModifier {
 
         for (let clue of clues) {
             if (!clue.redirect) {
-                clue.link.entries.forEach((entry) => {
-                    let cells = grid.getGridEntryFromReference(entry.gridRef);
-                    if (cells) {
+                clue.link.gridRefs.forEach((gridRef) => {
+                    let cells = grid.getGridEntryFromReference(gridRef);
+                    if (cells.length) {
                         cells.forEach(cell => {
                             if (cell.id === cellId) {
                                 result = clue;

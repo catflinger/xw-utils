@@ -117,7 +117,7 @@ export class Grid implements IGrid {
     }
 
     public getGridEntryFromReference(ref: GridReference): ReadonlyArray<GridCell> {
-        let entry: ReadonlyArray<GridCell> = null;
+        let entry: ReadonlyArray<GridCell> = [];
 
         let startCell = this.cells.find(c => c.caption === ref.caption);
 

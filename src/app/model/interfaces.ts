@@ -109,13 +109,9 @@ export interface IGridReference {
     direction: Direction; 
 }
 
-export interface IGridEntry {
-    gridRef: IGridReference;
-}
-
 export interface IGridLink {
     warning: string;
-    entries: Array<IGridEntry>;
+    gridRefs: Array<IGridReference>;
 }
 
 export interface ITextChunk {

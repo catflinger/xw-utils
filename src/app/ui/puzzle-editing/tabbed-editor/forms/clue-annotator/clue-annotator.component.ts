@@ -260,8 +260,8 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
                 if (this.grid) {
  
-                    this.clue.link.entries.forEach(entry => {
-                        let ge = this.grid.getGridEntryFromReference(entry.gridRef);
+                    this.clue.link.gridRefs.forEach(gridRef => {
+                        let ge = this.grid.getGridEntryFromReference(gridRef);
                         if (ge) {
                             lengthAvailable += ge.length;
                         }
@@ -362,44 +362,42 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
             let answer = this.clean(answers[0].answer);
             let index = 0;
 
-            this.clue.link.entries.forEach((entry) => {
-                let ge = grid.getGridEntryFromReference(entry.gridRef);
+            this.clue.link.gridRefs.forEach((gridRef) => {
+                let ge = grid.getGridEntryFromReference(gridRef);
 
-                if (ge) {
-                    ge.map(c => c.id)
-                    .forEach((id) => {
-                        let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
+                ge.map(c => c.id)
+                .forEach((id) => {
+                    let cell = this.shadowPuzzle.grid.cells.find((cell) => cell.id === id);
 
-                        // choose in order of preference:
-                        //     - a letter from the answer
-                        //     - a letter from the grid
-                        //     - a placeholder
+                    // choose in order of preference:
+                    //     - a letter from the answer
+                    //     - a letter from the grid
+                    //     - a placeholder
 
-                        let letter = "_";
-                        let klass: AnswerTextKlass = "placeholder";
+                    let letter = "_";
+                    let klass: AnswerTextKlass = "placeholder";
 
-                        let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
-                        let editorEntry = answer.length > index ? answer.charAt(index) : null;
+                    let gridEntry = cell.content && cell.content.trim().length > 0 ? cell.content : null;
+                    let editorEntry = answer.length > index ? answer.charAt(index) : null;
 
-                        if (!gridEntry) {
-                            if (editorEntry) {
-                                letter = editorEntry;
-                                klass = "editorEntry";
-                            }
-                        } else {
-                            if (editorEntry && gridEntry !== editorEntry) {
-                                letter = editorEntry;
-                                klass = "clash";
-                            } else {
-                                letter = gridEntry;
-                                klass = "gridEntry";
-                            }
+                    if (!gridEntry) {
+                        if (editorEntry) {
+                            letter = editorEntry;
+                            klass = "editorEntry";
                         }
+                    } else {
+                        if (editorEntry && gridEntry !== editorEntry) {
+                            letter = editorEntry;
+                            klass = "clash";
+                        } else {
+                            letter = gridEntry;
+                            klass = "gridEntry";
+                        }
+                    }
 
-                        result.push(new AnswerTextChunk(letter, klass));
-                        index++;
-                    });
-                }
+                    result.push(new AnswerTextChunk(letter, klass));
+                    index++;
+                });
             });
         }
         
@@ -426,8 +424,8 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
                 }
 
                 if (answer) {
-                    clue.link.entries.forEach((entry) => {
-                        grid.getGridEntryFromReference(entry.gridRef)
+                    clue.link.gridRefs.forEach((gridRef) => {
+                        grid.getGridEntryFromReference(gridRef)
                         .map(c => c.id)
                         .forEach((id) => {
                             let cell = puzzle.grid.cells.find(c => c.id === id);

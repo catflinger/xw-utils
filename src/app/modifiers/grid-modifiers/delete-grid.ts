@@ -10,7 +10,7 @@ export class DeleteGrid implements IPuzzleModifier {
             puzzle.grid = null;
             if (puzzle.clues) {
                 puzzle.clues.forEach( clue => {
-                    clue.link.entries = [];
+                    clue.link.gridRefs = [];
                     clue.link.warning = null;
                 });
             }
