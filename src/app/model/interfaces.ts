@@ -1,6 +1,8 @@
 
 import { DateTime } from 'luxon';
 
+export const latestPuzzleVersion: number = 1; 
+
 /*************************** Type ALIASES FOR IPUZZLE ***************************************/
 
 export type ClueGroup = "across" | "down";

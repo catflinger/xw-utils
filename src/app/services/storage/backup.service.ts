@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import { IPuzzleManager } from '../puzzles/puzzle-management.service';
 import { AppSettingsService } from '../app/app-settings.service';
 import { ApiSymbols } from '../common';
+import { UpgradeToLatestVersion } from 'src/app/modifiers/puzzle-modifiers/UpgradeToLatestVersion';
 
 // export type MergeAction = "skip" | "replace";
 
@@ -112,8 +113,9 @@ export class BackupService {
             let data: any = JSON.parse(backup.content);
             if (data.info.id) {
                 data.info.id = uuid();
-                let puzzle = new Puzzle(data);
-                this.puzzleManager.addPuzzle(puzzle);
+                new UpgradeToLatestVersion().exec(data);
+
+                this.puzzleManager.addPuzzle(new Puzzle(data));
             } else {
                 throw "not a backup of a puzzle!";
                 //error! doesn't look like a puzzle to me

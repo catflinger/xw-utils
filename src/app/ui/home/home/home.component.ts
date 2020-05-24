@@ -8,6 +8,9 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 import { BackupService } from 'src/app/services/storage/backup.service';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
+import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { AppSettings } from 'src/app/services/common';
+import { LocalStorageService } from 'src/app/services/storage/local-storage.service';
 
 @Component({
     selector: 'app-home',
@@ -20,12 +23,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     public appStatus: AppStatus;
     public credentials: Credentials;
+    public settings: AppSettings;
+    public trace: any = null;
 
     constructor(
         private appService: AppService,
         private navService: NavService<AppTrackData>,
         private puzzleManagement: IPuzzleManager,
         private authService: AuthService,
+        private settingsService: AppSettingsService,
+        private localStotage: LocalStorageService,
     ) { }
 
     public ngOnInit() {
@@ -33,12 +40,14 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.subs.push(combineLatest(
             this.appService.getObservable(),
             this.authService.observe(),
-            this.puzzleManagement.getPuzzleList())
+            this.puzzleManagement.getPuzzleList(),
+            this.settingsService.observe())
             .subscribe(
                 result => {
                     this.appStatus = result[0];
                     this.credentials = result[1];
                     const list = result[2];
+                    this.settings = result[3];
             
                     this.puzzleList = list.filter(p => p.info.provider !== "grid")
                         .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
@@ -88,5 +97,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         .then(() => {
             this.navService.beginTrack("createPuzzleTrack", {}, "hub");
         });
+    }
+
+    public onTrace(item: IPuzzleSummary) {
+        try {
+            if (this.settings.traceOutput) {
+                this.trace = this.localStotage.getPuzzleRaw(item.info.id);
+            }
+        } catch {}
     }
 }

@@ -28,7 +28,7 @@
                 <tbody>
                     <tr *ngFor="let item of puzzleList">
                         <td>{{item.info.setter}}</td>
-                        <td>{{item.info.title}}</td>
+                        <td (click)="onTrace(item)">{{item.info.title}}</td>
                         <td>{{item.info.puzzleDate | date : "fullDate"}}</td>
                         <td>{{item.info.wordpressId | wordpressId}}</td>
                         <td><button type="button" class="btn btn-primary mr-3" (click)="onOpenSaved(item.info.id)">Open</button></td>
@@ -83,6 +83,8 @@
     </div>
 </ng-container>
 
-
-
 <!-- <button class="btn btn-primary" (click)="test()">TEST</button> result = {{result}} -->
+
+<pre *ngIf="settings.traceOutput">
+{{ trace | json }}
+</pre>

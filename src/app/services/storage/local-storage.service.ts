@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { IPuzzle, IPuzzleSummary } from 'src/app/model/interfaces';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { UpgradeToLatestVersion } from 'src/app/modifiers/puzzle-modifiers/UpgradeToLatestVersion';
 
 @Injectable({
     providedIn: 'root'
@@ -58,12 +59,22 @@ export class LocalStorageService {
         
         if (json) {
             const temp: IPuzzle = JSON.parse(json);
-            if (temp.version === 0) {
-                new SetGridReferences().exec(temp);
-            }
+            new UpgradeToLatestVersion().exec(temp);
             return Promise.resolve(new Puzzle(temp));
+
         } else {
             return Promise.resolve(null);
+        }
+    }
+
+    // intended for debug & trace only
+    public getPuzzleRaw(id: string): any {
+        const json = localStorage.getItem("xw-puzzle-" + id);
+        
+        if (json) {
+            return JSON.parse(json);
+        } else {
+            return null;
         }
     }
 
@@ -79,4 +90,5 @@ export class LocalStorageService {
     public clearPuzzles() {
         localStorage.clear();
     }
+
 }

@@ -62,11 +62,11 @@ export class Clue implements IClue {
 
         if (data.link) {
             this.link = new GridLink(data.link);
-        } else if (data.entries) {
+        } else {
             // backward compatibility 17/03/2020
             this.link = new GridLink({
                 warning: null,
-                entries: data.entries,
+                entries: [],
             });
         }
 
