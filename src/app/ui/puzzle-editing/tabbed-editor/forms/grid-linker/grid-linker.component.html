@@ -17,8 +17,8 @@
         </label>
     </div>
     <div class="mt-5">
-        <div class="m-3" *ngFor="let entry of clue.link.entries">
-            <app-grid-reference [gridRef]="entry.gridRef"></app-grid-reference>
+        <div class="m-3" *ngFor="let gridRef of clue.link.gridRefs">
+            <app-grid-reference [gridRef]="gridRef"></app-grid-reference>
         </div>
     </div>
 </form>

@@ -15,6 +15,7 @@ export const gridToolTrack: NavTrack = {
             route: "/grid-start",
             actions: {
                 "continue": "edit",
+                "cancel": "home",
             }
         },
         {

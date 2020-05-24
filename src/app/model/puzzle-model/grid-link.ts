@@ -7,7 +7,7 @@ export class GridLink implements IGridLink {
 
     constructor(data: any) {
         if (data) {
-            this.warning = data.warning;
+            this.warning = data.warning ? data.warning : null;
             
             let gridRefs: GridReference[] = [];
 

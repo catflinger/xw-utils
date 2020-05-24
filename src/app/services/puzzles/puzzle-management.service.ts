@@ -6,7 +6,7 @@ import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpPuzzleSourceService } from './http-puzzle-source.service';
 import { Clear } from '../../modifiers/puzzle-modifiers/clear';
 import { IPuzzleModifier } from '../../modifiers/puzzle-modifier';
-import { PuzzleProvider, IPuzzleSummary } from '../../model/interfaces';
+import { PuzzleProvider, IPuzzleSummary, latestPuzzleVersion } from '../../model/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../../ui/general/app.service';
 import { ApiSymbols } from '../common';
@@ -220,9 +220,8 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         } else {
             result = this.httpPuzzleService.getPuzzle(params).then((response) => {
                 let puzzle = new Puzzle(response.puzzle);
-
-                // add some defaults
                 let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
+
                 new InitAnnotationWarnings().exec(puzzleM);
 
                 if (params.provider === "independent" || params.provider === "ios") {
@@ -312,7 +311,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return new Puzzle({
             clues: null,
             grid: null,
-            version: 1,
+            version: latestPuzzleVersion,
             revision: 0,
             uncommitted: false,
             info: {
