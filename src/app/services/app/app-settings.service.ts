@@ -71,7 +71,7 @@ const _defaultSettings: _AppSettings = {
         //showCommentEditor: { caption: "show comment editor", enabled: true },
         showCommentValidation: { caption: "show missing answers, comments, definitions etc", enabled: true },
         showCheat: { caption: "show cheat buttons", enabled: true },
-        containerFluid: { caption: "display app full-width inside the browser", enabled: true },
+        containerFluid: { caption: "display app full-width inside the browser", enabled: false },
         tabbedEditor: { caption: "show edit tabs in the clue editor", enabled: true },
     },
     tips: {

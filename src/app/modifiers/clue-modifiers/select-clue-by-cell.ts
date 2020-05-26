@@ -48,6 +48,8 @@ export class SelectClueByCell implements IPuzzleModifier {
                     new SelectClue(result.id).exec(puzzle);
                 } else {
                     // TO DO: ...folow redirect...
+
+                    // TO DO: try and share some of this code with SelectClue modifier
                 }
             }
         }

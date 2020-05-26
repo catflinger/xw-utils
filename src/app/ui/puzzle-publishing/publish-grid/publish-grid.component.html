@@ -7,7 +7,7 @@
 
 <div class="row" *ngIf="puzzle">
     <div class="col">
-        <app-grid (cellClick)="onCellClick($event)" [options]="{ showShading: true }"></app-grid>
+        <app-grid (cellClick)="onCellClick($event)" [options]="{ hideShading: false, hideHighlight: true }"></app-grid>
     </div>
     <div class="col">
         <p>shading colour</p>

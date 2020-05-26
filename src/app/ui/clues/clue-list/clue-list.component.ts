@@ -15,6 +15,7 @@ import { AppSettings } from 'src/app/services/common';
 })
 export class ClueListComponent implements OnInit {
     @Input() public direction: Direction;
+    @Input() followRedirects: boolean;
     @Output() public clueClick = new EventEmitter<Clue>();
 
     private subs: Subscription[] = [];
@@ -45,7 +46,35 @@ export class ClueListComponent implements OnInit {
         if (clue.highlight) {
             this.clueClick.emit(clue);
         } else {
-            this.activePuzzle.updateAndCommit(new SelectClue(clue.id));
+            let target = clue;
+
+            if (this.followRedirects && clue.redirect) {
+                // TO DO: ...
+                const match = /^\s*see\s+(?<target>(\d{1,2}|across|down| |,)+)\s*$/i.exec(clue.text);
+
+                if (match) {
+                    const parts = match.groups["target"].toString().split(",");
+
+                    const firstPart = parts[0];
+                    const match2 = /(<number>\d{1,2})\s*(?<direction>across|down|ac|dn)?/i.exec(firstPart);
+
+                    if (match2) {
+                        const numberGroup = match2.groups["number"];
+                        const directionGroup = match2.groups["direction"];
+
+                        let redirectClueNumber = parseInt(numberGroup);
+                        let redirectClueGroup =  directionGroup ? directionGroup.toString().toLowerCase() : clue.group;
+                        redirectClueGroup = redirectClueGroup.charAt(0) === "a" ? "across" : "down";
+
+                        // Now look for the clue for this entry...
+
+                        // TO DO: how to do this???
+                    }
+                }
+
+            }
+
+            this.activePuzzle.updateAndCommit(new SelectClue(target.id));
             this.detRef.markForCheck();
         }
     }

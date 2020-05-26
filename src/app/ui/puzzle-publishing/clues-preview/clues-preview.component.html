@@ -1,5 +1,5 @@
 <div *ngIf="clues && includeGrid">
-    <app-grid [options]="{ readonly: true, showShading: true }"></app-grid>
+    <app-grid [options]="{ readonly: true, hideShading: false, hideHighlight: true }"></app-grid>
 </div>
 
 <table *ngIf="clues && publishOptions.layout === 'table'">

@@ -74,7 +74,7 @@ export class ClueBuffer {
     static makeGridReferences(clueCaption: string, group: ClueGroup, grid?: Grid): ReadonlyArray<GridReference> {
         let result: GridReference[] = [];
         const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
-        
+
         let parts = clueCaption.split(",");
 
         parts.forEach((part) => {
