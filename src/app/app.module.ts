@@ -99,6 +99,7 @@ import { AboutComponent } from './ui/home/about/about.component';
 import { IssuesComponent } from './ui/home/issues/issues.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
 import { AdminComponent } from './ui/general/admin/admin.component';
+import { CheatFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/cheat-form/cheat-form.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -200,6 +201,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         AboutComponent,
         IssuesComponent,
         AdminComponent,
+        CheatFormComponent,
     ],
     imports: [
         BrowserModule,

@@ -29,6 +29,14 @@
                 <app-grid-form (close)="onClose()"></app-grid-form>
             </ng-template>
         </li>
+
+        <li ngbNavItem="CheatFormComponent" *ngIf="puzzle.hasSolutions">
+            <a ngbNavLink>Cheat</a>
+            <ng-template ngbNavContent>
+                <app-cheat-form (close)="onClose()"></app-cheat-form>
+            </ng-template>
+        </li>
+
     </ul>
 
     <div [ngbNavOutlet]="nav" class="my-3"></div>

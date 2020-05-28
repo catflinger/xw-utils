@@ -78,6 +78,19 @@ export class Puzzle implements IPuzzle {
     public getSelectedClue(): Clue {
         return this.clues.find((clue) => clue.highlight);
     }
+
+    public get hasSolutions(): boolean {
+        let result = false;
+
+        if (this.clues) {
+            if (this.clues.find((c) => c.solution)) {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
 }
 
 
