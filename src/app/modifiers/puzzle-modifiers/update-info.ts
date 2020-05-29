@@ -12,12 +12,6 @@ export class UpdateInfo implements IPuzzleModifier {
             puzzleDate?: Date,
             provider?: PuzzleProvider,
             instructions?: string,
-
-
-            // TO DO: move these to another modifier...
-            blogable?: boolean,
-            solveable?: boolean,
-            gridable?: boolean,
             ready?: boolean,
         },
     ) { }
@@ -43,20 +37,9 @@ export class UpdateInfo implements IPuzzleModifier {
         }
         if (this.args.provider !== undefined) {
             puzzle.info.provider = this.args.provider;
-
-
-        }
-        if (this.args.solveable !== undefined) {
-            puzzle.capability.solveable = this.args.solveable;
-        }
-        if (this.args.blogable !== undefined) {
-            puzzle.capability.blogable = this.args.blogable;
-        }
-        if (this.args.gridable !== undefined) {
-            puzzle.capability.gridable = this.args.gridable;
         }
         if (this.args.ready !== undefined) {
-            puzzle.capability.ready = this.args.ready;
+            puzzle.ready = this.args.ready;
         }
     }
 }

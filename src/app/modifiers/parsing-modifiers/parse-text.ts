@@ -98,14 +98,6 @@ export class ParseText implements IPuzzleModifier {
 
             const parseErrors = puzzle.provision.parseErrors;
 
-            if (!parseErrors || parseErrors.length === 0) {
-                new UpdateInfo({
-                    blogable: true,
-                    solveable: !!puzzle.grid,
-                    gridable: false,
-                }).exec(puzzle);
-            }
-
         } catch (error) {
             throw new Error(`Failed to parse puzzle: ${error}`);
         }

@@ -7,8 +7,6 @@ export class DeleteClues implements IPuzzleModifier {
     exec(puzzle: IPuzzle) {
         if (puzzle) {
             puzzle.clues = null;
-            puzzle.capability.blogable = false;
-            puzzle.capability.solveable = false;
         }
     }
 }

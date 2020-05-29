@@ -189,18 +189,6 @@ export interface IPuzzleProvision {
     parseWarnings: Array<ITextParsingWarning>;
 }
 
-export interface IPuzzleCapability {
-    // NOTE: a puzzle may be gridable or solveable but still not ready.  This represents the case
-    // where there are parse errors or warnings outstanding.  The puzzle is capable of being blogged, 
-    // but unless the user manually dismisses the warnings then the puzzle remains not ready and the
-    // blogging component should not be available
-
-    ready: boolean;       // puzzle is ready for use, has been fully parsed 
-    blogable: boolean;    // puzzle has clues that can be annotated
-    gridable: boolean;    // puzzle has a grid clues that can be edited or annotated
-    solveable: boolean;   // puzzle has both clues and grid that are linked. Can be solved online.
-}
-
 export interface IGridCell {
     id: string;
     x: number;
@@ -236,6 +224,8 @@ export interface IPuzzle {
     revision: number;
     clues: Array<IClue>;
     uncommitted: boolean;
+    ready: boolean;
+    trace: any;
 
     info: IPuzzleInfo;
     
@@ -243,7 +233,6 @@ export interface IPuzzle {
     publishOptions: IPublishOptions;
     notes: IPuzzleAnnotation;
     provision: IPuzzleProvision;
-    capability: IPuzzleCapability;
     grid: IGrid;
 };
 
@@ -269,5 +258,8 @@ export abstract class IDiaryEntry {
 
 export abstract class IPuzzleSummary {
     abstract readonly info: IPuzzleInfo;
-    abstract readonly capability: IPuzzleCapability;
+    abstract readonly ready: boolean;
+    abstract readonly blogable: boolean;
+    abstract readonly gridable: boolean;
+    abstract readonly solveable: boolean;
 }

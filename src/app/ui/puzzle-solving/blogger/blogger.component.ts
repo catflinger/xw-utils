@@ -49,7 +49,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
                 this.appSettings = settings;
 
                 if (puzzle) {
-                    if (!puzzle.capability.blogable) {
+                    if (!puzzle.blogable) {
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;

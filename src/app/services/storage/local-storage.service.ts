@@ -46,7 +46,10 @@ export class LocalStorageService {
 
                 result.push({
                     info: puzzle.info,
-                    capability: puzzle.capability
+                    ready: puzzle.ready,
+                    gridable: puzzle.gridable,
+                    solveable: puzzle.solveable,
+                    blogable: puzzle.blogable,
                 });
             }
         }

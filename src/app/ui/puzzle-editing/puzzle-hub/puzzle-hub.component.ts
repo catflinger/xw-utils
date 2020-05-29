@@ -107,9 +107,6 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     public onMarkFinished() {
         this.activePuzzle.updateAndCommit(new UpdateInfo({
             ready: true,
-            blogable: !!this.puzzle.clues,
-            solveable: !!this.puzzle.clues && !!this.puzzle.grid,
-            gridable: !!this.puzzle.grid,
         }));
         this.navService.goHome();
     }

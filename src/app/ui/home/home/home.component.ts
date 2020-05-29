@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                if (puzzle.capability.ready) {
+                if (puzzle.ready) {
                     this.navService.beginTrack("solveTrack", {});
                 } else {
                     this.navService.beginTrack("createPuzzleTrack", {}, "hub");

@@ -11,8 +11,6 @@ export class AddGrid implements IPuzzleModifier {
         if (puzzle) {
             if (typeof this.args.grid !== "undefined") {
                 puzzle.grid = this.args.grid;
-                puzzle.capability.gridable = true;
-                puzzle.capability.solveable = !!puzzle.clues;
             }
         }
     }

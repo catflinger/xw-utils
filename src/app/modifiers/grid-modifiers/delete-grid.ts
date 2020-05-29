@@ -1,6 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifier';
 import { IPuzzle } from '../../model/interfaces';
-import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class DeleteGrid implements IPuzzleModifier {
     constructor() { }
@@ -14,8 +13,6 @@ export class DeleteGrid implements IPuzzleModifier {
                     clue.link.warning = null;
                 });
             }
-            puzzle.capability.gridable = false;
-            puzzle.capability.solveable = false;
         }
     }
 }

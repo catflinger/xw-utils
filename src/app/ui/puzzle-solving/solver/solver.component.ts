@@ -55,7 +55,7 @@ export class SolverComponent implements OnInit {
                         const appSettings = result[1];
 
                         if (puzzle && appSettings) {
-                            if (!puzzle.capability.solveable) {
+                            if (!puzzle.solveable) {
                                 this.navService.goHome();
                             }
                             this.puzzle = puzzle;
