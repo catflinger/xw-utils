@@ -9,6 +9,8 @@ export class ValidatePuzzle implements IPuzzleModifier {
 
             // TO DO: is there anything not clue-grid related to check?  title?
 
+            // YES - redirects, ensure every clue marked as ridirect has a clue to go to
+
             if (puzzle.clues) {
                 // TO DO: 
             }

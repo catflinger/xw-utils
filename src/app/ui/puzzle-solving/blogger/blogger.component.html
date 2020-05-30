@@ -56,7 +56,7 @@
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">
         <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
-        <button type="button" class="btn btn-primary mr-3" (click)="onSolver()" *ngIf="puzzle.capability.solveable">Open in solver</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onSolver()" *ngIf="puzzle.solveable">Open in solver</button>
         <button type="button" class="btn btn-primary mr-3" (click)="onEditClues()" style="display:none">Edit clues (temp)</button>
         <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
     </div>
