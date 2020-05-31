@@ -18,7 +18,6 @@ export class Puzzle implements IPuzzle {
     public readonly ready: boolean;
     public uncommitted: boolean;
     public readonly version: number;
-    public readonly trace: any;
 
     public readonly grid: Grid;
     public readonly clues: Clue[];
@@ -27,8 +26,6 @@ export class Puzzle implements IPuzzle {
     public revision: number;
 
     constructor(data: any) {
-
-        this.trace = data.trace;
 
         this.version = data.version ? data.version : 0;
 

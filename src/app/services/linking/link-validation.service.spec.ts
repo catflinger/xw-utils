@@ -101,6 +101,7 @@ function getEmptyPuzzle(): IPuzzle {
         grid: null,
         revision: 0,
         uncommitted: false,
+        ready: true,
         info: {
             id: "abc123",
             title: "untitled",
@@ -108,15 +109,10 @@ function getEmptyPuzzle(): IPuzzle {
             provider: "text",
             setter: "anon",
             wordpressId: null,
+            instructions: null,
         },
         options: {
             setGridRefsFromCaptions: true,
-        },
-        capability: {
-            ready: true,
-            blogable: true,
-            solveable: false,
-            gridable: false,
         },
         provision: null,
         notes: {
@@ -177,7 +173,7 @@ function makeClue(id: string, caption: string, group: ClueGroup, text: string): 
         highlight: false,
         link: {
             warning: null,
-            entries: [],
+            gridRefs: [],
         },
         chunks: [],
         warnings: [],

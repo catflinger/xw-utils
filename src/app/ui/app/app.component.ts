@@ -118,6 +118,11 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
+    public onCarteBlanche() {
+        // TO DO: bring this into the main Angular app
+        window.location.href ="/carte-blanche/index.html"
+    }
+
     public onLogout() {
         this.authService.clearCredentials();
         this.appService.clear();

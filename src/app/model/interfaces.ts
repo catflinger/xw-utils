@@ -225,7 +225,6 @@ export interface IPuzzle {
     clues: Array<IClue>;
     uncommitted: boolean;
     ready: boolean;
-    trace: any;
 
     info: IPuzzleInfo;
     
