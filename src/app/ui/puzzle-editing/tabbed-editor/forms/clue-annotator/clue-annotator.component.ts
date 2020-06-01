@@ -177,8 +177,9 @@ export class ClueAnnotationComponent implements OnInit, AfterViewInit, OnDestroy
 
         if (this.clue) {
             result = this.clue.caption;
+            let exp = new RegExp(String.raw`(across|down)`, "i");
 
-            if (!/(across|down)/i.test(this.clue.caption)) {
+            if (!exp.test(this.clue.caption)) {
                 result += " " + this.clue.group;
             }
         }

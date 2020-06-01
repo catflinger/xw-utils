@@ -72,8 +72,9 @@ export class ClueBuffer {
     }
 
     static makeGridReferences(clueCaption: string, group: ClueGroup, grid?: Grid): ReadonlyArray<GridReference> {
+
         let result: GridReference[] = [];
-        const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})(\s?(?<direction>(across|down|ac|dn)))?`);
+        const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})\s*(?<direction>(across|down|ac|dn))?`);
 
         let parts = clueCaption.split(",");
 
@@ -91,7 +92,6 @@ export class ClueBuffer {
                 let ref: GridReference = null;
 
                 if (match.groups.direction) {
-                    //console.log("A");
                     
                     // 1. if there is an explicit direction give then use that
                     let directionString = match.groups.direction.toLowerCase();
@@ -102,7 +102,6 @@ export class ClueBuffer {
                 
                 } else {
                     if (grid) {
-                        //console.log("B");
 
                         // 2. there is no explicit direction so first assume the reference direction is same as the clue group
                         ref = new GridReference({
@@ -110,11 +109,9 @@ export class ClueBuffer {
                             direction: group
                         });
 
-                        //console.log("Looking for " + JSON.stringify(ref));
                         let cells = grid.getGridEntryFromReference(ref);
 
                         if (cells.length === 0) {
-                            //console.log("C");
 
                             // 3. if still no clue found so try in the other group
                             const otherGroup: ClueGroup = group === "across" ? "down" : "across";
@@ -125,7 +122,6 @@ export class ClueBuffer {
                             let cells = grid.getGridEntryFromReference(ref);
     
                             if (cells.length === 0) {
-                                //console.log("E");
 
                                 ref = null;
                                 // we have a reference to a clue not in the grid
@@ -133,7 +129,6 @@ export class ClueBuffer {
                             }
                         }
                     } else {
-                        //console.log("F");
                         ref = new GridReference({
                             caption, 
                             direction: group

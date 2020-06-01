@@ -71,6 +71,7 @@ export class SolverComponent implements OnInit {
     @HostListener('window:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
         let key = event.key;
+        let exp = new RegExp(String.raw`^[A-Z?]$`, "");
 
         if (key && typeof key === "string") {
             key = key.toUpperCase();
@@ -93,7 +94,7 @@ export class SolverComponent implements OnInit {
                         this.detRef.detectChanges();
                     });
 
-                } else if (/^[A-Z?]$/.test(key)) {
+                } else if (exp.test(key)) {
                     event.stopPropagation();
                     let clue = this.puzzle.getSelectedClue();
                     if (clue) {

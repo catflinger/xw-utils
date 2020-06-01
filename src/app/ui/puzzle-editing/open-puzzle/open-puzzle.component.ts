@@ -56,6 +56,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
         this.appService.setBusy();
 
         this.puzzleManagementService.openArchivePuzzle(params).then((puzzle) => {
+
             this.appService.clear();
             this.appService.clearOpenPuzzleParams();
 

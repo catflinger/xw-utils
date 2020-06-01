@@ -50,13 +50,15 @@ export class ClueListComponent implements OnInit {
 
             if (this.followRedirects && clue.redirect) {
                 // TO DO: ...
-                const match = /^\s*see\s+(?<target>(\d{1,2}|across|down| |,)+)\s*$/i.exec(clue.text);
+                let exp = new RegExp(String.raw`^\s*see\s+(?<target>(\d{1,2}|across|down| |,)+)\s*$`, "i");
+                const match = exp.exec(clue.text);
 
                 if (match) {
                     const parts = match.groups["target"].toString().split(",");
 
+                    exp = new RegExp(String.raw`(<number>\d{1,2})\s*(?<direction>across|down|ac|dn)?`, "i");
                     const firstPart = parts[0];
-                    const match2 = /(<number>\d{1,2})\s*(?<direction>across|down|ac|dn)?/i.exec(firstPart);
+                    const match2 = exp.exec(firstPart);
 
                     if (match2) {
                         const numberGroup = match2.groups["number"];

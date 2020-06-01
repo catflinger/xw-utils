@@ -153,7 +153,8 @@ export class Clue implements IClue {
         groups.forEach((group, index ) => {
 
             // ignore barred grid "2 words" annotations
-            if (!/^\s*\d\s+words\s*$/i.test(group)) {
+            const exp = new RegExp(String.raw`^\s*\d\s+words\s*$`, "i");
+            if (!exp.test(group)) {
 
                 if (index > 0) {
                     result += "/";
@@ -174,8 +175,8 @@ export class Clue implements IClue {
 
         while(match = exp.exec(group.trim())) {
             let text: string = match[0];
-
-            if (/\d/.test(text)) {
+            const exp = new RegExp(String.raw`\d`);
+            if (exp.test(text)) {
                 let len = parseInt(text);
                 result += ",".repeat(len);
             } else if (text.trim()) {

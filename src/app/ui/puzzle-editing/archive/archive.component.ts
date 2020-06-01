@@ -76,7 +76,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
     public openPuzzle(item: ArchiveItem) {
         this.appService.clear();
-        
+
         this.appService.setOpenPuzzleParams({
             provider: item.provider,
             sourceUrl: item.url,

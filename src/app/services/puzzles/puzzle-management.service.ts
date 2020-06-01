@@ -218,6 +218,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 return this.newPuzzle(params.provider, reducers);
             });
         } else {
+
             result = this.httpPuzzleService.getPuzzle(params).then((response) => {
                 let puzzle = new Puzzle(response.puzzle);
                 let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));

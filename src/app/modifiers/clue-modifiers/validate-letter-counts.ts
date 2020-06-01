@@ -36,7 +36,8 @@ export class ValidateLetterCounts implements IPuzzleModifier {
         groups.forEach((group) => {
 
             // ignore barred grid "2 words" annotations
-            if (!/^\s*\d\s+words\s*$/i.test(group)) {
+            const exp = new RegExp(String.raw`^\s*\d\s+words\s*$`, "i");
+            if (!exp.test(group)) {
 
                 let exp = /\d+/y;
                 let match: any[];

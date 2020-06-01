@@ -38,30 +38,37 @@ export class Line {
 
     private get hasStartMarker(): boolean {
         if (this.options && this.options && this.options.azedFeatures) {
-            return /^\*?\s*\d{1,2}\D/i.test(this.text);
+            let exp = new RegExp(String.raw`^\*?\s*\d{1,2}\D`, "i");
+            return exp.test(this.text);
         } else {
-            return /^\d{1,2}\D/i.test(this.text);
+            let exp = new RegExp(String.raw`^\d{1,2}\D`, "i");
+            return exp.test(this.text);
         }
     }
 
     private get hasEndMarker(): boolean {
-        return /\(\d[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
+        let exp = new RegExp(String.raw`\(\d[,0-9- ]*(words|apostrophe)?\s?\)$`, "i");
+        return exp.test(this.text);
     }
 
     private get hasPartialEndMarker(): boolean {
-        return /^\s*[,0-9- ]*(words|apostrophe)?\s?\)$/i.test(this.text);
+        let exp = new RegExp(String.raw`^\s*[,0-9- ]*(words|apostrophe)?\s?\)$`, "i");
+        return exp.test(this.text);
     }
 
     private get hasAcrossMarker(): boolean {
         if (this.options && this.options.allowTypos) {
-            return /^(ACROSS|ACROS|AROSS|ACRPSS)$/i.test(this.text);
+            let exp = new RegExp(String.raw`^(ACROSS|ACROS|AROSS|ACRPSS)$`, "i");
+            return exp.test(this.text);
         } else {
-            return /^ACROSS$/i.test(this.text);
+            let exp = new RegExp(String.raw`^ACROSS$`, "i");
+            return exp.test(this.text);
         }
     }
 
     private get hasDownMarker(): boolean {
-        return /^DOWN$/i.test(this.text);
+        let exp = new RegExp(String.raw`^DOWN$`, "i");
+        return exp.test(this.text);
     }
 
 }
