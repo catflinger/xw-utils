@@ -17,6 +17,7 @@ interface HttpPuzzleBackupInfo
     contentId: string;
     contentType: string;
     content?: string;
+    host?: string;
 }
 
 interface HttpApiResult {

@@ -16,7 +16,7 @@ export class Clue implements IClue {
     public readonly answers: Array<string>;
     public readonly solution: string;
     public readonly annotation: string;
-    public readonly redirect: boolean;
+    public readonly redirect: string;
     public readonly format: string;
     public readonly comment: QuillDelta;
     public readonly highlight: boolean;
@@ -52,12 +52,10 @@ export class Clue implements IClue {
             throw "unrecognised clue group when reading clue data";
         }
 
-        if (typeof data.redirect === "boolean") {
+        if (typeof data.redirect === "string") {
             this.redirect = data.redirect;
-        } else if (typeof data.text === "string" && data.text.length > 0) {
-            this.redirect = Clue.isRedirect(data.text);
         } else {
-            this.redirect = false;
+            this.redirect = null;
         }
 
         if (data.link) {
@@ -83,10 +81,6 @@ export class Clue implements IClue {
             data.warnings.forEach(warning => warnings.push(warning));
         }
         this.warnings = warnings;
-    }
-
-    public static isRedirect(text: string): boolean {
-        return new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(text);
     }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
@@ -197,7 +191,7 @@ export class Clue implements IClue {
             answers: [""],
             solution: "",
             annotation: null,
-            redirect: false,
+            redirect: null,
             format: Clue.getAnswerFormat(buffer.letterCount),
             comment: new QuillDelta(),
             highlight: false,
@@ -216,4 +210,7 @@ export class Clue implements IClue {
         return JSON.parse(JSON.stringify(this));
     }
 
+    public static isRedirect(text: string): boolean {
+        return new RegExp("^see\\s+\\d+(\\d+|across|down|,|\\s+)*$", "i").test(text);
+    }
 }

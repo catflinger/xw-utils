@@ -167,7 +167,7 @@ function makeClue(id: string, caption: string, group: ClueGroup, text: string): 
         answers: [""],
         solution: "",
         annotation: "",
-        redirect: false,
+        redirect: null,
         format: "",
         comment: null,
         highlight: false,

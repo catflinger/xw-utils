@@ -9,7 +9,7 @@ export class SetGridReferences implements IPuzzleModifier {
 
     public exec(puzzle: IPuzzle) {
 
-        if (puzzle && puzzle.grid && puzzle.clues && puzzle.clues.length > 0) {
+        if (puzzle && puzzle.clues && puzzle.clues.length > 0) {
             let clues: IClue[];
 
             if (!this.clueIds) {
@@ -24,11 +24,13 @@ export class SetGridReferences implements IPuzzleModifier {
                 })
             }
 
+            const grid = puzzle.grid ? new Grid(puzzle.grid) : null;
+
             clues.forEach(clue => {
                 clue.link.gridRefs = [];
 
                 if (clue.caption && clue.group) {
-                    let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group, new Grid(puzzle.grid));
+                    let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group, grid);
 
                     if (refs) {
                         refs.forEach(ref => {

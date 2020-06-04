@@ -55,7 +55,7 @@ export class CreateClues implements IPuzzleModifier {
             answers: [""],
             solution: "",
             annotation: null,
-            redirect: false,
+            redirect: null,
             format: ",".repeat(entryLength),
             comment: { ops: []},
             highlight: false,

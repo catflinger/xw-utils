@@ -27,6 +27,7 @@
                     <th>Time</th>
                     <th>Title</th>
                     <th>Origin</th>
+                    <th>Location</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -37,6 +38,7 @@
                     <td>{{backup.date | date:'mediumTime'}}</td>
                     <td>{{backup.caption}}</td>
                     <td>{{backup.origin}}</td>
+                    <td>{{backup.host}}</td>
                     <td><button type="button" class="btn btn-primary" (click)="onRestore(backup)">Restore</button></td>
                     <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
                 </tr>
@@ -53,6 +55,7 @@
                     <th>Time</th>
                     <th>Title</th>
                     <th>Origin</th>
+                    <th>Location</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -63,6 +66,7 @@
                     <td>{{backup.date | date:'mediumTime'}}</td>
                     <td>{{backup.caption}}</td>
                     <td>{{backup.origin}}</td>
+                    <td>{{backup.host}}</td>
                     <td><button type="button" class="btn btn-primary" (click)="onRestoreSettings(backup)">Restore</button></td>
                     <td><button type="button" class="btn btn-primary" (click)="onDelete(backup)">Delete</button></td>
                 </tr>

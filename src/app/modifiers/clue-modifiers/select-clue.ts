@@ -33,9 +33,11 @@ export class SelectClue implements IPuzzleModifier {
                         }
                     });
                 }
-            } else if (clue.redirect) {
+            } else if (clue.redirect && this.followRedirects) {
                 // TO DO: ... folow redirect...
-
+                puzzle.clues.forEach(target => {
+                    
+                })
             }
         }
     }

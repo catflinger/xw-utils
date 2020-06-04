@@ -44,13 +44,7 @@ export class SelectClueByCell implements IPuzzleModifier {
             }
 
             if (result) {
-                if (!result.redirect) {
-                    new SelectClue(result.id).exec(puzzle);
-                } else {
-                    // TO DO: ...folow redirect...
-
-                    // TO DO: try and share some of this code with SelectClue modifier
-                }
+                new SelectClue(result.id, this.followRedirects).exec(puzzle);
             }
         }
     }

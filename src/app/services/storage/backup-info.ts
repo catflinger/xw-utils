@@ -11,6 +11,7 @@ export class BackupInfo {
     readonly contentType: BackupContentType;
     readonly contentId: string;
     readonly content?: string;
+    readonly host?: string;
 
     constructor(data: any) {
         this.id = data.id;
@@ -22,5 +23,7 @@ export class BackupInfo {
         this.contentType = data.contentType;
         this.date = new Date(data.date);
         this.content = data.content;
+        
+        this.host = typeof data.host === "string" ? data.host : null;
     }
 }

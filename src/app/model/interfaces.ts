@@ -129,7 +129,7 @@ export interface IClue {
     letterCount: string;    // "(5, 4)"
     solution: string;
     annotation: string;
-    redirect: boolean;
+    redirect: string;
     format: string;
     highlight: boolean;
 
