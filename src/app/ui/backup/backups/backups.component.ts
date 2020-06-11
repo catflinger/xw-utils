@@ -6,7 +6,7 @@ import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { AppService } from '../../general/app.service';
-import { AppSettingsService } from 'src/app/services/app/app-settings.service';
+import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 
 @Component({
     selector: 'app-backups',
@@ -27,6 +27,7 @@ export class BackupsComponent implements OnInit, OnDestroy {
         private detRef: ChangeDetectorRef,
         private authService: AuthService,
         private appService: AppService,
+        private puzzleManager: IPuzzleManager,
     ) { }
 
     public ngOnInit(): void {
@@ -87,8 +88,6 @@ export class BackupsComponent implements OnInit, OnDestroy {
     }
 
     private localCopyExists(backup: BackupInfo): boolean {
-        let exists = true;
-
-        return exists;
+        return !!this.puzzleManager.getPuzzleList().find(p => p.info.id === backup.contentId);
     }
 }

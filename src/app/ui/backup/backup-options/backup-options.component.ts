@@ -32,7 +32,7 @@ export class BackupOptionsComponent implements OnInit, OnDestroy {
         this.subs.push(
             this.route.paramMap.subscribe(paramMap => {
                 const backupId = paramMap.get("id");
-                this.backup = this.backupService.backups.find(b => b.id === backupId);
+                this.backup = this.backupService.getBackup(backupId);
                 this.detRef.detectChanges();
             })
         );

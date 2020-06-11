@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { ContentGeneratorTableLayout } from '../content-generator/content-generator-table-layout';
-import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols } from '../common';
+import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols, getApiRoot } from '../common';
 import { AuthService, Credentials } from '../app/auth.service';
-import { environment } from 'src/environments/environment';
 import { ContentGeneratorListLayout } from '../content-generator/content-generator-list-layout';
 import { AppSettingsService } from '../app/app-settings.service';
 
@@ -56,7 +55,7 @@ export class PublicationService {
         const credentials: Credentials = this.authService.getCredentials();
 
         if (image) {
-            return this.http.post(environment.apiRoot + "PublishGrid", {
+            return this.http.post(getApiRoot() + "PublishGrid", {
                 title: title,
                 content: image,
                 username: credentials.username,
@@ -82,7 +81,7 @@ export class PublicationService {
         const credentials: Credentials = this.authService.getCredentials();
         let content = this.getContent(puzzle, gridUrl);
 
-        return this.http.post(environment.apiRoot + "PublishPost", {
+        return this.http.post(getApiRoot() + "PublishPost", {
             provider: puzzle.info.provider,
             title: puzzle.info.title,
             content,

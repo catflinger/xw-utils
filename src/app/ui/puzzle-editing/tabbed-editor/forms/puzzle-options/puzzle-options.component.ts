@@ -7,6 +7,7 @@ import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
 import { ClueEditorService } from '../../clue-editor.service';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -14,7 +15,7 @@ import { ClueEditorService } from '../../clue-editor.service';
     styleUrls: ['./puzzle-options.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PuzzleOptionsComponent implements OnInit, OnDestroy {
+export class PuzzleOptionsComponent extends EditorFormBase implements OnInit, OnDestroy {
     public form: FormGroup;
 
     @Input() public clueId: string;
@@ -24,11 +25,15 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
     constructor(
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
-    ) { }
+        editorService: ClueEditorService
+    ) { 
+        super(editorService)
+    }
 
     public get answerColsArray(): FormArray {
         return this.form.get("answerCols") as FormArray;
     }
+
     public ngOnInit() {
 
         this.form = new FormGroup({
@@ -59,6 +64,7 @@ export class PuzzleOptionsComponent implements OnInit, OnDestroy {
 
     public  ngOnDestroy() {
         this.subs.forEach(s => s .unsubscribe());
+        super.ngOnDestroy();
     }
 
     public onAddColumn() {

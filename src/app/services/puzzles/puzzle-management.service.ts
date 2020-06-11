@@ -37,13 +37,15 @@ export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
     // at teh moment some of the name sound quite similar
     abstract newPuzzle(provider: PuzzleProvider, reducers?: IPuzzleModifier[]): void;
-    abstract getPuzzleList(): Observable<IPuzzleSummary[]>;
+    abstract observePuzzleList(): Observable<IPuzzleSummary[]>;
     abstract openPuzzle(id: string, modifiers?: IPuzzleModifier[]): Promise<Puzzle>;
     abstract openArchivePuzzle(params: OpenPuzzleParamters): Promise<Puzzle>;
     abstract loadPuzzleFromPdf(params: OpenPuzzleParamters): Promise<string>;
 
     abstract addPuzzle(Puzzle);
     abstract deletePuzzle(id: string): Promise<void>;
+
+    abstract getPuzzleList(): IPuzzleSummary[];
 }
 
 @Injectable()
@@ -182,8 +184,12 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
     //#region General Puzzle management
 
-    public getPuzzleList(): Observable<IPuzzleSummary[]> {
+    public observePuzzleList(): Observable<IPuzzleSummary[]> {
         return this.bsList.asObservable();
+    }
+
+    public getPuzzleList(): IPuzzleSummary[] {
+        return this.bsList.value;
     }
 
     public openPuzzle(id: string, modifiers?: IPuzzleModifier[]): Promise<Puzzle> {

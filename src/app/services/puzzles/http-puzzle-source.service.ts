@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
+import { ApiResponse, ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
 import { AuthService } from '../app/auth.service';
-import { environment } from "../../../environments/environment";
 import { OpenPuzzleParamters } from '../../ui/general/app.service';
 import { Base64Encoded } from '../../model/interfaces';
 
@@ -52,7 +51,7 @@ export class HttpPuzzleSourceService {
         params.username = credentials.username;
         params.password = credentials.password;
 
-        return this.http.post(environment.apiRoot + "provision/", params)
+        return this.http.post(getApiRoot() + "provision/", params)
         .toPromise()
         .then((data: ApiPdfExtractResponse) => {
             if (data.success === ApiResponseStatus.OK) {
@@ -75,7 +74,7 @@ export class HttpPuzzleSourceService {
         params.username = credentials.username;
         params.password = credentials.password;
 
-        return this.http.post(environment.apiRoot + "puzzle/", params)
+        return this.http.post(getApiRoot() + "puzzle/", params)
         .toPromise()
         .then((data: ApiPuzzleResponse) => {
             if (data.success === ApiResponseStatus.OK) {
@@ -103,7 +102,7 @@ export class HttpPuzzleSourceService {
             textPage,
         }
 
-        return this.http.post(environment.apiRoot + "pdfextract/", params)
+        return this.http.post(getApiRoot() + "pdfextract/", params)
         .toPromise()
         .then((data: ApiPdfExtractResponse) => {
             if (data.success === ApiResponseStatus.OK) {
@@ -128,7 +127,7 @@ export class HttpPuzzleSourceService {
             password: credentials.password,
         }
 
-        return this.http.post(environment.apiRoot + "admin/", params)
+        return this.http.post(getApiRoot() + "admin/", params)
         .toPromise()
         .then((data: ApiPdfExtractResponse) => {
             if (data.success === ApiResponseStatus.OK) {

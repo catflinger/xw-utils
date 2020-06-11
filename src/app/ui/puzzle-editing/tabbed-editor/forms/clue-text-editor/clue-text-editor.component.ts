@@ -13,6 +13,7 @@ import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
+import { EditorFormBase } from '../editor-form-base';
 
 export interface ClueEditModel {
     id: string;
@@ -27,9 +28,8 @@ export interface ClueEditModel {
     styleUrls: ['./clue-text-editor.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy, IClueEditorForm {
+export class ClueTextEditorComponent extends EditorFormBase implements OnInit, AfterViewInit, OnDestroy {
     private subs: Subscription[] = [];
-    private instanceId: string = null;
 
     public form: FormGroup;
     public title = "";
@@ -43,12 +43,13 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     constructor(
         private activePuzzle:IActivePuzzle,
-        private editorService: ClueEditorService,
         private formBuilder: FormBuilder,
-    ) { }
+        editorService: ClueEditorService,
+    ) {
+        super(editorService)
+    }
 
     public ngOnInit() {
-        this.instanceId = this.editorService.register(() => this.onSave());
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
@@ -105,10 +106,10 @@ export class ClueTextEditorComponent implements OnInit, AfterViewInit, OnDestroy
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
-        this.editorService.unRegister(this.instanceId);
+        super.ngOnDestroy();
     }
 
-    private onSave(): Promise<boolean> {
+    protected onSave(): Promise<boolean> {
         let result: boolean = false;
 
         let mods: IPuzzleModifier[] = [];

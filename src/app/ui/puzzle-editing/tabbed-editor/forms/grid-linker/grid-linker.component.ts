@@ -5,6 +5,7 @@ import { Clue } from 'src/app/model/puzzle-model/clue';
 import { FormGroup, FormControl } from '@angular/forms';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-grid-linker',
@@ -12,9 +13,8 @@ import { ClueEditorService } from '../../clue-editor.service';
     styleUrls: ['./grid-linker.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridLinkerComponent implements OnInit, IClueEditorForm {
+export class GridLinkerComponent extends EditorFormBase implements OnInit {
     private subs: Subscription[] = [];
-    private instanceId: string = null;
 
     @Output() dirty = new EventEmitter<void>();
 
@@ -23,11 +23,12 @@ export class GridLinkerComponent implements OnInit, IClueEditorForm {
 
     constructor(
         private activePuzzle:IActivePuzzle,
-        private editorService: ClueEditorService,
-    ) { }
+        editorService: ClueEditorService,
+    ) { 
+        super(editorService)
+    }
 
     public ngOnInit() {
-        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
          this.form = new FormGroup({
             "setGridRefsFromCaptions": new FormControl({
@@ -46,7 +47,7 @@ export class GridLinkerComponent implements OnInit, IClueEditorForm {
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
-        this.editorService.unRegister(this.instanceId);
+        super.ngOnDestroy();
     }
 
     public onChangeGridRefs() {

@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.subs.push(combineLatest(
             this.appService.getObservable(),
             this.authService.observe(),
-            this.puzzleManagement.getPuzzleList(),
+            this.puzzleManagement.observePuzzleList(),
             this.settingsService.observe())
             .subscribe(
                 result => {

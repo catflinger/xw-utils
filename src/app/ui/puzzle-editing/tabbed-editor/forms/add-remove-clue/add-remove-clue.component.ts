@@ -7,6 +7,7 @@ import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { DeleteClue } from 'src/app/modifiers/clue-modifiers/delete-clue';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-add-remove-clue',
@@ -14,9 +15,8 @@ import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
     styleUrls: ['./add-remove-clue.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorForm {
+export class AddRemoveClueComponent extends EditorFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
-    private instanceId: string = null;
     
     public  clue: Clue;
     public letters: string[];
@@ -26,12 +26,12 @@ export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorFor
 
     constructor(
         private activePuzzle: IActivePuzzle,
-        private editorService: ClueEditorService,
-    ) { }
+        editorService: ClueEditorService,
+    ) { 
+        super(editorService)
+    }
 
     public ngOnInit() {
-
-        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
         this.subs.push(
             this.activePuzzle.observe().subscribe(
@@ -51,7 +51,7 @@ export class AddRemoveClueComponent implements OnInit, OnDestroy, IClueEditorFor
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
-        this.editorService.unRegister(this.instanceId);
+        super.ngOnDestroy();
     }
 
     public onLetterClick(index: number) {

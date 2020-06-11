@@ -8,6 +8,7 @@ import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
 import { ClueEditorService } from '../../clue-editor.service';
 import { BarClickEvent } from 'src/app/ui/grid/grid/grid.component';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-grid-form',
@@ -15,32 +16,29 @@ import { BarClickEvent } from 'src/app/ui/grid/grid/grid.component';
     styleUrls: ['./grid-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridFormComponent implements OnInit, OnDestroy, IClueEditorForm {
+export class GridFormComponent extends EditorFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     private puzzle: Puzzle;
-    private instanceId: string = null;
 
    @Output() dirty = new EventEmitter<void>();
 
     constructor(
         private activePuzzle:IActivePuzzle,
-        private editorService: ClueEditorService,
-    ) { }
+        editorService: ClueEditorService,
+    ) { 
+        super(editorService)
+    }
 
     public ngOnInit() {
-        this.instanceId = this.editorService.register(() => Promise.resolve(false));
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.puzzle = puzzle;
-
-            if (puzzle) {
-            }
         }));
     }
 
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
-        this.editorService.unRegister(this.instanceId);
+        super.ngOnDestroy();
     }
 
     public onCellClick(cell: GridCell) {

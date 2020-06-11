@@ -49,7 +49,7 @@ export class BackupComponent implements OnInit, OnDestroy {
         });
 
         this.subs.push(
-            this.puzzleManager.getPuzzleList().subscribe(puzzles => {
+            this.puzzleManager.observePuzzleList().subscribe(puzzles => {
                 this.puzzles = puzzles;
                 this.detRef.detectChanges();
             })

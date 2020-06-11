@@ -8,13 +8,16 @@ import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { v4 as uuid } from "uuid";
+import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { ClueEditorService } from '../../clue-editor.service';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
   selector: 'app-add-clue',
   templateUrl: './add-clue.component.html',
   styleUrls: ['./add-clue.component.css']
 })
-export class AddClueComponent implements OnInit {
+export class AddClueComponent extends EditorFormBase implements OnInit {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
@@ -27,7 +30,10 @@ export class AddClueComponent implements OnInit {
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-    ) { }
+        editorService: ClueEditorService,
+    ) { 
+        super(editorService)
+    }
 
     public ngOnInit() {
 

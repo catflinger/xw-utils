@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import { AuthService } from '../app/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { ApiResponseStatus, ApiSymbols } from '../common';
+import { ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
 import { BackupInfo, BackupType, BackupContentType } from './backup-info';
 import { TraceService } from '../app/trace.service';
 
@@ -61,14 +60,16 @@ export class HttpBackupSourceService {
         private trace: TraceService,
     ) { }
 
-    public getBackupList(owner: string): Promise<BackupInfo[]> {
+    public getBackupList(host: string, owner: string): Promise<BackupInfo[]> {
         // request the info from the server
         // check the response for auth failure and reject with special error token
         // resolve with data
-        
-        this.trace.log("Requesting backup list for [" + owner + "]");
 
-        return this.http.get(environment.apiRoot + `user/${owner}/backup`)
+        const url = `https://${host}/api/user/${owner}/backup`;
+        
+        this.trace.log("Requesting backup list for [" + url + "]");
+
+        return this.http.get(url)
         .toPromise()
         .then((response: HttpPuzzleBackupResult) => {
 
@@ -86,8 +87,8 @@ export class HttpBackupSourceService {
         });
     }
 
-    public getBackup(id: string): Promise<BackupInfo> {
-        return this.http.get(environment.apiRoot + `backup/${id}`)
+    public getBackup(host: string, id: string): Promise<BackupInfo> {
+        return this.http.get(`https://${host}/api/backup/${id}`)
         .toPromise()
         .then((response: HttpPuzzleBackupResult) => {
             
@@ -129,7 +130,7 @@ export class HttpBackupSourceService {
             }
         }
 
-        return this.http.post(environment.apiRoot + "backup", data)
+        return this.http.post(getApiRoot() + "backup", data)
         .toPromise()
         .then((response: HttpApiResult) => {
             if (response.success === ApiResponseStatus.OK) {
@@ -142,7 +143,7 @@ export class HttpBackupSourceService {
         });
     }
 
-    public deleteBackup(id: string): Promise<void> {
+    public deleteBackup(host: string, id: string): Promise<void> {
         const creds = this.authService.getCredentials();
         const body: HttpApiRequest = {
             username: creds.username,
@@ -150,7 +151,7 @@ export class HttpBackupSourceService {
         }
         return this.http.request(
             "delete", 
-            environment.apiRoot + `backup/${id}`, 
+            getApiRoot() + `backup/${id}`, 
             {body: body}
         ).toPromise()
         .then((response: HttpApiResult) => {

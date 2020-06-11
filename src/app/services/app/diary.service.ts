@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ApiSymbols, ApiResponse, ApiResponseStatus } from '../common';
+import { ApiSymbols, ApiResponse, ApiResponseStatus, getApiRoot } from '../common';
 import { Diary } from '../../model/diary-model/diary';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -46,7 +45,7 @@ export class DiaryService {
             password: credentials.password,
         };
 
-        return this.http.post(environment.apiRoot + "diary/", request)
+        return this.http.post(getApiRoot() + "diary/", request)
         .toPromise()
         .then((data: DiaryResponse) => {
             if (data.success === ApiResponseStatus.authorizationFailure) {

@@ -107,7 +107,7 @@ const quillGlobalConfig = {
             ['bold', 'italic', 'underline'],
             [{ 'color': [] }, { 'background': [] }],
             [{ 'font': [] }],
-            ['link', 'image']
+            ['link']
         ]
     }
 };

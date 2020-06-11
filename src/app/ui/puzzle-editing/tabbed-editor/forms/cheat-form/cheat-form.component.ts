@@ -4,28 +4,22 @@ import { Cheat } from 'src/app/modifiers/clue-modifiers/cheat';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-cheat-form',
     templateUrl: './cheat-form.component.html',
     styleUrls: ['./cheat-form.component.css']
 })
-export class CheatFormComponent implements OnInit, OnDestroy {
-    private instanceId: string = null;
+export class CheatFormComponent extends EditorFormBase implements OnDestroy {
     
     @Output() close = new EventEmitter<void>();
 
     constructor(
-            private activePuzzle: IActivePuzzle,
-            private editorService: ClueEditorService,
-            ) { }
-
-    public ngOnInit(): void {
-        this.instanceId = this.editorService.register(() => Promise.resolve(false));
-    }
-
-    public ngOnDestroy() {
-        this.editorService.unRegister(this.instanceId);
+        private activePuzzle: IActivePuzzle,
+        editorService: ClueEditorService,
+    ) {
+        super(editorService)
     }
 
     public onCheat() {

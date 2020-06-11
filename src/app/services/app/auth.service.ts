@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiResponse, ApiResponseStatus, ApiSymbols } from '../common';
-import { environment } from 'src/environments/environment';
+import { ApiResponse, ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
 import { AppSettingsService } from './app-settings.service';
 
 export class Credentials {
@@ -34,7 +33,7 @@ export class AuthService {
     }
 
     public authenticate(username: string, password: string): Promise<void> {
-        return this.http.post(environment.apiRoot + "authorization/", { username, password, sandbox: this.settingsService.settings.sandbox})
+        return this.http.post(getApiRoot() + "authorization/", { username, password, sandbox: this.settingsService.settings.sandbox})
         .toPromise()
         .then((data: ApiResponse) => {
             if (data.success === ApiResponseStatus.OK) {

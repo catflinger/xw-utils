@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse, ApiResponseStatus } from '../common';
+import { ApiResponse, ApiResponseStatus, getApiRoot } from '../common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Archive } from '../../model/archive-model/archive';
-import { environment } from 'src/environments/environment';
 import { PuzzleProvider } from '../../model/interfaces';
 
 interface ArchiveItemResponse {
@@ -40,7 +39,7 @@ export class ArchiveService {
 
     public getList(provider: PuzzleProvider): Promise<void> {
 
-        return this.http.get(environment.apiRoot + "archive/" + provider)
+        return this.http.get(getApiRoot() + "archive/" + provider)
         .toPromise()
         .then((data: ArchiveResponse) => {
             if (data) {

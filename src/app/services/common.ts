@@ -1,5 +1,20 @@
 import { Puzzle } from '../model/puzzle-model/puzzle';
 import { QuillDelta } from '../model/puzzle-model/quill-delta';
+import { environment } from 'src/environments/environment';
+
+export type ApiHostType = "primary" | "secondary" | "development" | "default";
+
+export const apiHosts = {
+    primary: "crosswords.drurys.org",
+    secondary: "drurys2.org",
+    development: "localhost:44301",
+}
+
+export function getApiRoot() {
+    return environment.production ? 
+        "/api/" :
+        "https://" + apiHosts.development + "/api/";
+} 
 
 export enum ApiResponseStatus {
     OK = 0,

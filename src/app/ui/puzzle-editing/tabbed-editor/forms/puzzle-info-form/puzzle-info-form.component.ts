@@ -3,6 +3,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
+import { ClueEditorService } from '../../clue-editor.service';
+import { EditorFormBase } from '../editor-form-base';
 
 @Component({
     selector: 'app-puzzle-info-form',
@@ -10,7 +12,7 @@ import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
     styleUrls: ['./puzzle-info-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PuzzleInfoFormComponent implements OnInit, OnDestroy {
+export class PuzzleInfoFormComponent extends EditorFormBase implements OnInit, OnDestroy {
     public form: FormGroup;
 
     @Input() public clueId: string;
@@ -22,7 +24,10 @@ export class PuzzleInfoFormComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-    ) { }
+        editorService: ClueEditorService,
+    ) { 
+        super(editorService)
+    }
 
     public ngOnInit() {
 
@@ -48,17 +53,20 @@ export class PuzzleInfoFormComponent implements OnInit, OnDestroy {
 
     public  ngOnDestroy() {
         this.subs.forEach(s => s .unsubscribe());
+        super.ngOnDestroy();
     }
 
-    public onSave() {
-        this.activePuzzle.update(new UpdateInfo({
-            title: this.form.value.text,
+    public onSave(): Promise<boolean> {
+        this.activePuzzle.updateAndCommit(new UpdateInfo({
+            title: this.form.value.title,
             setter: this.form.value.setter,
             instructions: this.form.value.instructions,
             puzzleDate: this.form.value.date,
         }));
 
         this.close.emit();
+
+        return Promise.resolve(false);
     }
 
     public onCancel() {
