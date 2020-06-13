@@ -5,7 +5,7 @@ import { BackupInfo } from 'src/app/services/storage/backup-info';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
-import { AppService } from '../../general/app.service';
+import { AppService, AppStatus } from '../../general/app.service';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 
 @Component({
@@ -20,6 +20,7 @@ export class BackupsComponent implements OnInit, OnDestroy {
     public puzzleBackups: BackupInfo[] = [];
     public settingsBackups: BackupInfo[] = [];
     public creds: Credentials;
+    public appStatus: AppStatus;
     
     constructor(
         private backupService: BackupService,
@@ -36,20 +37,27 @@ export class BackupsComponent implements OnInit, OnDestroy {
         if (!this.authService.getCredentials().authenticated) {
             this.appService.redirect = ["backups"];
             this.navService.gotoRoute(["login"]);
-        }
+        } else {
+            this.subs.push(this.appService.getObservable().subscribe(appStatus => {
+                this.appStatus = appStatus;
+                this.detRef.detectChanges();
+            }));
         
-        this.subs.push(this.authService.observe().subscribe(creds => {
-            this.creds = creds;
-            this.detRef.detectChanges();
-        }));
-        
-        this.subs.push(this.backupService.observe().subscribe(backups => {
-            this.puzzleBackups = backups.filter(b => b.backupType === "puzzle");
-            this.settingsBackups = backups.filter(b => b.backupType === "settings");
-            this.detRef.detectChanges();
-        }));
+            this.subs.push(this.authService.observe().subscribe(creds => {
+                this.creds = creds;
+                this.detRef.detectChanges();
+            }));
+            
+            this.subs.push(this.backupService.observe().subscribe(backups => {
+                this.puzzleBackups = backups.filter(b => b.backupType === "puzzle");
+                this.settingsBackups = backups.filter(b => b.backupType === "settings");
+                this.appService.clearBusy();
+                this.detRef.detectChanges();
+            }));
+    
+            this.backupService.refresh();
+            }
 
-        this.backupService.refresh();
     }
 
     public ngOnDestroy() {
@@ -57,6 +65,8 @@ export class BackupsComponent implements OnInit, OnDestroy {
     }
 
     public onRefresh() {
+        this.appService.clearAlerts();
+        this.appService.setBusy();
         this.backupService.refresh();
     }
 

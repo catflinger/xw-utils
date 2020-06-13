@@ -11,28 +11,19 @@ import { IPuzzleManager } from '../puzzles/puzzle-management.service';
 import { AppSettingsService } from '../app/app-settings.service';
 import { ApiSymbols, apiHosts } from '../common';
 import { UpgradeToLatestVersion } from 'src/app/modifiers/puzzle-modifiers/UpgradeToLatestVersion';
-
-// export type MergeAction = "skip" | "replace";
-
-// export interface BackupOptions {
-//     foo: boolean;
-// }
-
-// export interface RestoreOptions {
-//     mergeAction: MergeAction; // what to do for conflicts
-// }
-
-const primary = 0;
-const secondary = 1;
-const development = 2;
-
+import { environment } from 'src/environments/environment';
+import { AppService } from 'src/app/ui/general/app.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BackupService {
 
-    private _bsBackupLists: BehaviorSubject<BackupInfo[]>[] = [];
+    private _bsBackupLists = {
+        primary: new BehaviorSubject<BackupInfo[]>([]),
+        secondary: new BehaviorSubject<BackupInfo[]>([]),
+        development: new BehaviorSubject<BackupInfo[]>([]),
+    };
 
     constructor(
         private backupSource: HttpBackupSourceService,
@@ -40,11 +31,8 @@ export class BackupService {
         private puzzleManager: IPuzzleManager,
         private settingsService: AppSettingsService,
         private authService: AuthService,
+        private appService: AppService,
     ) {
-        this._bsBackupLists.push(new BehaviorSubject<BackupInfo[]>([]));
-        this._bsBackupLists.push(new BehaviorSubject<BackupInfo[]>([]));
-        this._bsBackupLists.push(new BehaviorSubject<BackupInfo[]>([]));
-
         this.refresh();
     }
 
@@ -52,36 +40,25 @@ export class BackupService {
         const creds = this.authService.getCredentials();
 
         if (creds.authenticated) {
-            this.backupSource.getBackupList(apiHosts.primary, creds.username)
-            .then(list => {
-                this._bsBackupLists[primary].next(list);
-            })
-            .catch(() => console.log("Failed to get backups from Primary"));
+            this.refreshBackupStore(creds.username, "primary");
+            this.refreshBackupStore(creds.username, "secondary");
 
-            this.backupSource.getBackupList(apiHosts.secondary, creds.username)
-            .then(list => {
-                this._bsBackupLists[secondary].next(list);
-            })
-            .catch(() => console.log("Failed to get backups from Secondary"));
-
-            this.backupSource.getBackupList(apiHosts.development, creds.username)
-            .then(list => {
-                this._bsBackupLists[development].next(list);
-            })
-            .catch(() => console.log("Failed to get backups from Development"));
+            if (!environment.production) {
+                this.refreshBackupStore(creds.username, "development");
+            }
         }
     }
 
     public observe(): Observable<BackupInfo[]> {
         return combineLatest([
-            this._bsBackupLists[primary].asObservable(),
-            this._bsBackupLists[secondary].asObservable(),
-            this._bsBackupLists[development].asObservable(),
+            this._bsBackupLists.primary.asObservable(),
+            this._bsBackupLists.secondary.asObservable(),
+            this._bsBackupLists.development.asObservable(),
             ])
             .pipe(map((vals) => {
-                const a = vals[primary];
-                const b = vals[secondary];
-                const c = vals[development];
+                const a = vals[0];
+                const b = vals[1];
+                const c = vals[2];
 
                 let result: BackupInfo[] = [];
                 return result.concat(a).concat(b).concat(c);
@@ -91,20 +68,17 @@ export class BackupService {
     // TO DO: rename this method?  Reads like we will go to the server to get the backup content
     
     public getBackup(id: string): BackupInfo {
-        let result: BackupInfo = null;
-
-        if (this._bsBackupLists[primary].value) {
-            result = this._bsBackupLists[primary].value.find(b => b.id === id);
-        }
-
-        if (!result && this._bsBackupLists[secondary].value) {
-            result = this._bsBackupLists[secondary].value.find(b => b.id === id);
-        }
         
-        if (!result && this._bsBackupLists[development].value) {
-            result = this._bsBackupLists[development].value.find(b => b.id === id);
+        let result: BackupInfo = this.getBackupByHost("primary", id);
+
+        if(!result) {
+            result = this.getBackupByHost("secondary", id);
         }
-        
+
+        if(!result && !environment.production) {
+            result = this.getBackupByHost("development", id);
+        }
+
         return result;
     }
 
@@ -189,5 +163,25 @@ export class BackupService {
                 throw "Backup does not contain settings data";
             }
         });
+    }
+
+    private refreshBackupStore(username: string, hostIndex: string): void {
+        this.backupSource.getBackupList(apiHosts[hostIndex], username)
+        .then(list => {
+            this._bsBackupLists[hostIndex].next(list);
+        })
+        .catch(() => 
+        {
+            this.appService.setAlert("danger", "Failed to get backups from " + apiHosts[hostIndex]);
+        });
+    }
+
+    private getBackupByHost(hostIndex: string, id: string): BackupInfo {
+        let result: BackupInfo = null;
+        
+        if (this._bsBackupLists[hostIndex].value) {
+            result = this._bsBackupLists[hostIndex].value.find(b => b.id === id);
+        }
+        return result;
     }
 }

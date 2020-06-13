@@ -13,13 +13,10 @@ export class EditorFormBase implements IClueEditorForm, OnDestroy {
     }
 
     protected onSave(): Promise<boolean> {
-        console.log("SAVING IN THE BASE");
         return Promise.resolve(false);
     }
 
     public ngOnDestroy() {
-        console.log("RELEASING THE EDITOR SERVICE");
         this.editorService.unRegister(this.instanceId);
     }
-
 }

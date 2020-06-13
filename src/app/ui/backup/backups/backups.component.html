@@ -13,7 +13,7 @@
     </p>
 </ngb-alert>
 
-<ng-container *ngIf="creds && creds.authenticated">
+<ng-container *ngIf="appStatus && creds && creds.authenticated">
     <div class="mt-5">
         <button type="button" class="btn btn-primary" (click)="onMakeBackup()">Make a backup</button>
     </div>
@@ -75,6 +75,6 @@
     </div>
     
     <div class="mt-5">
-        <button type="button" class="btn btn-primary" (click)="onRefresh()">Refresh</button>
+        <button type="button" class="btn btn-primary" (click)="onRefresh()" [disabled]="appStatus.busy">Refresh</button>
     </div>
 </ng-container>

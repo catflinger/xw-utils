@@ -2,8 +2,6 @@ import { Puzzle } from '../model/puzzle-model/puzzle';
 import { QuillDelta } from '../model/puzzle-model/quill-delta';
 import { environment } from 'src/environments/environment';
 
-export type ApiHostType = "primary" | "secondary" | "development" | "default";
-
 export const apiHosts = {
     primary: "crosswords.drurys.org",
     secondary: "drurys2.org",
