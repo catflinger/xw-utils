@@ -1,9 +1,9 @@
 import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
 import { IPuzzle, IClue, ClueGroup, IGridReference } from '../../model/interfaces';
-import { SortClues } from './sort-clues';
+import { SetRedirects } from './set-redirects';
 
-describe('SortClues modifier', () => {
+describe('SetRedirects modifier', () => {
 
     describe('exec', () => {
 
@@ -11,15 +11,15 @@ describe('SortClues modifier', () => {
             TestBed.configureTestingModule({});
         });
 
-        it('should sort an empty puzzle', () => {
+        it('should set redirects in an empty puzzle', () => {
             let puzzle = getEmptyPuzzle();
-            expect(new SortClues().exec(puzzle)).not.toThrow();
+            expect(new SetRedirects().exec(puzzle)).not.toThrow();
         });
 
-        it('should sort an numerical puzzle', () => {
+        it('should set redirects', () => {
             let puzzle = getEmptyPuzzle();
             addTestClues(puzzle);
-            new SortClues().exec(puzzle);
+            new SetRedirects().exec(puzzle);
 
             expect(puzzle.clues.length).toEqual(3);
             expect(puzzle.clues[0].caption).toEqual("1");
@@ -74,6 +74,7 @@ function addTestClues(puzzle: IPuzzle) {
     ));
 
 }
+
 
 function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGridReference[]): IClue {
     return {
@@ -160,3 +161,4 @@ function getEmptyPuzzle(): IPuzzle {
         },
     };
 }
+

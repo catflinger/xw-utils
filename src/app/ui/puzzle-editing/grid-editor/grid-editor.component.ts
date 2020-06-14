@@ -203,16 +203,23 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
         if (this.tool === "grid" && this.puzzle.grid.properties.style === "barred") {
             const cell = event.cell;
-            const symCell = this.getSymCell(cell);
+            let symCell = this.getSymCell(cell);
 
             if (event.bar === "rightBar") {
                 updates.push(new UpdateCell(cell.id, { rightBar: !cell.rightBar }));
-                if (symCell) {
+
+                if (symCell && symCell.x > 0) {
+                    // sym cell needs to alter the left bar, so use right bar from neighbouring cell
+                    symCell = this.puzzle.grid.cellAt(symCell.x - 1, symCell.y);
                     updates.push(new UpdateCell(symCell.id, { rightBar: !cell.rightBar }));
                 }
             } else {
-                if (symCell) {
-                    updates.push(new UpdateCell(cell.id, { bottomBar: !cell.bottomBar }));
+                updates.push(new UpdateCell(cell.id, { bottomBar: !cell.bottomBar }));
+
+                if (symCell && symCell.y > 0) {
+                    // sym cell needs to alter the top bar, so use bottom bar from cell above
+                    symCell = this.puzzle.grid.cellAt(symCell.x, symCell.y - 1);
+                    updates.push(new UpdateCell(symCell.id, { bottomBar: !cell.bottomBar }));
                 }
             }
             updates.push(new RenumberGid());

@@ -7,7 +7,7 @@ interface ClueRef {
     group: ClueGroup,
 }
 
-export class HousekeepClues implements IPuzzleModifier {
+export class SetRedirects implements IPuzzleModifier {
     constructor() { }
 
     exec(puzzle: IPuzzle) {
@@ -47,16 +47,23 @@ export class HousekeepClues implements IPuzzleModifier {
         let result: ClueRef = null;
 
         if (Clue.isRedirect(text)) {
-            //what?
 
-            // to begin with find the clue number of the first cross ref
-            // work out how to handle more complex cases later, maybe return ClueRef[] instead
-            //
-            // eg simplest case: "1 See 2"
-            // still simple: "1 See 2 down"
-            // more difficult: "1 See 1 Down"
-            // more ticky still: "1 See 3 Across, 1 Down"
-            //
+            //we know this is of the form See xxxxx, xx, xxx
+            // find the first group
+            const trimmed = text.replace(/See\s+/i, "");
+            let parts = trimmed.split(",");
+            let firstPart = parts[0].trim();
+
+            //find clue the number and an optional direction
+            const exp = new RegExp(String.raw`^(?<number>\d{1,2})\s*(?<direction>across|down)?`, "i");
+
+            const match = exp.exec(firstPart);
+
+            if (match) {
+                // redirect to this clue
+            } else {
+                // some sort of error has occurred
+            }
         }
 
         return result;
