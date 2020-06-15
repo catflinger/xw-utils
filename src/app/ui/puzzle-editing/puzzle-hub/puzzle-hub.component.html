@@ -30,7 +30,8 @@
 
     <div class="col" *ngIf="puzzle.clues">
         <button type="button" class="btn btn-outline-primary mr-3" (click)="onEditClues()">Edit clues</button>
-        <button type="button" class="btn btn-outline-primary" (click)="onDeleteClues()">Delete clues</button>
+        <button type="button" class="btn btn-outline-primary mr-3" (click)="onDeleteClues()">Delete clues</button>
+        <button type="button" class="btn btn-outline-primary" *ngIf="puzzle.parseable" (click)="onReloadClues()">Reload clues</button>
     </div>
 
     <div class="col" *ngIf="!puzzle.clues">

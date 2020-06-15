@@ -73,6 +73,11 @@ export class Puzzle implements IPuzzle {
         return result;
     }
 
+    public get parseable(): boolean {
+        // TDO DO: think if this shold be more robust, check provider perhaps
+        return !!this.provision.source;
+    }
+
     public get blogable(): boolean {
         return !!this.clues;
     }

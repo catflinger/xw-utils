@@ -12,6 +12,8 @@ import { SelectClue } from 'src/app/modifiers/clue-modifiers/select-clue';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cells-for-edit';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../general/confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'app-puzzle-hub',
@@ -25,6 +27,7 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
 
     constructor(
+        private modalService: NgbModal,
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
@@ -78,6 +81,17 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
 
     public onDeleteClues() {
         this.activePuzzle.updateAndCommit(new DeleteClues());
+    }
+
+    public onReloadClues() {
+        let lengthDialog = this.modalService.open(ConfirmModalComponent);
+        lengthDialog.componentInstance.message = "Warning: the current answers and annotations will be lost. Do you wish to Continue?";
+        lengthDialog.result.then(cancel => {
+            if (!cancel) {
+                this.navService.navigate("reload-clues");
+            }
+        });
+
     }
 
     public onDeleteGrid() {

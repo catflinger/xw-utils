@@ -11,6 +11,7 @@ import { InitAnnotationWarnings } from 'src/app/modifiers/puzzle-modifiers/init-
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { NavProcessor } from './interfaces';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
+import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 
 @Injectable({
     providedIn: 'root'
@@ -96,7 +97,10 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         let action = "error";
 
         try {
-            this.activePuzzle.updateAndCommit(new ParseText(this.textParsingService, this.providerService));
+            this.activePuzzle.updateAndCommit(
+                new ParseText(this.textParsingService, this.providerService),
+                new SyncGridContent());
+                
             const errors = this.activePuzzle.puzzle.provision.parseErrors;
 
             if (errors && errors.length) {

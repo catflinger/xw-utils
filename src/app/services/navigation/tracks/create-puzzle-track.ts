@@ -28,6 +28,7 @@ export const createPuzzleTrack: NavTrack = {
                 "add-clues": "make-clues",
                 "add-clues-grid": "make-clues",
                 "add-clues-text": "special-text",
+                "reload-clues": "special-text",
                 "edit-clues": "clues-editor",
                 "add-text": "special-text",
                 "solve": "solver",
