@@ -8,7 +8,7 @@ import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data'
 import { Router } from '@angular/router';
 import Bowser from 'bowser';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
-import { AppSettings, ApiSymbols } from 'src/app/services/common';
+import { AppSettings, AppResultSymbols } from 'src/app/services/common';
 import { AppService } from '../../general/app.service';
 
 @Component({
@@ -59,7 +59,7 @@ export class BackupSettingsComponent implements OnInit {
             this.router.navigate(["backups"]);
         })
         .catch((error) => {
-            const message = error === ApiSymbols.AuthorizationFailure ?
+            const message = error === AppResultSymbols.AuthorizationFailure ?
             "User is not logged in" :
             "Failed to make backup";
             this.appService.setAlert("danger", message);

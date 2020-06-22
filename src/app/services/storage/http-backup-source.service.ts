@@ -1,7 +1,7 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import { AuthService } from '../app/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
+import { ApiResponseStatus, AppResultSymbols, getApiRoot } from '../common';
 import { BackupInfo, BackupType, BackupContentType } from './backup-info';
 import { TraceService } from '../app/trace.service';
 
@@ -80,7 +80,7 @@ export class HttpBackupSourceService {
                     .map(b => new BackupInfo(b))
                     .sort((a,b) => b.date.getTime() - a.date.getTime());
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw "Error trying to get backups: " + response.message;
             }
@@ -98,7 +98,7 @@ export class HttpBackupSourceService {
                 }
                 return new BackupInfo(response.backups[0]);
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw "Error trying to get backups: " + response.message;
             }
@@ -136,7 +136,7 @@ export class HttpBackupSourceService {
             if (response.success === ApiResponseStatus.OK) {
                 return null;
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw "Error trying to get backups: " + response.message;
             }
@@ -158,7 +158,7 @@ export class HttpBackupSourceService {
             if (response.success === ApiResponseStatus.OK) {
                 return null;
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw "Error trying to get delete backup: " + response.message;
             }

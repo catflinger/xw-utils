@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { AuthService } from 'src/app/services/app/auth.service';
-import { ApiSymbols, AppSettings } from 'src/app/services/common';
+import { AppResultSymbols, AppSettings } from 'src/app/services/common';
 import { Subscription } from 'rxjs';
 import { UIResult } from '../../common';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
@@ -58,16 +58,18 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         this.authService.authenticate(
             this.form.value.username,
             this.form.value.password)
-        .then(() => {
+        .then(result => {
             this.appService.clearBusy();
-            this.close.emit("ok");
-        })
-        .catch((error) => {
-            this.appService.clearBusy();
-            if (error === ApiSymbols.AuthorizationFailure) {
-                this.appService.setAlert("danger", "Username or password is incorrect");
-            } else {
-                this.appService.setAlert("danger", "Failed to connect to fifteensquared to verify the username and password");
+
+            switch (result) {
+                case AppResultSymbols.OK:
+                    this.close.emit("ok");
+                    break;
+                case AppResultSymbols.AuthorizationFailure:
+                    this.appService.setAlert("danger", "Username or password is incorrect");
+                    break;
+                default:
+                    this.appService.setAlert("danger", "Failed to connect to fifteensquared to verify the username and password");
             }
         });
     }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpClient } from '@angular/common/http';
 import { ContentGeneratorTableLayout } from '../content-generator/content-generator-table-layout';
-import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, ApiSymbols, getApiRoot } from '../common';
+import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, AppResultSymbols, getApiRoot } from '../common';
 import { AuthService, Credentials } from '../app/auth.service';
 import { ContentGeneratorListLayout } from '../content-generator/content-generator-list-layout';
 import { AppSettingsService } from '../app/app-settings.service';
@@ -67,7 +67,7 @@ export class PublicationService {
                 if (data.success === ApiResponseStatus.OK) {
                     return data as PublishGridResult;
                 } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                    throw ApiSymbols.AuthorizationFailure;
+                    throw AppResultSymbols.AuthorizationFailure;
                 } else {
                     throw "Publish Grid Failure: " + data.message;
                 }
@@ -95,7 +95,7 @@ export class PublicationService {
             if (data.success === ApiResponseStatus.OK) {
                 return data as PublishPostResult;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw "Publish Post Failure: " + data.message;
             }

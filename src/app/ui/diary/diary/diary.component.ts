@@ -4,7 +4,7 @@ import { Subscription, combineLatest } from 'rxjs';
 import { AppService } from '../../general/app.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { DiaryEntry } from 'src/app/model/diary-model/diary-entry';
-import { ApiSymbols } from 'src/app/services/common';
+import { AppResultSymbols } from 'src/app/services/common';
 
 @Component({
     selector: 'app-diary',
@@ -60,7 +60,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
             },
             error => {
                 this.appService.clear();
-                if (error === ApiSymbols.AuthorizationFailure) {
+                if (error === AppResultSymbols.AuthorizationFailure) {
                     this.appService.setAlert("danger", "User not logged in.  Please login and try again.");
                 } else {
                     this.appService.setAlert("danger", "Failed to get Google diary.");
@@ -80,16 +80,16 @@ export class DiaryComponent implements OnInit, OnDestroy {
         this.diaryService.refresh()
         .then((result: Symbol) => {
             this.appService.clear();
-            if (result === ApiSymbols.AuthorizationFailure) {
+            if (result === AppResultSymbols.AuthorizationFailure) {
                 this.appService.setAlert("danger", "Not logged-in.  Please log in and try again.");
-            } else if (result != ApiSymbols.OK) {
+            } else if (result != AppResultSymbols.OK) {
                 this.appService.setAlert("danger", "Failed to get Google diary.");
             }
             this.detRef.detectChanges();
         })
         .catch((error) => {
             this.appService.clear();
-            if (error === ApiSymbols.AuthorizationFailure) {
+            if (error === AppResultSymbols.AuthorizationFailure) {
                 this.appService.setAlert("danger", "Not logged-in.  Please log in and try again.");
             } else {
                 this.appService.setAlert("danger", "Failed to get Google diary.");

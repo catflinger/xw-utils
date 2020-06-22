@@ -4,7 +4,7 @@ import { PublicationService, PublishGridResult } from 'src/app/services/puzzles/
 import { AppStatus, AppService } from 'src/app/ui/general/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { ApiSymbols, PublishStatus, ContentGenerator } from 'src/app/services/common';
+import { AppResultSymbols, PublishStatus, ContentGenerator } from 'src/app/services/common';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -157,14 +157,14 @@ export class PublishComponent implements OnInit, OnDestroy {
             this.navService.navigate("continue");
         })
         .catch(error => {
-            if (error === ApiSymbols.AuthorizationFailure) {
+            if (error === AppResultSymbols.AuthorizationFailure) {
                 this.appService.clear();
                 this.appService.setAlert("danger", "Username or password incorrect");
                 this.authService.clearCredentials();
                 this.navService.navigate("authenticate");
             } else {
                 this.appService.clear();
-                this.appService.setAlert("danger", "ERROR: " + error);
+                this.appService.setAlert("danger", "ERROR Failed to publish:" + error);
             }
         });
     }
@@ -179,7 +179,7 @@ export class PublishComponent implements OnInit, OnDestroy {
                 this.navService.navigate("continue");
             })
             .catch(error => {
-                if (error === ApiSymbols.AuthorizationFailure) {
+                if (error === AppResultSymbols.AuthorizationFailure) {
                     this.appService.clear();
                     this.appService.setAlert("danger", "Username or password incorrect");
                     this.authService.clearCredentials();

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse, ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
+import { ApiResponse, ApiResponseStatus, AppResultSymbols, getApiRoot } from '../common';
 import { AuthService } from '../app/auth.service';
 import { OpenPuzzleParamters } from '../../ui/general/app.service';
 import { Base64Encoded } from '../../model/interfaces';
@@ -45,7 +45,7 @@ export class HttpPuzzleSourceService {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
+            return Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         params.username = credentials.username;
@@ -57,7 +57,7 @@ export class HttpPuzzleSourceService {
             if (data.success === ApiResponseStatus.OK) {
                 return data as PdfExtractResponse;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw data.message;
             }
@@ -68,7 +68,7 @@ export class HttpPuzzleSourceService {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
+            return Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         params.username = credentials.username;
@@ -80,7 +80,7 @@ export class HttpPuzzleSourceService {
             if (data.success === ApiResponseStatus.OK) {
                 return data as PuzzleResponse;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw data.message;
             }
@@ -91,7 +91,7 @@ export class HttpPuzzleSourceService {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
+            return Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         let params: any = {
@@ -108,7 +108,7 @@ export class HttpPuzzleSourceService {
             if (data.success === ApiResponseStatus.OK) {
                 return data as PdfExtractResponse;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw data.message;
             }
@@ -119,7 +119,7 @@ export class HttpPuzzleSourceService {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
+            return Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         let params: any = {
@@ -133,7 +133,7 @@ export class HttpPuzzleSourceService {
             if (data.success === ApiResponseStatus.OK) {
                 return;
             } else if (data.success === ApiResponseStatus.authorizationFailure) {
-                throw ApiSymbols.AuthorizationFailure;
+                throw AppResultSymbols.AuthorizationFailure;
             } else {
                 throw data.message;
             }

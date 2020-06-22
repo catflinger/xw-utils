@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiResponse, ApiResponseStatus, ApiSymbols, getApiRoot } from '../common';
+import { ApiResponse, ApiResponseStatus, AppResultSymbols, getApiRoot } from '../common';
 import { AppSettingsService } from './app-settings.service';
 
 export class Credentials {
@@ -32,21 +32,52 @@ export class AuthService {
         return this.bs.value;
     }
 
-    public authenticate(username: string, password: string): Promise<void> {
+    // public authenticate(username: string, password: string): Promise<void> {
+    //     return this.http.post(getApiRoot() + "authorization/", { username, password, sandbox: this.settingsService.settings.sandbox})
+    //     .toPromise()
+    //     .then((data: ApiResponse) => {
+    //         if (data.success === ApiResponseStatus.OK) {
+    //             this.settingsService.username = username;
+    //             this.bs.next(new Credentials(username, password, true));
+    //         } else {
+    //             this.clearCredentials();
+    //             throw AppResultSymbols.AuthorizationFailure;
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         this.clearCredentials();
+    //         throw error;
+    //     });
+    // }
+
+    public authenticate(username: string, password: string): Promise<Symbol> {
         return this.http.post(getApiRoot() + "authorization/", { username, password, sandbox: this.settingsService.settings.sandbox})
         .toPromise()
+
         .then((data: ApiResponse) => {
+            let result: Symbol;
             if (data.success === ApiResponseStatus.OK) {
+                result = AppResultSymbols.OK;
+            } else if (data.success === ApiResponseStatus.authorizationFailure) {
+                result = AppResultSymbols.AuthorizationFailure;
+            } else {
+                result = AppResultSymbols.Error;
+            }
+            return result;
+        })
+
+        .catch(() => {
+            return AppResultSymbols.Error;
+        })
+
+        .then(result => {
+            if (result === AppResultSymbols.OK) {
                 this.settingsService.username = username;
                 this.bs.next(new Credentials(username, password, true));
             } else {
                 this.clearCredentials();
-                throw ApiSymbols.AuthorizationFailure;
             }
-        })
-        .catch((error) => {
-            this.clearCredentials();
-            throw error;
+            return result;
         });
     }
 

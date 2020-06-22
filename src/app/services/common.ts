@@ -26,7 +26,7 @@ export interface ApiResponse {
     message: string;
 }
 
-export const ApiSymbols = {
+export const AppResultSymbols = {
     OK: Symbol("OK"),
     AuthorizationFailure: Symbol("AuthorizationFailure"),
     Error: Symbol("Error"),

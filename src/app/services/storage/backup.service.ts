@@ -9,7 +9,7 @@ import { AuthService } from '../app/auth.service';
 import { v4 as uuid } from "uuid";
 import { IPuzzleManager } from '../puzzles/puzzle-management.service';
 import { AppSettingsService } from '../app/app-settings.service';
-import { ApiSymbols, apiHosts } from '../common';
+import { AppResultSymbols, apiHosts } from '../common';
 import { UpgradeToLatestVersion } from 'src/app/modifiers/puzzle-modifiers/UpgradeToLatestVersion';
 import { environment } from 'src/environments/environment';
 import { AppService } from 'src/app/ui/general/app.service';
@@ -97,18 +97,19 @@ export class BackupService {
                 JSON.stringify(this.settingsService.settings));
     
         } else {
-            result = Promise.reject(ApiSymbols.AuthorizationFailure);
+            result = Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         return result;
     }
 
     public backupPuzzle(id: string, origin: string, caption: string): Promise<void> {
+        let result: Promise<void>;
 
         const creds = this.authService.getCredentials();
 
         if (creds.authenticated) {
-            return this.localStorage.getPuzzle(id)
+            result = this.localStorage.getPuzzle(id)
             .then(puzzle => {
                 if (puzzle) {
                     return this.backupSource.addBackup(
@@ -125,10 +126,10 @@ export class BackupService {
             .then(()=> this.refresh());
     
         } else {
-            // TO DO ...
-            console.log("NOT AUTHENTICATED!")
+            result = Promise.reject("Authentication failed.  Please log in.");
         }
-        return Promise.resolve();
+        
+        return result;
     }
 
     public restorePuzzle(backup: BackupInfo): Promise<void> {

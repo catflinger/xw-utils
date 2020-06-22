@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { AppService, OpenPuzzleParamters } from '../../general/app.service';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { PuzzleManagementService } from 'src/app/services/puzzles/puzzle-management.service';
-import { ApiSymbols } from 'src/app/services/common';
+import { AppResultSymbols } from 'src/app/services/common';
 import { UIResult } from '../../common';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
@@ -67,7 +67,7 @@ export class OpenPuzzleComponent implements OnInit, OnDestroy {
             }
         })
         .catch((error) => {
-            if (error === ApiSymbols.AuthorizationFailure) {
+            if (error === AppResultSymbols.AuthorizationFailure) {
                 this.appService.clear();
                 this.authService.clearCredentials();
                 this.appService.setAlert("danger", "Username or password is incorrect.  Please try to login again.");

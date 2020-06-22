@@ -9,7 +9,7 @@ import { IPuzzleModifier } from '../../modifiers/puzzle-modifier';
 import { PuzzleProvider, IPuzzleSummary, latestPuzzleVersion } from '../../model/interfaces';
 import { InitAnnotationWarnings } from '../../modifiers/puzzle-modifiers/init-annotation-warnings';
 import { OpenPuzzleParamters } from '../../ui/general/app.service';
-import { ApiSymbols } from '../common';
+import { AppResultSymbols } from '../common';
 import { UpdateInfo } from '../../modifiers/puzzle-modifiers/update-info';
 import { Grid } from '../../model/puzzle-model/grid';
 import { AddGrid } from '../../modifiers/grid-modifiers/add-grid';
@@ -274,7 +274,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             return "ok";
         })
         .catch((error) => {
-            if (error === ApiSymbols.AuthorizationFailure) {
+            if (error === AppResultSymbols.AuthorizationFailure) {
                 return "authenticate";
             } else {
                 throw error;

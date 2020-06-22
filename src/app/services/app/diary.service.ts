@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
-import { ApiSymbols, ApiResponse, ApiResponseStatus, getApiRoot } from '../common';
+import { AppResultSymbols, ApiResponse, ApiResponseStatus, getApiRoot } from '../common';
 import { Diary } from '../../model/diary-model/diary';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -37,7 +37,7 @@ export class DiaryService {
         const credentials = this.authService.getCredentials();
 
         if (!credentials.authenticated) {
-            return Promise.reject(ApiSymbols.AuthorizationFailure);
+            return Promise.reject(AppResultSymbols.AuthorizationFailure);
         }
 
         const request: DiaryRequest = {
@@ -49,14 +49,14 @@ export class DiaryService {
         .toPromise()
         .then((data: DiaryResponse) => {
             if (data.success === ApiResponseStatus.authorizationFailure) {
-                return ApiSymbols.AuthorizationFailure;
+                return AppResultSymbols.AuthorizationFailure;
             } else {
                 this.bs.next(new Diary(data));
-                return ApiSymbols.OK
+                return AppResultSymbols.OK
             }
         })
         .catch(() => {
-            return ApiSymbols.Error;
+            return AppResultSymbols.Error;
         });
     }
 }

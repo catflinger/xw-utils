@@ -9,6 +9,7 @@ import * as Bowser from "bowser";
 import { AuthService } from 'src/app/services/app/auth.service';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
+import { AppService } from '../../general/app.service';
 
 @Component({
     selector: 'app-backup',
@@ -24,6 +25,7 @@ export class BackupComponent implements OnInit, OnDestroy {
     public form: FormGroup;
     
     constructor(
+        private appService: AppService,
         private backupService: BackupService,
         private puzzleManager: IPuzzleManager,
         private authService: AuthService,
@@ -61,6 +63,9 @@ export class BackupComponent implements OnInit, OnDestroy {
     }
 
     public onBackup() {
+        this.appService.setBusy();
+        this.appService.clearAlerts();
+
         const origin = this.form.value.browser + " on " + this.form.value.computer;
         
         this.backupService.backupPuzzle(
@@ -68,11 +73,12 @@ export class BackupComponent implements OnInit, OnDestroy {
             origin, 
             this.form.value.caption)
         .then(() => {
+            this.appService.clearBusy();
             this.router.navigate(["backups"]);
         })
         .catch((error) => {
-            // TO DO: ...
-            console.log("failed " + error);
+            this.appService.clearBusy();
+            this.appService.setAlert("danger", "Failed to complete backup: " + error)
         });
     }
 
