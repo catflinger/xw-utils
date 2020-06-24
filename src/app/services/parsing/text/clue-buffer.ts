@@ -87,8 +87,6 @@ export class ClueBuffer {
                 caption = parseInt(match.groups.caption.toString());
 
                 //determining direction:
-                // 4.  if still no clue found then what??
-
                 let ref: GridReference = null;
 
                 if (match.groups.direction) {
@@ -111,7 +109,7 @@ export class ClueBuffer {
 
                         let cells = grid.getGridEntryFromReference(ref);
 
-                        if (cells.length === 0) {
+                        if (cells.length < 2) {
 
                             // 3. if still no clue found so try in the other group
                             const otherGroup: ClueGroup = group === "across" ? "down" : "across";
@@ -121,7 +119,7 @@ export class ClueBuffer {
                             });
                             let cells = grid.getGridEntryFromReference(ref);
     
-                            if (cells.length === 0) {
+                            if (cells.length < 2) {
 
                                 ref = null;
                                 // we have a reference to a clue not in the grid

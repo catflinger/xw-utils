@@ -184,7 +184,6 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
                 result += " " + this.clue.group;
             }
         }
-
         return result;
     }
 
@@ -194,7 +193,6 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
         });
         this.form.markAsDirty();
         this.validate();
-
     }
 
     public hasDefinition(): boolean {

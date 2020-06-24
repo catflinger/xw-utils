@@ -37,22 +37,14 @@ export class ClueEditorComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
 
-        this.subs.push(combineLatest(
-            
-            this.settingsService.observe(),
-            this.activePuzzle.observe())
-            .subscribe(result => {
-
-                let settings = result[0];
-                let puzzle = result[1];
-
-                if (settings) {
-                    this.settings = settings;
-                    if (puzzle) {
-                        this.puzzle = puzzle;
-                        this.dirty = false;
-                    }
-                }
+        this.subs.push(this.settingsService.observe().subscribe(settings => {
+            this.settings = settings;
+            this.detRef.detectChanges();
+        }));
+        
+        this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
+            this.puzzle = puzzle;
+            this.dirty = false;
             this.detRef.detectChanges();
         }));
     }
