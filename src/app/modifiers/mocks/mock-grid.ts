@@ -30,7 +30,7 @@ export class MockGrid {
             id,
             x: 0,
             y: 0,
-            caption: null,
+            label: null,
             content: "",
             light: false,
             bottomBar: false,

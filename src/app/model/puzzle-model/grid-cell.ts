@@ -4,7 +4,7 @@ export class GridCell implements IGridCell {
     public readonly id: string;
     public readonly x: number;
     public readonly y: number;
-    public readonly caption: number;
+    public readonly label: number;
     public readonly content: string;
     public readonly light: boolean;
     public readonly rightBar: boolean;
@@ -26,9 +26,9 @@ export class GridCell implements IGridCell {
         this.edit = data.edit;
 
         if (data.caption && typeof data.caption === "string") {
-            this.caption = parseInt(data.caption);
+            this.label = parseInt(data.caption);
         } else {
-            this.caption = data.caption;
+            this.label = data.caption;
         }
     }
 }

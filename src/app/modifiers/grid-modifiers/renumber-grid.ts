@@ -28,10 +28,10 @@ export class RenumberGid implements IPuzzleModifier {
                     }
 
                     if (isStartCell) {
-                        cell.caption = counter;
+                        cell.label = counter;
                         counter++;
                     } else {
-                        cell.caption = null;
+                        cell.label = null;
                     }
                 }
             }

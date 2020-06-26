@@ -110,20 +110,20 @@ export class Grid implements IGrid {
 
     public getMaxCaption(): number {
         const cells = this.cells
-            .filter(cell => cell.caption)
-            .sort((a, b) => b.caption - a.caption);
+            .filter(cell => cell.label)
+            .sort((a, b) => b.label - a.label);
 
-        return cells.length > 0 ? cells[0].caption : 0;
+        return cells.length > 0 ? cells[0].label : 0;
     }
 
     public getGridEntryFromReference(ref: GridReference): ReadonlyArray<GridCell> {
         let entry: ReadonlyArray<GridCell> = [];
 
-        let startCell = this.cells.find(c => c.caption === ref.caption);
+        let startCell = this.cells.find(c => c.label === ref.label);
 
         if (startCell) {
             let cells = this.getEntry(startCell, ref.direction);
-            if (cells.length > 0 && cells[0].caption === ref.caption) {
+            if (cells.length > 0 && cells[0].label === ref.label) {
                 entry = cells;
             }
         }
@@ -134,14 +134,14 @@ export class Grid implements IGrid {
     public getNextClueNumber(startRef: IGridReference): number {
 
         // TO DO: work how to handle this for non-numbered grids (eg carte blanches etc)
-        let clueNumber = startRef.caption;
+        let clueNumber = startRef.label;
         let found = false;
 
         // find the caption of the next entry in the same direction
 
         do {
             clueNumber++;
-            let startCell = this.cells.find(c => c.caption === clueNumber);
+            let startCell = this.cells.find(c => c.label === clueNumber);
             let x: number;
             let y : number;
             

@@ -79,7 +79,7 @@ function emptyGridData(): IGrid {
                 id: x.toString() + y.toString(),
                 x,
                 y,
-                caption: null,
+                label: null,
                 content: "",
                 rightBar: false,
                 bottomBar: false,
@@ -186,19 +186,19 @@ function testGridData() {
 
     // set the captions
     let cell = data.cells.find(c => c.id === "00");
-    cell.caption = 1;
+    cell.label = 1;
 
     cell = data.cells.find(c => c.id === "20");
-    cell.caption = 2;
+    cell.label = 2;
 
     cell = data.cells.find(c => c.id === "40");
-    cell.caption = 3;
+    cell.label = 3;
 
     cell = data.cells.find(c => c.id === "02");
-    cell.caption = 4;
+    cell.label = 4;
 
     cell = data.cells.find(c => c.id === "04");
-    cell.caption = 5;
+    cell.label = 5;
 
     // set the blacked-out squares
     let cells: IGridCell[] = [];

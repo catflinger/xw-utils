@@ -23,7 +23,7 @@ export class UpdateCell implements IPuzzleModifier {
                     cell.shading = this.args.shading;
                 }
                 if (this.args.caption !== undefined) {
-                    cell.caption = this.args.caption;
+                    cell.label = this.args.caption;
                 }
                 if (this.args.content !== undefined) {
                     cell.content = this.args.content;

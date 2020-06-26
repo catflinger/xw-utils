@@ -107,7 +107,7 @@ export interface ITextParsingWarning {
 
 export interface IGridReference {
     id: string;
-    caption: number;
+    label: number;
     direction: Direction; 
 }
 
@@ -193,7 +193,7 @@ export interface IGridCell {
     id: string;
     x: number;
     y: number;
-    caption: number;
+    label: number;
     content: string;
     light: boolean;
     rightBar: boolean;

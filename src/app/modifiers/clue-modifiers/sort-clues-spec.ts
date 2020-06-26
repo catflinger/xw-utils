@@ -40,12 +40,12 @@ function addTestClues(puzzle: IPuzzle) {
         [
             {
                 id: "",
-                caption: 5,
+                label: 5,
                 direction: "across",
             },
             {
                 id: "",
-                caption: 3,
+                label: 3,
                 direction: "down",
             }
         ]
@@ -57,7 +57,7 @@ function addTestClues(puzzle: IPuzzle) {
         "This is one across (5)",
         [{
             id: "",
-            caption: 1,
+            label: 1,
             direction: "across"
         }]
     ));
@@ -68,7 +68,7 @@ function addTestClues(puzzle: IPuzzle) {
         "This is 2 down (5)",
         [{
             id: "",
-            caption: 2,
+            label: 2,
             direction: "down"
         }]
     ));
