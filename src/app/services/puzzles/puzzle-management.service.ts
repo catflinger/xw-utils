@@ -18,6 +18,7 @@ import { MarkAsUncommitted } from '../../modifiers/puzzle-modifiers/mark-as-unco
 import { IPuzzle } from 'src/app/model/interfaces';
 import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -233,6 +234,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
                 if (params.provider === "independent" || params.provider === "ios") {
                     new SetGridReferences().exec(puzzleM);
+                    new SetRedirects().exec(puzzleM);
                 }
 
                 this.localStorageService.putPuzzle(puzzleM);

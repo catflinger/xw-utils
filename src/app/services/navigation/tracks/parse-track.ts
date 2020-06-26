@@ -24,8 +24,17 @@ export const parseTrack: NavTrack = {
             type: "process",
             process: "set-grid-refs",
             actions: {
+                "ok": "set-redirects",
+                "error": "error",
+            }
+        },
+        {
+            name: "set-redirects",
+            type: "process",
+            process: "set-redirects",
+            actions: {
                 "ok": "linker",
-                "error": "link-error",
+                "error": "error",
             }
         },
         {
@@ -33,35 +42,15 @@ export const parseTrack: NavTrack = {
             type: "process",
             process: "link",
             actions: {
-                "ok": "validator",
-                "error": "link-error",
+                "ok": "mark-as-ready",
             }
         },
         {
-            name: "link-error",
-            type: "route",
-            route: "/link-error",
-            actions: {
-                "grid": "edit-grid-2",
-                "clues": "edit-clues",
-            }
-        },
-        {
-            name: "validator",
+            name: "mark-as-ready",
             type: "process",
-            process: "validate",
+            process: "mark-as-ready",
             actions: {
                 "ok": "finish",
-                "error": "link-error",
-            }
-        },
-        {
-            name: "validation-error",
-            type: "route",
-            route: "/validate-puzzle",
-            actions: {
-                "grid": "edit-grid-2",
-                "clues": "edit-clues",
             }
         },
         {

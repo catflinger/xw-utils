@@ -23,11 +23,11 @@
         </div>
 
         <div class="col">
-            <app-clue-list direction="across" (clueClick)="onClueClick($event)"></app-clue-list>
+            <app-clue-list direction="across" (clueClick)="onClueClick($event)" [followRedirects]="true"></app-clue-list>
         </div>
 
         <div class="col">
-            <app-clue-list direction="down" (clueClick)="onClueClick($event)"></app-clue-list>
+            <app-clue-list direction="down" (clueClick)="onClueClick($event)" [followRedirects]="true"></app-clue-list>
         </div>
     </div>
 

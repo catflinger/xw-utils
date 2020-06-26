@@ -13,6 +13,7 @@ import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { HousekeepClues } from 'src/app/modifiers/clue-modifiers/housekeep-clues';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 
 @Component({
   selector: 'app-clue-edit-list',
@@ -77,6 +78,7 @@ export class ClueEditListComponent implements OnInit {
                 new Clear(),
                 new SortClues(),
                 new SetGridReferences(),
+                new SetRedirects(),
                 );
             this.detRef.detectChanges();
             });

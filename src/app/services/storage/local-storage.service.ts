@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { IPuzzle, IPuzzleSummary } from 'src/app/model/interfaces';
-import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { UpgradeToLatestVersion } from 'src/app/modifiers/puzzle-modifiers/UpgradeToLatestVersion';
 
 @Injectable({

@@ -12,6 +12,7 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { NavProcessor } from './interfaces';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
+import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 
 @Injectable({
     providedIn: 'root'
@@ -81,9 +82,14 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                 this.activePuzzle.updateAndCommit(new SetGridReferences());
                 action = Promise.resolve("ok");
                 break;
-    
-            case "validate":
-                action = this.validate();
+
+            case "set-redirects":
+                this.activePuzzle.updateAndCommit(new SetRedirects());
+                action = Promise.resolve("ok");
+                break;
+
+            case "mark-as-ready":
+                action = this.markAsReady();
                 break;
 
             default:
@@ -116,7 +122,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         return Promise.resolve(action);
     }
 
-    private validate(): Promise<string> {
+    private markAsReady(): Promise<string> {
 
         // TO DO: do some proper validation here...
         

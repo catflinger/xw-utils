@@ -3,6 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { Alert, AlertType } from '../common';
 import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
+import { AppResultSymbols } from 'src/app/services/common';
 
 export type OpenPuzzleAction = "openByDate" | "openLatest";
 
@@ -144,7 +145,34 @@ export class AppService implements OnDestroy {
         this.alerts.push(new Alert(type, message));
         this.emitNext();
     }
+    
+    public setAlertError(message: string, error: any) {
+        let errorInfo = "";
 
+        try {
+            if (error === AppResultSymbols.OK) {
+                errorInfo = "";
+            } else if (error === AppResultSymbols.AuthorizationFailure) {
+                errorInfo = "Authentication failure. A valid username and password is required.";
+            } else if (error === AppResultSymbols.Error) {
+                errorInfo = "An error has occurred.";
+            } else if (typeof error === "string") {
+                errorInfo = error;
+            } else if (typeof error === "object" && error["message"] && typeof error["message"] === "string") {
+                errorInfo = error["message"];
+            } else if (typeof error === "object") {
+                errorInfo = JSON.stringify(error);
+            } else {
+                errorInfo = error;
+            }
+            this.alerts.push(new Alert("danger", message + " " + errorInfo));
+        
+        } catch {
+            this.alerts.push(new Alert("danger", message));
+        }
+        this.emitNext();
+    }
+    
     public clearAlerts() {
         this.alerts = [];
         this.emitNext();

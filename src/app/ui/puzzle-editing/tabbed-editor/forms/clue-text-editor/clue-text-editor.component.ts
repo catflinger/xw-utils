@@ -14,6 +14,7 @@ import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
+import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 
 export interface ClueEditModel {
     id: string;
@@ -141,6 +142,7 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
 
             mods.push(
                 new SetGridReferences([this.clue.id]),
+                new SetRedirects(),
                 new ValidateLetterCounts(),
                 new SortClues(),
                 //new Clear(),

@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
+import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 
 @Component({
   selector: 'app-add-clue',
@@ -83,6 +84,7 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
                 id,
             ),
             new SetGridReferences([id]),
+            new SetRedirects(),
             new SortClues(),
             );
         this.close.emit();

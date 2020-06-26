@@ -19,10 +19,18 @@ export class SelectClue implements IPuzzleModifier {
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
 
             if (clue) {
-                clue.highlight = true;
+                let redirect = null;
+
+                if (this.followRedirects && clue.redirect) {
+                    redirect = puzzle.clues.find(c => c.id === clue.redirect);
+                }
+
+                let target = redirect || clue;
+
+                target.highlight = true;
 
                 if (gridX) {
-                    clue.link.gridRefs.forEach((gridRef) => {
+                    target.link.gridRefs.forEach((gridRef) => {
                         let cells = gridX.getGridEntryFromReference(gridRef);
                         if (cells.length) {
                             cells.forEach(cell => {
@@ -33,11 +41,6 @@ export class SelectClue implements IPuzzleModifier {
                         }
                     });
                 }
-            } else if (clue.redirect && this.followRedirects) {
-                // TO DO: ... folow redirect...
-                puzzle.clues.forEach(target => {
-                    
-                })
             }
         }
     }
