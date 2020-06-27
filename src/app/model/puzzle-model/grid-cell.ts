@@ -27,8 +27,10 @@ export class GridCell implements IGridCell {
 
         if (data.caption && typeof data.caption === "string") {
             this.label = parseInt(data.caption);
-        } else {
+        } else if (data.caption && typeof data.caption === "number") {
             this.label = data.caption;
+        } else {
+            this.label = data.label;
         }
     }
 }

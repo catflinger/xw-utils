@@ -1,6 +1,6 @@
 import { IPuzzleModifier } from '../puzzle-modifier';
 import { Clear } from '../puzzle-modifiers/clear';
-import { IPuzzle } from '../../model/interfaces';
+import { IPuzzle, IClue } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 
 export class SelectClue implements IPuzzleModifier {
@@ -19,7 +19,7 @@ export class SelectClue implements IPuzzleModifier {
             let clue = puzzle.clues.find((clue) => clue.id === this.clueId);
 
             if (clue) {
-                let redirect = null;
+                let redirect: IClue = null;
 
                 if (this.followRedirects && clue.redirect) {
                     redirect = puzzle.clues.find(c => c.id === clue.redirect);
@@ -32,13 +32,11 @@ export class SelectClue implements IPuzzleModifier {
                 if (gridX) {
                     target.link.gridRefs.forEach((gridRef) => {
                         let cells = gridX.getGridEntryFromReference(gridRef);
-                        if (cells.length) {
-                            cells.forEach(cell => {
-                                // find the matching cell in the mutable puzzle
-                                let cellm = puzzle.grid.cells.find(c => c.id === cell.id);
-                                cellm.highlight = true;
-                            });
-                        }
+                        cells.forEach(cell => {
+                            // find the matching cell in the mutable puzzle
+                            let cellm = puzzle.grid.cells.find(c => c.id === cell.id);
+                            cellm.highlight = true;
+                        });
                     });
                 }
             }
