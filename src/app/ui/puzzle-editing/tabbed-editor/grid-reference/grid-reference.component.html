@@ -1,7 +1,7 @@
 <form [formGroup]="form">
     <div class="border border-secondary rounded d-inline-block p-0 mr-3">
         <div class="d-inline-block px-3">
-            <span *ngIf="!editable">{{gridRef.caption}} {{gridRef.direction}}</span>
+            <span *ngIf="!editable">{{gridRef.label}} {{gridRef.direction}}</span>
             <input type="number" min="1" max="99" step="1" formControlName="caption" *ngIf="editable">
         </div>
         <button type="button" class="btn btn-primary" (click)="onSave()" *ngIf="editable">Save</button>

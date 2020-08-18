@@ -73,7 +73,10 @@ export class ContentGeneratorListLayout implements ContentGenerator {
     }
 
     private writeClue(clue: Clue, publishOptions: PublishOptions) {
-        let markup = this.writeClueItem(this.writeText(clue.caption, publishOptions.clueStyle) + this.writeClueText(clue.chunks, publishOptions));
+        let markup = this.writeClueItem(
+            this.writeText(clue.caption, publishOptions.clueStyle) + 
+            this.writeText(". ", publishOptions.clueStyle) + 
+            this.writeClueText(clue.chunks, publishOptions));
 
         if (publishOptions.textCols.length === 1) {
             let text = clue.answers[0] || "";

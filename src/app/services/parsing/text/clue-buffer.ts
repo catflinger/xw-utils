@@ -76,7 +76,9 @@ export class ClueBuffer {
         let result: GridReference[] = [];
         const expression = new RegExp(String.raw`\s*\*?(?<caption>\d{1,2})\s*(?<direction>(across|down|ac|dn))?`);
 
-        let parts = clueCaption.split(",");
+        const separator = clueCaption.indexOf(",") < 0 ? "/" : ",";
+
+        let parts = clueCaption.split(separator);
 
         parts.forEach((part) => {
             let label: number;
