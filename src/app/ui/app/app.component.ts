@@ -9,6 +9,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
+import { TraceService } from 'src/app/services/app/trace.service';
 
 @Component({
     selector: 'app-root',
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private appService: AppService,
         private settingsService: AppSettingsService,
+        public traceService: TraceService,
         private detref: ChangeDetectorRef,
         ) {
     }

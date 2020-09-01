@@ -8,6 +8,7 @@ import { ProviderService } from 'src/app/services/puzzles/provider.service';
 import { ParseData } from 'src/app/services/parsing/text/parse-data';
 import { TextParsingOptions } from 'src/app/services/parsing/text/types';
 import { UpdateInfo } from '../puzzle-modifiers/update-info';
+import { TraceService } from 'src/app/services/app/trace.service';
 
 // interface GridReference {
 //     // for example: 2 down or 23 across
@@ -19,10 +20,13 @@ export class ParseText implements IPuzzleModifier {
 
     constructor(
         private textParsingService: TextParsingService,
-        private providerService: ProviderService
+        private providerService: ProviderService,
+        private traceService: TraceService,
     ) { }
 
     public exec(puzzle: IPuzzle): void {
+        this.traceService.clearTrace();
+        
         let parseData = new ParseData();
         parseData.clueDataType = "text";
         parseData.rawData = puzzle.provision.source;
@@ -56,7 +60,7 @@ export class ParseText implements IPuzzleModifier {
                 if (!puzzle.info.title) {
 
                     // first look for an FT style title
-                    let titleExpression = new RegExp(String.raw`(no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
+                    let titleExpression = new RegExp(String.raw`(no|no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
 
                     let match = titleExpression.exec(line);
 

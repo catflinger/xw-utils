@@ -19,10 +19,10 @@ export class Line {
             result = "downMarker";
         } else if (this.hasStartMarker && this.hasEndMarker) {
             result = "clue";
-        } else if (this.hasStartMarker) {
-            result = "partialClueStart";
         } else if (this.hasEndMarker || this.hasPartialEndMarker) {
             result = "partialClueEnd";
+        } else if (this.hasStartMarker) {
+            result = "partialClueStart";
         }
 
         return result;

@@ -6,6 +6,8 @@ import { AppSettingsService } from './app-settings.service';
 })
 export class TraceService {
 
+    private traceItems: string[] = [];
+
     constructor(private settingsService: AppSettingsService) { 
     }
 
@@ -21,4 +23,19 @@ export class TraceService {
         }
     }
 
+    public clearTrace() {
+        if (this.settingsService.settings.traceOutput) {
+            this.traceItems = [];
+        }
+    }
+
+    public addTrace(message: string) {
+        if (this.settingsService.settings.traceOutput) {
+            this.traceItems.push(message);
+        }
+    }
+
+    public getTrace(): ReadonlyArray<string> {
+        return this.traceItems;
+    }
 }

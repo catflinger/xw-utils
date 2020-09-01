@@ -13,6 +13,7 @@ import { NavProcessor } from './interfaces';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
+import { TraceService } from '../app/trace.service';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +26,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
         private puzzleManager: IPuzzleManager,
         private textParsingService: TextParsingService,
         private providerService: ProviderService,
+        private traceService: TraceService,
     ) {}
 
     async exec(processName: string, appData: AppTrackData): Promise<string> {
@@ -104,7 +106,7 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
         try {
             this.activePuzzle.updateAndCommit(
-                new ParseText(this.textParsingService, this.providerService),
+                new ParseText(this.textParsingService, this.providerService, this.traceService),
                 new SyncGridContent());
                 
             const errors = this.activePuzzle.puzzle.provision.parseErrors;

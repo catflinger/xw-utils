@@ -88,6 +88,7 @@
 <div class="row bg-light" *ngIf="settings.traceOutput">
     <div class="col">
         <div>OUTPUT 1</div>
+        <div *ngFor="let message of traceService.getTrace()">{{message}}</div>
     </div>
     <div class="col">
         <div>OUTPUT 2</div>

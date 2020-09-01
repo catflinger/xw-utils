@@ -4,6 +4,7 @@ import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, 
 import { TextParsingOptions } from '../types';
 import { TokenGroup } from 'src/app/model/puzzle-model/token-group';
 import { IParseToken } from 'src/app/model/interfaces';
+import { TraceService } from 'src/app/services/app/trace.service';
 
 export class TokenList {
     constructor(private _tokens: ReadonlyArray<IParseToken>) {}
@@ -39,7 +40,7 @@ export class TokenList {
 })
 export class TokeniserService {
 
-    constructor() { }
+    constructor(private trace: TraceService) { }
 
     public parse(data: string, options?: TextParsingOptions): TokenList {
         let tokens: IParseToken[] = [];
@@ -51,6 +52,9 @@ export class TokeniserService {
         tokens.push(new StartMarkerToken());
 
         lines.forEach(line => {
+
+            this.trace.addTrace(`TOKENISER: ${line.lineType} [${line.rawText}] `);
+            
             switch (line.lineType) {
                 case "acrossMarker":
                     tokens.push(new AcrossMarkerToken(line));
