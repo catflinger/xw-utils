@@ -12,6 +12,7 @@ import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ContentGeneratorListLayout } from 'src/app/services/content-generator/content-generator-list-layout';
 import { ContentGeneratorTableLayout } from 'src/app/services/content-generator/content-generator-table-layout';
 import { GridComponent } from '../../grid/grid/grid.component';
+import { fifteenSquaredBlack } from '../../common';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -26,7 +27,8 @@ export class PublishComponent implements OnInit, OnDestroy {
     public alreadyPublished = false;
     public gridOnly = false;
     public action: PublishActions = "nothing";
-    public debugContent: string ="";
+    public debugContent: string = "";
+    public readonly black = fifteenSquaredBlack;
 
     private subs: Subscription[] = [];
 

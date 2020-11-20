@@ -4,7 +4,7 @@ import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { GridControlOptions, GridParameters, GridParametersSmall, GridParametersLarge } from '../../common';
+import { GridControlOptions, GridParameters, GridParametersSmall, GridParametersLarge, fifteenSquaredBlack } from '../../common';
 import { GridPainterService } from '../grid-painter.service';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
@@ -28,6 +28,7 @@ type GridInput = {
         height: string,
         width: string,
         border: string,
+        color:string,
     }, 
 }
 const editBorderWidth = 2;
@@ -41,6 +42,7 @@ const gridInputDefaults: GridInput = {
         height: "50px",
         width: "50px",
         border: `${editBorderWidth}px gold solid`,
+        color: "black",
     }
 };
 
@@ -206,7 +208,13 @@ export class GridComponent implements OnInit, AfterViewInit {
     public getDataUrl(): string {
         const canvas: HTMLCanvasElement = this.canvas.nativeElement;
         const context = canvas.getContext('2d');
-        this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, this.gridParams);
+        let params = { ...this.gridParams };
+            
+        if (this.options && this.options.color) {
+            params.gridColor = this.options.color;
+        }
+
+    this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params);
 
         return canvas.toDataURL();
     }
@@ -216,7 +224,14 @@ export class GridComponent implements OnInit, AfterViewInit {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
-            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, this.gridParams);
+
+            let params = { ...this.gridParams };
+            
+            if (this.options && this.options.color) {
+                params.gridColor = this.options.color;
+            }
+
+            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params);
         }
     }
 

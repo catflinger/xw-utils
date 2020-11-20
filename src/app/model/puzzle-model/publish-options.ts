@@ -10,7 +10,10 @@ export class PublishOptions implements IPublishOptions {
     public readonly layout: Layouts;
     public readonly spacing: Spacing;
 
+    public readonly useDefaults: boolean;
+
     constructor(data) {
+        this.useDefaults = typeof data.useDefaults === "undefined" ? true : !!data.useDefaults;
         this.includeGrid = !!(data.includeGrid);
         this.layout = data.layout ? data.layout : "table";
         this.spacing = data.spacing ? data.spacing : "medium";

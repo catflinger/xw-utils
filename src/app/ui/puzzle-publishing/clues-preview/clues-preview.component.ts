@@ -4,7 +4,7 @@ import { TextStyle } from 'src/app/model/puzzle-model/text-style';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription } from 'rxjs';
-import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
+import { fifteenSquaredBlack, fifteenSquaredBlue } from '../../common';
 
 export interface CluesPreviewOptions {
     count?: number;
@@ -14,7 +14,7 @@ export interface CluesPreviewOptions {
   selector: 'app-clues-preview',
   templateUrl: './clues-preview.component.html',
   styleUrls: ['./clues-preview.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CluesPreviewComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
@@ -25,6 +25,8 @@ export class CluesPreviewComponent implements OnInit, OnDestroy {
 
     public clues: Clue[];
     public publishOptions: PublishOptions;
+
+    public readonly black = fifteenSquaredBlack;
 
     @Input() public options: CluesPreviewOptions;
 
@@ -66,14 +68,12 @@ export class CluesPreviewComponent implements OnInit, OnDestroy {
         if (this.publishOptions) {
             return this.makeStyle(this.publishOptions.answerStyle);
         }
-        return {};
     }
 
     public makeClueStyle(): any {
         if (this.publishOptions) {
             return this.makeStyle(this.publishOptions.clueStyle);
         }
-        return {};
     }
 
     public get tdClass(): string[] {
