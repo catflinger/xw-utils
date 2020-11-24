@@ -38,6 +38,7 @@ import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info
 import { AboutComponent } from './ui/home/about/about.component';
 import { IssuesComponent } from './ui/home/issues/issues.component';
 import { AdminComponent } from './ui/general/admin/admin.component';
+import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 
 const routes: Routes = [
 
@@ -53,6 +54,7 @@ const routes: Routes = [
     { path: "publish-options", component: PublishOptionsComponent },
     { path: "publish-grid", component: PublishGridComponent },
     { path: "publish-preamble", component: PublishPreambleComponent },
+    { path: "publish-preview", component: PublishPreviewComponent },
     { path: "publish-login", component: PublishLoginComponent },
     { path: "publish", component: PublishComponent },
     { path: "publish-complete", component: PublishCompleteComponent },

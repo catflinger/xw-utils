@@ -7,7 +7,7 @@ import { MockTokeniserService } from './tokeniser/mock-tokeniser.service';
 import { IParseContext } from './text-parsing-context';
 import { IParseToken } from 'src/app/model/interfaces';
 
-let mockTokeniser: MockTokeniserService = new MockTokeniserService();
+let mockTokeniser: MockTokeniserService = new MockTokeniserService(null);
 
 describe('TextParsingService', () => {
     

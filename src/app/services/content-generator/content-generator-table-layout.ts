@@ -18,7 +18,7 @@ export class ContentGeneratorTableLayout implements ContentGenerator {
     private buffer: string = "";
     private tdPadding = "3px";
 
-    // TO DO: IMPORTANT!
+    // IMPORTANT!
     // review this component for XSS vunerabilities
 
     // TO DO: rewrite this using the neater back-quote syntax, as used in ContentGeneratorListLayout

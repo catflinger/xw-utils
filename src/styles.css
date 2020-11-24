@@ -3,3 +3,15 @@
 .nopad .ql-editor {
     padding: 0 !important;
 }
+
+.fts-answer {
+    font-weight: bold;
+    color: #666666;
+}
+.fts-clue {
+    color: #0000FF;
+}
+.fts-definition {
+    color: #0000FF;
+    text-decoration: underline;
+}

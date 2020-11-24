@@ -161,6 +161,7 @@ export interface ITextStyle {
     bold: boolean;
     italic: boolean;
     underline: boolean;
+    class: string;
 }
 
 export interface ITextColumn {

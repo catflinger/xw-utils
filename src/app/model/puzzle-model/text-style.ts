@@ -6,6 +6,7 @@ export class TextStyle implements ITextStyle {
         public readonly bold: boolean;
         public readonly italic: boolean;
         public readonly underline: boolean;
+        public readonly class: string;
 
         constructor(data) {
             this.name = data.name;
@@ -13,6 +14,7 @@ export class TextStyle implements ITextStyle {
             this.bold = data.bold || false;
             this.italic = data.italic || false;
             this.underline = data.underline || false;
+            this.class = data.class || `fts-${data.name}`;
         }
 
         public toCssStyleString(): string {

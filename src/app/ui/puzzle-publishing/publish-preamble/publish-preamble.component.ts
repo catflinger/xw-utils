@@ -84,27 +84,38 @@ export class PublishPreambleComponent implements OnInit {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    onContinue() {
+    public onContinue() {
         this.activePuzzle.updateAndCommit(new UpdatePreamble(
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
 
-        if (this.authService.getCredentials().authenticated) {
+        if (this.appSettings.traceOutput) {
+            this.navService.navigate("preview");
+        } else if (this.authService.getCredentials().authenticated) {
             this.navService.navigate("continue");
         } else {
             this.navService.navigate("authenticate");
         }
     }
 
-    onBack() {
+    public onBack() {
         this.activePuzzle.updateAndCommit(new UpdatePreamble(
             this.form.value.title,
             this.form.value.header,
             this.form.value.body));
             
             this.navService.navigate("back");
-        }
+    }
+
+    public onPreview() {
+        this.activePuzzle.updateAndCommit(new UpdatePreamble(
+            this.form.value.title,
+            this.form.value.header,
+            this.form.value.body));
+            
+            this.navService.navigate("preview");
+    }
 
     public getUsername(): string {
         return this.appSettings && this.appSettings.username ? 

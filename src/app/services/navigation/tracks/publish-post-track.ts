@@ -33,6 +33,7 @@ export const publishPostTrack: NavTrack = {
             type: "route",
             route: "/publish-preamble",
             actions: {
+                "preview": "publish-preview",
                 "continue": "publish",
                 "authenticate": "publish-login",
                 "back": "publish-options",
@@ -45,6 +46,14 @@ export const publishPostTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "back": "publish-preamble",
+            }
+        },
+        {
+            name: "publish-preview",
+            type: "route",
+            route: "/publish-preview",
+            actions: {
+                "continue": "publish-preamble",
             }
         },
         {

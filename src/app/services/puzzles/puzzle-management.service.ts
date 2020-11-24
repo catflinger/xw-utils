@@ -358,6 +358,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                         bold: false,
                         italic: false,
                         underline: false,
+                        class: "fts-answer",
                     },
                     {
                         name: "clue",
@@ -365,6 +366,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                         bold: false,
                         italic: false,
                         underline: false,
+                        class: "fts-clue",
                     },
                     {
                         name: "definition",
@@ -372,6 +374,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                         bold: false,
                         italic: false,
                         underline: false,
+                        class: "fts-definition",
                     },
                 ],
                 textCols: [

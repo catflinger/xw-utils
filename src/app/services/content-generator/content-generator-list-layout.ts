@@ -14,10 +14,12 @@ const marginSizes = {
     large: "8px",
 }
 
+const prefix = "fts";
+
 export class ContentGeneratorListLayout implements ContentGenerator {
     private marginSize: string = "3px";
 
-    // TO DO: IMPORTANT!
+    // IMPORTANT!
     // review this component for XSS vunerabilities
 
     constructor() {
@@ -28,9 +30,13 @@ export class ContentGeneratorListLayout implements ContentGenerator {
 
         const markup =  `
         <div>
-            <div>
+            <div class="entry-title">
                 ${this.writeQuillDelta(puzzle.notes.header)}
-                <!-- MORE -->
+            </div>
+
+            <!-- MORE -->
+
+            <div>
                 ${this.writeQuillDelta(puzzle.notes.body)}
             </div>
 
@@ -38,7 +44,7 @@ export class ContentGeneratorListLayout implements ContentGenerator {
                 ${this.writeGridUrl(gridUrl)}
             </div>
 
-            <div>
+            <div class="fts-across-down">
                 ACROSS
             </div>
             
@@ -46,7 +52,7 @@ export class ContentGeneratorListLayout implements ContentGenerator {
                 ${this.writeClues(puzzle.clues.filter(c => c.group === "across"), puzzle.publishOptions)}
             </div>
 
-            <div>
+            <div class="fts-across-down">
                 DOWN
             </div>
             
@@ -54,7 +60,7 @@ export class ContentGeneratorListLayout implements ContentGenerator {
             ${this.writeClues(puzzle.clues.filter(c => c.group === "down"), puzzle.publishOptions)}
             </div>
 
-            <div>
+            <div class="fts-footer">
                 ${this.writeQuillDelta(puzzle.notes.footer)}
             </div>
         </div>
@@ -63,32 +69,46 @@ export class ContentGeneratorListLayout implements ContentGenerator {
         return markup;
     }
 
-    private writeClueItem(content: string) {
-        const markup = `
+    private writeClueItem(content: string, publishOptions: PublishOptions) {
+        const markup = publishOptions.useDefaults ?
+         `
+        <div class="${prefix}-clue-item-${this.marginSize}">
+            ${content}
+        </div>
+        ` :
+        `
         <div style="margin-top:${this.marginSize}">
             ${content}
         </div>
         `;
+
         return markup;
     }
 
     private writeClue(clue: Clue, publishOptions: PublishOptions) {
         let markup = this.writeClueItem(
-            this.writeText(clue.caption, publishOptions.clueStyle) + 
-            this.writeText(". ", publishOptions.clueStyle) + 
-            this.writeClueText(clue.chunks, publishOptions));
+            this.writeText(clue.caption, publishOptions.useDefaults, publishOptions.clueStyle) + 
+            this.writeText(". ", publishOptions.useDefaults, publishOptions.clueStyle) + 
+            this.writeClueText(clue.chunks, publishOptions),
+            publishOptions);
 
         if (publishOptions.textCols.length === 1) {
             let text = clue.answers[0] || "";
-            markup += this.writeClueItem(this.writeText(text, publishOptions.answerStyle));
+            markup += this.writeClueItem(
+                this.writeText(text, publishOptions.useDefaults, publishOptions.answerStyle),
+                publishOptions);
         } else {
             publishOptions.textCols.forEach((col, index) => {
                 let caption = col.caption || "";
                 let text = clue.answers[index] || "";
-                markup += this.writeClueItem(caption + this.writeText(text, publishOptions.answerStyle));
+                markup += this.writeClueItem(
+                    caption + this.writeText(text, publishOptions.useDefaults, publishOptions.answerStyle),
+                    publishOptions);
             });
         }        
-        markup += this.writeClueItem(this.writeQuillDelta(clue.comment));
+        markup += this.writeClueItem(
+            this.writeQuillDelta(clue.comment),
+            publishOptions);
 
         return markup;
     }
@@ -105,17 +125,19 @@ export class ContentGeneratorListLayout implements ContentGenerator {
         return markup;
     }
 
-    private writeClues(clues: Clue[], publishOptions): string {
+    private     writeClues(clues: Clue[], publishOptions): string {
         let markup = "";
         clues.forEach(clue => markup += this.writeClue(clue, publishOptions));
         return markup;
     }
 
-    private writeText(text: string, textStyle?: TextStyle) {
+    private writeText(text: string, useDefaults: boolean, textStyle?: TextStyle) {
         let markup = "";
 
         if (textStyle) {
-            markup = `<span style="${textStyle.toCssStyleString()}">${escape(text)}</span>`;
+            markup = useDefaults ?
+             `<span class="${prefix}-${textStyle.name}">${escape(text)}</span>` :
+             `<span style="${textStyle.toCssStyleString()}">${escape(text)}</span>`;
         } else {
             markup = escape(text);
         }
@@ -144,7 +166,9 @@ export class ContentGeneratorListLayout implements ContentGenerator {
                 publishOptions.definitionStyle :
                 publishOptions.clueStyle;
 
-                markup += `<span style="${textStyle.toCssStyleString()}">${chunk.text}</span>`;
+                markup += publishOptions.useDefaults ? 
+                `<span class="${prefix}-${textStyle.name}">${chunk.text}</span>` :
+                `<span style="${textStyle.toCssStyleString()}">${chunk.text}</span>`;
         });
 
         return markup;
