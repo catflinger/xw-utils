@@ -26,6 +26,18 @@ export class ListLayout implements ContentGenerator {
             // annotation
             new Tag("div", new QuillNode(puzzle.notes.body)),
 
+            // grid
+            puzzle.publishOptions.includeGrid ? 
+                new Tag("div", 
+                    new Tag("img", 
+                        new Attribute("src", gridUrl),
+                        new Attribute("alt", "picture of the completed grid")
+                    )
+                )
+                :
+                null,
+
+            // clues
             new Tag("div", new Text("ACROSS")),
             new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions))),
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
@@ -9,6 +9,7 @@ import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppService, AppStatus } from '../../general/app.service';
+import { GridComponent } from '../../grid/grid/grid.component';
 
 @Component({
     selector: 'app-publish-preview',
@@ -17,13 +18,18 @@ import { AppService, AppStatus } from '../../general/app.service';
 })
 export class PublishPreviewComponent implements OnInit {
 
-    public puzzle = null;
+    public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public appSettings: AppSettings;
     public debugContent: string = "";
+    public username: string = null;
 
     private subs: Subscription[] = [];
+    private gridControl: GridComponent;
 
+    @ViewChild(GridComponent, { static: true }) 
+    set content(content: GridComponent) { this.gridControl = content };
+    
     constructor(
         private navService: NavService<AppTrackData>,
         private appService: AppService,
@@ -36,6 +42,8 @@ export class PublishPreviewComponent implements OnInit {
     ngOnInit() {
         window.scrollTo(0, 0);
         
+        this.username = this.authService.getCredentials().username;
+
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
             this.detRef.detectChanges();
@@ -53,7 +61,7 @@ export class PublishPreviewComponent implements OnInit {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
-                        this.debugContent = this.listLayout.getContent(puzzle, "http://aplace/aresource");
+                        this.debugContent = this.listLayout.getContent(puzzle, this.getGridImage());
                         this.detRef.detectChanges();
                     }
                 ));
@@ -68,4 +76,14 @@ export class PublishPreviewComponent implements OnInit {
         this.navService.navigate("continue");
     }
 
-}
+    private getGridImage(): string {
+        let result: string = null;
+
+        try {
+            result = this.gridControl.getDataUrl(); //.replace("data:image/png;base64,", "");
+        } catch (error) {
+            result = null;
+        }
+
+        return result;
+    }}

@@ -16,7 +16,7 @@ export class Tag extends ContentNode {
         let buffer = `<${this.name}`;
 
         this.children
-        .filter(ch => ch.isAttribute)
+        .filter(ch => ch && ch.isAttribute)
         .forEach(attr => {
             buffer += attr.toString();
         });
@@ -24,7 +24,7 @@ export class Tag extends ContentNode {
         buffer += `>\n`;
 
         this.children
-        .filter(ch => !ch.isAttribute)
+        .filter(ch => ch && !ch.isAttribute)
         .forEach(tag => {
             buffer += tag.toString();
         });
