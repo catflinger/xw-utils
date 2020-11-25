@@ -2,6 +2,7 @@ import { IClueEditorForm } from '../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../clue-editor.service';
 import { OnDestroy } from '@angular/core';
 
+// TODO: Add Angular decorator.
 export class EditorFormBase implements IClueEditorForm, OnDestroy {
     
     protected readonly instanceId: string = null;
