@@ -56,7 +56,7 @@ export class ParseText implements IPuzzleModifier {
                 if (!puzzle.info.title) {
 
                     // first look for an FT style title
-                    let titleExpression = new RegExp(String.raw`(no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
+                    let titleExpression = new RegExp(String.raw`(no|no\.|crossword)\s+(?<serialNumber>[0-9,]+)\s+(set)?\s*by\s+(?<setter>[A-Za-z]+)`, "i");
 
                     let match = titleExpression.exec(line);
 
