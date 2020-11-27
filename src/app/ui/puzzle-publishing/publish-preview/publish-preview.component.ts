@@ -4,6 +4,7 @@ import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { AppSettings, ContentGenerator } from 'src/app/services/common';
+import { TableLayout } from 'src/app/services/content-generator/table-layout';
 import { ListLayout } from 'src/app/services/content-generator/list-layout';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
@@ -37,6 +38,7 @@ export class PublishPreviewComponent implements OnInit {
         private appSettingsService: AppSettingsService,
         private activePuzzle: IActivePuzzle,
         private listLayout: ListLayout,
+        private tableLayout: TableLayout,
         private detRef: ChangeDetectorRef,) { }
 
     ngOnInit() {
@@ -61,7 +63,10 @@ export class PublishPreviewComponent implements OnInit {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
-                        this.debugContent = this.listLayout.getContent(puzzle, this.getGridImage());
+                        if (puzzle) {
+                            const generator = puzzle.publishOptions.layout === "table" ? this.tableLayout : this.listLayout;
+                            this.debugContent = generator.getContent(puzzle, this.getGridImage());
+                        }
                         this.detRef.detectChanges();
                     }
                 ));
