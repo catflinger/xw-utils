@@ -4,14 +4,3 @@
     padding: 0 !important;
 }
 
-.fts-answer {
-    font-weight: bold;
-    color: #666666;
-}
-.fts-clue {
-    color: #1e72bd;
-}
-.fts-definition {
-    color: #1e72bd;
-    text-decoration: underline;
-}

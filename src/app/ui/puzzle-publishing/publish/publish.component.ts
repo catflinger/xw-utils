@@ -9,10 +9,10 @@ import { AuthService } from 'src/app/services/app/auth.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
-import { ContentGeneratorListLayout } from 'src/app/services/content-generator/content-generator-list-layout';
-import { ContentGeneratorTableLayout } from 'src/app/services/content-generator/content-generator-table-layout';
 import { GridComponent } from '../../grid/grid/grid.component';
-import { fifteenSquaredBlack } from '../../common';
+import { fifteenSquaredGridBlack } from '../../common';
+import { ListLayout } from 'src/app/services/content-generator/list-layout';
+import { TableLayout } from 'src/app/services/content-generator/table-layout';
 
 export type PublishActions = "nothing" | "upload" | "publish" | "copy-post" | "copy-grid" | "replace-post" | "replace-grid";
 
@@ -28,7 +28,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public gridOnly = false;
     public action: PublishActions = "nothing";
     public debugContent: string = "";
-    public readonly black = fifteenSquaredBlack;
+    public readonly gidColor = fifteenSquaredGridBlack;
 
     private subs: Subscription[] = [];
 
@@ -196,8 +196,8 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     private getContentForDebug(puzzle: Puzzle, gridUrl: string) {
         let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
-            new ContentGeneratorListLayout():
-            new ContentGeneratorTableLayout();
+            new ListLayout():
+            new TableLayout();
 
             return generator.getContent(puzzle, gridUrl);
     }

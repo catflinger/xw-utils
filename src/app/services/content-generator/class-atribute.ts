@@ -1,14 +1,17 @@
 import { ContentNode } from './content-node';
 
-export class Attribute extends ContentNode {
+export class ClassAttribute extends ContentNode {
 
     constructor(
-        name: string,
         public  readonly value: string,
     ) {
-            super(name, true);
+            super("class", true);
     }
-
+    
+    public get composable(): boolean {
+        return true;
+    }
+    
     public toString(): string {
         return ` ${this.name}="${this.value}"`;
     }

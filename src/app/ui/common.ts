@@ -7,8 +7,9 @@ export type UIResult = "ok" | "cancel" | "back";
 
 export type GridSizes = "small" | "large";
 
-export const fifteenSquaredBlack = "#666666";
-export const fifteenSquaredBlue = "#1e72bd";
+export const fifteenSquaredBlack = "#898989";
+export const fifteenSquaredBlue = "#4682b4";
+export const fifteenSquaredGridBlack = "#444444";
 
 export class Alert {
     constructor(public readonly type: AlertType, public readonly message: string) {}

@@ -11,6 +11,8 @@ import { QuillNode } from './quill-node';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { TextStyleName } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
+import { ClassAttribute } from './class-atribute';
+import { StyleAttribute } from './style-attribute';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +22,8 @@ export class TableLayout implements ContentGenerator {
     public getContent(puzzle: Puzzle, gridUrl: string): string {
 
         const root = new Tag("div",
-            // heading
+        new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
+        // heading
             new Tag("div", new QuillNode(puzzle.notes.header)),
             new Comment("MORE"),
 
@@ -75,7 +78,7 @@ export class TableLayout implements ContentGenerator {
             new Tag("tr",
                 new Tag("td", new Tag("span", 
                     new Text(clue.caption)),
-                    this.makeTextStyleAttribute("clue", publishOptions)
+                    this.makeTextStyleAttribute("clue", publishOptions),
                 ),
                 new Tag("td", new Tag("span",  new Text(clue.answers[0]), this.makeTextStyleAttribute("answer", publishOptions))),
                 
@@ -96,8 +99,8 @@ export class TableLayout implements ContentGenerator {
         const style = publishOptions.getStyle(styleName);
 
         return publishOptions.useDefaults ? 
-            new Attribute("class", style.class) :
-            new Attribute("style", style.toCssStyleString());
+            new ClassAttribute(style.class) :
+            new StyleAttribute(style.toCssStyleString());
     }
 
     public makeChunkStyleAttribute(chunk: TextChunk, publishOptions: PublishOptions): ContentNode {
@@ -105,7 +108,7 @@ export class TableLayout implements ContentGenerator {
         const definitionStyle = publishOptions.getStyle("definition");
 
         return publishOptions.useDefaults ? 
-            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
+            new ClassAttribute(chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
+            new StyleAttribute(chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
     }
 }

@@ -1,0 +1,21 @@
+.fts-answer {
+    font-weight: bold;
+    color: #898989;
+}
+.fts-clue {
+    color: #4682b4;
+}
+.fts-definition {
+    color: #4682b4;
+    text-decoration: underline;
+}
+
+.fts-mt-s {
+    margin-top: 0px;
+}
+.fts-mt-m {
+    margin-top: 3px;
+}
+.fts-mt-l {
+    margin-top: 5px;
+}

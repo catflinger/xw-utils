@@ -9,7 +9,8 @@ import { Text } from "./text";
 import { ContentNode } from './content-node';
 import { QuillNode } from './quill-node';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
-import { TextStyle } from 'src/app/model/puzzle-model/text-style';
+import { ClassAttribute } from './class-atribute';
+import { StyleAttribute } from './style-attribute';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +20,8 @@ export class ListLayout implements ContentGenerator {
     public getContent(puzzle: Puzzle, gridUrl: string): string {
 
         const root = new Tag("div",
+            new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
+
             // heading
             new Tag("div", new QuillNode(puzzle.notes.header)),
             new Comment("MORE"),
@@ -57,35 +60,44 @@ export class ListLayout implements ContentGenerator {
         const answerStyle = publishOptions.getStyle("answer");
 
         return new Tag("div",
-        
+            new Attribute("class", "fts-group"),
+
             // write the clue
             new Tag("div",
-                publishOptions.useDefaults ? 
-                    new Attribute("class", clueStyle.class) :
-                    new Attribute("style", clueStyle.toCssStyleString()),
-                new Text(clue.caption),
-                new Text(". "),
-                ...clue.chunks.map(chunk => 
-                    new Tag("span", 
+                new Attribute("class", "fts-subgroup"),
+
+                // caption
+                new Tag("span",
+                    new Text(clue.caption),
+                    new Text(". "),
+                    publishOptions.useDefaults ?
+                        new ClassAttribute(clueStyle.class) :
+                        new StyleAttribute(clueStyle.toCssStyleString()),
+                ),
+
+                // maked-up clue text with definition
+                ...clue.chunks.map(chunk =>
+                    new Tag("span",
                         publishOptions.useDefaults ? 
-                            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-                            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
-                        new Text(chunk.text), 
+                            new ClassAttribute(chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
+                            new StyleAttribute(chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
+                        new Text(chunk.text),
                     )
                 ),
             ),
 
             // write the answer
             new Tag("div",
-                new Attribute("class", "fts-answer"),
+                new Attribute("class", "fts-subgroup"),
                 publishOptions.useDefaults ? 
-                    new Attribute("class", answerStyle.class) :
-                    new Attribute("style", answerStyle.toCssStyleString()),
+                    new ClassAttribute(answerStyle.class) :
+                    new StyleAttribute(answerStyle.toCssStyleString()),
                 new Text(clue.answers[0]),
             ),
 
             // write the comments
             new Tag("div",
+                new Attribute("class", "fts-subgroup"),
                 new QuillNode(clue.comment)
             )
         );

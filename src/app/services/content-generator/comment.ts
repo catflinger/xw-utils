@@ -8,7 +8,9 @@ export class Comment extends ContentNode {
             super(null, false);
     }
 
-    public toString(): string {
-        return `<!--- ${this.value} -->\n`;
+    public toString(indent: boolean = false): string {
+        const newline = indent ? "\n" : "";
+
+        return `<!--- ${this.value} -->${newline}`;
     }
 }
