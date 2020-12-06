@@ -22,8 +22,7 @@ export class Tag extends ContentNode {
 
         // TO DO: Learn more about rxjs and improve this
 
-        // consolidate the attributes so that we do dot get multiple
-        // attributes with the same name on a tag
+        // consolidate so that we do dot get multiple attributes with the same name on a tag
         from(this.children)
         .pipe(
             filter((ch: ContentNode) => ch && ch.isAttribute),

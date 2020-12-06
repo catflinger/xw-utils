@@ -9,8 +9,6 @@ import { Text } from "./text";
 import { ContentNode } from './content-node';
 import { QuillNode } from './quill-node';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
-import { ClassAttribute } from './class-atribute';
-import { StyleAttribute } from './style-attribute';
 
 @Injectable({
     providedIn: 'root'
@@ -41,10 +39,10 @@ export class ListLayout implements ContentGenerator {
                 null,
 
             // clues
-            new Tag("div", new Text("ACROSS")),
+            new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")),
             new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions))),
 
-            new Tag("div", new Text("DOWN")),
+            new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")),
             new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions))),
 
             //footer
@@ -71,16 +69,16 @@ export class ListLayout implements ContentGenerator {
                     new Text(clue.caption),
                     new Text(". "),
                     publishOptions.useDefaults ?
-                        new ClassAttribute(clueStyle.class) :
-                        new StyleAttribute(clueStyle.toCssStyleString()),
+                        new Attribute("class", clueStyle.class) :
+                        new Attribute("style", clueStyle.toCssStyleString()),
                 ),
 
                 // maked-up clue text with definition
                 ...clue.chunks.map(chunk =>
                     new Tag("span",
                         publishOptions.useDefaults ? 
-                            new ClassAttribute(chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-                            new StyleAttribute(chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
+                            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
+                            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
                         new Text(chunk.text),
                     )
                 ),
@@ -90,8 +88,8 @@ export class ListLayout implements ContentGenerator {
             new Tag("div",
                 new Attribute("class", "fts-subgroup"),
                 publishOptions.useDefaults ? 
-                    new ClassAttribute(answerStyle.class) :
-                    new StyleAttribute(answerStyle.toCssStyleString()),
+                    new Attribute("class", answerStyle.class) :
+                    new Attribute("style", answerStyle.toCssStyleString()),
                 new Text(clue.answers[0]),
             ),
 

@@ -1,3 +1,5 @@
+
+
 /* Explanation of classes added by the crossword utilities
 Name          Meaning
 ===================================================================
@@ -44,7 +46,7 @@ fts-spacing-large .fts-group {
 
 .fts-answer {
     font-weight: bold;
-    color: #898989;
+    color: #424242;
 }
 .fts-clue {
     color: #4682b4;

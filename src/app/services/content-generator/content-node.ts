@@ -4,8 +4,4 @@ export class ContentNode {
         public readonly name: string,
         public readonly isAttribute: boolean)
     {}
-
-    public get composable(): boolean {
-        return false;
-    }
 }

@@ -11,8 +11,6 @@ import { QuillNode } from './quill-node';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { TextStyleName } from 'src/app/model/interfaces';
 import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
-import { ClassAttribute } from './class-atribute';
-import { StyleAttribute } from './style-attribute';
 
 @Injectable({
     providedIn: 'root'
@@ -99,8 +97,8 @@ export class TableLayout implements ContentGenerator {
         const style = publishOptions.getStyle(styleName);
 
         return publishOptions.useDefaults ? 
-            new ClassAttribute(style.class) :
-            new StyleAttribute(style.toCssStyleString());
+            new Attribute("class", style.class) :
+            new Attribute("style", style.toCssStyleString());
     }
 
     public makeChunkStyleAttribute(chunk: TextChunk, publishOptions: PublishOptions): ContentNode {
@@ -108,7 +106,7 @@ export class TableLayout implements ContentGenerator {
         const definitionStyle = publishOptions.getStyle("definition");
 
         return publishOptions.useDefaults ? 
-            new ClassAttribute(chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-            new StyleAttribute(chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
+            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
+            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
     }
 }
