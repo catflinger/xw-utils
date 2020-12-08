@@ -15,28 +15,6 @@
         </div>
     </div>
     
-    <!-- <div class="row justify-content-center mt-5" *ngIf="puzzle">
-        <div class="col-2"></div>
-        <div class="col-8 bg-light p-5 border">
-            <div class="title">{{form.value.title}}</div>
-            <div class="border-bottom">Posted by {{getUsername()}} on {{today | date : "MMMM d, y"}}</div>
-            <div class="clearfix mt-2">
-                <div class="mug-shot float-left">
-                    <img src="assets/kitten.png">
-                </div>
-                <div class="float-left">
-                    <div>
-                        <quill-view [content]="form.value.header" format="object" theme="snow"></quill-view>
-                    </div>
-                    <div class="anchor-like">Read the rest of this entry >></div>
-                </div>
-            </div>
-            <div class="border-bottom">Posted in <span class="anchor-like">{{puzzle.info.providerName}}</span> | <span
-                    class="anchor-like">0 Comments</span> >></div>
-        </div>
-        <div class="col-2"></div>
-    </div> -->
-
     <div class="row" *ngIf="puzzle">
         <div class="col">
             <div class="mt-4">
@@ -46,37 +24,6 @@
         </div>
     </div>
 
-    <!-- <div class="row justify-content-center mt-5" *ngIf="puzzle">
-            <div class="col-2"></div>
-            <div class="col-8 bg-light p-5 border">
-            <div class="body-top clearfix">
-                <div class="float-left anchor-like smaller m-0">&lt;&lt; Guardian cryptic 23,456 by Paul</div>
-                <div class="float-right anchor-like smaller m-0">&gt;&gt; Financial Times 12,345 by Julius</div>
-            </div>
-            <div class="title mt-3">{{form.value.title}}</div>
-            <div class="border-bottom">Posted by {{getUsername()}} on {{today | date : "MMMM d, y"}}</div>
-            <div class="row">
-                <div class="col-auto">
-                    <div class="mug-shot">
-                        <img src="assets/kitten.png">
-                    </div>
-                    </div>
-                <div class="col-auto">
-                    <div>
-                        <app-content-preview [content]="form.value.header"></app-content-preview>
-                    </div>
-                    <div>
-                        <app-content-preview [content]="form.value.body"></app-content-preview>
-                    </div>
-                    <app-clues-preview></app-clues-preview>
-                    <div>
-                        <app-content-preview [content]="appSettings.footer"></app-content-preview>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-2"></div>
-    </div> -->
 
     <div class="row" *ngIf="puzzle">
         <div class="col">

@@ -55,7 +55,6 @@ export class ListLayout implements ContentGenerator {
     private makeClue(clue: Clue, publishOptions: PublishOptions): ContentNode {
         const clueStyle = publishOptions.getStyle("clue");
         const definitionStyle = publishOptions.getStyle("definition");
-        const answerStyle = publishOptions.getStyle("answer");
 
         return new Tag("div",
             new Attribute("class", "fts-group"),
@@ -84,14 +83,8 @@ export class ListLayout implements ContentGenerator {
                 ),
             ),
 
-            // write the answer
-            new Tag("div",
-                new Attribute("class", "fts-subgroup"),
-                publishOptions.useDefaults ? 
-                    new Attribute("class", answerStyle.class) :
-                    new Attribute("style", answerStyle.toCssStyleString()),
-                new Text(clue.answers[0]),
-            ),
+            // write the answer(s)
+            ...this.makeAnswers(clue, publishOptions),
 
             // write the comments
             new Tag("div",
@@ -99,5 +92,22 @@ export class ListLayout implements ContentGenerator {
                 new QuillNode(clue.comment)
             )
         );
+    }
+
+    private makeAnswers(clue: Clue, publishOptions: PublishOptions): ContentNode[] {
+        let result: ContentNode[] = [];
+        const answerStyle = publishOptions.getStyle("answer");
+
+        clue.answers.forEach(answer => 
+            result.push(
+                new Tag("div",
+                    new Attribute("class", "fts-subgroup"),
+                    publishOptions.useDefaults ? 
+                        new Attribute("class", answerStyle.class) :
+                        new Attribute("style", answerStyle.toCssStyleString()),
+                new Text(answer),
+            )));
+
+        return result;
     }
 }

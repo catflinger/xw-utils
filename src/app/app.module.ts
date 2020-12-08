@@ -25,7 +25,6 @@ import { TextStyleComponent } from './ui/puzzle-publishing/text-style/text-style
 import { BloggerComponent } from './ui/puzzle-solving/blogger/blogger.component';
 import { ClueTextControlComponent } from './ui/clues/clue-text-control/clue-text-control.component';
 import { ClueTextComponent } from './ui/clues/clue-text/clue-text.component';
-import { CluesPreviewComponent } from './ui/puzzle-publishing/clues-preview/clues-preview.component';
 import { ContentPreviewComponent } from './ui/puzzle-publishing/content-preview/content-preview.component';
 import { HtmlAsIsPipe } from './ui/general/html-as-is.pipe';
 import { ValidationMessageComponent } from './ui/general/validation-message/validation-message.component';
@@ -144,7 +143,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         TextStyleComponent,
         BloggerComponent,
         ClueTextComponent,
-        CluesPreviewComponent,
         ContentPreviewComponent,
         ValidationMessageComponent,
         LoginComponent,

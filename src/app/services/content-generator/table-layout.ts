@@ -18,9 +18,10 @@ import { TextChunk } from 'src/app/model/puzzle-model/clue-text-chunk';
 export class TableLayout implements ContentGenerator {
     
     public getContent(puzzle: Puzzle, gridUrl: string): string {
+        const answerColumnCount = puzzle.publishOptions.textCols.length;
 
         const root = new Tag("div",
-        new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
+        new Attribute("class", `fts fts-table fts-spacing-${puzzle.publishOptions.spacing}`),
         // heading
             new Tag("div", new QuillNode(puzzle.notes.header)),
             new Comment("MORE"),
@@ -45,8 +46,15 @@ export class TableLayout implements ContentGenerator {
                     
                     // ACROSS title
                     new Tag("tr", 
-                        new Tag("td", new Text("ACROSS"), new Attribute("colspan", "3"))
+                        new Tag("td", 
+                            new Text("ACROSS"), 
+                            new Attribute("colspan", (answerColumnCount + 2).toString()),
+                            new Attribute("class", "fts-group"),
+                        )
                     ),
+
+                    // optional heading when there are multiple answer columns
+                    this.makeHeadingRow(puzzle.publishOptions),
                     
                     // across clues
                     ...puzzle.clues.filter(c => c.group === "across")
@@ -54,9 +62,16 @@ export class TableLayout implements ContentGenerator {
                     .flat(),
 
                     // DOWN title
-                    new Tag("tr", 
-                        new Tag("td", new Text("DOWN"), new Attribute("colspan", "3"))
+                    new Tag("tr",
+                        new Tag("td", 
+                            new Text("DOWN"), 
+                            new Attribute("colspan", (answerColumnCount +2).toString()),
+                            new Attribute("class", "fts-group"),
+                        )
                     ),
+
+                    // optional heading when there are multiple answer columns
+                    this.makeHeadingRow(puzzle.publishOptions),
 
                     // down clues
                     ...puzzle.clues.filter(c => c.group === "down")
@@ -70,24 +85,50 @@ export class TableLayout implements ContentGenerator {
         return root.toString();
     }
 
+    private makeHeadingRow(publishOptions: PublishOptions): ContentNode {
+        
+        if (publishOptions.textCols.length > 1) {
+            return new Tag("tr",
+                new Attribute("style", "border-bottom: 1px solid"),
+                new Tag("td", new Text("No.")),
+                ...publishOptions.textCols.map(col => 
+                    new Tag("td", new Text(col.caption))
+                ),
+                new Tag("td"),
+            );
+        }
+        
+        return null;
+    }
+
     private makeClue(clue: Clue, publishOptions: PublishOptions): ContentNode[] {
 
         return [
             new Tag("tr",
-                new Tag("td", new Tag("span", 
-                    new Text(clue.caption)),
+
+                new Tag("td", 
+                    new Attribute("class", "fts-subgroup"),
+                    new Tag("span", new Text(clue.caption)),
                     this.makeTextStyleAttribute("clue", publishOptions),
                 ),
-                new Tag("td", new Tag("span",  new Text(clue.answers[0]), this.makeTextStyleAttribute("answer", publishOptions))),
-                
-                new Tag("td", new Tag("div", ...clue.chunks.map(chunk => 
-                    new Tag("span", new Text(chunk.text), this.makeChunkStyleAttribute(chunk, publishOptions)))
+
+                ...publishOptions.textCols.map((col, index) => new Tag("td", 
+                    new Attribute("class", "fts-subgroup"),
+                    new Tag("span",  new Text(clue.answers[index] || ""), 
+                    this.makeTextStyleAttribute("answer", publishOptions))
                 )),
+                
+                new Tag("td", 
+                    new Attribute("class", "fts-subgroup"),
+                    new Tag("div", ...clue.chunks.map(chunk => 
+                        new Tag("span", new Text(chunk.text), this.makeChunkStyleAttribute(chunk, publishOptions)))
+                    )
+                ),
             ),
 
             new Tag("tr",
-                new Tag("td"),
-                new Tag("td"),
+                new Attribute("class", "fts-subgroup"),
+                new Tag("td", new Attribute("colspan", (publishOptions.textCols.length + 1).toString())),
                 new Tag("td", new QuillNode(clue.comment)),
             ),
         ];

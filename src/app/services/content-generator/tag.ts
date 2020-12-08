@@ -13,7 +13,7 @@ export class Tag extends ContentNode {
         ...children: ContentNode[]
     ) {
             super(name, false);
-            this.children = children ?? [];
+            this.children = children ? children.filter(ch => !!ch) : [];
     }
 
     public toString(indent: boolean = false): string {

@@ -20,30 +20,6 @@ fts-clue        Added to each element containing clue text
 fts-definition  Added to each element containing clue text to be marked as definition
 */
 
-.fts.fts-table td {
-    vertical-align: top;
-}
-
-fts-spacing-large .fts-group {
-    margin-top: 20px;
-}
-.fts-spacing-medium .fts-group {
-    margin-top: 5px;
-}
-.fts-spacing-small .fts-group {
-    margin-top: 2px;
-}
-
-.fts-spacing-large .fts-subgroup {
-    margin-top: 20px;
-}
-.fts-spacing-medium .fts-subgroup {
-    margin-top: 5px;
-}
-.fts-spacing-small .fts-subgroup {
-    margin-top: 2px;
-}
-
 .fts-answer {
     font-weight: bold;
     color: #424242;
@@ -55,3 +31,52 @@ fts-spacing-large .fts-group {
     color: #4682b4;
     text-decoration: underline;
 }
+
+/* formats for list layout */
+
+.fts-list.fts-spacing-large .fts-group {
+    margin-top: 20px;
+}
+.fts-list.fts-spacing-medium .fts-group {
+    margin-top: 5px;
+}
+.fts-list.fts-spacing-small .fts-group {
+    margin-top: 2px;
+}
+
+.fts-list.fts-spacing-large .fts-subgroup {
+    margin-top: 20px;
+}
+.fts-list.fts-spacing-medium .fts-subgroup {
+    margin-top: 5px;
+}
+.fts-list.fts-spacing-small .fts-subgroup {
+    margin-top: 2px;
+}
+
+/* formats for table layout */
+
+.fts.fts-table td {
+    vertical-align: top;
+}
+.fts-table.fts-spacing-large .fts-group {
+    padding-top: 20px;
+}
+.fts-table.fts-spacing-medium .fts-group {
+    padding-top: 5px;
+}
+.fts-table.fts-spacing-small .fts-group {
+    padding-top: 2px;
+}
+
+.fts-table.fts-spacing-large .fts-subgroup {
+    padding-top: 20px;
+}
+.fts-table.fts-spacing-medium .fts-subgroup {
+    padding-top: 5px;
+}
+.fts-table.fts-spacing-small .fts-subgroup {
+    padding-top: 2px;
+}
+
+

@@ -81,7 +81,6 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
 
     public onUseDefaultChange(event: any) {
         if (event.target.checked) {
-            this.publishOptions
             this.activePuzzle.updateAndCommit(
                 new UpdatePublsihOptionTextStyle("clue", fifteenSquaredBlue, false, false, false),
                 new UpdatePublsihOptionTextStyle("definition", fifteenSquaredBlue, false, false, true),

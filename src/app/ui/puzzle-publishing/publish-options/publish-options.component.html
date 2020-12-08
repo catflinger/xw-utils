@@ -4,33 +4,29 @@
     </div>
 </div>
 
-<div class="row justify-content-center" *ngIf="puzzle">
-    <div class="col col-auto">
-
-        <div class="row">
-            <div class="col btn-group btn-group-toggle" ngbRadioGroup name="radioLayout" [(ngModel)]="publishOptions.layout" (change)="onChange()">
-                <label ngbButtonLabel class="btn btn-light">
-                    <input ngbButton type="radio" value="table"> Table layout
-                </label>
-                <label ngbButtonLabel class="btn btn-light">
-                    <input ngbButton type="radio" value="list"> List layout
-                </label>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col">
-                <app-clues-preview></app-clues-preview>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <div class="row mt-3" *ngIf="puzzle">
     <div class="col">
         <div>
-            Line Spacing: 
+            Layout 
+        </div>
+
+        <div class="form-check-inline">
+            <label class="form-check-label" for="layout1">
+                <input id="layout1" type="radio" class="form-check-input" name="layout" value="table" [(ngModel)]="publishOptions.layout" (change)="onChange()"> table
+            </label>
+        </div>
+
+        <div class="form-check-inline">
+            <label class="form-check-label" for="layout2">
+                <input id="layout2" type="radio" class="form-check-input" name="layout" value="list" [(ngModel)]="publishOptions.layout" (change)="onChange()"> list
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row mt-3" *ngIf="puzzle">
+    <div class="col">
+        <div>
+            Line Spacing 
         </div>
         <div class="form-check-inline">
             <label class="form-check-label" for="spacing1">
@@ -110,3 +106,10 @@
         <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
     </div>
 </div>
+
+<div class="row justify-content-center" *ngIf="puzzle">
+    <div class="col col-auto">
+        <app-content-preview></app-content-preview>
+    </div>
+</div>
+
