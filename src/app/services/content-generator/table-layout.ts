@@ -24,7 +24,7 @@ export class TableLayout implements ContentGenerator {
         new Attribute("class", `fts fts-table fts-spacing-${puzzle.publishOptions.spacing}`),
         // heading
             new Tag("div", new QuillNode(puzzle.notes.header)),
-            new Comment("MORE"),
+            new Comment("more"),
 
             // annotation
             new Tag("div", new QuillNode(puzzle.notes.body)),

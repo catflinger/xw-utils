@@ -11,6 +11,6 @@ export class Comment extends ContentNode {
     public toString(indent: boolean = false): string {
         const newline = indent ? "\n" : "";
 
-        return `<!--- ${this.value} -->${newline}`;
+        return `<!-- ${this.value} -->${newline}`;
     }
 }

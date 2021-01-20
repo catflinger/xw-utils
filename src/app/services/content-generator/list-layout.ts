@@ -22,7 +22,7 @@ export class ListLayout implements ContentGenerator {
 
             // heading
             new Tag("div", new QuillNode(puzzle.notes.header)),
-            new Comment("MORE"),
+            new Comment("more"),
 
             // annotation
             new Tag("div", new QuillNode(puzzle.notes.body)),
