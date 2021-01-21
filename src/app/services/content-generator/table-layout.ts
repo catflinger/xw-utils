@@ -3,7 +3,8 @@ import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ContentGenerator } from '../common';
 import { Attribute } from './attribute';
-import { Comment } from './comment';
+import { Root } from './root';
+import { More } from './more';
 import { Tag } from './tag';
 import { Text } from "./text";
 import { ContentNode } from './content-node';
@@ -20,18 +21,17 @@ export class TableLayout implements ContentGenerator {
     public getContent(puzzle: Puzzle, gridUrl: string): string {
         const answerColumnCount = puzzle.publishOptions.textCols.length;
 
-        const root = new Tag("div",
-        new Attribute("class", `fts fts-table fts-spacing-${puzzle.publishOptions.spacing}`),
-        // heading
-            new Tag("div", new QuillNode(puzzle.notes.header)),
-            new Comment("more"),
+        const root = new Root(
+            // heading
+            new QuillNode(puzzle.notes.header),
+            new More(),
 
             // annotation
-            new Tag("div", new QuillNode(puzzle.notes.body)),
+            new QuillNode(puzzle.notes.body),
 
             // grid
             puzzle.publishOptions.includeGrid ? 
-                new Tag("div", 
+                new Tag("p", 
                     new Tag("img", 
                         new Attribute("src", gridUrl),
                         new Attribute("alt", "picture of the completed grid")
@@ -40,45 +40,49 @@ export class TableLayout implements ContentGenerator {
                 :
                 null,
 
-            // clues
-            new Tag("table",
-                new Tag("tbody",
-                    
-                    // ACROSS title
-                    new Tag("tr", 
-                        new Tag("td", 
-                            new Text("ACROSS"), 
-                            new Attribute("colspan", (answerColumnCount + 2).toString()),
-                            new Attribute("class", "fts-group"),
-                        )
+            new Tag("div",
+                new Attribute("class", `fts fts-table fts-spacing-${puzzle.publishOptions.spacing}`),
+
+                // clues
+                new Tag("table",
+                    new Tag("tbody",
+                        
+                        // ACROSS title
+                        new Tag("tr", 
+                            new Tag("td", 
+                                new Text("ACROSS"), 
+                                new Attribute("colspan", (answerColumnCount + 2).toString()),
+                                new Attribute("class", "fts-group"),
+                            )
+                        ),
+
+                        // optional heading when there are multiple answer columns
+                        this.makeHeadingRow(puzzle.publishOptions),
+                        
+                        // across clues
+                        ...puzzle.clues.filter(c => c.group === "across")
+                        .map(clue => this.makeClue(clue, puzzle.publishOptions))
+                        .flat(),
+
+                        // DOWN title
+                        new Tag("tr",
+                            new Tag("td", 
+                                new Text("DOWN"), 
+                                new Attribute("colspan", (answerColumnCount +2).toString()),
+                                new Attribute("class", "fts-group"),
+                            )
+                        ),
+
+                        // optional heading when there are multiple answer columns
+                        this.makeHeadingRow(puzzle.publishOptions),
+
+                        // down clues
+                        ...puzzle.clues.filter(c => c.group === "down")
+                        .map(clue => this.makeClue(clue, puzzle.publishOptions))
+                        .flat()
+
                     ),
-
-                    // optional heading when there are multiple answer columns
-                    this.makeHeadingRow(puzzle.publishOptions),
-                    
-                    // across clues
-                    ...puzzle.clues.filter(c => c.group === "across")
-                    .map(clue => this.makeClue(clue, puzzle.publishOptions))
-                    .flat(),
-
-                    // DOWN title
-                    new Tag("tr",
-                        new Tag("td", 
-                            new Text("DOWN"), 
-                            new Attribute("colspan", (answerColumnCount +2).toString()),
-                            new Attribute("class", "fts-group"),
-                        )
-                    ),
-
-                    // optional heading when there are multiple answer columns
-                    this.makeHeadingRow(puzzle.publishOptions),
-
-                    // down clues
-                    ...puzzle.clues.filter(c => c.group === "down")
-                    .map(clue => this.makeClue(clue, puzzle.publishOptions))
-                    .flat()
-
-                ),
+                )
             )
         );
 

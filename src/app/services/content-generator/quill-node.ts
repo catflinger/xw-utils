@@ -16,7 +16,9 @@ export class QuillNode extends ContentNode {
         if (this.delta && this.delta.ops && this.delta.ops.length) {
             const converter = new QuillDeltaToHtmlConverter(
                 this.delta.ops,
-                { inlineStyles: true });
+                { inlineStyles: true,
+                multiLineParagraph: false,
+             });
 
             markup = converter.convert();
         }

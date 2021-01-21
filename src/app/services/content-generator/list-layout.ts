@@ -3,7 +3,8 @@ import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { ContentGenerator } from '../common';
 import { Attribute } from './attribute';
-import { Comment } from './comment';
+import { More } from './more';
+import { Root } from './root';
 import { Tag } from './tag';
 import { Text } from "./text";
 import { ContentNode } from './content-node';
@@ -14,22 +15,20 @@ import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
     providedIn: 'root'
 })
 export class ListLayout implements ContentGenerator {
-    
+
     public getContent(puzzle: Puzzle, gridUrl: string): string {
 
-        const root = new Tag("div",
-            new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
-
+        const root = new Root(
             // heading
-            new Tag("div", new QuillNode(puzzle.notes.header)),
-            new Comment("more"),
+            new QuillNode(puzzle.notes.header),
+            new More(),
 
             // annotation
-            new Tag("div", new QuillNode(puzzle.notes.body)),
+            new QuillNode(puzzle.notes.body),
 
             // grid
             puzzle.publishOptions.includeGrid ? 
-                new Tag("div", 
+                new Tag("p", 
                     new Tag("img", 
                         new Attribute("src", gridUrl),
                         new Attribute("alt", "picture of the completed grid")
@@ -38,15 +37,19 @@ export class ListLayout implements ContentGenerator {
                 :
                 null,
 
-            // clues
-            new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")),
-            new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions))),
+            new Tag("div",
+                new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
 
-            new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")),
-            new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions))),
+                // clues
+                new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")),
+                new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions))),
 
-            //footer
-            new Tag("div", new QuillNode(puzzle.notes.footer)),
+                new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")),
+                new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions))),
+
+                //footer
+                new Tag("div", new QuillNode(puzzle.notes.footer)),
+            )
         );
 
         return root.toString();

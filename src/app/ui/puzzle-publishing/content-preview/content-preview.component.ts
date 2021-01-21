@@ -11,6 +11,7 @@ import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data'
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppService, AppStatus } from '../../general/app.service';
 import { GridComponent } from '../../grid/grid/grid.component';
+import { fifteenSquaredBlack } from '../../common';
 
 @Component({
     selector: 'app-content-preview',
@@ -23,6 +24,8 @@ export class ContentPreviewComponent implements OnInit {
     public appSettings: AppSettings;
     public debugContent: string = "";
     public username: string = null;
+
+    public black = fifteenSquaredBlack;
 
     private subs: Subscription[] = [];
     private gridControl: GridComponent;

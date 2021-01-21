@@ -28,7 +28,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     public gridOnly = false;
     public action: PublishActions = "nothing";
     public debugContent: string = "";
-    public readonly gidColor = fifteenSquaredGridBlack;
+    public readonly gridColor = fifteenSquaredGridBlack;
 
     private subs: Subscription[] = [];
 
