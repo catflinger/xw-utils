@@ -19,6 +19,7 @@ import { IPuzzle } from 'src/app/model/interfaces';
 import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
+import { fifteenSquaredBlack, fifteenSquaredBlue } from "src/app/ui/common";
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -354,7 +355,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 textStyles: [
                     {
                         name: "answer",
-                        color: "#000000",
+                        color: fifteenSquaredBlack,
                         bold: false,
                         italic: false,
                         underline: false,
@@ -362,7 +363,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                     },
                     {
                         name: "clue",
-                        color: "#000000",
+                        color: fifteenSquaredBlue,
                         bold: false,
                         italic: false,
                         underline: false,
@@ -370,7 +371,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                     },
                     {
                         name: "definition",
-                        color: "#000000",
+                        color: fifteenSquaredBlue,
                         bold: false,
                         italic: false,
                         underline: false,
