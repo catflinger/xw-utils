@@ -1,0 +1,82 @@
+
+
+/* Explanation of classes added by the crossword utilities
+Name          Meaning
+===================================================================
+fts             Added to the outermost container of generated content
+
+fts-table       Added to outer container when table format was chosen
+fts-list        Added to outer container when list format was chosen
+
+fts-spacing-large   Added to the outer container, indicates large spacing
+fts-spacing-medium   Added to the outer container, indicates medium spacing
+fts-spacing-small   Added to the outer container, indicates small spacing
+
+fts-group       Added the container of each clue in the blog
+fts-subgroup    Added to each of the clue-group parts (the clue, the answer and the comments)
+
+fts-answer      Added to each element containing answer text
+fts-clue        Added to each element containing clue text
+fts-definition  Added to each element containing clue text to be marked as definition
+*/
+
+.fts-answer {
+    font-weight: bold;
+    color: #424242;
+}
+.fts-clue {
+    color: #4682b4;
+}
+.fts-definition {
+    color: #4682b4;
+    text-decoration: underline;
+}
+
+/* formats for list layout */
+
+.fts-list.fts-spacing-large .fts-group {
+    margin-top: 20px;
+}
+.fts-list.fts-spacing-medium .fts-group {
+    margin-top: 5px;
+}
+.fts-list.fts-spacing-small .fts-group {
+    margin-top: 2px;
+}
+
+.fts-list.fts-spacing-large .fts-subgroup {
+    margin-top: 20px;
+}
+.fts-list.fts-spacing-medium .fts-subgroup {
+    margin-top: 5px;
+}
+.fts-list.fts-spacing-small .fts-subgroup {
+    margin-top: 2px;
+}
+
+/* formats for table layout */
+
+.fts.fts-table td {
+    vertical-align: top;
+}
+.fts-table.fts-spacing-large .fts-group {
+    padding-top: 20px;
+}
+.fts-table.fts-spacing-medium .fts-group {
+    padding-top: 5px;
+}
+.fts-table.fts-spacing-small .fts-group {
+    padding-top: 2px;
+}
+
+.fts-table.fts-spacing-large .fts-subgroup {
+    padding-top: 20px;
+}
+.fts-table.fts-spacing-medium .fts-subgroup {
+    padding-top: 5px;
+}
+.fts-table.fts-spacing-small .fts-subgroup {
+    padding-top: 2px;
+}
+
+

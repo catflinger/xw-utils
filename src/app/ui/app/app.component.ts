@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { TraceService } from 'src/app/services/app/trace.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -57,11 +58,16 @@ export class AppComponent implements OnInit, OnDestroy {
             this.detref.detectChanges();
         }));
 
-        this.subs.push(this.router.events.subscribe(event => {
-            if (event instanceof NavigationStart) {
+        this.subs.push(this.router.events
+            .pipe(
+                filter(event => event instanceof NavigationStart)
+            )
+            .subscribe((event: NavigationStart) => {
                 this.modalService.dismissAll();
-            }
-            this.detref.detectChanges();
+                if (event.restoredState) {
+                    this.appService.setAlert("danger", "Please don't use the browser's back or forward button to navigate.  Use the buttons in the app instead.");
+                  }
+                this.detref.detectChanges();
         }));
 
     }

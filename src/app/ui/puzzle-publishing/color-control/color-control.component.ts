@@ -33,7 +33,7 @@ export class ColorControlComponent implements ControlValueAccessor, OnInit {
 
     public writeValue(color: string) {
         let option = color ? 
-            this.options.find(opt => opt.value === color.toLowerCase().replace(";", "")) :
+            this.options.find(opt => opt.value.replace(";", "") === color.toLowerCase().replace(";", "")) :
             null;
 
         if (option) {

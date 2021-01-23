@@ -47,12 +47,12 @@ export class Line {
     }
 
     private get hasEndMarker(): boolean {
-        let exp = new RegExp(String.raw`\(\d[,0-9- ]*(words|apostrophe)?\s?\)$`, "i");
+        let exp = new RegExp(String.raw`\(\d[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
         return exp.test(this.text);
     }
 
     private get hasPartialEndMarker(): boolean {
-        let exp = new RegExp(String.raw`^\s*[,0-9- ]*(words|apostrophe)?\s?\)$`, "i");
+        let exp = new RegExp(String.raw`^\s*[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
         return exp.test(this.text);
     }
 

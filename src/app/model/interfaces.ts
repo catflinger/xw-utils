@@ -161,6 +161,7 @@ export interface ITextStyle {
     bold: boolean;
     italic: boolean;
     underline: boolean;
+    class: string;
 }
 
 export interface ITextColumn {
@@ -173,6 +174,7 @@ export interface IPublishOptions {
     textCols: Array<ITextColumn>;
     textStyles: Array<ITextStyle>;
     
+    useDefaults: boolean;
     includeGrid: boolean;
     spacing: Spacing;
 }

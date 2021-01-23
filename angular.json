@@ -25,6 +25,7 @@
             ],
             "styles": [
               "src/styles.css",
+              "src/styles-fts.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./node_modules/quill/dist/quill.core.css",

@@ -119,9 +119,8 @@
 </div>
 
 <div style="visibility: hidden;">
-    <app-grid #gridControl [options]="{ hideShading: false, hideHighlight: true, size: 'small' }"></app-grid>
+    <app-grid #gridControl [options]="{ hideShading: false, hideHighlight: true, size: 'small', color: gridColor }"></app-grid>
 </div>
 
-<pre class="d-none">
-    {{debugContent | htmlAsIs}}
-</pre>
+<!-- <pre class="d-none" [innerHTML]="debugContent | htmlAsIs">
+</pre> -->

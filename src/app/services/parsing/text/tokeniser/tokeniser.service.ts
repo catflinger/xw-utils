@@ -53,8 +53,10 @@ export class TokeniserService {
 
         lines.forEach(line => {
 
-            this.trace.addTrace(`TOKENISER: ${line.lineType} [${line.rawText}] `);
-            
+            if (this.trace) {
+                this.trace.addTrace(`TOKENISER: ${line.lineType} [${line.rawText}] `);
+            }
+
             switch (line.lineType) {
                 case "acrossMarker":
                     tokens.push(new AcrossMarkerToken(line));

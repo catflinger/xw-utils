@@ -9,7 +9,7 @@ import { data as testData } from "./mocks/pdf-extract-1";
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { GridStyle, ClueGroup, IGridCell, IGrid } from 'src/app/model/interfaces';
 
-let tokeniser: TokeniserService = new TokeniserService();
+let tokeniser: TokeniserService = new TokeniserService(null);
 
 describe('TextParsing', () => {
     

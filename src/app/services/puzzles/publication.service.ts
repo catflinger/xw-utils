@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
 import { HttpClient } from '@angular/common/http';
-import { ContentGeneratorTableLayout } from '../content-generator/content-generator-table-layout';
 import { ApiResponse, ApiResponseStatus, ContentGenerator, PublishStatus, AppResultSymbols, getApiRoot } from '../common';
 import { AuthService, Credentials } from '../app/auth.service';
-import { ContentGeneratorListLayout } from '../content-generator/content-generator-list-layout';
 import { AppSettingsService } from '../app/app-settings.service';
+import { TableLayout } from '../content-generator/table-layout';
+import { ListLayout } from '../content-generator/list-layout';
 
 abstract class PublishPostResponse implements ApiResponse {
     public abstract success: ApiResponseStatus;
@@ -45,8 +45,8 @@ export class PublicationService {
 
     public getContent(puzzle: Puzzle, gridUrl: string) {
         let generator: ContentGenerator= puzzle.publishOptions.layout === "list" ?
-            new ContentGeneratorListLayout():
-            new ContentGeneratorTableLayout();
+            new ListLayout():
+            new TableLayout();
 
             return generator.getContent(puzzle, gridUrl);
     }

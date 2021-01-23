@@ -7,6 +7,10 @@ export type UIResult = "ok" | "cancel" | "back";
 
 export type GridSizes = "small" | "large";
 
+export const fifteenSquaredBlack = "#424242";
+export const fifteenSquaredBlue = "#4682b4";
+export const fifteenSquaredGridBlack = "#424242";
+
 export class Alert {
     constructor(public readonly type: AlertType, public readonly message: string) {}
 }
@@ -31,7 +35,7 @@ export class GridParametersLarge implements GridParameters {
     public readonly cellPadding = 2;
     public readonly captionFont = "9px serif";
     public readonly textFont = "20px sans-serif";
-    public readonly gridColor = "#000000";
+    public readonly gridColor = "black";
     public readonly highlightColor = "BurlyWood";
 }
 
@@ -43,7 +47,7 @@ export class GridParametersSmall implements GridParameters {
     public readonly cellPadding = 1;
     public readonly captionFont = "8px serif";
     public readonly textFont = "16px sans-serif";
-    public readonly gridColor = "#000000";
+    public readonly gridColor = "black";
     public readonly highlightColor = "BurlyWood";
 }
 
@@ -53,6 +57,7 @@ export interface GridControlOptions {
     //enableTextEdit?: boolean;
     editor?: Symbol;
     size?: GridSizes;
+    color?: string;
 }
 
 export const GridEditors = {

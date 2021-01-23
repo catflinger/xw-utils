@@ -99,6 +99,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
+    public onPreview(id: string) {
+        this.puzzleManagement.openPuzzle(id)
+        .then(() => {
+            this.navService.beginTrack("publishPostTrack", {}, "publish-preview");
+        });
+    }
+
     public onTrace(item: IPuzzleSummary) {
         try {
             if (this.settings.traceOutput) {

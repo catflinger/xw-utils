@@ -1,33 +1,39 @@
 import * as _ from "lodash";
 import { TestBed } from '@angular/core/testing';
 import { IPuzzle, IClue, ClueGroup, IGridReference } from '../../model/interfaces';
-import { SetRedirects } from './set-redirects';
+import { ListLayout } from './list-layout';
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 
-describe('SetRedirects modifier', () => {
+describe('List Layout content generator', () => {
+
+    let listLayout: ListLayout;
 
     describe('exec', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({});
+            listLayout = TestBed.inject(ListLayout)
         });
 
-        it('should set redirects in an empty puzzle', () => {
-            let puzzle = getEmptyPuzzle();
-            expect(() => new SetRedirects().exec(puzzle)).not.toThrow();
+        it('should generate from an empty puzzle', () => {
+            let puzzle = new Puzzle(getEmptyPuzzle());
+
+            let s = listLayout.getContent(puzzle, null);
+
+            expect(s).toEqual("<div>\n</div>\n")
         });
 
-        it('should set redirects', () => {
-            let puzzle = getEmptyPuzzle();
+        it('should generate html', () => {
+            let puzzle = new Puzzle(getEmptyPuzzle());
             addTestClues(puzzle);
-            new SetRedirects().exec(puzzle);
 
-            expect(puzzle.clues.length).toEqual(3);
-            expect(puzzle.clues[0].caption).toEqual("5, 3 down");
-            expect(puzzle.clues[1].caption).toEqual("1");
-            expect(puzzle.clues[2].caption).toEqual("2");
+            let s = listLayout.getContent(puzzle, null);
+
+            expect(s).toEqual(listLayoutResult)
         });
 
-    });
+
+    }); 
 });
 
 function addTestClues(puzzle: IPuzzle) {
@@ -37,6 +43,7 @@ function addTestClues(puzzle: IPuzzle) {
         "5, 3 down", 
         "across", 
         "This has two grid entries (5, 5)",
+        "WHOLE WHEAT",
         [
             {
                 id: "",
@@ -55,6 +62,7 @@ function addTestClues(puzzle: IPuzzle) {
         "1", 
         "across", 
         "This is one across (5)",
+        "PHONE",
         [{
             id: "",
             label: 1,
@@ -64,7 +72,8 @@ function addTestClues(puzzle: IPuzzle) {
 
     puzzle.clues.push(makeClue(
         "2", 
-        "down", 
+        "down",
+        "BEANO  ", 
         "This is 2 down (5)",
         [{
             id: "",
@@ -75,15 +84,25 @@ function addTestClues(puzzle: IPuzzle) {
 
 }
 
+const listLayoutResult = `<div>
+<div class="clue">
+</div>
+<div class="clue">
+</div>
+<div class="clue">
+</div>
+</div>
+`;
 
-function makeClue(caption: string, group: ClueGroup, text: string, gridRefs: IGridReference[]): IClue {
+
+function makeClue(caption: string, group: ClueGroup, text: string, answer: string, gridRefs: IGridReference[]): IClue {
     return {
         id: "",
         group,
         caption,
         text,
         letterCount: "",
-        answers: [""],
+        answers: [answer],
         solution: "",
         annotation: "",
         redirect: null,

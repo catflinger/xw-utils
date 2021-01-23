@@ -1,102 +1,133 @@
 <div class="row">
-    <div class="col">
-        <h3>publish options</h3>
-    </div>
-</div>
-
-<div class="row justify-content-center" *ngIf="puzzle">
-    <div class="col col-auto">
-
+    <div class="col-lg-4">
         <div class="row">
-            <div class="col btn-group btn-group-toggle" ngbRadioGroup name="radioLayout" [(ngModel)]="publishOptions.layout" (change)="onChange()">
-                <label ngbButtonLabel class="btn btn-light">
-                    <input ngbButton type="radio" value="table"> Table layout
+            <div class="col">
+                <h3>publish options</h3>
+            </div>
+        </div>
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <div>
+                    Layout
+                </div>
+
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="layout1">
+                        <input id="layout1" type="radio" class="form-check-input" name="layout" value="table"
+                            [(ngModel)]="publishOptions.layout" (change)="onChange()"> table
+                    </label>
+                </div>
+
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="layout2">
+                        <input id="layout2" type="radio" class="form-check-input" name="layout" value="list"
+                            [(ngModel)]="publishOptions.layout" (change)="onChange()"> list
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <div>
+                    Line Spacing
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="spacing1">
+                        <input id="spacing1" type="radio" class="form-check-input" name="spacing" value="small"
+                            [(ngModel)]="publishOptions.spacing" (change)="onChange()"> small
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="spacing2">
+                        <input id="spacing2" type="radio" class="form-check-input" name="spacing" value="medium"
+                            [(ngModel)]="publishOptions.spacing" (change)="onChange()"> medium
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label" for="spacing3">
+                        <input id="spacing3" type="radio" class="form-check-input" name="spacing" value="large"
+                            [(ngModel)]="publishOptions.spacing" (change)="onChange()"> large
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <label>
+                    <input type="checkbox" [(ngModel)]="publishOptions.useDefaults"
+                        (change)="onUseDefaultChange($event)">
+                    use fifteensquared theme colours
                 </label>
-                <label ngbButtonLabel class="btn btn-light">
-                    <input ngbButton type="radio" value="list"> List layout
+            </div>
+        </div>
+
+
+        <div class="row mt-3" *ngIf="puzzle && !puzzle.publishOptions.useDefaults">
+            <div class="col">
+                <div class="row">
+
+                    <div class="col">
+                        <div class="card">
+                            <h5 class="card-header">Answer</h5>
+                            <div class="card-body">
+                                <app-text-style textStyleName="answer" caption="answer" (change)="onChange()">
+                                </app-text-style>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card">
+                            <h5 class="card-header">Clue</h5>
+                            <div class="card-body">
+                                <app-text-style textStyleName="clue" caption="clue text" (change)="onChange()">
+                                </app-text-style>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card">
+                            <h5 class="card-header">Definition</h5>
+                            <div class="card-body">
+                                <app-text-style textStyleName="definition" caption="definition" (change)="onChange()">
+                                </app-text-style>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="puzzle && puzzle.grid">
+            <div class="col">
+                <label>
+                    <input type="checkbox" [(ngModel)]="publishOptions.includeGrid" (change)="onChange()">
+                    include grid image
                 </label>
             </div>
         </div>
 
-        <div class="row mt-3">
-            <div class="col bg-light">
-                <app-clues-preview></app-clues-preview>
+        <div class="row mt-3 mb-5" *ngIf="puzzle && puzzle.grid && publishOptions.includeGrid">
+            <div class="col">
+                <button type="button" class="btn btn-outline-primary" (click)="onGrid()">Colour the grid</button>
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
+                <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
             </div>
         </div>
 
     </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle">
-    <div class="col">
-        <div class="card-deck">
-
-            <div class="card">
-                <h5 class="card-header">Answer</h5>
-                <div class="card-body">
-                    <app-text-style textStyleName="answer" caption="answer" (change)="onChange()"></app-text-style>
-                </div>
+    <div class="col-lg-8">
+        <div class="row justify-content-center" *ngIf="puzzle">
+            <div class="col col-auto">
+                <app-content-preview></app-content-preview>
             </div>
-
-            <div class="card">
-                <h5 class="card-header">Clue</h5>
-                <div class="card-body">
-                    <app-text-style textStyleName="clue" caption="clue text" (change)="onChange()"></app-text-style>
-                </div>
-            </div>
-
-            <div class="card">
-                <h5 class="card-header">Definition</h5>
-                <div class="card-body">
-                    <app-text-style textStyleName="definition" caption="definition" (change)="onChange()"></app-text-style>
-                </div>
-            </div>
-
         </div>
-    </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle">
-    <div class="col">
-        <div>
-            Line Spacing: 
-        </div>
-        <div class="form-check-inline">
-            <label class="form-check-label" for="spacing1">
-                <input id="spacing1" type="radio" class="form-check-input" name="spacing" value="small" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> small
-            </label>
-        </div>
-        <div class="form-check-inline">
-            <label class="form-check-label" for="spacing2">
-                <input id="spacing2" type="radio" class="form-check-input" name="spacing" value="medium" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> medium
-            </label>
-        </div>
-        <div class="form-check-inline">
-            <label class="form-check-label" for="spacing3">
-                <input id="spacing3" type="radio" class="form-check-input" name="spacing" value="large" [(ngModel)]="publishOptions.spacing" (change)="onChange()"> large
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle && puzzle.grid">
-    <div class="col">
-        <label>
-            <input type="checkbox" [(ngModel)]="publishOptions.includeGrid" (change)="onChange()">
-            include grid image
-        </label>
-    </div>
-</div>
-
-<div class="row mt-3 mb-5" *ngIf="puzzle && puzzle.grid && publishOptions.includeGrid">
-    <div class="col">
-        <button type="button" class="btn btn-primary" (click)="onGrid()">Colour the grid</button>
-    </div>
-</div>
-
-<div class="row mt-3" *ngIf="puzzle">
-    <div class="col">
-        <button type="button" class="btn btn-primary mr-3" (click)="onContinue()">Continue</button>
-        <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Back</button>
     </div>
 </div>

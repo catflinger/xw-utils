@@ -1,3 +1,4 @@
+import { fifteenSquaredBlack, fifteenSquaredBlue } from 'src/app/ui/common';
 import { ITextStyle, TextStyleName } from '../interfaces';
 
 export class TextStyle implements ITextStyle {
@@ -6,13 +7,15 @@ export class TextStyle implements ITextStyle {
         public readonly bold: boolean;
         public readonly italic: boolean;
         public readonly underline: boolean;
+        public readonly class: string;
 
         constructor(data) {
             this.name = data.name;
-            this.color = data.color || "black";
+            this.color = data.color || data.name === "answer" ? fifteenSquaredBlack : fifteenSquaredBlue;
             this.bold = data.bold || false;
             this.italic = data.italic || false;
             this.underline = data.underline || false;
+            this.class = data.class || `fts-${data.name}`;
         }
 
         public toCssStyleString(): string {

@@ -55,7 +55,7 @@ export class TextStyleComponent implements OnInit, OnDestroy {
             this.detRef.detectChanges();
         }));
 
-        let latest = combineLatest(this.appService.getObservable(), this.activePuzzle.observe());
+        let latest = combineLatest([this.appService.getObservable(), this.activePuzzle.observe()]);
 
         this.subs.push(latest.subscribe((result) => {
             this.appStatus = result[0];

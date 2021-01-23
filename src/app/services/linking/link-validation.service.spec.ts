@@ -153,6 +153,7 @@ function getEmptyPuzzle(): IPuzzle {
             includeGrid: false,
             layout: "table",
             spacing: "small",
+            useDefaults: false,
         },
     };
 }
