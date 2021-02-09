@@ -1,0 +1,32 @@
+Fifteensquared Theme
+====================
+Find a mechanism to hide/show off-topic comment
+
+Pangram analyser
+=================
+Go through the solutions and looks for single/double pangrams etc.
+
+Nina Finder
+===========
+Go though the grid and extract possible Nina form uncheked cells etc
+
+Grid Image Maker
+================
+Allow other formats for download grid image: gif, png etc
+Add a caption to the grid image, useful for animated GIF tools
+
+Animated GIF creator
+====================
+Stitch together several grid images as an animated GIF (difficult client side?)
+
+Grid Numbering
+==============
+Have an option to show/hide the numbers in Downlaoded Grids
+Have an option to hide grid numbers in grids in the blog
+
+Clue Captions
+=============
+Allow captions to be completely independent of grid numbers
+(default is to link captions to grid numbers)
+Allow alphabeticals to be extracted from PDFs etc (letters as grid numbers)
+Allow puzzles with no captions to be imported

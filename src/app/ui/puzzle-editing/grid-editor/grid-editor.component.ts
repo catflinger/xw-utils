@@ -100,25 +100,6 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    // @HostListener('document:keypress', ['$event'])
-    // handleKeyboardEvent(event: KeyboardEvent) {
-    //     if (this.puzzle && !this.modalRef) {
-    //         if (event.key === "Enter") {
-    //             event.stopPropagation();
-    //             let clue = this.puzzle.getSelectedClue();
-    //             if (clue) {
-    //                 this.openEditor(clue, null);
-    //             }
-    //         } else if (/[a-zA-Z]/.test(event.key)) {
-    //             event.stopPropagation();
-    //             let clue = this.puzzle.getSelectedClue();
-    //             if (clue) {
-    //                 this.openEditor(clue, event.key);
-    //             }
-    //         }
-    //     }
-    // }
-
     public onTabChange(event: NgbTabChangeEvent) {
         this.appService.clear();
         //this.tool = event.nextId as ToolType;
