@@ -133,6 +133,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: "fts-clue",
                 },
                 {
                     name: "answer",
@@ -140,6 +141,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: "fts-answer",
                 },
                 {
                     name: "definition",
@@ -147,6 +149,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: "fts-definition",
                 },
             ],
             textCols: [
