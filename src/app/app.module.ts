@@ -100,6 +100,7 @@ import { GridComponent } from './ui/grid/grid/grid.component';
 import { AdminComponent } from './ui/general/admin/admin.component';
 import { CheatFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/cheat-form/cheat-form.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
+import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -202,6 +203,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         AdminComponent,
         CheatFormComponent,
         PublishPreviewComponent,
+        NinaFinderComponent,
     ],
     imports: [
         BrowserModule,

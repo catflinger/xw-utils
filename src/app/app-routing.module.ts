@@ -39,6 +39,7 @@ import { AboutComponent } from './ui/home/about/about.component';
 import { IssuesComponent } from './ui/home/issues/issues.component';
 import { AdminComponent } from './ui/general/admin/admin.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
+import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 
 const routes: Routes = [
 
@@ -72,6 +73,7 @@ const routes: Routes = [
     { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
+    { path: "nina-finder", component: NinaFinderComponent },
     { path: "clues-start", component: CluesStartComponent },
     { path: "clues-editor", component: CluesEditorComponent },
     { path: "puzzle-info", component: PuzzleInfoComponent },

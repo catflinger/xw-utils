@@ -16,6 +16,7 @@ export const publishPostTrack: NavTrack = {
             actions: {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
+                "nina": "nina-finder",
                 "back": "exit",
             }
         },
@@ -25,6 +26,14 @@ export const publishPostTrack: NavTrack = {
             route: "/publish-grid",
             actions: {
                 "continue": "publish-preamble",
+                "back": "publish-options",
+            }
+        },
+        {
+            name: "nina-finder",
+            type: "route",
+            route: "/nina-finder",
+            actions: {
                 "back": "publish-options",
             }
         },

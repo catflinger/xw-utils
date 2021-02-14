@@ -74,6 +74,11 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         this.navService.navigate("grid");
     }
 
+    public onNina() {
+        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
+        this.navService.navigate("nina");
+    }
+
     public onChange() {
         this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
         //this.detRef.detectChanges();
