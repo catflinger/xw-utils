@@ -25,6 +25,7 @@ export const gridToolTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "nina-finder": "nina-finder",
+                "image": "image",
                 "close": "home",
             }
         },
@@ -32,6 +33,14 @@ export const gridToolTrack: NavTrack = {
             name: "nina-finder",
             type: "route",
             route: "/nina-finder",
+            actions: {
+                "back": "edit",
+            }
+        },
+        {
+            name: "image",
+            type: "route",
+            route: "/grid-image",
             actions: {
                 "back": "edit",
             }

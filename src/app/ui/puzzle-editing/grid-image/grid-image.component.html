@@ -1,0 +1,48 @@
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <h5>{{puzzle.info.title}}</h5>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <app-grid 
+            #gridControl
+            (cellClick)="onCellClick($event)" 
+            (barClick)="onBarClick($event)" 
+            (gridText)="onGridText($event)" 
+            (gridNavigation)="onGridNavigation($event)" 
+            [options]="options">
+        </app-grid>
+    </div>
+
+    <div class="col border border-secondary rounded p-3">
+        <form class="form" [formGroup]="form">
+            <div class="form-group">
+                <label class="form-label" for="caption">Caption displayed below image</label>
+                <input id="caption" type="text" class="form-control" formControlName="caption" placeholder="(optional)">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="filename">File name</label>
+                <input id="filename" type="text" class="form-control" formControlName="filename">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="encoding">Image type</label>
+                <select id="encoding" class="form-control" formControlName="encoding">
+                    <option value="png">png</option>
+                    <option value="jpeg">jpeg</option>
+                    <option value="gif">gif</option>
+                </select>
+            </div>
+        </form>
+        <button type="button" class="btn btn-primary mr-3" (click)="onDownload()">Download image</button>
+    </div>
+</div>
+
+<div class="row" *ngIf="puzzle">
+    <div class="col">
+        <button type="button" class="btn btn-primary mr-3" (click)="onClose()">Close</button>
+    </div>
+</div>
+
+<a #downloadLink class="invisible" target="_self" [download]="filename" [href]="dataUrl"></a>

@@ -243,15 +243,19 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     }
 
     public onDownload() {
-        this.filename = "grid-image.png";
-        this.dataUrl = this.gridControl.getDataUrl();
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(new Clear());
+        this.navService.navigate("image");
 
-        setTimeout(
-            () => {
-                this.downloadLink.nativeElement.click();
-            },
-            250
-        );
+        // this.filename = "grid-image.png";
+        // this.dataUrl = this.gridControl.getDataUrl();
+
+        // setTimeout(
+        //     () => {
+        //         this.downloadLink.nativeElement.click();
+        //     },
+        //     250
+        // );
     }
 
     private getSymCell(cell: GridCell): GridCell {

@@ -40,6 +40,7 @@ import { IssuesComponent } from './ui/home/issues/issues.component';
 import { AdminComponent } from './ui/general/admin/admin.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
+import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
 
 const routes: Routes = [
 
@@ -73,6 +74,7 @@ const routes: Routes = [
     { path: "special-text", component: SpecialTextComponent },
     { path: "grid-start", component: GridStartComponent },
     { path: "grid-editor", component: GridEditorComponent },
+    { path: "grid-image", component: GridImageComponent },
     { path: "nina-finder", component: NinaFinderComponent },
     { path: "clues-start", component: CluesStartComponent },
     { path: "clues-editor", component: CluesEditorComponent },
