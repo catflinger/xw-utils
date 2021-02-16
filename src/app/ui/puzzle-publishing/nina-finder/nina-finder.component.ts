@@ -8,6 +8,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { map, reduce } from 'rxjs/operators';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 
 interface PangramLetter {
@@ -119,8 +120,8 @@ export class NinaFinderComponent implements OnInit {
         range(0, diagLength)
         .pipe(
             map(offset => [
-                grid.cellAt(offset, offset).content,
-                grid.cellAt(offset, diagLength - 1 - offset).content
+                this.letterOrUnderscore(grid.cellAt(offset, offset)),
+                this.letterOrUnderscore(grid.cellAt(offset, diagLength - 1 - offset))
             ]),
             reduce(
                 (acc: {main: string, other: string}, letters: string[]) => {
@@ -149,7 +150,7 @@ export class NinaFinderComponent implements OnInit {
             if (!checkedCell) {
                 let str = grid.cells
                 .filter(cell => cell.y === y)
-                .map(cell => cell.content)
+                .map(cell => this.letterOrUnderscore(cell))
                 .join("");
 
                 this.uncheckedRows.push(str);
@@ -168,7 +169,7 @@ export class NinaFinderComponent implements OnInit {
             if (!checkedCell) {
                 let str = grid.cells
                 .filter(cell => cell.x === x)
-                .map(cell => cell.content)
+                .map(cell => this.letterOrUnderscore(cell))
                 .join("");
 
                 this.uncheckedColumns.push(str);
@@ -184,20 +185,28 @@ export class NinaFinderComponent implements OnInit {
         const down = grid.properties.size.down;
 
         for(let x: number = 0; x < across; x++) {
-            this.perimiter += grid.cellAt(x, 0).content;
+            this.perimiter += this.letterOrUnderscore(grid.cellAt(x, 0));
         }
 
         for(let y: number = 0; y < down; y++) {
-            this.perimiter += grid.cellAt(across - 1, y).content;
+            this.perimiter += this.letterOrUnderscore(grid.cellAt(across - 1, y));
         }
 
         for(let x: number = across - 1; x >= 0; x--) {
-            this.perimiter += grid.cellAt(x, down - 1).content;
+            this.perimiter += this.letterOrUnderscore(grid.cellAt(x, down - 1));
         }
 
         for(let y: number = down - 1; y >= 0; y--) {
-            this.perimiter += grid.cellAt(0, y).content;
+            this.perimiter += this.letterOrUnderscore(grid.cellAt(0, y));
         }
 
+    }
+
+    private letterOrUnderscore(cell: GridCell): string {
+        if (cell.light) {
+            const trim = cell.content ? cell.content.trim() : "";
+            return trim || "_";
+        }
+        return "";
     }
 }
