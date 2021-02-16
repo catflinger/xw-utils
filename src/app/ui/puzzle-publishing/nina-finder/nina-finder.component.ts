@@ -92,7 +92,7 @@ export class NinaFinderComponent implements OnInit {
     private clearPangramCounter() {
         this.pangramCounter = [];
 
-        range(0, 25)
+        range(0, 26)
         .subscribe(offset => this.pangramCounter.push({
             letter: String.fromCharCode("A".charCodeAt(0) + offset),
             count: 0
