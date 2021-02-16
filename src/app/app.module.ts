@@ -42,7 +42,6 @@ import { IndyComponent } from './ui/puzzle-editing/indy/indy.component';
 import { ConfirmModalComponent } from './ui/general/confirm-modal/confirm-modal.component';
 import { GridEditorComponent } from './ui/puzzle-editing/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/puzzle-editing/grid-start/grid-start.component';
-import { DownloadButtonComponent } from './ui/general/download-button/download-button.component';
 import { DiaryAliasControlComponent } from './ui/diary/diary-alias-control/diary-alias-control.component';
 import { DiarySettingsEditorComponent } from './ui/diary/diary-settings-editor/diary-settings-editor.component';
 import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf.component';
@@ -162,7 +161,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         ConfirmModalComponent,
         GridEditorComponent,
         GridStartComponent,
-        DownloadButtonComponent,
         DiaryComponent,
         DiaryAliasControlComponent,
         DiarySettingsEditorComponent,

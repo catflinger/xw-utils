@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GridParameters, GridControlOptions, GridParametersSmall } from '../common';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
+import { GridProperties } from 'src/app/model/puzzle-model/grid-properties';
 
 export class GridDisplayInfo {
     public top: number;
@@ -58,7 +59,7 @@ export class GridPainterService {
         }
     }
 
-    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridControlOptions, gridParams: GridParameters): void {
+    public drawGrid(context: CanvasRenderingContext2D, grid: Grid, options: GridControlOptions, gridParams: GridParameters, caption: string): void {
 
         context.setTransform(1, 0, 0, 1, 0, 0);
         context.fillStyle = "white";
@@ -69,6 +70,10 @@ export class GridPainterService {
         grid.cells.forEach((cell) => {
             this.drawCell(context, cell, options, gridParams);
         });
+
+        if (caption) {
+            this.drawGridCaption(context, caption, gridParams, grid.properties);
+        }
     }
 
     private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions, gridParams: GridParameters) {
@@ -93,7 +98,7 @@ export class GridPainterService {
 
             // draw the caption
             if (cell.label) {
-                this.drawCaption(
+                this.drawCellCaption(
                     context,
                     left,
                     top,
@@ -192,7 +197,7 @@ export class GridPainterService {
         context.stroke();
     }
 
-    private drawCaption(context: CanvasRenderingContext2D, left: number, top: number, caption: string, gridParams: GridParameters) {
+    private drawCellCaption(context: CanvasRenderingContext2D, left: number, top: number, caption: string, gridParams: GridParameters) {
         context.font = gridParams.captionFont;
         context.textAlign = "start";
         context.textBaseline = "hanging";
@@ -216,6 +221,25 @@ export class GridPainterService {
             content,
             left + gridParams.cellSize / 2,
             top + gridParams.cellSize / 2);
+    }
+
+    private drawGridCaption(context: CanvasRenderingContext2D, caption: string, gridParams: GridParameters, gridProps: GridProperties) {
+        context.font = gridParams.textFont;
+        context.textAlign = "start";
+        context.textBaseline = "hanging";
+        context.direction = "ltr";
+        context.fillStyle = gridParams.gridColor;
+
+        const textWidth = context.measureText(caption);
+        const textLeft = Math.max(0, (context.canvas.width - gridParams.gridPadding * 2 - textWidth.width) / 2);
+
+        //console.log(`TEXT width  ${JSON.stringify(textWidth.width, null, 2)}`)
+
+        context.fillText(
+            caption,
+            textLeft,
+            gridParams.cellSize *  gridProps.size.down + gridParams.gridPadding * 2);
+
     }
 
 }

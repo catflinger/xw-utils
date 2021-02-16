@@ -15,6 +15,12 @@ export class AppStatus {
     ) { }
 }
 
+export interface RecentlyUsed {
+    downloadFilename: string,
+    downloadEncoding: string,
+    downloadCaption: string,
+}
+
 export interface OpenPuzzleParamters {
     provider: PuzzleProvider,
     username?: string;
@@ -69,8 +75,17 @@ export class AppService implements OnDestroy {
     private alerts: Alert[] = [];
     private subs: Subscription[] = [];
     private _openPuzzleParameters: OpenPuzzleParamters;
+    
+    private _recentlyUsed: RecentlyUsed = {
+        downloadCaption: "",
+        downloadEncoding: "png",
+        downloadFilename: "grid-image"
+    }
 
-
+    // TO DO: make this more sophisticated
+    public get recentlyUsed(): RecentlyUsed {
+        return this._recentlyUsed;
+    }
 
     // TO DO: move this to nav service
     private _redirectToRoute: string[] = null;

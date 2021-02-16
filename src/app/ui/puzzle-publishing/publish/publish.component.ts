@@ -133,7 +133,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         let result: string = null;
 
         try {
-            result = this.gridControl.getDataUrl().replace("data:image/png;base64,", "");
+            result = this.gridControl.getDataUrl("png").replace("data:image/png;base64,", "");
         } catch (error) {
             result = null;
         }

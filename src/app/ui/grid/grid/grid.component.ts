@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
@@ -8,7 +8,6 @@ import { GridControlOptions, GridParameters, GridParametersSmall, GridParameters
 import { GridPainterService } from '../grid-painter.service';
 
 export type BarClickEvent = {cell: GridCell, bar: "rightBar" | "bottomBar" };
-
 
 export type GridTextEvent = { 
     text: string,
@@ -52,9 +51,10 @@ const gridInputDefaults: GridInput = {
     styleUrls: ['./grid.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridComponent implements OnInit, AfterViewInit {
+export class GridComponent implements OnInit, AfterViewInit, OnChanges {
 
     @Input() options: GridControlOptions;
+    @Input() caption: string = "";
 
     @Output() cellClick = new EventEmitter<GridCell>();
     @Output() barClick = new EventEmitter<BarClickEvent>();
@@ -92,9 +92,9 @@ export class GridComponent implements OnInit, AfterViewInit {
 
                     if (puzzle) {
                         this.puzzle = puzzle;
-                        this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
-                        this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2;
                         this.model.style.display = "none";
+
+                        this.resizeCanvas();
 
                         let cell = this.puzzle.grid.cells.find(c => c.edit);
 
@@ -104,7 +104,7 @@ export class GridComponent implements OnInit, AfterViewInit {
 
                         // don't draw the grid until the native canvas has had a chance to resize
                         setTimeout(() => { 
-                            this.drawGrid(); 
+                            this.drawGrid(this.caption); 
                             //this.detRef.detectChanges() 
                         }, 0);
 
@@ -118,13 +118,32 @@ export class GridComponent implements OnInit, AfterViewInit {
         );
     }
 
+    private resizeCanvas() {
+        if (this.puzzle) {
+            const captionHeight = this.caption ? this.gridParams.cellSize + this.gridParams.gridPadding * 3 : 0;
+
+            this.canvasWidth = this.gridParams.cellSize * this.puzzle.grid.properties.size.across + this.gridParams.gridPadding * 2;
+            this.canvasHeight = this.gridParams.cellSize * this.puzzle.grid.properties.size.down + this.gridParams.gridPadding * 2 + captionHeight;
+            }
+    }
+
     public ngOnDestroy() {
         this.subs.forEach((s) => s.unsubscribe());
     }
 
     public ngAfterViewInit() {
         this.viewInitiated = true;
-        this.drawGrid()
+        this.drawGrid(this.caption)
+    }
+
+    public ngOnChanges() {
+        this.resizeCanvas();
+
+        setTimeout(_ => {
+            this.drawGrid(this.caption);
+            this.detRef.detectChanges();
+        },
+        0)
     }
 
     public onCanvasClick(params: any) {
@@ -205,7 +224,7 @@ export class GridComponent implements OnInit, AfterViewInit {
         event.preventDefault();
     }
 
-    public getDataUrl(): string {
+    public getDataUrl(encoding: string): string {
         const canvas: HTMLCanvasElement = this.canvas.nativeElement;
         const context = canvas.getContext('2d');
         let params = { ...this.gridParams };
@@ -214,13 +233,13 @@ export class GridComponent implements OnInit, AfterViewInit {
             params.gridColor = this.options.color;
         }
 
-    this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params);
+    this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params, this.caption);
 
-        return canvas.toDataURL();
+        return canvas.toDataURL(`image/${encoding}`);
     }
 
 
-    private drawGrid(): void {
+    private drawGrid(caption: string): void {
         if (this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
@@ -231,7 +250,7 @@ export class GridComponent implements OnInit, AfterViewInit {
                 params.gridColor = this.options.color;
             }
 
-            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params);
+            this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params, caption);
         }
     }
 

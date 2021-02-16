@@ -4,12 +4,11 @@ import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clear } from 'src/app//modifiers/puzzle-modifiers/clear';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GridControlOptions, GridEditors } from '../../common';
-import { GridEditor } from '../../grid/grid-editors/grid-editor';
 import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { GridComponent } from '../../grid/grid/grid.component';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-grid-image',
@@ -20,7 +19,6 @@ import { GridComponent } from '../../grid/grid/grid.component';
 export class GridImageComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
-    public options: GridControlOptions = { editor: GridEditors.cellEditor, hideShading: true };
 
     public dataUrl: string;
     public filename: string;
@@ -29,8 +27,6 @@ export class GridImageComponent implements OnInit, OnDestroy {
     @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
 
     private subs: Subscription[] = [];
-
-    private gridEditor: GridEditor;
 
     constructor(
         private navService: NavService<AppTrackData>,
@@ -43,11 +39,31 @@ export class GridImageComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            encoding: ["png"],
-            filename: ["grid-image"],
-            caption: [""],
+            encoding: [
+                this.appService.recentlyUsed.downloadEncoding, 
+                Validators.required],
+            filename: [
+                this.appService.recentlyUsed.downloadFilename, 
+                [
+                    Validators.required, 
+                    Validators.pattern(/^[ a-z0-9-]+$/i)
+                ]
+            ],
+            caption: 
+                this.appService.recentlyUsed.downloadCaption,
         });
 
+        this.subs.push(
+             this.form.get("caption").valueChanges
+            .pipe(
+                debounceTime(200)
+            )
+            .subscribe(change => {
+                this.gridControl.caption = change;
+                this.detRef.detectChanges();
+            })
+        );
+        
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
         } else {
@@ -63,7 +79,8 @@ export class GridImageComponent implements OnInit, OnDestroy {
                         this.puzzle = puzzle;
                         this.detRef.detectChanges();
                     }
-                ));
+                )
+            );
         }
     }
 
@@ -78,15 +95,28 @@ export class GridImageComponent implements OnInit, OnDestroy {
     }
 
     public onDownload() {
-        this.filename = "grid-image.png";
-        this.dataUrl = this.gridControl.getDataUrl();
+        this.appService.clear();
 
-        setTimeout(
-            () => {
-                this.downloadLink.nativeElement.click();
-            },
-            250
-        );
+        this.filename = `${this.form.value.filename}.${this.form.value.encoding}`;
+        this.dataUrl = this.gridControl.getDataUrl(this.form.value.encoding);
+
+        if (this.dataUrl === "data;") {
+            this.appService.setAlert("danger", `Your browser is unable to create an image of this grid.`);
+
+        } else if (this.dataUrl.startsWith("data:image/png") && this.form.value.encoding !== "png") {
+            this.appService.setAlert("danger", `Unfortunately ${this.form.value.encoding} is not availabel on your browser.  Try another encoding.`)
+
+        } else {
+            this.appService.recentlyUsed.downloadCaption = this.form.value.caption;
+            this.appService.recentlyUsed.downloadEncoding = this.form.value.encoding;
+            this.appService.recentlyUsed.downloadFilename = this.form.value.filename;
+
+            setTimeout(
+                () => {
+                    this.downloadLink.nativeElement.click();
+                },
+                250
+            );
+        }
     }
-
 }

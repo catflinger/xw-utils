@@ -1,17 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { combineLatest, from, range, Subscription } from 'rxjs';
+import { range, Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
-import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
-import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
-import { DownloadInstance } from '../../general/download-button/download-button.component';
 import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { GridComponent } from '../../grid/grid/grid.component';
-import { groupBy, map, mergeMap, reduce, tap } from 'rxjs/operators';
 import { Grid } from 'src/app/model/puzzle-model/grid';
+import { map, reduce } from 'rxjs/operators';
 
 
 interface PangramLetter {

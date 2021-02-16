@@ -5,11 +5,11 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
 import { ClearShading } from 'src/app//modifiers/grid-modifiers/clear-shading';
-import { DownloadInstance } from '../../general/download-button/download-button.component';
 import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { GridComponent } from '../../grid/grid/grid.component';
+import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 
 @Component({
   selector: 'app-publish-grid',
@@ -67,14 +67,14 @@ export class PublishGridComponent implements OnInit {
         this.navService.navigate("back");
     }
 
+    public onDownload() {
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(new Clear());
+        this.navService.navigate("image");
+    }
+
     public onClearAll() {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new ClearShading());
     }
-
-    public onDownload(instance: DownloadInstance) {
-        this.appService.clear();
-        instance.download("grid-image.png", this.gridControl.getDataUrl());
-    }
-
 }

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col">
-        <h3>grid editor</h3>
+        <h3>Grid highlights</h3>
         <p>Click on cells in the grid to add shading, to highlight a theme for example</p>
     </div>
 </div>
@@ -9,6 +9,14 @@
     <div class="col">
         <app-grid (cellClick)="onCellClick($event)" [options]="{ hideShading: false, hideHighlight: true }"></app-grid>
     </div>
+
+    <div class="col-2">
+        <div class="mt-3">
+            <button type="button" class="btn btn-outline-primary" (click)="onDownload()" title="Take a snapshot of the grid and download it to you computer">Download image</button>
+        </div>
+    </div>
+
+
     <div class="col">
         <p>shading colour</p>
         <form>
