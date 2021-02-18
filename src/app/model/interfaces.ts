@@ -228,6 +228,7 @@ export interface IGridProperties {
     style: GridStyle;
     size: IGridSize;
     symmetrical: boolean;
+    numbered: boolean;
 }
 
 export interface IGrid {

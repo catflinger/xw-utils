@@ -68,7 +68,7 @@ export class GridPainterService {
         context.translate(gridParams.gridPadding, gridParams.gridPadding);
 
         grid.cells.forEach((cell) => {
-            this.drawCell(context, cell, options, gridParams);
+            this.drawCell(context, cell, options, gridParams, grid.properties);
         });
 
         if (caption) {
@@ -76,7 +76,7 @@ export class GridPainterService {
         }
     }
 
-    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions, gridParams: GridParameters) {
+    private drawCell(context: CanvasRenderingContext2D, cell: GridCell, options: GridControlOptions, gridParams: GridParameters, gridProperties: GridProperties) {
         const top = cell.y * gridParams.cellSize;
         const left = cell.x * gridParams.cellSize;
         const size = gridParams.cellSize;
@@ -97,12 +97,20 @@ export class GridPainterService {
             }
 
             // draw the caption
-            if (cell.caption) {
+            let cellCaption: string = null;
+            
+            if (gridProperties.numbered && cell.anchor) {
+                cellCaption = cell.anchor.toString();
+            } else if (!gridProperties.numbered && cell.caption) {
+                cellCaption = cell.caption;
+            }
+            
+            if (cellCaption) {
                 this.drawCellCaption(
                     context,
                     left,
                     top,
-                    cell.caption,
+                    cellCaption,
                     gridParams);
             }
 

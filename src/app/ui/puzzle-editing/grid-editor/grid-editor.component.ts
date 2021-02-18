@@ -32,6 +32,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
     public symmetrical: boolean = true;
+    public numbered: boolean = true;
     public options: GridControlOptions = { editor: GridEditors.cellEditor, hideShading: true };
     public gridEditors = GridEditors;
     public shadingColor: string;
@@ -79,6 +80,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                             }
                             this.form.patchValue({title: puzzle.info.title});
                             this.symmetrical = puzzle.grid.properties.symmetrical;
+                            this.numbered = puzzle.grid.properties.numbered;
                         }
                         this.puzzle = puzzle;
                         this.detRef.detectChanges();
@@ -138,6 +140,15 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.activePuzzle.updateAndCommit(new UpdateGridProperties({
             symmetrical: val,
         }));
+    }
+
+    public onNumbered() {
+        // TO DO: Use reactive forms and observe grid properties
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(
+            new UpdateGridProperties({ numbered: !this.numbered }),
+            new RenumberGid(),
+        );
     }
 
     public onCellClick(cell: GridCell) {

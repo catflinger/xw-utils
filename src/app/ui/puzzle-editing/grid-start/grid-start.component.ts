@@ -10,6 +10,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GridStyles, IGridCell } from 'src/app/model/interfaces';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { AppService } from '../../general/app.service';
+import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
 
 @Component({
     selector: 'app-grid-start',
@@ -68,7 +69,13 @@ export class GridStartComponent implements OnInit, OnDestroy {
             symmetrical : [
                 true,
                 [Validators.required],
+            ],
+
+            numbered : [
+                true,
+                [Validators.required],
             ]
+
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -97,16 +104,19 @@ export class GridStartComponent implements OnInit, OnDestroy {
                 down: this.form.value.cellsDown,
             },
             symmetrical: this.form.value.symmetrical,
+            numbered: this.form.value.numbered,
         });
 
         if (this.activePuzzle.hasPuzzle) {
             this.activePuzzle.updateAndCommit(
-                new AddGrid({ grid })
+                new AddGrid({ grid }),
+                new RenumberGid()
             );
         } else {
             this.puzzleManager.newPuzzle("grid", [
                 new AddGrid({grid}),
-                new UpdateInfo({title: this.form.value.title})
+                new UpdateInfo({title: this.form.value.title}),
+                new RenumberGid()
             ]);
         }
 

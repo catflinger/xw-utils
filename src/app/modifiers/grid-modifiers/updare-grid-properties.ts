@@ -4,7 +4,7 @@ import { GridSize } from 'src/app/model/puzzle-model/grid-size';
 
 export class UpdateGridProperties implements IPuzzleModifier {
     constructor(
-        public args: { style?: GridStyle, size?: GridSize, symmetrical?: boolean },
+        public args: { style?: GridStyle, size?: GridSize, symmetrical?: boolean, numbered?: boolean },
     ) { }
 
     exec(puzzle: IPuzzle) {
@@ -18,6 +18,9 @@ export class UpdateGridProperties implements IPuzzleModifier {
                 }
                 if (this.args.symmetrical !== undefined) {
                     puzzle.grid.properties.symmetrical = this.args.symmetrical;
+                }
+                if (this.args.numbered !== undefined) {
+                    puzzle.grid.properties.numbered = this.args.numbered;
                 }
             }
         }

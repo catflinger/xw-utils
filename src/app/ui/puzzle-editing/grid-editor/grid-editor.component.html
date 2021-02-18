@@ -49,6 +49,10 @@
                         <span *ngIf="!barred">lights and dark cells</span>
                     </div>
                     <div class="form-check mt-5">
+                        <input id="numbered" type="checkbox" class="form-check-input" [checked]="numbered" (change)="onNumbered()"/>
+                        <label for="numbered" class="form-check-label">Grid has numbers</label>
+                    </div>
+                    <div class="form-check mt-5">
                         <input disabled="true" id="symmetrical" type="checkbox" class="form-check-input" [checked]="symmetrical" (change)="onSymmetrical(!symmetrical)"/>
                         <label for="symmetrical" class="form-check-label">Grid is symmetrical </label>
                     </div>
