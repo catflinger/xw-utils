@@ -81,12 +81,12 @@ export class ClueBuffer {
         let parts = clueCaption.split(separator);
 
         parts.forEach((part) => {
-            let label: number;
+            let anchor: number;
 
             let match = expression.exec(part);
 
             if (match && match.groups.caption) {
-                label = parseInt(match.groups.caption.toString());
+                anchor = parseInt(match.groups.caption.toString());
 
                 //determining direction:
                 let ref: GridReference = null;
@@ -97,7 +97,7 @@ export class ClueBuffer {
                     let directionString = match.groups.direction.toLowerCase();
                     let direction = directionString.charAt(0) === "a" ? "across" : "down";
                     ref = new GridReference({ 
-                        caption: label, 
+                        caption: anchor, 
                         direction })
                 
                 } else {
@@ -105,7 +105,7 @@ export class ClueBuffer {
 
                         // 2. there is no explicit direction so first assume the reference direction is same as the clue group
                         ref = new GridReference({
-                            caption: label, 
+                            caption: anchor, 
                             direction: group
                         });
 
@@ -116,7 +116,7 @@ export class ClueBuffer {
                             // 3. if still no clue found so try in the other group
                             const otherGroup: ClueGroup = group === "across" ? "down" : "across";
                             ref = new GridReference({
-                                caption: label, 
+                                caption: anchor, 
                                 direction: otherGroup
                             });
                             let cells = grid.getGridEntryFromReference(ref);
@@ -130,7 +130,7 @@ export class ClueBuffer {
                         }
                     } else {
                         ref = new GridReference({
-                            caption: label, 
+                            caption: anchor, 
                             direction: group
                         });
                     }

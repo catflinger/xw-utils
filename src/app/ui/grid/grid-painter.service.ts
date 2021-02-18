@@ -97,12 +97,12 @@ export class GridPainterService {
             }
 
             // draw the caption
-            if (cell.label) {
+            if (cell.anchor) {
                 this.drawCellCaption(
                     context,
                     left,
                     top,
-                    cell.label.toString(),
+                    cell.anchor.toString(),
                     gridParams);
             }
 

@@ -383,7 +383,7 @@ export class TextParsingService {
             let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
             let nextClueBuf = new ClueBuffer(token.text, context.state as ClueGroup);
 
-            let actualNextClueNumber: number = nextClueBuf.gridRefs[0].label;
+            let actualNextClueNumber: number = nextClueBuf.gridRefs[0].anchor;
 
             if (expectedNextClueNumber === actualNextClueNumber) {
                 // create a new letter count

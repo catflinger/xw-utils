@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export interface GridReferenceEvent {
     id: string,
-    label: number,
+    anchor: number,
     direction: Direction,
 }
 
@@ -31,7 +31,7 @@ export class GridReferenceComponent implements OnInit {
 
     public ngOnInit() {
         this.form = this.fb.group({
-            caption: this.gridRef.label,
+            caption: this.gridRef.anchor,
             direction: this.gridRef.direction,
         });
     }
@@ -39,7 +39,7 @@ export class GridReferenceComponent implements OnInit {
     public onRemove() {
         this.remove.emit({ 
             id: this.gridRef.id,
-            label: null,
+            anchor: null,
             direction: null,
         });
     }
@@ -47,7 +47,7 @@ export class GridReferenceComponent implements OnInit {
     public onSave() {
         this.save.emit({ 
             id: this.gridRef.id,
-            label: this.form.value.caption,
+            anchor: this.form.value.caption,
             direction: this.form.value.direction,
         });
     }

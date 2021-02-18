@@ -61,7 +61,7 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(1);
-            expect(cb.gridRefs[0].label).toEqual(2);
+            expect(cb.gridRefs[0].anchor).toEqual(2);
             expect(cb.gridRefs[0].direction).toEqual("across");
         });
 
@@ -70,7 +70,7 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(1);
-            expect(cb.gridRefs[0].label).toEqual(33);
+            expect(cb.gridRefs[0].anchor).toEqual(33);
             expect(cb.gridRefs[0].direction).toEqual("down");
         });
 
@@ -79,9 +79,9 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(2);
-            expect(cb.gridRefs[0].label).toEqual(2);
+            expect(cb.gridRefs[0].anchor).toEqual(2);
             expect(cb.gridRefs[0].direction).toEqual("across");
-            expect(cb.gridRefs[1].label).toEqual(3);
+            expect(cb.gridRefs[1].anchor).toEqual(3);
             expect(cb.gridRefs[1].direction).toEqual("across");
         });
 
@@ -90,11 +90,11 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(3);
-            expect(cb.gridRefs[0].label).toEqual(2);
+            expect(cb.gridRefs[0].anchor).toEqual(2);
             expect(cb.gridRefs[0].direction).toEqual("across");
-            expect(cb.gridRefs[1].label).toEqual(3);
+            expect(cb.gridRefs[1].anchor).toEqual(3);
             expect(cb.gridRefs[1].direction).toEqual("down");
-            expect(cb.gridRefs[2].label).toEqual(4);
+            expect(cb.gridRefs[2].anchor).toEqual(4);
             expect(cb.gridRefs[2].direction).toEqual("across");
         });
 
@@ -103,11 +103,11 @@ describe('ClueBuffer', () => {
 
             expect(Array.isArray(cb.gridRefs)).toBeTruthy;
             expect(cb.gridRefs.length).toEqual(3);
-            expect(cb.gridRefs[0].label).toEqual(2);
+            expect(cb.gridRefs[0].anchor).toEqual(2);
             expect(cb.gridRefs[0].direction).toEqual("down");
-            expect(cb.gridRefs[1].label).toEqual(3);
+            expect(cb.gridRefs[1].anchor).toEqual(3);
             expect(cb.gridRefs[1].direction).toEqual("across");
-            expect(cb.gridRefs[2].label).toEqual(4);
+            expect(cb.gridRefs[2].anchor).toEqual(4);
             expect(cb.gridRefs[2].direction).toEqual("down");
         });
     });

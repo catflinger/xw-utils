@@ -124,7 +124,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
                     id: `cell-${x}-${y}`,
                     x,
                     y,
-                    label: null,
+                    anchor: null,
                     content: "",
                     light: true,
                     rightBar: false,

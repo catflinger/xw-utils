@@ -72,7 +72,7 @@ export class SetRedirects implements IPuzzleModifier {
         .filter(c => c.id !== excludeId)
         .filter(candidate => !!candidate.link.gridRefs.find(gr => 
             gr.direction === lookFor.group &&
-            gr.label === lookFor.number));
+            gr.anchor === lookFor.number));
     }
 
     private parseRedirect(clue: IClue): ClueRef {

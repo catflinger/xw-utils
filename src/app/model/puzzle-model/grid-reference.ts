@@ -5,7 +5,7 @@ import { ObjectUnsubscribedError } from 'rxjs';
 export class GridReference implements IGridReference {
     // for example: 2 down or 23 across
     public readonly id: string;
-    public readonly label: number;
+    public readonly anchor: number;
     public readonly direction: Direction;
 
     constructor(data: any) {
@@ -13,11 +13,11 @@ export class GridReference implements IGridReference {
             this.id = data.id || uuid();
 
             if (typeof data.caption === "string") {
-                this.label = parseInt(data.caption);
+                this.anchor = parseInt(data.caption);
             } else if (typeof data.caption === "number") {
-                this.label = data.caption;
+                this.anchor = data.caption;
             } else {
-                this.label = data.label;
+                this.anchor = data.label || data.anchor;
             }
             this.direction = data.direction;
         }

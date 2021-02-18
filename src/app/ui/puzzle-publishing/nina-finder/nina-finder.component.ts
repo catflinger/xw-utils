@@ -146,7 +146,7 @@ export class NinaFinderComponent implements OnInit {
         const down = grid.properties.size.down;
         
         for(let y: number = 0; y < down; y++) {
-            let checkedCell = grid.cells.find(cell => cell.y === y && cell.label);
+            let checkedCell = grid.cells.find(cell => cell.y === y && cell.anchor);
             if (!checkedCell) {
                 let str = grid.cells
                 .filter(cell => cell.y === y)
@@ -165,7 +165,7 @@ export class NinaFinderComponent implements OnInit {
         const across = grid.properties.size.across;
         
         for(let x: number = 0; x < across; x++) {
-            let checkedCell = grid.cells.find(cell => cell.x === x && cell.label);
+            let checkedCell = grid.cells.find(cell => cell.x === x && cell.anchor);
             if (!checkedCell) {
                 let str = grid.cells
                 .filter(cell => cell.x === x)

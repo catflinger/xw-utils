@@ -104,7 +104,7 @@ export class GridImageComponent implements OnInit, OnDestroy {
             this.appService.setAlert("danger", `Your browser is unable to create an image of this grid.`);
 
         } else if (this.dataUrl.startsWith("data:image/png") && this.form.value.encoding !== "png") {
-            this.appService.setAlert("danger", `Unfortunately ${this.form.value.encoding} is not availabel on your browser.  Try another encoding.`)
+            this.appService.setAlert("danger", `Saving as ${this.form.value.encoding} is not available on your browser.  Try another encoding.`)
 
         } else {
             this.appService.recentlyUsed.downloadCaption = this.form.value.caption;
