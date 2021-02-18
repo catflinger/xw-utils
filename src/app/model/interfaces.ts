@@ -192,16 +192,30 @@ export interface IPuzzleProvision {
 }
 
 export interface IGridCell {
+    // identifier unique in the grid
     id: string;
+    
+    // x and y are grid cell offsets, the first row has x = 0, the first column has y = 0
     x: number;
     y: number;
+
+    // having a non-zero anchor number  marks the cell as the start of a light, numbers are allocated in the usual grid numbering order
     anchor: number;
+    // caption is the label to display in the cell, normally just the anchor number but may be different in specials
+    caption: string;
+
+    // the letter(s) the cell contains (normally the answer to a clue)
     content: string;
+
+    // decorations: in addition to visual appearance light also indicates the cell is part of a light in the crossword sense (a grid entry cell)
     light: boolean;
+    shading: string;
     rightBar: boolean;
     bottomBar: boolean;
+
+    // transitory property indicating the cell is part of a user selection
     highlight: boolean;
-    shading: string;
+    // transitory property indicating the cell is being edited
     edit: boolean;
 }
 
