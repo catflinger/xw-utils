@@ -33,7 +33,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         this.form = this.fb.group({
-            //title: ["", Validators.required],
+            clueStyle: ["plain", Validators.required],
             text: [defaultText, Validators.required],
         });
 

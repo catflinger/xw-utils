@@ -97,20 +97,12 @@ export class GridPainterService {
             }
 
             // draw the caption
-            let cellCaption: string = null;
-            
             if (gridProperties.numbered && cell.anchor) {
-                cellCaption = cell.anchor.toString();
-            } else if (!gridProperties.numbered && cell.caption) {
-                cellCaption = cell.caption;
-            }
-            
-            if (cellCaption) {
                 this.drawCellCaption(
                     context,
                     left,
                     top,
-                    cellCaption,
+                    cell.anchor.toString(),
                     gridParams);
             }
 

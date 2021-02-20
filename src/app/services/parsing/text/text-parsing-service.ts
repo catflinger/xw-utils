@@ -26,6 +26,7 @@ export class TextParsingService {
             allowPostamble: options && options.allowPostamble,
             allowTypos: options && options.allowTypos,
             azedFeatures: options && options.azedFeatures,
+            clueStyle: options.clueStyle,
         }
 
         let context = new ParseContext();

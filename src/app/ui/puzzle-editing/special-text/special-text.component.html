@@ -4,17 +4,28 @@
     </div>
 </div>
 
-<form [formGroup]="form">
+<form [formGroup]="form" class="form mt-3">
+    <label class="form-label">How are the clues labelled?</label>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="clueStyle" value="plain">Plain - the clues are
+            labelled with numbers in the normal way
+        </label>
+    </div>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="clueStyle" value="alphabetical">Alphabtical -
+            each clue is labelled with a letter of the alphabet
+        </label>
+    </div>
+    <div class="form-check disabled">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="clueStyle" value="jigsaw">Jigsaw - the clues
+            have no labels
+        </label>
+    </div>
 
-    <!-- <div class="row">
-        <div class="col form-group">
-            <label for="title" class="form-label">Give this puzzle a title</label>
-            <input id="title" type="text" class="form-control" formControlName="title">
-        </div>
-    </div> -->
-
-
-    <div *ngIf="parseError">
+    <div *ngIf="parseError" class="mt-3">
         <app-parse-result [result]="parseError"></app-parse-result>
 
         <!-- <label><input type="checkbox" #showText [checked]="false"> Show the full text</label> -->
@@ -22,73 +33,141 @@
         <pre>{{puzzle.provision.source}}</pre>
     </div>
 
-    <div class="row" *ngIf="!parseError">
+    <div class="row mt-5" *ngIf="!parseError">
         <div class="col form-group">
-            <label for="text" class="form-label">Enter text for the clues here</label>
-            <textarea id="text" class="form-control" rows="24" formControlName="text"></textarea>
+            <label for="text" class="form-label">Paste the text for your clues here</label>
+            <textarea id="text" class="form-control" rows="40" formControlName="text"></textarea>
+        </div>
+        <div class="col">
+            <ng-container *ngTemplateOutlet="form.value.clueStyle === 'plain' ? plain : null"></ng-container>
+            <ng-container *ngTemplateOutlet="form.value.clueStyle === 'alphabetical' ? alphabetical : null"></ng-container>
+            <ng-container *ngTemplateOutlet="form.value.clueStyle === 'jigsaw' ? jigsaw : null"></ng-container>
         </div>
     </div>
-        
-    <div class="row">
+
+    <div class="row mt-3">
         <div class="col form-group">
-            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()" [disabled]="!form.valid">Continue</button>
-            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
+            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()"
+                [disabled]="!form.valid">Continue</button>
+            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()"
+                [disabled]="!form.valid">Amend</button>
             <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
         </div>
     </div>
+</form>
 
+<ng-template #plain>
     <div class="row">
         <div class="col form-group">
             <app-tip key="specialText">
-    <h5>Notes on formatting the clues:</h5>
-    <p>
-        Clues for a puzzle can be entered manually here.  The format is simple and based on that used
-        by the daily cyptics in a newspaper.  In general, text cut-and-pasted from a newspaper website should
-        work here.
-    </p>
+                <p>
+                    The entry format is simple and based on that used by cyptics in a newspaper. In general, text cut-and-pasted from a newspaper website
+                    should work here.
+                </p>
 
-    The 5 basic rules for entering clues are:
-    <ul>
-        <li>There should be one clue per line</li>
-        <li>Clues should start with the clue number</li>
-        <li>Clues should end with the letter count</li>
-        <li>The across clues are labelled "ACROSS"</li>
-        <li>The down clues are labelled "DOWN"</li>
-    </ul>
+                The 4 basic rules for entering clues are:
+                <ul>
+                    <li>Clues should start with the clue number</li>
+                    <li>Clues should end with the letter count</li>
+                    <li>The across clues are labelled "ACROSS"</li>
+                    <li>The down clues are labelled "DOWN"</li>
+                </ul>
 
-    <pre class="bg-light">
-    ACROSS
-    1 Goodnight ladies (5)
-    2 Ladies goodnight (2, 4)
-    DOWN
-    3 This is a clue (2-2)
-    </pre>
+                It is not essential, but it may help if you also:
+                <ul>
+                    <li>Remove line breaks so there is one clue per line</li>
+                    <li>Remove unwanted text before the start of the clues</li>
+                    <li>Remove unwanted text after the end of the clues</li>
+                </ul>
 
-    Some optional features for more complex clues are:
-    <ul>
-        <li>Optionally, additional clue numbers may be added for linked clues, separated by commas</li>
-        <li>Optionally, numbers for linked clues may be supplemented with "across" or "down" to remove ambiguity</li>
-        <li>Redirections should be of the form "See n" where n is the clue number</li>
-        <li>Optionally, redirection numbers can be supplemented with "across" or down" to remove ambiguity</li>
-    </ul>
+                <pre class="bg-light">
+ACROSS
+1 Goodnight ladies (5)
+2 Ladies goodnight (2, 4)
+DOWN
+3 This is a clue (2-2)
+</pre>
 
-    <pre class="bg-light">
-    ACROSS
-    1,2 down,3 Life in the fast lane (8,2,2 4)
-    2 This is a clue (2, 4)
-    3 See 1
-    4 Another clue on its own (4)
-    DOWN
-    1 this is a clue (4)
-    2 See 1 across
-    </pre>
-    <p>
-        You can cut-and-paste text into here copied from another document, a PDF file for example.
-        Any extaneous text before the first ACROSS marker and after the last down-clue will be ignored, but best to remove it
-        before pressing the "continue" button just in case.
-    </p>
+                Some optional features for more complex clues are:
+                <ul>
+                    <li>Optionally, additional clue numbers may be added for linked clues, separated by commas</li>
+                    <li>Optionally, numbers for linked clues may be supplemented with "across" or "down" to remove
+                        ambiguity</li>
+                    <li>Redirections should be of the form "See n" where n is the clue number</li>
+                    <li>Optionally, redirection numbers can be supplemented with "across" or down" to remove
+                        ambiguity
+                    </li>
+                </ul>
+
+                <pre class="bg-light">
+ACROSS
+1,2 down,3 Life in the fast lane (8,2,2 4)
+2 This is a clue (2, 4)
+3 See 1
+4 Another clue on its own (4)
+DOWN
+1 this is a clue (4)
+2 See 1 across
+</pre>
+
             </app-tip>
         </div>
     </div>
+</ng-template>
 
-</form>
+<ng-template #alphabetical>
+    <div class="row">
+        <div class="col form-group">
+            <app-tip key="specialText">
+
+                The 4 basic rules for entering clues are:
+                <ul>
+                    <li>Clues should start with a capital letter</li>
+                    <li>Clues should end with the letter count</li>
+                </ul>
+
+                You should also:
+                <ul>
+                    <li>Remove any ACROSS or DOWN labels</li>
+                    <li>Remove unwanted text before the start of the clues</li>
+                    <li>Remove unwanted text after the end of the clues</li>
+                </ul>
+
+                <pre class="bg-light">
+A Goodnight ladies (5)
+B Ladies goodnight (2, 4)
+C This is a clue (2-2)
+</pre>
+
+            </app-tip>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #jigsaw>
+    <div class="row">
+        <div class="col form-group">
+            <app-tip key="specialText">
+
+                The 4 basic rules for entering clues are:
+                <ul>
+                    <li>Clues should be unlabelled</li>
+                    <li>Clues should end with the letter count</li>
+                </ul>
+
+                You should also:
+                <ul>
+                    <li>Remove unwanted text before the start of the clues</li>
+                    <li>Remove unwanted text after the end of the clues</li>
+                </ul>
+
+                <pre class="bg-light">
+Goodnight ladies (5)
+Ladies goodnight (2, 4)
+This is a clue (2-2)
+</pre>
+
+            </app-tip>
+        </div>
+    </div>
+</ng-template>

@@ -65,18 +65,18 @@ export class TextToken extends ParseToken {
 
 export class StartMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[start-of-file]", NaN, {}), "StartMarkerToken");
+        super(new Line("[start-of-file]", NaN, { clueStyle: null }), "StartMarkerToken");
     }
 }
 
 export class EndMarkerToken extends ParseToken {
     constructor() {
-        super(new Line("[end-of-file]", NaN, {}), "EndMarkerToken");
+        super(new Line("[end-of-file]", NaN, { clueStyle: null }), "EndMarkerToken");
     }
 }
 
 export class NullToken extends ParseToken {
     constructor() {
-        super(new Line("", NaN, {}), "NullToken");
+        super(new Line("", NaN, { clueStyle: null }), "NullToken");
     }
 }

@@ -1,3 +1,5 @@
+import { ClueStyle } from "src/app/model/interfaces";
+
 // one or two digits
 export const clueCaptionExpressionFirstPart = String.raw`\s*\d{1,2}`;
 
@@ -12,6 +14,7 @@ export const clueCaptionExpression = String.raw`^\s*\*?\s*(?<caption>\s*${clueCa
 export const clueLetterCountExpression = String.raw`(?<letterCount>\((words|[0-9, -])+?\)\s*$)`;
 
 export interface TextParsingOptions {
+    clueStyle: ClueStyle,
     allowPreamble?: boolean,
     allowPostamble?: boolean,
     allowTypos?: boolean,

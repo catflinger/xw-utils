@@ -5,7 +5,7 @@ export class Line {
     constructor(
         public readonly rawText: string,
         public readonly lineNumber: number,
-        public readonly options?: TextParsingOptions,
+        public readonly options: TextParsingOptions,
     ) {}
 
     public get lineType(): LineType {
@@ -37,9 +37,17 @@ export class Line {
     }
 
     private get hasStartMarker(): boolean {
-        if (this.options && this.options && this.options.azedFeatures) {
+        if (this.options.clueStyle === "jigsaw") {
+            return true;
+        
+        } else if (this.options.clueStyle === "alphabetical") {
+            let exp = new RegExp(String.raw`^\s*[A-Z]\s`);
+            return exp.test(this.text);
+        
+        }else if (this.options && this.options.azedFeatures) {
             let exp = new RegExp(String.raw`^\*?\s*\d{1,2}\D`, "i");
             return exp.test(this.text);
+
         } else {
             let exp = new RegExp(String.raw`^\d{1,2}\D`, "i");
             return exp.test(this.text);

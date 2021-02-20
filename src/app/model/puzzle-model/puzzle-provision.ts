@@ -1,9 +1,10 @@
-import { IPuzzleProvision } from '../interfaces';
+import { ClueStyle, IPuzzleProvision } from '../interfaces';
 import { TextParsingError } from './text-parsing-error';
 import { TextParsingWarning } from './text-parsing-warning';
 
 export class PuzzleProvision implements IPuzzleProvision {
     public readonly source: string;
+    public readonly clueStyle: ClueStyle;
     public readonly parseErrors: Array<TextParsingError>;
     public readonly parseWarnings: Array<TextParsingWarning>;
 
@@ -23,5 +24,6 @@ export class PuzzleProvision implements IPuzzleProvision {
         this.parseErrors = errors;
         this.parseWarnings = warnings;
         this.source = data.source;
+        this.clueStyle = data.clueStyle || null;
     }
 }

@@ -1,5 +1,5 @@
 import { IPuzzleModifier } from '../puzzle-modifier';
-import { IPuzzle, ITextParsingError } from '../../model/interfaces';
+import { IPuzzle, IPuzzleProvision, ITextParsingError } from '../../model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { InitAnnotationWarnings } from '../puzzle-modifiers/init-annotation-warnings';
 import { PuzzleProvider } from 'src/app/model/interfaces';
@@ -32,7 +32,7 @@ export class ParseText implements IPuzzleModifier {
         parseData.rawData = puzzle.provision.source;
         parseData.grid = puzzle.grid ? new Grid(puzzle.grid) : null;
 
-        let parser = this.textParsingService.parser(parseData, this.getParsingOptions(puzzle.info.provider));
+        let parser = this.textParsingService.parser(parseData, this.getParsingOptions(puzzle.info.provider, puzzle.provision));
         let context = parser.next();
 
         while(!context.done) {
@@ -107,8 +107,10 @@ export class ParseText implements IPuzzleModifier {
         }
     }
 
-    private getParsingOptions(provider: PuzzleProvider): TextParsingOptions {
-        let options: TextParsingOptions = {}
+    private getParsingOptions(provider: PuzzleProvider, provision: IPuzzleProvision): TextParsingOptions {
+        let options: TextParsingOptions = {
+            clueStyle: provision.clueStyle
+        }
 
         if (provider !== "text") {
             options.allowPostamble = true;

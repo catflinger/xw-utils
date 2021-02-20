@@ -13,6 +13,9 @@ export type Layouts = "table" | "list";
 export type Spacing = "small" | "medium" | "large";
 export type TextStyleName = "answer" | "clue" | "definition";
 export type GridStyle = "standard" | "barred";
+export type ClueStyle = "plain" | "alphabetical" | "jigsaw"| null;
+
+
 
 export type TextParsingErrorCode =
     "unparsed" |
@@ -189,6 +192,7 @@ export interface IPuzzleProvision {
     source: string;
     parseErrors: Array<ITextParsingError>;
     parseWarnings: Array<ITextParsingWarning>;
+    clueStyle: ClueStyle,
 }
 
 export interface IGridCell {
@@ -199,10 +203,8 @@ export interface IGridCell {
     x: number;
     y: number;
 
-    // having a non-zero anchor number  marks the cell as the start of a light, numbers are allocated in the usual grid numbering order
+    // the grid number: having a non-zero grid number marks the cell as the start of an across or down light
     anchor: number;
-    // caption is the label to display in the cell, normally just the anchor number but may be different in specials
-    caption: string;
 
     // the letter(s) the cell contains (normally the answer to a clue)
     content: string;
