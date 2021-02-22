@@ -8,6 +8,7 @@ import { AppTrackData } from '../../../services/navigation/tracks/app-track-data
 import { Subscription } from 'rxjs';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ITextParsingError } from 'src/app/model/interfaces';
+import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -49,6 +50,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                             this.form.patchValue({ 
                                 //title: puzzle.info.title,
                                 text: puzzle.provision.source,
+                                clueStyle: puzzle.provision.clueStyle,
                             });
 
                             const errors = puzzle.provision.parseErrors;
@@ -66,15 +68,15 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onParse() {
         this.appService.clear();
 
-        const params = new UpdateInfo({
-            //title: this.form.value.title,
-            source: this.form.value.text 
-        });
+        const params = [
+            new UpdateInfo({source: this.form.value.text}),
+            new UpdateProvision({clueStyle: this.form.value.clueStyle})
+        ];
 
         if (this.puzzle) {
-            this.activePuzzle.updateAndCommit(params);
+            this.activePuzzle.updateAndCommit(...params);
         } else {
-            this.puzzleManager.newPuzzle("local", [params]);
+            this.puzzleManager.newPuzzle("local", params);
         }
 
         this.navService.navigate("parse");

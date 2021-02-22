@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@ang
 import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, Validator, ValidatorFn } from '@angular/forms';
 import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
@@ -12,6 +12,7 @@ import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
+import { ClueStyle } from 'src/app/model/interfaces';
 
 @Component({
   selector: 'app-add-clue',
@@ -39,13 +40,7 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            caption: [
-                "", 
-                [
-                    Validators.required, 
-                    Validators.pattern(clueCaptionExpression + String.raw`\s*`)
-                ]
-            ],
+            caption: "",
             text: [
                 "",
                 [ 
@@ -64,6 +59,9 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
         this.subs.push(
             this.activePuzzle.observe().subscribe(puzzle => {
                 this.puzzle = puzzle;
+                if (puzzle) {
+                    this.form.get("caption").setValidators(this.getCaptionValidators(puzzle.provision.clueStyle));
+                }
                 this.detRef.detectChanges();
             })
         );
@@ -88,5 +86,19 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
             new SortClues(),
             );
         this.close.emit();
+    }
+
+    private getCaptionValidators(clueStyle: ClueStyle): ValidatorFn[] {
+        let captionExpression: string;
+
+        if (clueStyle === "alphabetical") {
+            captionExpression = String.raw`^\s*[A-Z]\s+`;
+        } else if (clueStyle === "jigsaw") {
+            captionExpression = String.raw`^\s*`;
+        } else {
+            captionExpression = clueCaptionExpression;
+        }
+
+        return [Validators.required, Validators.pattern(captionExpression + String.raw`\s*`)]
     }
 }

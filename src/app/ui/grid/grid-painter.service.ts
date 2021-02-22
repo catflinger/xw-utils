@@ -233,8 +233,6 @@ export class GridPainterService {
         const textWidth = context.measureText(caption);
         const textLeft = Math.max(0, (context.canvas.width - gridParams.gridPadding * 2 - textWidth.width) / 2);
 
-        //console.log(`TEXT width  ${JSON.stringify(textWidth.width, null, 2)}`)
-
         context.fillText(
             caption,
             textLeft,

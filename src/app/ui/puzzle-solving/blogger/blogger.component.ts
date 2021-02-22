@@ -42,7 +42,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
             const puzzleObserver = this.activePuzzle.observe();
             const settingsObserver = this.appSettinsgService.observe();
 
-            this.subs.push(combineLatest(puzzleObserver, settingsObserver).subscribe(result => {
+            this.subs.push(combineLatest([puzzleObserver, settingsObserver]).subscribe(result => {
                 const puzzle = result[0];
                 const settings = result[1];
 

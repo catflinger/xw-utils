@@ -1,8 +1,9 @@
-import { ClueGroup, Direction } from 'src/app/model/interfaces';
+import { ClueGroup, ClueStyle, Direction } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { clueCaptionExpression } from './types';
 import { Grid } from 'src/app/model/puzzle-model/grid';
+import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error';
 
 export class ClueBuffer {
     private _rawText: string;
@@ -12,7 +13,11 @@ export class ClueBuffer {
     private _letterCount: string;
     private _gridRefs: ReadonlyArray<GridReference>;
 
-    constructor (text: string, direction: ClueGroup, private grid?: Grid) {
+    constructor (
+        private clueStyle: ClueStyle, 
+        text: string, 
+        direction: ClueGroup, 
+        private grid?: Grid) {
         this._rawText = text.trim();
         this._direction = direction;
 
@@ -54,21 +59,30 @@ export class ClueBuffer {
 
         if (!this._rawText || this._rawText.trim().length === 0) {
             this._caption = null;
-        }
+            this._clue = "";
 
-        // any characters up to the end of the line
-        const clueGroupExpression = String.raw`(?<clue>.*$)`;
-        
-        // start of line, optional space, (the caption group)
-        const regExp = new RegExp(clueCaptionExpression + clueGroupExpression);
+        } else {
 
-        const match = regExp.exec(this._rawText);
+            if (this.clueStyle === "jigsaw") {
+                this._caption = null;
+                this._clue = this._rawText.trim();
 
-        if (match) {
-            this._caption = match.groups.caption.trim();
-            this._clue = match.groups.clue.trim();
-        }
+            } else {
+                const exp = this.clueStyle === "alphabetical" ?
+                    String.raw`^\s*(?<caption>[A-Z])\s+(?<clue>.*)` :
+                    clueCaptionExpression + String.raw`(?<clue>.*$)`;
 
+                    const match = new RegExp(exp)
+                    .exec(this._rawText);
+
+                    if (match && match.groups) {
+                        this._caption = match.groups.caption ? match.groups.caption.trim() : null;
+                        this._clue = match.groups.clue.trim();
+                    } else {
+                        throw new TextParsingError("Failed to find a caption in the clue test");
+                    }
+                }
+            }
     }
 
     static makeGridReferences(clueCaption: string, group: ClueGroup, grid?: Grid): ReadonlyArray<GridReference> {

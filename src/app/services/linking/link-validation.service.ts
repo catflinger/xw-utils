@@ -37,7 +37,7 @@ export class LinkValidationService {
         */
         puzzle.clues.forEach((clue) => {
 
-            let cb: ClueBuffer = new ClueBuffer(clue.text, clue.group);
+            let cb: ClueBuffer = new ClueBuffer(clue.text, clue.group, null, puzzle.provision.clueStyle);
 
             if (clue.redirect) {
                 // TO DO: should a redirect have an entry?

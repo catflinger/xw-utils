@@ -19,30 +19,35 @@ export class TextParsingService {
         private tokeniser: TokeniserService,
         ) {}
 
-    public *parser(data: ParseData, options: TextParsingOptions) {
+    public *parser(data: ParseData, textParsingOptions: TextParsingOptions) {
 
         const _options: TextParsingOptions = {
-            allowPreamble: options && options.allowPreamble,
-            allowPostamble: options && options.allowPostamble,
-            allowTypos: options && options.allowTypos,
-            azedFeatures: options && options.azedFeatures,
-            clueStyle: options.clueStyle,
+            allowPreamble: textParsingOptions && textParsingOptions.allowPreamble,
+            allowPostamble: textParsingOptions && textParsingOptions.allowPostamble,
+            allowTypos: textParsingOptions && textParsingOptions.allowTypos,
+            azedFeatures: textParsingOptions && textParsingOptions.azedFeatures,
+            clueStyle: textParsingOptions.clueStyle,
         }
 
-        let context = new ParseContext();
-        let tokens: TokenList = this.tokeniser.parse(data.rawData, options);
+        let context = new ParseContext(_options.clueStyle);
+        let tokens: TokenList = this.tokeniser.parse(data.rawData, _options);
 
         let tokeniser = tokens.getIterator();
         let item = tokeniser.next();
 
         while(!item.done) {
 
+            // TO DO: have a parse trace setting to display progress in the parse orcess
+            // console.log(`State is ${context.state} parsing token ${JSON.stringify(item.value.current.type)}`)
+
             context.setGroup(item.value);
 
             try {
                 switch (context.tokenGroup.current.type) {
                     case "StartMarkerToken":
-                        //ignore this
+                        if (_options.clueStyle !== "plain") {
+                            context.state = "across";
+                        }
                         break;
                     case "AcrossMarkerToken":
                         this.onAcrossMarker(context, _options);
@@ -174,11 +179,20 @@ export class TextParsingService {
                     message: "reached end of file and no clues found"});
 
             case "across":
-                case null:
+                if (options.clueStyle === "plain") {
                     throw new TextParsingError({
                         code: "endMarker_across",
                         tokens: context.tokenGroup,
                         message: "reached end of file and no down clues found"});
+                } else if (context.buffer === null) {
+                    // this is good news, the input ends following a completed clue
+                } else {
+                    throw new TextParsingError({
+                        code: "endMarker_down",
+                        tokens: context.tokenGroup,
+                        message: "reached the end of the file with an unfinished clue."});
+                }
+                break;
     
             case "down":
                 if (context.buffer === null) {
@@ -203,7 +217,6 @@ export class TextParsingService {
                     code: "clue_null",
                     tokens: context.tokenGroup,
                     message: "Found start of clue before ACROSS or DOWN marker"});
-
             case "ended":
                 // we don't expect to se whole clues cropping up in the solutions
                 throw new TextParsingError({
@@ -382,7 +395,7 @@ export class TextParsingService {
             // best to not attempt it at all than to code a botched attempt that causes more harm than good.
 
             let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
-            let nextClueBuf = new ClueBuffer(token.text, context.state as ClueGroup);
+            let nextClueBuf = new ClueBuffer(context.clueStyle, token.text, context.state as ClueGroup);
 
             let actualNextClueNumber: number = nextClueBuf.gridRefs[0].anchor;
 
@@ -400,7 +413,7 @@ export class TextParsingService {
                 
                 // finish off the existing clue with an added lettercount
                 context.addClueText(letterCount);
-                context.addWarning(token.lineNumber, `A clue was found that looks to be missing a letter count, a new lettercount has been added.  The amended clue is: ${context.buffer.caption} ${context.buffer.clue}`);
+                context.addWarning(token.lineNumber, `A clue was found that looks to be missing a letter count, a new lettercount has been added.`);
                 context.save();
 
             } else {

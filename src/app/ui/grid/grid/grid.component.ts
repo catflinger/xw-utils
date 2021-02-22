@@ -90,7 +90,7 @@ export class GridComponent implements OnInit, AfterViewInit, OnChanges {
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
 
-                    if (puzzle) {
+                    if (puzzle && this.puzzle.grid) {
                         this.puzzle = puzzle;
                         this.model.style.display = "none";
 
