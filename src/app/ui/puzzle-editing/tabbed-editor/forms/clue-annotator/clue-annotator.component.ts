@@ -17,6 +17,7 @@ import { Grid } from 'src/app/model/puzzle-model/grid';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
+import { PuzzleProvision } from 'src/app/model/puzzle-model/puzzle-provision';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -52,8 +53,8 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
     public warnings: ClueValidationWarning[] = [];
     public showAnnotation: boolean = false;
     public latestAnswer: AnswerTextChunk[] = [];
-    public publishOptions: PublishOptions;
-
+    public puzzle: Puzzle;
+    
     private shadowPuzzle: Puzzle;
     private subs: Subscription[] = [];
 
@@ -83,6 +84,9 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
         this.subs.push(
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
+                    this.puzzle = puzzle;
+                    this.clue = null;
+
                     if (puzzle) {
                         this.clue = puzzle.getSelectedClue();
                         if (this.clue) {
@@ -90,7 +94,6 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
                             this.shadowPuzzle = this.makeShadowPuzzle(puzzle, this.clue.id);
 
                             this.grid = puzzle.grid;
-                            this.publishOptions = puzzle.publishOptions;
 
                             this.answersFormArray.clear();
 
@@ -171,20 +174,6 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
 
     public trackAnswersBy(index) {
         return index;
-    }
-
-    public get clueCaption(): string {
-        let result = "";
-
-        if (this.clue) {
-            result = this.clue.caption;
-            let exp = new RegExp(String.raw`(across|down)`, "i");
-
-            if (!exp.test(this.clue.caption)) {
-                result += " " + this.clue.group;
-            }
-        }
-        return result;
     }
 
     public onClearDefinition() {

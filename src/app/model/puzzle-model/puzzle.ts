@@ -49,7 +49,7 @@ export class Puzzle implements IPuzzle {
             this.clues = null;
         }
 
-        this.provision = data.provision ? new PuzzleProvision(data.provision) : null;
+        this.provision = new PuzzleProvision( data.provision || { clueStyle: "plain"} );
         this.info = new PuzzleInfo(data.info);
         this.notes = new PuzzleAnnotation(data.notes);
         this.publishOptions = new PublishOptions(data.publishOptions);

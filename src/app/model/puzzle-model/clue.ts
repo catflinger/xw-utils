@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { ClueGroup } from '../interfaces';
+import { ClueGroup, ClueStyle } from '../interfaces';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from '../interfaces';
 import { ClueBuffer } from '../../services/parsing/text/clue-buffer';
@@ -81,6 +81,24 @@ export class Clue implements IClue {
             data.warnings.forEach(warning => warnings.push(warning));
         }
         this.warnings = warnings;
+    }
+
+    public getDisplayCaption(clueStyle: ClueStyle) {
+        let result = "";
+
+        if (clueStyle === "plain") {
+            result = this.caption;
+            let exp = new RegExp(String.raw`(across|down)`, "i");
+
+            if (!exp.test(this.caption)) {
+                result += " " + this.group;
+            }
+        
+        } else if (clueStyle === "alphabetical") {
+            result = this.caption;
+        }
+
+        return result;
     }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {

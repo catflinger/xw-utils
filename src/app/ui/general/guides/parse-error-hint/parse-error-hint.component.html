@@ -50,7 +50,7 @@
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
 <div *ngIf="errorCode === 'clueEnd_acrossdown'">
-    <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
+    <ng-container *ngTemplateOutlet="unstartedClue"></ng-container>
 </div>
 <div *ngIf="errorCode === 'clueEnd_null'">
     <!-- is this really an error ? -->
@@ -67,7 +67,6 @@
     <ng-container *ngTemplateOutlet="unfinishedClue"></ng-container>
 </div>
 
-
 <ng-template #unfinishedClue>
     There seems to be a clue that is not finished.
     This is often caused by problems with the letter-count of the previous clue.
@@ -82,6 +81,10 @@
     This makes the line appear to be the start of a new clue.
     Fix this by removing the line break and having the whole clue on one line.
 
+</ng-template>
+
+<ng-template #unstartedClue>
+    There seems to be a clue that has no clue number at the beginning (or no clue letter if alphatical puzzle).
 </ng-template>
 
 <ng-template #contentBeforeAcrossMarker>

@@ -305,7 +305,7 @@ export class TextParsingService {
                 // 1.  
 
                     throw new TextParsingError({
-                        code: "clueStart_acrossdown",
+                        code: "clueEnd_acrossdown",
                         tokens: context.tokenGroup,
                         message: "Found end of clue when no clue started"});
                 }

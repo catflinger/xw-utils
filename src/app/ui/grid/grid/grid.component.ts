@@ -89,9 +89,9 @@ export class GridComponent implements OnInit, AfterViewInit, OnChanges {
         this.subs.push(
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
+                    this.puzzle = puzzle;
 
                     if (puzzle && this.puzzle.grid) {
-                        this.puzzle = puzzle;
                         this.model.style.display = "none";
 
                         this.resizeCanvas();
@@ -133,7 +133,7 @@ export class GridComponent implements OnInit, AfterViewInit, OnChanges {
 
     public ngAfterViewInit() {
         this.viewInitiated = true;
-        this.drawGrid(this.caption)
+        this.drawGrid(this.caption);
     }
 
     public ngOnChanges() {
@@ -240,7 +240,7 @@ export class GridComponent implements OnInit, AfterViewInit, OnChanges {
 
 
     private drawGrid(caption: string): void {
-        if (this.viewInitiated && this.canvas) {
+        if (this.puzzle && this.puzzle.grid && this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
 

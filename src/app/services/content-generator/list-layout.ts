@@ -10,6 +10,7 @@ import { Text } from "./text";
 import { ContentNode } from './content-node';
 import { QuillNode } from './quill-node';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
+import { PuzzleProvision } from 'src/app/model/puzzle-model/puzzle-provision';
 
 @Injectable({
     providedIn: 'root'
@@ -42,10 +43,10 @@ export class ListLayout implements ContentGenerator {
 
                 // clues
                 new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")),
-                new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions))),
+                new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions, puzzle.provision))),
 
                 new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")),
-                new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions))),
+                new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions, puzzle.provision))),
 
                 //footer
                 new Tag("div", new QuillNode(puzzle.notes.footer)),
@@ -55,7 +56,7 @@ export class ListLayout implements ContentGenerator {
         return root.toString();
     }
 
-    private makeClue(clue: Clue, publishOptions: PublishOptions): ContentNode {
+    private makeClue(clue: Clue, publishOptions: PublishOptions, provision: PuzzleProvision): ContentNode {
         const clueStyle = publishOptions.getStyle("clue");
         const definitionStyle = publishOptions.getStyle("definition");
 
@@ -68,7 +69,7 @@ export class ListLayout implements ContentGenerator {
 
                 // caption
                 new Tag("span",
-                    new Text(clue.caption),
+                    new Text(clue.getDisplayCaption(provision.clueStyle)),
                     new Text(". "),
                     publishOptions.useDefaults ?
                         new Attribute("class", clueStyle.class) :

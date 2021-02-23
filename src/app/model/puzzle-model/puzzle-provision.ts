@@ -24,6 +24,6 @@ export class PuzzleProvision implements IPuzzleProvision {
         this.parseErrors = errors;
         this.parseWarnings = warnings;
         this.source = data.source;
-        this.clueStyle = data.clueStyle || null;
+        this.clueStyle = data.clueStyle || "plain";
     }
 }
