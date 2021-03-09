@@ -27,7 +27,7 @@ export class SyncGridContent implements IPuzzleModifier {
                     .forEach(id => {
                         let cell = puzzle.grid.cells.find(c => c.id === id);
                         if (index < answer.length) {
-                            cell.content = answer.charAt(index);
+                            cell.content += answer.charAt(index);
                         }
                         index++;
                     });

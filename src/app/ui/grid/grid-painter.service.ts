@@ -86,15 +86,23 @@ export class GridPainterService {
             this.fillCell(context, left, top, gridParams.gridColor, gridParams);
 
         } else {
+            const showConflicts = options && options.showConflicts;
             const hideShading = options && options.hideShading;
             const hideHighlight = options && options.hideHighlight;
+            const cellText = (cell.content && cell.content.trim()) ? cell.content.trim().charAt(0) : null;
 
             // highlight cells that are in focus
-            if (cell.highlight && !hideHighlight) {
-                this.fillCell(context, left, top, gridParams.highlightColor, gridParams);
+            let bgColor: string = null;
+            
+            if (showConflicts && cell.hasConflict)  {
+                bgColor = gridParams.conflictColor;
+            } else if (cell.highlight && !hideHighlight) {
+                bgColor = gridParams.highlightColor;
             } else if (cell.shading && !hideShading)  {
-                this.fillCell(context, left, top, cell.shading, gridParams);
+                bgColor = cell.shading;
             }
+
+            this.fillCell(context, left, top, bgColor, gridParams);
 
             // draw the caption
             if (gridProperties.numbered && cell.anchor) {
@@ -107,12 +115,12 @@ export class GridPainterService {
             }
 
             // draw the cell context
-            if (cell.content.trim()) {
+            if (cellText) {
                 this.drawContent(
                     context,
                     left,
                     top,
-                    cell.content.trim(),
+                    cellText,
                     gridParams);
             }
 
@@ -176,16 +184,18 @@ export class GridPainterService {
     }
 
     private fillCell(context: CanvasRenderingContext2D, left: number, top: number, color: string, gridParams: GridParameters) {
-        context.beginPath();
-        context.fillStyle = color;
-
-        context.rect(
-            left - 1 + gridParams.borderWidth,
-            top - 1 + gridParams.borderWidth,
-            gridParams.cellSize - gridParams.borderWidth * 2 + 1,
-            gridParams.cellSize - gridParams.borderWidth * 2 + 1);
-
-        context.fill();
+        if (color) {
+            context.beginPath();
+            context.fillStyle = color;
+    
+            context.rect(
+                left - 1 + gridParams.borderWidth,
+                top - 1 + gridParams.borderWidth,
+                gridParams.cellSize - gridParams.borderWidth * 2 + 1,
+                gridParams.cellSize - gridParams.borderWidth * 2 + 1);
+    
+            context.fill();
+        }
     }
 
     private drawLine(context: CanvasRenderingContext2D, from: [number, number], to: [number, number], width: number, color: string) {

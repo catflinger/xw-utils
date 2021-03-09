@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AuthService } from 'src/app/services/app/auth.service';
@@ -18,7 +18,7 @@ import { fifteenSquaredBlack } from '../../common';
     templateUrl: './content-preview.component.html',
     styleUrls: ['./content-preview.component.css'],
 })
-export class ContentPreviewComponent implements OnInit {
+export class ContentPreviewComponent implements OnInit, AfterViewInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
     public appSettings: AppSettings;
@@ -28,10 +28,9 @@ export class ContentPreviewComponent implements OnInit {
     public black = fifteenSquaredBlack;
 
     private subs: Subscription[] = [];
-    private gridControl: GridComponent;
+    //private gridControl: GridComponent;
 
-    @ViewChild(GridComponent, { static: true }) 
-    set content(content: GridComponent) { this.gridControl = content };
+    @ViewChildren(GridComponent ) children: QueryList<GridComponent>;
     
     constructor(
         private navService: NavService<AppTrackData>,
@@ -59,23 +58,24 @@ export class ContentPreviewComponent implements OnInit {
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
-        } else {
-
-            this.subs.push(
-                this.activePuzzle.observe().subscribe(
-                    (puzzle) => {
-                        this.puzzle = puzzle;
-                        if (puzzle) {
-                            const generator = puzzle.publishOptions.layout === "table" ? this.tableLayout : this.listLayout;
-                            this.debugContent = generator.getContent(puzzle, this.getGridImage());
-                        }
-                        this.detRef.detectChanges();
-                    }
-                ));
         }
     }
 
-    ngOnDestroy() {
+    public ngAfterViewInit() {
+        this.subs.push(
+                this.activePuzzle.observe().subscribe(puzzle => {
+                this.puzzle = puzzle;
+
+                if (this.puzzle) {
+                    const generator = this.puzzle.publishOptions.layout === "table" ? this.tableLayout : this.listLayout;
+                    this.debugContent = generator.getContent(this.puzzle, this.getGridImage(this.children.first));
+                }
+                this.detRef.detectChanges();
+            })
+        );
+    }
+
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
@@ -83,11 +83,11 @@ export class ContentPreviewComponent implements OnInit {
         this.navService.navigate("continue");
     }
 
-    private getGridImage(): string {
+    private getGridImage(gridControl: GridComponent): string {
         let result: string = null;
 
         try {
-            result = this.gridControl.getDataUrl("png"); //.replace("data:image/png;base64,", "");
+            result = gridControl.getDataUrl("png"); //.replace("data:image/png;base64,", "");
         } catch (error) {
             result = null;
         }

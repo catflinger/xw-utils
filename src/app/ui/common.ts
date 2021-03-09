@@ -25,6 +25,7 @@ export interface GridParameters {
     readonly textFont: string;
     readonly gridColor: string;
     readonly highlightColor: string;
+    readonly conflictColor: string;
 }
 
 export class GridParametersLarge implements GridParameters {
@@ -37,6 +38,7 @@ export class GridParametersLarge implements GridParameters {
     public readonly textFont = "20px sans-serif";
     public readonly gridColor = "black";
     public readonly highlightColor = "BurlyWood";
+    public readonly conflictColor = "Tomato";
 }
 
 export class GridParametersSmall implements GridParameters {
@@ -49,11 +51,13 @@ export class GridParametersSmall implements GridParameters {
     public readonly textFont = "16px sans-serif";
     public readonly gridColor = "black";
     public readonly highlightColor = "BurlyWood";
+    public readonly conflictColor = "Tomato";
 }
 
 export interface GridControlOptions {
     hideShading?: boolean;
     hideHighlight?: boolean;
+    showConflicts?: boolean;
     //enableTextEdit?: boolean;
     editor?: Symbol;
     size?: GridSizes;

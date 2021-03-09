@@ -233,7 +233,7 @@ export class GridComponent implements OnInit, AfterViewInit, OnChanges {
             params.gridColor = this.options.color;
         }
 
-    this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params, this.caption);
+        this.gridPainter.drawGrid(context, this.puzzle.grid, this.options, params, this.caption);
 
         return canvas.toDataURL(`image/${encoding}`);
     }

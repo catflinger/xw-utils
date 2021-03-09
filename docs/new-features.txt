@@ -15,6 +15,11 @@ Grid Image Maker
 Allow other formats for download grid image: gif, png etc
 Add a caption to the grid image, useful for animated GIF tools
 
+Advanced cryptic support
+========================
+Have a new grid-layout for IQs etc
+Highlight conflicts in grid (also useful ofr standard puzzles)
+
 Animated GIF creator
 ====================
 Stitch together several grid images as an animated GIF (difficult client side?)

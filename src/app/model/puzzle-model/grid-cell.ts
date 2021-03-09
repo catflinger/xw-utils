@@ -27,4 +27,23 @@ export class GridCell implements IGridCell {
 
         this.anchor = (data.label || data.anchor) || null;
     }
+
+    public get hasConflict(): boolean {
+        var result = false;
+
+        if (this.content) {
+            const letters = this.content.replace(/\s/, "");
+            
+            if (letters) {
+                const first = letters.charAt(0);
+
+                for (const x of this.content.trim()) {
+                    if (x !== first) {
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }

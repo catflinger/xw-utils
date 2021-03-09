@@ -19,7 +19,7 @@
 
     <div class="row" *ngIf="showPuzzle">
         <div class="col" *ngIf="puzzle.grid">
-            <app-grid (cellClick)="onCellClick($event)" [options]="{ hideShading: true }"></app-grid>
+            <app-grid (cellClick)="onCellClick($event)" [options]="{ hideShading: true, showConflicts: true }"></app-grid>
         </div>
 
         <div class="col">
