@@ -87,7 +87,7 @@ export class ContentPreviewComponent implements OnInit, AfterViewInit, OnDestroy
         let result: string = null;
 
         try {
-            result = gridControl.getDataUrl("png"); //.replace("data:image/png;base64,", "");
+            result = gridControl.getDataUrl("png");
         } catch (error) {
             result = null;
         }
