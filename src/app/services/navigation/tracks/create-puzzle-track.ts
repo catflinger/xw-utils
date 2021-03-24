@@ -57,11 +57,28 @@ export const createPuzzleTrack: NavTrack = {
             type: "route",
             route: "/grid-editor",
             actions: {
+                "image": "image",
+                "nina": "nina-finder",
                 "continue": "link",
                 "close": "hub",
             }
         },
         {
+            name: "nina-finder",
+            type: "route",
+            route: "/nina-finder",
+            actions: {
+                "back": "edit-grid",
+            }
+        },
+        {
+            name: "image",
+            type: "route",
+            route: "/grid-image",
+            actions: {
+                "back": "edit-grid",
+            }
+        },        {
             name: "link",
             type: "process",
             process: "link",

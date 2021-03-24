@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { ClueGroup, ClueStyle } from '../interfaces';
+import { ClueGroup, CaptionStyle } from '../interfaces';
 import { TextChunk } from './clue-text-chunk';
 import { ClueValidationWarning, IClue } from '../interfaces';
 import { ClueBuffer } from '../../services/parsing/text/clue-buffer';
@@ -83,10 +83,10 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    public getDisplayCaption(clueStyle: ClueStyle) {
+    public getDisplayCaption(clueStyle: CaptionStyle) {
         let result = "";
 
-        if (clueStyle === "plain") {
+        if (clueStyle === "numbered") {
             result = this.caption;
             let exp = new RegExp(String.raw`(across|down)`, "i");
 

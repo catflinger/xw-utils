@@ -18,11 +18,16 @@
             each clue is labelled with a letter of the alphabet
         </label>
     </div>
-    <div class="form-check disabled">
+    <div class="form-check">
         <label class="form-check-label">
-            <input type="radio" class="form-check-input" formControlName="clueStyle" value="jigsaw">Jigsaw - the clues
+            <input type="radio" class="form-check-input" formControlName="clueStyle" value="none">none - the clues
             have no labels
         </label>
+    </div>
+
+    <div class="form-check mt-5">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" formControlName="hasLetterCount">The clues have letter counts e.g. (3,4)</label>
     </div>
 
     <div *ngIf="parseError" class="mt-3">

@@ -3,7 +3,7 @@ import { ClueBuffer } from './clue-buffer';
 import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error';
 import { TextParsingWarning } from 'src/app/model/puzzle-model/text-parsing-warning';
 import { TokenGroup } from 'src/app/model/puzzle-model/token-group';
-import { ClueStyle } from 'src/app/model/interfaces';
+import { CaptionStyle } from 'src/app/model/interfaces';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -27,7 +27,7 @@ export class ParseContext implements IParseContext {
     private _preamble: string[] = [];
 
     constructor(
-        public readonly clueStyle: ClueStyle,
+        public readonly clueStyle: CaptionStyle,
     ) {}
 
     public addClueText(text: string) {

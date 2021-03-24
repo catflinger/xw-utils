@@ -105,7 +105,7 @@ export class NinaFinderComponent implements OnInit {
         this.clearPangramCounter();
 
         grid.cells.forEach(cell => {
-            let entry = this.pangramCounter.find(pl => pl.letter.toUpperCase() === cell.content);
+            let entry = this.pangramCounter.find(pl => cell.light && pl.letter.toUpperCase() === cell.content);
             if (entry) {
                 entry.count++;
             }
@@ -143,40 +143,50 @@ export class NinaFinderComponent implements OnInit {
 
     private extractUncheckedRows(grid: Grid) {
         this.uncheckedRows = [];
+        this.uncheckedRowsR = [];
         const down = grid.properties.size.down;
         
         for(let y: number = 0; y < down; y++) {
-            let checkedCell = grid.cells.find(cell => cell.y === y && cell.anchor);
-            if (!checkedCell) {
-                let str = grid.cells
-                .filter(cell => cell.y === y)
-                .map(cell => this.letterOrUnderscore(cell))
-                .join("");
 
-                this.uncheckedRows.push(str);
-                this.uncheckedRowsR.push(str.split("").reverse().join(""));
+            const checkedCells = grid.cells.filter(c => c.y === y && this.inAcrossLight(c) && this.inDownLight(c));
+
+            if (checkedCells.length === 0) {
+
+                const unCheckedCells = grid.cells.filter(c => c.y === y && c.light);
+
+                if (unCheckedCells.length > 0) {
+                    let str = unCheckedCells.map(c => this.letterOrUnderscore(c))
+                    .join("");
+    
+                    this.uncheckedRows.push(str);
+                    this.uncheckedRowsR.push(str.split("").reverse().join(""));
+                }
             }
         }
-
     }
 
     private extractUncheckedColumns(grid: Grid) {
         this.uncheckedColumns = [];
+        this.uncheckedColumnsR = [];
         const across = grid.properties.size.across;
         
         for(let x: number = 0; x < across; x++) {
-            let checkedCell = grid.cells.find(cell => cell.x === x && cell.anchor);
-            if (!checkedCell) {
-                let str = grid.cells
-                .filter(cell => cell.x === x)
-                .map(cell => this.letterOrUnderscore(cell))
-                .join("");
 
-                this.uncheckedColumns.push(str);
-                this.uncheckedColumnsR.push(str.split("").reverse().join(""));
+            const checkedCells = grid.cells.filter(c => c.x === x && this.inAcrossLight(c) && this.inDownLight(c));
+
+            if (checkedCells.length === 0) {
+
+                const unCheckedCells = grid.cells.filter(c => c.x === x && c.light);
+
+                if (unCheckedCells.length > 0) {
+                    let str = unCheckedCells.map(c => this.letterOrUnderscore(c))
+                    .join("");
+    
+                    this.uncheckedColumns.push(str);
+                    this.uncheckedColumnsR.push(str.split("").reverse().join(""));
+                }
             }
         }
-
     }
 
     private getExtractPerimiter(grid: Grid) {
@@ -208,5 +218,41 @@ export class NinaFinderComponent implements OnInit {
             return trim || "_";
         }
         return "";
+    }
+
+    private inAcrossLight(target: GridCell): boolean {
+        const grid = this.puzzle.grid;
+        let checked: boolean = false;
+
+        if (grid.properties.style === "standard") {
+
+            const neigbours = grid.cells
+                .filter(c => c.y === target.y && Math.abs(c.x - target.x) === 1)
+                .filter(c => c.light)
+                .length;
+
+            checked = target.light && neigbours > 0;
+
+        }
+
+        return checked;
+    }
+
+    private inDownLight(target: GridCell): boolean {
+        const grid = this.puzzle.grid;
+        let checked: boolean = false;
+
+        if (grid.properties.style === "standard") {
+
+            const neigbours = grid.cells
+                .filter(c => c.x === target.x && Math.abs(c.y - target.y) === 1)
+                .filter(c => c.light)
+                .length;
+
+            checked = target.light && neigbours > 0;
+
+        }
+
+        return checked;
     }
 }

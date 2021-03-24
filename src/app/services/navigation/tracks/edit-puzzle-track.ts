@@ -11,6 +11,24 @@ export const editPuzzleTrack: NavTrack = {
             actions: {
                 "continue": "grid-captions",
                 "close": "abandon",
+                "image": "image",
+                "nina": "nina-finder",
+            }
+        },
+        {
+            name: "nina-finder",
+            type: "route",
+            route: "/nina-finder",
+            actions: {
+                "back": "edit-grid",
+            }
+        },
+        {
+            name: "image",
+            type: "route",
+            route: "/grid-image",
+            actions: {
+                "back": "edit-grid",
             }
         },
         {

@@ -1,17 +1,21 @@
 import { IPuzzleModifier } from '../puzzle-modifier';
-import { ClueStyle, IPuzzle } from '../../model/interfaces';
+import { CaptionStyle, IPuzzle } from '../../model/interfaces';
 import { PuzzleProvider } from 'src/app/model/interfaces';
 
 export class UpdateProvision implements IPuzzleModifier {
     constructor(
         private args: { 
-            clueStyle?: ClueStyle,
+            clueStyle?: CaptionStyle,
+            hasLetterCount?: boolean,
         },
     ) { }
 
     exec(puzzle: IPuzzle) {
         if (this.args.clueStyle !== undefined) {
-            puzzle.provision.clueStyle = this.args.clueStyle;
+            puzzle.provision.captionStyle = this.args.clueStyle;
+        }
+        if (this.args.hasLetterCount !== undefined) {
+            puzzle.provision.hasLetterCount = this.args.hasLetterCount;
         }
     }
 }

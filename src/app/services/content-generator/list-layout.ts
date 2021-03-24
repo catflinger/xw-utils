@@ -69,7 +69,7 @@ export class ListLayout implements ContentGenerator {
 
                 // caption
                 new Tag("span",
-                    new Text(clue.getDisplayCaption(provision.clueStyle)),
+                    new Text(clue.getDisplayCaption(provision.captionStyle)),
                     new Text(". "),
                     publishOptions.useDefaults ?
                         new Attribute("class", clueStyle.class) :

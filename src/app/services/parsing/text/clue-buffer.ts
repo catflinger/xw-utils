@@ -1,4 +1,4 @@
-import { ClueGroup, ClueStyle, Direction } from 'src/app/model/interfaces';
+import { ClueGroup, CaptionStyle, Direction } from 'src/app/model/interfaces';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { clueCaptionExpression } from './types';
@@ -14,7 +14,7 @@ export class ClueBuffer {
     private _gridRefs: ReadonlyArray<GridReference>;
 
     constructor (
-        private clueStyle: ClueStyle, 
+        private clueStyle: CaptionStyle, 
         text: string, 
         direction: ClueGroup, 
         private grid?: Grid) {
@@ -63,11 +63,12 @@ export class ClueBuffer {
 
         } else {
 
-            if (this.clueStyle === "jigsaw") {
+            if (this.clueStyle === "none") {
                 this._caption = null;
                 this._clue = this._rawText.trim();
 
             } else {
+
                 const exp = this.clueStyle === "alphabetical" ?
                     String.raw`^\s*(?<caption>[A-Z])\s+(?<clue>.*)` :
                     clueCaptionExpression + String.raw`(?<clue>.*$)`;

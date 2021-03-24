@@ -14,7 +14,7 @@ export class AddClue implements IPuzzleModifier {
     exec(puzzle: IPuzzle) {
         if (puzzle) {
             let fullText = this.caption + " " + this.text;
-            const cb: ClueBuffer = new ClueBuffer(puzzle.provision.clueStyle, fullText, this.group);
+            const cb: ClueBuffer = new ClueBuffer(puzzle.provision.captionStyle, fullText, this.group);
 
             const clue = Clue.makeClue(cb, this.group, this.clueId).toMutable();
             clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);

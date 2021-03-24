@@ -13,7 +13,7 @@ export type Layouts = "table" | "list";
 export type Spacing = "small" | "medium" | "large";
 export type TextStyleName = "answer" | "clue" | "definition";
 export type GridStyle = "standard" | "barred";
-export type ClueStyle = "plain" | "alphabetical" | "jigsaw"| null;
+export type CaptionStyle = "numbered" | "alphabetical" | "none";
 
 
 
@@ -192,7 +192,8 @@ export interface IPuzzleProvision {
     source: string;
     parseErrors: Array<ITextParsingError>;
     parseWarnings: Array<ITextParsingWarning>;
-    clueStyle: ClueStyle,
+    captionStyle: CaptionStyle,
+    hasLetterCount: boolean,
 }
 
 export interface IGridCell {

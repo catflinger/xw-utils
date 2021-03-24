@@ -119,7 +119,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onNina() {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new Clear());
-        this.navService.navigate("nina-finder");
+        this.navService.navigate("nina");
     }
 
     public onClose() {

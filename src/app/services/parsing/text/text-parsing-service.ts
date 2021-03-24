@@ -21,15 +21,25 @@ export class TextParsingService {
 
     public *parser(data: ParseData, textParsingOptions: TextParsingOptions) {
 
-        const _options: TextParsingOptions = {
-            allowPreamble: textParsingOptions && textParsingOptions.allowPreamble,
-            allowPostamble: textParsingOptions && textParsingOptions.allowPostamble,
-            allowTypos: textParsingOptions && textParsingOptions.allowTypos,
-            azedFeatures: textParsingOptions && textParsingOptions.azedFeatures,
-            clueStyle: textParsingOptions.clueStyle,
+        const _options: TextParsingOptions = textParsingOptions ?
+         {
+            allowPreamble: textParsingOptions.allowPreamble,
+            allowPostamble: textParsingOptions.allowPostamble,
+            allowTypos: textParsingOptions.allowTypos,
+            azedFeatures: textParsingOptions.azedFeatures,
+            captionStyle: textParsingOptions.captionStyle,
+            hasLetterCount: textParsingOptions.hasLetterCount
+        } :
+        {
+            allowPreamble: false,
+            allowPostamble: false,
+            allowTypos: false,
+            azedFeatures: false,
+            captionStyle: "numbered",
+            hasLetterCount: true,
         }
 
-        let context = new ParseContext(_options.clueStyle);
+        let context = new ParseContext(_options.captionStyle);
         let tokens: TokenList = this.tokeniser.parse(data.rawData, _options);
 
         let tokeniser = tokens.getIterator();
@@ -45,9 +55,6 @@ export class TextParsingService {
             try {
                 switch (context.tokenGroup.current.type) {
                     case "StartMarkerToken":
-                        if (_options.clueStyle !== "plain") {
-                            context.state = "across";
-                        }
                         break;
                     case "AcrossMarkerToken":
                         this.onAcrossMarker(context, _options);
@@ -179,7 +186,7 @@ export class TextParsingService {
                     message: "reached end of file and no clues found"});
 
             case "across":
-                if (options.clueStyle === "plain") {
+                if (options.captionStyle === "none") {
                     throw new TextParsingError({
                         code: "endMarker_across",
                         tokens: context.tokenGroup,

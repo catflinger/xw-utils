@@ -36,6 +36,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         this.form = this.fb.group({
             clueStyle: ["plain", Validators.required],
             text: [defaultText, Validators.required],
+            hasLetterCount: true,
         });
 
         if (!this.activePuzzle.hasPuzzle) {
@@ -50,7 +51,8 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                             this.form.patchValue({ 
                                 //title: puzzle.info.title,
                                 text: puzzle.provision.source,
-                                clueStyle: puzzle.provision.clueStyle,
+                                clueStyle: puzzle.provision.captionStyle,
+                                hasLetterCount: puzzle.provision.hasLetterCount,
                             });
 
                             const errors = puzzle.provision.parseErrors;
@@ -70,7 +72,10 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
 
         const params = [
             new UpdateInfo({source: this.form.value.text}),
-            new UpdateProvision({clueStyle: this.form.value.clueStyle})
+            new UpdateProvision({
+                clueStyle: this.form.value.clueStyle,
+                hasLetterCount: this.form.value.hasLetterCount,
+            })
         ];
 
         if (this.puzzle) {

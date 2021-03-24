@@ -12,7 +12,7 @@ import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
-import { ClueStyle } from 'src/app/model/interfaces';
+import { CaptionStyle } from 'src/app/model/interfaces';
 
 @Component({
   selector: 'app-add-clue',
@@ -60,7 +60,7 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
             this.activePuzzle.observe().subscribe(puzzle => {
                 this.puzzle = puzzle;
                 if (puzzle) {
-                    this.form.get("caption").setValidators(this.getCaptionValidators(puzzle.provision.clueStyle));
+                    this.form.get("caption").setValidators(this.getCaptionValidators(puzzle.provision.captionStyle));
                 }
                 this.detRef.detectChanges();
             })
@@ -88,12 +88,12 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
         this.close.emit();
     }
 
-    private getCaptionValidators(clueStyle: ClueStyle): ValidatorFn[] {
+    private getCaptionValidators(clueStyle: CaptionStyle): ValidatorFn[] {
         let captionExpression: string;
 
         if (clueStyle === "alphabetical") {
             captionExpression = String.raw`^\s*[A-Z]\s+`;
-        } else if (clueStyle === "jigsaw") {
+        } else if (clueStyle === "none") {
             captionExpression = String.raw`^\s*`;
         } else {
             captionExpression = clueCaptionExpression;

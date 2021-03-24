@@ -109,7 +109,12 @@ export class ParseText implements IPuzzleModifier {
 
     private getParsingOptions(provider: PuzzleProvider, provision: IPuzzleProvision): TextParsingOptions {
         let options: TextParsingOptions = {
-            clueStyle: provision.clueStyle
+            allowPreamble: false,
+            allowPostamble: false,
+            allowTypos: false,
+            azedFeatures: false,
+            captionStyle: provision.captionStyle,
+            hasLetterCount: provision.hasLetterCount,
         }
 
         if (provider !== "text") {

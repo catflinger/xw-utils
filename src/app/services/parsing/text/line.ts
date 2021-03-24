@@ -37,14 +37,14 @@ export class Line {
     }
 
     private get hasStartMarker(): boolean {
-        if (this.options.clueStyle === "jigsaw") {
+        if (this.options.captionStyle === "none") {
             return true;
         
-        } else if (this.options.clueStyle === "alphabetical") {
+        } else if (this.options.captionStyle === "alphabetical") {
             let exp = new RegExp(String.raw`^\s*[A-Z]\s`);
             return exp.test(this.text);
         
-        }else if (this.options && this.options.azedFeatures) {
+        } else if (this.options && this.options.azedFeatures) {
             let exp = new RegExp(String.raw`^\*?\s*\d{1,2}\D`, "i");
             return exp.test(this.text);
 
@@ -55,13 +55,22 @@ export class Line {
     }
 
     private get hasEndMarker(): boolean {
-        let exp = new RegExp(String.raw`\(\d[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
-        return exp.test(this.text);
+        if (!this.options.hasLetterCount) {
+            return true;
+        } else {
+            let exp: RegExp = new RegExp(String.raw`\(\d[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
+            return exp.test(this.text);
+        }
     }
 
     private get hasPartialEndMarker(): boolean {
-        let exp = new RegExp(String.raw`^\s*[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
-        return exp.test(this.text);
+        if (!this.options.hasLetterCount) {
+            return false;
+        } else {
+            let exp = new RegExp(String.raw`^\s*[,0-9- ]*(words)?(\s*,\s*apostrophe)?\s*\)$`, "i");
+            return exp.test(this.text);
+        }
+        
     }
 
     private get hasAcrossMarker(): boolean {
