@@ -1,6 +1,7 @@
 General Bugs
 ============
 Open button on home page does nothing if puzzle is not complete
+FIXED NEEDS TESTING Sort out button click/screen redraw on SpecialText screen
 
 Fifteensquared Theme
 ====================
@@ -21,7 +22,7 @@ Warn the user when leaving the Settings page with unsaved changes.  Other pages 
 
 Grid Image Maker
 ================
-BUG FIX - sometimes creates a filecalled untitled.jpg on first attempt (see mail from MC Rapper) 
+BUG FIX - sometimes creates a file called untitled.jpg on first attempt (see mail from MC Rapper) 
 
 Advanced cryptic support
 ========================

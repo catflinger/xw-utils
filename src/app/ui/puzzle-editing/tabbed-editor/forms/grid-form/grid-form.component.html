@@ -16,4 +16,16 @@
             [options]="{ hideShading: true, hideHighlight: true }">
         </app-grid>
     </div>
+
+</div>
+
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <form [formGroup]="form">
+            <div class="form-check" >
+                <input id="numbered" type="checkbox" class="form-check-input" formControlName="numbered">
+                <label for="numbered" class="form-check-label">Show grid numbers</label>
+            </div>
+        </form>
+    </div>
 </div>

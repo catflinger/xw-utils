@@ -44,9 +44,9 @@ export class SolverComponent implements OnInit {
             this.navService.goHome();
         } else {
 
-            const observer: Observable<[Puzzle, AppSettings]> = combineLatest(
+            const observer: Observable<[Puzzle, AppSettings]> = combineLatest([
                 this.activePuzzle.observe(),
-                this.appSettingsService.observe());
+                this.appSettingsService.observe()]);
 
             this.subs.push(
                 observer.subscribe(

@@ -53,7 +53,7 @@ export class Puzzle implements IPuzzle {
         this.info = new PuzzleInfo(data.info);
         this.notes = new PuzzleAnnotation(data.notes);
         this.publishOptions = new PublishOptions(data.publishOptions);
-        this.ready = typeof data.ready === "boolean" ? data.ready : true;
+        this.ready = typeof data.ready === "boolean" ? data.ready : false;
 
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Provider } from '@angular/core';
+import { Component, OnInit, OnDestroy, Provider, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { AppService } from '../../general/app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
@@ -15,7 +15,8 @@ const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This 
 @Component({
     selector: 'app-special-text',
     templateUrl: './special-text.component.html',
-    styleUrls: ['./special-text.component.css']
+    styleUrls: ['./special-text.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpecialTextComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
@@ -29,6 +30,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
         private activePuzzle: IActivePuzzle,
         private puzzleManager: IPuzzleManager,
         private fb: FormBuilder,
+        private changeRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -57,7 +59,11 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
 
                             const errors = puzzle.provision.parseErrors;
                             this.parseError = errors && errors.length > 0 ? errors[0] : null;
+                        } else {
+                            this.parseError = null;
                         }
+                        
+                        this.changeRef.detectChanges();
                     }
             ));
         }

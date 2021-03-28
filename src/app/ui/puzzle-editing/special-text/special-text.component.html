@@ -30,6 +30,13 @@
             <input type="checkbox" class="form-check-input" formControlName="hasLetterCount">The clues have letter counts e.g. (3,4)</label>
     </div>
 
+    <div class="row mt-3" *ngIf="parseError" >
+        <div class="col form-group">
+            <button type="button" class="btn btn-primary mr-3" (click)="onAmend()" [disabled]="!form.valid">Amend</button>
+            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+        </div>
+    </div>
+
     <div *ngIf="parseError" class="mt-3">
         <app-parse-result [result]="parseError"></app-parse-result>
 
@@ -50,12 +57,9 @@
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="row mt-3"  *ngIf="!parseError">
         <div class="col form-group">
-            <button type="button" class="btn btn-primary mr-3" *ngIf="!parseError" (click)="onParse()"
-                [disabled]="!form.valid">Continue</button>
-            <button type="button" class="btn btn-primary mr-3" *ngIf="parseError" (click)="onAmend()"
-                [disabled]="!form.valid">Amend</button>
+            <button type="button" class="btn btn-primary mr-3" (click)="onParse()" [disabled]="!form.valid">Continue</button>
             <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
         </div>
     </div>

@@ -10,7 +10,7 @@ export class GridProperties implements IGridProperties {
     constructor(data: any) {
         this.style = data.style;
         this.symmetrical = !!data.symmetrical;
-        this.numbered = !! data.numbered;
+        this.numbered = typeof data.numbered === "boolean" ? data.numbered : true;
         this.size = new GridSize(data.size);
     }
 }

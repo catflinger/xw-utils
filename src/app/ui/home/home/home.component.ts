@@ -76,7 +76,8 @@ export class HomeComponent implements OnInit, OnDestroy {
                     this.navService.beginTrack("createPuzzleTrack", {}, "hub");
                 }
             }
-        });
+        })
+        .catch(error => this.appService.setAlertError(`Failed to open puzzle.`, error));
     }
 
     public onOpenSavedGrid(id: string) {

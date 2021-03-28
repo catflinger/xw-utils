@@ -20,6 +20,7 @@ import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { fifteenSquaredBlack, fifteenSquaredBlue } from "src/app/ui/common";
+import { RenumberGid } from "src/app/modifiers/grid-modifiers/renumber-grid";
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -232,6 +233,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 let puzzleM: IPuzzle = JSON.parse(JSON.stringify(puzzle));
 
                 new InitAnnotationWarnings().exec(puzzleM);
+                new RenumberGid().exec(puzzleM);
 
                 if (params.provider === "independent" || params.provider === "ios") {
                     new SetGridReferences().exec(puzzleM);

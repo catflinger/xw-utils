@@ -15,6 +15,7 @@ export class Grid implements IGrid {
                     down: data.size.down,
                 },
                 style: data.style,
+                numbered: true,
             });
         } else if (data.properties) {
             this.properties = new GridProperties(data.properties);

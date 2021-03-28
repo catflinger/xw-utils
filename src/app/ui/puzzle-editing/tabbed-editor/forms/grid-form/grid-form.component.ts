@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -9,6 +9,8 @@ import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
 import { ClueEditorService } from '../../clue-editor.service';
 import { BarClickEvent } from 'src/app/ui/grid/grid/grid.component';
 import { EditorFormBase } from '../editor-form-base';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UpdateGridProperties } from 'src/app/modifiers/grid-modifiers/updare-grid-properties';
 
 @Component({
     selector: 'app-grid-form',
@@ -19,20 +21,36 @@ import { EditorFormBase } from '../editor-form-base';
 export class GridFormComponent extends EditorFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     private puzzle: Puzzle;
+    
+    public form: FormGroup;
 
    @Output() dirty = new EventEmitter<void>();
 
     constructor(
-        private activePuzzle:IActivePuzzle,
         editorService: ClueEditorService,
+        private activePuzzle:IActivePuzzle,
+        private changeRef: ChangeDetectorRef,
+        private fb: FormBuilder,
     ) { 
         super(editorService)
     }
 
     public ngOnInit() {
+        this.form = this.fb.group({ numbered: false });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.puzzle = puzzle;
+            if (puzzle) {
+                this.form.patchValue({ numbered: puzzle.grid.properties.numbered}, { emitEvent: false });
+                this.changeRef.detectChanges();
+            }
+        }));
+
+        this.subs.push(this.form.valueChanges.subscribe(val => {
+            this.activePuzzle.updateAndCommit(
+                new UpdateGridProperties({numbered: val.numbered}),
+                new RenumberGid()
+            );
         }));
     }
 
