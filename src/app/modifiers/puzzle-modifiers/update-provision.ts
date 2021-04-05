@@ -6,6 +6,7 @@ export class UpdateProvision implements IPuzzleModifier {
         private args: { 
             captionStyle?: CaptionStyle,
             hasLetterCount?: boolean,
+            hasClueGroups?: boolean,
         },
     ) { }
 
@@ -15,6 +16,9 @@ export class UpdateProvision implements IPuzzleModifier {
         }
         if (this.args.hasLetterCount !== undefined) {
             puzzle.provision.hasLetterCount = this.args.hasLetterCount;
+        }
+        if (this.args.hasClueGroups !== undefined) {
+            puzzle.provision.hasCluesGroups = this.args.hasClueGroups;
         }
     }
 }

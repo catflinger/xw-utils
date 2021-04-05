@@ -4,6 +4,7 @@ import { TextParsingError } from 'src/app/model/puzzle-model/text-parsing-error'
 import { TextParsingWarning } from 'src/app/model/puzzle-model/text-parsing-warning';
 import { TokenGroup } from 'src/app/model/puzzle-model/token-group';
 import { CaptionStyle } from 'src/app/model/interfaces';
+import { TextParsingOptions } from './types';
 
 export type TextParsingState = "across" | "down" | "ended" | null;
 
@@ -27,13 +28,14 @@ export class ParseContext implements IParseContext {
     private _preamble: string[] = [];
 
     constructor(
-        public readonly captionStyle: CaptionStyle,
+        public readonly textParsingOptions: TextParsingOptions,
     ) {}
+
 
     public addClueText(text: string) {
         if (this._state === "across" || this._state === "down") {
             if (!this._clueBuffer) {
-                this._clueBuffer = new ClueBuffer(this.captionStyle, text, this._state);
+                this._clueBuffer = new ClueBuffer(this.textParsingOptions.captionStyle, text, this._state);
             } else {
                 this._clueBuffer.add(text);
             }

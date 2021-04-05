@@ -6,6 +6,7 @@ export class PuzzleProvision implements IPuzzleProvision {
     public readonly source: string;
     public readonly captionStyle: CaptionStyle;
     public readonly hasLetterCount: boolean;
+    public readonly hasCluesGroups: boolean;
     public readonly parseErrors: Array<TextParsingError>;
     public readonly parseWarnings: Array<TextParsingWarning>;
 
@@ -27,5 +28,6 @@ export class PuzzleProvision implements IPuzzleProvision {
         this.source = data.source;
         this.captionStyle = data.captionStyle || "numbered";
         this.hasLetterCount = typeof data.hasLetterCount === "boolean" ? data.hasLetterCount : true;
+        this.hasCluesGroups = typeof data.hasCluesGroups === "boolean" ? data.hasCluesGroups : true;
     }
 }

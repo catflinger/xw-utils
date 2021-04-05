@@ -194,6 +194,7 @@ export interface IPuzzleProvision {
     parseWarnings: Array<ITextParsingWarning>;
     captionStyle: CaptionStyle,
     hasLetterCount: boolean,
+    hasCluesGroups: boolean,
 }
 
 export interface IGridCell {

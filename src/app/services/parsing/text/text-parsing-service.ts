@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵCodegenComponentFactoryResolver } from '@angular/core';
 import { ParseData } from "./parse-data";
 import { TokeniserService, TokenList } from './tokeniser/tokeniser.service';
 import { ClueToken, ClueStartToken, ClueEndToken, TextToken, AcrossMarkerToken, DownMarkerToken, EndMarkerToken } from './tokeniser/tokens';
@@ -28,7 +28,8 @@ export class TextParsingService {
             allowTypos: textParsingOptions.allowTypos,
             azedFeatures: textParsingOptions.azedFeatures,
             captionStyle: textParsingOptions.captionStyle,
-            hasLetterCount: textParsingOptions.hasLetterCount
+            hasLetterCount: textParsingOptions.hasLetterCount,
+            hasClueGroups: textParsingOptions.hasClueGroups,
         } :
         {
             allowPreamble: false,
@@ -37,9 +38,10 @@ export class TextParsingService {
             azedFeatures: false,
             captionStyle: "numbered",
             hasLetterCount: true,
+            hasClueGroups: true,
         }
 
-        let context = new ParseContext(_options.captionStyle);
+        let context = new ParseContext(_options);
         let tokens: TokenList = this.tokeniser.parse(data.rawData, _options);
 
         let tokeniser = tokens.getIterator();
@@ -57,25 +59,25 @@ export class TextParsingService {
                     case "StartMarkerToken":
                         break;
                     case "AcrossMarkerToken":
-                        this.onAcrossMarker(context, _options);
+                        this.onAcrossMarker(context);
                         break;
                     case "DownMarkerToken":
-                        this.onDownMarker(context, _options);
+                        this.onDownMarker(context);
                         break;
                     case "EndMarkerToken":
-                        this.onEndMarker(context, _options);
+                        this.onEndMarker(context);
                         break;
                     case "ClueToken":
-                        this.onClueToken(context, _options, data.grid);
+                        this.onClueToken(context, data.grid);
                         break;
                     case "ClueStartToken":
-                        this.onClueStartToken(context, _options, data.grid);
+                        this.onClueStartToken(context, data.grid);
                         break;
                     case "TextToken":
-                        this.onTextToken(context, _options);
+                        this.onTextToken(context);
                         break;
                     case "ClueEndToken":
-                        this.onClueEndToken(context, _options);
+                        this.onClueEndToken(context);
                         break;
                     default:
                         throw "unrecognised Token Type";
@@ -86,11 +88,10 @@ export class TextParsingService {
                 context.setGroup(item.value);
 
             } catch(error) {
-                //context.state = true;
                 if (error instanceof TextParsingError) {
                     context.error = error;
                 } else {
-                    throw error.toString();
+                    throw error;
                 }
                 
                 return context;
@@ -103,7 +104,7 @@ export class TextParsingService {
         return context as IParseContext;
     }
 
-    private onAcrossMarker(context: ParseContext, options: TextParsingOptions) {
+    private onAcrossMarker(context: ParseContext) {
 
         switch (context.state) {
             case null:
@@ -123,7 +124,7 @@ export class TextParsingService {
                     message: "Found ACROSS marker in the down clues"});
 
             case "ended":
-                if (options.allowPostamble) {
+                if (context.textParsingOptions.allowPostamble) {
                     // this is OK, it will happen when the solutions from last weeks puzzle appear at the end of a PDF
                 } else {
                     throw new TextParsingError({
@@ -135,7 +136,7 @@ export class TextParsingService {
         }
     }
 
-    private onDownMarker(context: ParseContext, options: TextParsingOptions) {
+    private onDownMarker(context: ParseContext) {
 
         switch (context.state) {
             case "across":
@@ -164,7 +165,7 @@ export class TextParsingService {
                     message: "Found DOWN marker in the down clues"});
 
             case "ended":
-                if (options.allowPostamble) {
+                if (context.textParsingOptions.allowPostamble) {
                     // this is probably OK, down markers can appear in solutions to last week's puzzle
                 } else {
                     throw new TextParsingError({
@@ -176,7 +177,7 @@ export class TextParsingService {
         }
     }
 
-    private onEndMarker(context: ParseContext, options: TextParsingOptions) {
+    private onEndMarker(context: ParseContext) {
 
         switch (context.state) {
             case null:
@@ -186,7 +187,7 @@ export class TextParsingService {
                     message: "reached end of file and no clues found"});
 
             case "across":
-                if (options.captionStyle === "none") {
+                if (context.textParsingOptions.hasClueGroups) {
                     throw new TextParsingError({
                         code: "endMarker_across",
                         tokens: context.tokenGroup,
@@ -214,12 +215,12 @@ export class TextParsingService {
         }
     }
 
-    private onClueToken(context: ParseContext, options: TextParsingOptions, grid: Grid) {
+    private onClueToken(context: ParseContext, grid: Grid) {
         const token = context.tokenGroup.current as ClueToken;
 
         switch (context.state) {
             case null:
-                if (context.captionStyle === "none") {
+                if (context.textParsingOptions.hasClueGroups === false) {
                     context.state = "across";
                     context.addClueText(token.text);
                     context.save();
@@ -251,12 +252,12 @@ export class TextParsingService {
             }
     }
 
-    private onClueStartToken(context: ParseContext, options: TextParsingOptions, grid: Grid) {
+    private onClueStartToken(context: ParseContext, grid: Grid) {
         const token = context.tokenGroup.current as ClueStartToken;
 
         switch (context.state) {
             case null:
-                if (options.allowPreamble) {
+                if (context.textParsingOptions.allowPreamble) {
                     context.addPreamble(token.text);
                 } else {
                     throw new TextParsingError({
@@ -279,7 +280,7 @@ export class TextParsingService {
                 break;
 
             case "ended": 
-            if (options.allowPostamble) {
+            if (context.textParsingOptions.allowPostamble) {
                 // This situation is ambiguous.  Probably indicates something htat caused the down clues to end early
                 // but we can't be sure at this stage
                 context.addWarning(context.tokenGroup.current.lineNumber, "Found another clue after the end of the puzzle.");
@@ -293,12 +294,12 @@ export class TextParsingService {
         }
     }
 
-    private onClueEndToken(context: ParseContext, options: TextParsingOptions) {
+    private onClueEndToken(context: ParseContext) {
         const token = context.tokenGroup.current as ClueEndToken;
 
         switch (context.state) {
             case null:
-                if (options.allowPreamble) {
+                if (context.textParsingOptions.allowPreamble) {
                     context.addPreamble(token.text);
                 } else {
                     throw new TextParsingError({
@@ -327,7 +328,7 @@ export class TextParsingService {
                 break;
 
             case "ended":
-                if (options.allowPostamble) {
+                if (context.textParsingOptions.allowPostamble) {
                     // This situation is ambiguous.  Probably indicates something htat caused the down clues to end early
                     // but we can't be sure at this stage
                     context.addWarning(context.tokenGroup.current.lineNumber, "Found a clue after the end of the puzzle.");
@@ -342,13 +343,13 @@ export class TextParsingService {
         }
     }
     
-    private onTextToken(context: ParseContext, options: TextParsingOptions) {
+    private onTextToken(context: ParseContext) {
         const token = context.tokenGroup.current as TextToken;
         const azedExp = /^\s*(name|address|post\s*code)\s*$/i;
 
         switch (context.state) {
             case null:
-                if (options.allowPreamble) {
+                if (context.textParsingOptions.allowPreamble) {
                     context.addPreamble(token.text);
                 } else {
                     throw new TextParsingError({
@@ -363,7 +364,7 @@ export class TextParsingService {
                 if (context.hasContent) {
                     context.addClueText(token.text);
 
-                } else if (options.azedFeatures && azedExp.test(token.text)) {
+                } else if (context.textParsingOptions.azedFeatures && azedExp.test(token.text)) {
                     // extracts from AZED pdfs somethimes mistakenly include address details in the across clues
                     // ignore these lines
                     
@@ -379,12 +380,12 @@ export class TextParsingService {
                 if (context.hasContent) {
                     context.addClueText(token.text);
 
-                } else if (options.azedFeatures && azedExp.test(token.text)) {
+                } else if (context.textParsingOptions.azedFeatures && azedExp.test(token.text)) {
                     // extracts from AZED pdfs somethimes mistakenly include address details in the across clues
                     // ignore these lines
                     
                 } else {
-                    if (options.allowPostamble) {
+                    if (context.textParsingOptions.allowPostamble) {
                         // in postamble mode the down clues are over when a completed down clue is followed by
                         // something not recognisable as part of another clue
                         context.state = "ended";
@@ -410,7 +411,7 @@ export class TextParsingService {
             // best to not attempt it at all than to code a botched attempt that causes more harm than good.
 
             let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
-            let nextClueBuf = new ClueBuffer(context.captionStyle, token.text, context.state as ClueGroup);
+            let nextClueBuf = new ClueBuffer(context.textParsingOptions.captionStyle, token.text, context.state as ClueGroup);
 
             let actualNextClueNumber: number = nextClueBuf.gridRefs[0].anchor;
 
