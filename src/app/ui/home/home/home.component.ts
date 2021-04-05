@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onOpenSaved(id: string) {
+        this.appService.clear();
 
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
@@ -81,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onOpenSavedGrid(id: string) {
+        this.appService.clear();
         this.puzzleManagement.openPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
@@ -90,10 +92,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onDelete(id: string) {
+        this.appService.clear();
         this.puzzleManagement.deletePuzzle(id);
     }
 
     public onEdit(id: string) {
+        this.appService.clear();
         this.puzzleManagement.openPuzzle(id, [new UpdateInfo({ready: false})])
         .then(() => {
             this.navService.beginTrack("createPuzzleTrack", {}, "hub");
@@ -101,6 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public onPreview(id: string) {
+        this.appService.clear();
         this.puzzleManagement.openPuzzle(id)
         .then(() => {
             this.navService.beginTrack("publishPostTrack", {}, "publish-preview");

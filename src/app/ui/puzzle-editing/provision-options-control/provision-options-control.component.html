@@ -1,0 +1,32 @@
+
+<div [formGroup]="form">
+    <label class="form-label">How are the clues labelled?</label>
+
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="captionStyle" value="numbered">Numbered - the clues are
+            labelled with grid numbers in the normal way
+        </label>
+    </div>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="captionStyle" value="alphabetical">Alphabtical -
+            each clue is labelled with a letter of the alphabet
+        </label>
+    </div>
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="captionStyle" value="none">None - the clues
+            have no labels
+        </label>
+    </div>
+
+    <label class="form-label mt-3">Do the clues have letter counts?</label>
+
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" formControlName="hasLetterCount">The clues end with letter counts e.g. (3,4)</label>
+    </div>
+
+</div>
+

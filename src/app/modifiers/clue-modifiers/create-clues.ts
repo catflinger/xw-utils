@@ -12,15 +12,19 @@ export class CreateClues implements IPuzzleModifier {
     constructor() { }
 
     exec(puzzle: IPuzzle) {
-        if (puzzle && puzzle.grid) {
-            new RenumberGid().exec(puzzle);
-            puzzle.clues = [];
+        if (puzzle) {
+            if (!puzzle.clues) {
+                puzzle.clues = [];
+            }
 
-            let grid = new Grid(puzzle.grid);
+            if (puzzle.grid) {
+                new RenumberGid().exec(puzzle);
 
-            this.makeClues(puzzle, grid, "across");
-            this.makeClues(puzzle, grid, "down");
+                let grid = new Grid(puzzle.grid);
 
+                this.makeClues(puzzle, grid, "across");
+                this.makeClues(puzzle, grid, "down");
+            }
         }
     }
 

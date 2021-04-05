@@ -219,11 +219,19 @@ export class TextParsingService {
 
         switch (context.state) {
             case null:
-                // even in preamble mode this is probably an error, we don't expect to see a well formatted clue before the first across marker
-                throw new TextParsingError({
-                    code: "clue_null",
-                    tokens: context.tokenGroup,
-                    message: "Found start of clue before ACROSS or DOWN marker"});
+                if (context.captionStyle === "none") {
+                    context.state = "across";
+                    context.addClueText(token.text);
+                    context.save();
+                } else {
+                    // even in preamble mode this is probably an error, we don't expect to see a well formatted clue before the first across marker
+                    throw new TextParsingError({
+                        code: "clue_null",
+                        tokens: context.tokenGroup,
+                        message: "Found start of clue before ACROSS or DOWN marker"});
+                }
+                break;
+                
             case "ended":
                 // we don't expect to se whole clues cropping up in the solutions
                 throw new TextParsingError({
@@ -402,7 +410,7 @@ export class TextParsingService {
             // best to not attempt it at all than to code a botched attempt that causes more harm than good.
 
             let expectedNextClueNumber: number = grid.getNextClueNumber(context.buffer.gridRefs[0]);
-            let nextClueBuf = new ClueBuffer(context.clueStyle, token.text, context.state as ClueGroup);
+            let nextClueBuf = new ClueBuffer(context.captionStyle, token.text, context.state as ClueGroup);
 
             let actualNextClueNumber: number = nextClueBuf.gridRefs[0].anchor;
 

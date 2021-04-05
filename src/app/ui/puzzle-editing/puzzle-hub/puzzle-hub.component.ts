@@ -14,6 +14,7 @@ import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cell
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../general/confirm-modal/confirm-modal.component';
+import { AppService } from '../../general/app.service';
 
 @Component({
     selector: 'app-puzzle-hub',
@@ -27,6 +28,7 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
 
     constructor(
+        private appService: AppService,
         private modalService: NgbModal,
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
@@ -62,28 +64,34 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     }
 
     public onRowClick(clueId: string) {
+        this.appService.clear();
         this.activePuzzle.update(new SelectClue(clueId));
     }
 
     public onCellClick(cell: GridCell) {
+        this.appService.clear();
         if (cell) {
             this.activePuzzle.update(new SelectClueByCell(cell.id));
         }
     }
 
     public onEditInfo() {
+        this.appService.clear();
         this.navService.navigate("edit-info");
     }
 
     public onEditClues() {
+        this.appService.clear();
         this.navService.navigate("edit-clues");
     }
 
     public onDeleteClues() {
+        this.appService.clear();
         this.activePuzzle.updateAndCommit(new DeleteClues());
     }
 
     public onReloadClues() {
+        this.appService.clear();
         let lengthDialog = this.modalService.open(ConfirmModalComponent);
         lengthDialog.componentInstance.message = "Warning: the current answers and annotations will be lost. Do you wish to Continue?";
         lengthDialog.result.then(cancel => {
@@ -95,30 +103,37 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     }
 
     public onDeleteGrid() {
+        this.appService.clear();
         this.activePuzzle.updateAndCommit(new DeleteGrid());
     }
 
     public onEditGrid() {
+        this.appService.clear();
         this.navService.navigate("edit-grid");
     }
 
     public onAddGrid() {
+        this.appService.clear();
         this.navService.navigate("add-grid");
     }
 
     public onAddCluesGrid() {
+        this.appService.clear();
         this.navService.navigate("add-clues-grid");
     }
 
     public onAddCluesText() {
+        this.appService.clear();
         this.navService.navigate("add-clues-text");
     }
 
     public onAddCluesManual() {
+        this.appService.clear();
         this.navService.navigate("add-clues");
     }
 
     public onMarkFinished() {
+        this.appService.clear();
         this.activePuzzle.updateAndCommit(new UpdateInfo({
             ready: true,
         }));
@@ -126,6 +141,7 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
     }
 
     public onClose() {
+        this.appService.clear();
         this.navService.goHome();
     }
 }

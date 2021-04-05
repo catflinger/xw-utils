@@ -27,13 +27,13 @@ export class ParseContext implements IParseContext {
     private _preamble: string[] = [];
 
     constructor(
-        public readonly clueStyle: CaptionStyle,
+        public readonly captionStyle: CaptionStyle,
     ) {}
 
     public addClueText(text: string) {
         if (this._state === "across" || this._state === "down") {
             if (!this._clueBuffer) {
-                this._clueBuffer = new ClueBuffer(this.clueStyle, text, this._state);
+                this._clueBuffer = new ClueBuffer(this.captionStyle, text, this._state);
             } else {
                 this._clueBuffer.add(text);
             }

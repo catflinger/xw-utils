@@ -14,6 +14,7 @@ import { AppSettings } from 'src/app/services/common';
 import { ClueEditorComponent } from '../../puzzle-editing/tabbed-editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PuzzleEditorComponent } from '../../puzzle-editing/tabbed-editor/puzzle-editor/puzzle-editor.component';
+import { AppService } from '../../general/app.service';
 
 @Component({
   selector: 'app-solver',
@@ -30,6 +31,7 @@ export class SolverComponent implements OnInit {
     private _showEditor = false;
 
     constructor(
+        private appService: AppService,
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private appSettingsService: AppSettingsService,
@@ -56,6 +58,7 @@ export class SolverComponent implements OnInit {
 
                         if (puzzle && appSettings) {
                             if (!puzzle.solveable) {
+                                this.appService.setAlert("danger", "Cannot open this puzzle in solver: the puzzle is missing either clues or a grid");
                                 this.navService.goHome();
                             }
                             this.puzzle = puzzle;

@@ -14,7 +14,7 @@ export class ClueBuffer {
     private _gridRefs: ReadonlyArray<GridReference>;
 
     constructor (
-        private clueStyle: CaptionStyle, 
+        private captionStyle: CaptionStyle, 
         text: string, 
         direction: ClueGroup, 
         private grid?: Grid) {
@@ -63,13 +63,13 @@ export class ClueBuffer {
 
         } else {
 
-            if (this.clueStyle === "none") {
+            if (this.captionStyle === "none") {
                 this._caption = null;
                 this._clue = this._rawText.trim();
 
             } else {
 
-                const exp = this.clueStyle === "alphabetical" ?
+                const exp = this.captionStyle === "alphabetical" ?
                     String.raw`^\s*(?<caption>[A-Z])\s+(?<clue>.*)` :
                     clueCaptionExpression + String.raw`(?<clue>.*$)`;
 
@@ -80,7 +80,7 @@ export class ClueBuffer {
                         this._caption = match.groups.caption ? match.groups.caption.trim() : null;
                         this._clue = match.groups.clue.trim();
                     } else {
-                        throw new TextParsingError("Failed to find a caption in the clue test");
+                        throw new TextParsingError("Failed to find a caption in the clue text");
                     }
                 }
             }

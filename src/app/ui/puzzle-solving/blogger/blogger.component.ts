@@ -10,6 +10,7 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { ClueEditorComponent } from '../../puzzle-editing/tabbed-editor/clue-editor/clue-editor.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppService } from '../../general/app.service';
 
 @Component({
     selector: 'app-blogger',
@@ -25,6 +26,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
     private _showEditor = false;
 
     constructor(
+        private appService: AppService,
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private appSettinsgService: AppSettingsService,
@@ -50,6 +52,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
 
                 if (puzzle) {
                     if (!puzzle.blogable) {
+                        this.appService.setAlert("danger", "Cannot open this puzzle for blogging: the puzzle has no clues");
                         this.navService.goHome();
                     }
                     this.puzzle = puzzle;

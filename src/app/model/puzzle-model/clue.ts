@@ -83,10 +83,10 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    public getDisplayCaption(clueStyle: CaptionStyle) {
+    public getDisplayCaption(captionStyle: CaptionStyle) {
         let result = "";
 
-        if (clueStyle === "numbered") {
+        if (captionStyle === "numbered") {
             result = this.caption;
             let exp = new RegExp(String.raw`(across|down)`, "i");
 
@@ -94,7 +94,7 @@ export class Clue implements IClue {
                 result += " " + this.group;
             }
         
-        } else if (clueStyle === "alphabetical") {
+        } else if (captionStyle === "alphabetical") {
             result = this.caption;
         }
 

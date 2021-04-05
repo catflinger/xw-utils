@@ -14,6 +14,7 @@ import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { TraceService } from '../app/trace.service';
+import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
 
 @Injectable({
     providedIn: 'root'
@@ -61,7 +62,11 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
 
             case "make-clues":
                 // TO DO: work out what to do if puzzle aready has clues
-                this.activePuzzle.updateAndCommit(new CreateClues(), new InitAnnotationWarnings());
+                this.activePuzzle.updateAndCommit(
+                    new UpdateProvision({ captionStyle: "numbered"}),
+                    new CreateClues(), 
+                    new InitAnnotationWarnings()
+                );
                 action = Promise.resolve("ok");
                 break;
 

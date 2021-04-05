@@ -30,9 +30,14 @@
                     <label for="textPage" class="form-label">Text for the clues will be found on page number</label>
                     <input id="textPage" class="form-control" type="number" min="1" max="100" step="1" formControlName="textPage">
                 </div>
+
+                <div class="mt-3">
+                    <app-provision-options-control formControlName="provisionOptions"></app-provision-options-control>
+                </div>
+
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-5">
                 <button class="btn btn-primary" type="button" (click)="onOpenPdf()">Open PDF</button>
             </div>
         </form>

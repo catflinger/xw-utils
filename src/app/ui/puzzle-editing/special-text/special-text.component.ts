@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ITextParsingError } from 'src/app/model/interfaces';
 import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
+import { ProvisionOptions } from '../provision-options-control/provision-options-control.component';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -36,9 +37,8 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public ngOnInit() {
 
         this.form = this.fb.group({
-            clueStyle: ["plain", Validators.required],
             text: [defaultText, Validators.required],
-            hasLetterCount: true,
+            provisionOptions: null,
         });
 
         if (!this.activePuzzle.hasPuzzle) {
@@ -51,10 +51,8 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                         this.puzzle = puzzle;
                         if (puzzle) {
                             this.form.patchValue({ 
-                                //title: puzzle.info.title,
                                 text: puzzle.provision.source,
-                                clueStyle: puzzle.provision.captionStyle,
-                                hasLetterCount: puzzle.provision.hasLetterCount,
+                                provisionOptions:puzzle.provision,
                             });
 
                             const errors = puzzle.provision.parseErrors;
@@ -78,10 +76,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
 
         const params = [
             new UpdateInfo({source: this.form.value.text}),
-            new UpdateProvision({
-                clueStyle: this.form.value.clueStyle,
-                hasLetterCount: this.form.value.hasLetterCount,
-            })
+            new UpdateProvision(this.form.value.provisionOptions),
         ];
 
         if (this.puzzle) {
@@ -94,26 +89,12 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     }
 
     public onCancel() {
+        this.appService.clear();
         this.navService.navigate("cancel");
     }
 
     public onAmend() {
+        this.appService.clear();
         this.parseError = null;
     }
-
-    // private parse(text: string): IParseContext {
-    //     let parseData = new ParseData();
-    //     parseData.clueDataType = "text";
-    //     parseData.rawData = text;
-
-    //     let parser = this.textParsingService.parser(parseData, null);
-    //     let context = parser.next();
-
-    //     while(!context.done) {
-    //         context = parser.next();
-    //     }
-    
-    //     return context.value as IParseContext;
-    // }
-
 }

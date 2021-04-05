@@ -4,6 +4,7 @@ import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import bsCustomFileInput from "bs-custom-file-input";
+import { ProvisionOptions } from '../provision-options-control/provision-options-control.component';
 
 @Component({
     selector: 'app-special-pdf',
@@ -24,11 +25,12 @@ export class SpecialPdfComponent implements OnInit, AfterViewInit {
 
 
     public ngOnInit() {
- 
+
         this.form = this.formBuilder.group({
             file: [],
             gridPage: [1, Validators.required],
             textPage: [1, Validators.required],
+            provisionOptions: null,
             advancedOptions: false,
         });
 
@@ -66,6 +68,7 @@ export class SpecialPdfComponent implements OnInit, AfterViewInit {
             sourceDataB64: this.content,
             gridPage: parseInt(this.form.value.gridPage),
             textPage: parseInt(this.form.value.textPage),
+            provisionOptions: this.form.value.provisionOptions,
          })
         this.navService.navigate("continue");
     }

@@ -3,7 +3,7 @@ import { PuzzleInfo } from './puzzle-info';
 import { PuzzleAnnotation } from './puzzle-annotation';
 import { Grid } from './grid';
 import { Clue } from './clue';
-import { IPuzzle } from '../interfaces';
+import { ClueGroup, IPuzzle } from '../interfaces';
 import { PuzzleProvision } from './puzzle-provision';
 import { PuzzleOptions } from './puzzle-options';
 
@@ -49,7 +49,7 @@ export class Puzzle implements IPuzzle {
             this.clues = null;
         }
 
-        this.provision = new PuzzleProvision( data.provision || { clueStyle: "plain"} );
+        this.provision = new PuzzleProvision( data.provision || { captionStyle: "numbered"} );
         this.info = new PuzzleInfo(data.info);
         this.notes = new PuzzleAnnotation(data.notes);
         this.publishOptions = new PublishOptions(data.publishOptions);
@@ -88,6 +88,19 @@ export class Puzzle implements IPuzzle {
 
     public get gridable(): boolean {
         return !this.clues && !!this.grid;
+    }
+
+    public getMaxClueCaption(group: ClueGroup): number {
+        if (this.provision.captionStyle === "numbered") {
+            this.clues
+            .filter(c => c.group === group)
+            .reduce<number>(
+                (acc: number, current: Clue) => Math.max(acc, parseInt(current.caption)), 
+                0
+            );
+        } else {
+            return 0;
+        }
     }
 
 }

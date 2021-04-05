@@ -92,7 +92,7 @@ export const createPuzzleTrack: NavTrack = {
             type: "process",
             process: "make-clues",
             actions: {
-                "ok": "hub",
+                "ok": "clues-editor",
             }
         },
         {

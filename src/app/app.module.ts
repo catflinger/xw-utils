@@ -101,6 +101,7 @@ import { CheatFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/chea
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
+import { ProvisionOptionsControlComponent } from './ui/puzzle-editing/provision-options-control/provision-options-control.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -204,6 +205,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         PublishPreviewComponent,
         NinaFinderComponent,
         GridImageComponent,
+        ProvisionOptionsControlComponent,
     ],
     imports: [
         BrowserModule,

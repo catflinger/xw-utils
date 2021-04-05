@@ -5,30 +5,7 @@
 </div>
 
 <form [formGroup]="form" class="form mt-3">
-    <label class="form-label">How are the clues labelled?</label>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="radio" class="form-check-input" formControlName="clueStyle" value="plain">Plain - the clues are
-            labelled with numbers in the normal way
-        </label>
-    </div>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="radio" class="form-check-input" formControlName="clueStyle" value="alphabetical">Alphabtical -
-            each clue is labelled with a letter of the alphabet
-        </label>
-    </div>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="radio" class="form-check-input" formControlName="clueStyle" value="none">none - the clues
-            have no labels
-        </label>
-    </div>
-
-    <div class="form-check mt-5">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" formControlName="hasLetterCount">The clues have letter counts e.g. (3,4)</label>
-    </div>
+    <app-provision-options-control formControlName="provisionOptions"></app-provision-options-control>
 
     <div class="row mt-3" *ngIf="parseError" >
         <div class="col form-group">

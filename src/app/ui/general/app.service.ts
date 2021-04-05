@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { Alert, AlertType } from '../common';
 import { PuzzleProvider, Base64Encoded } from 'src/app/model/interfaces';
 import { AppResultSymbols } from 'src/app/services/common';
+import { ProvisionOptions } from '../puzzle-editing/provision-options-control/provision-options-control.component';
 
 export type OpenPuzzleAction = "openByDate" | "openLatest";
 
@@ -34,6 +35,7 @@ export interface OpenPuzzleParamters {
     setter?: string,
     gridPage?: number,
     textPage?: number,
+    provisionOptions?: ProvisionOptions,
 }
 
 class ActivityMonitor {

@@ -21,6 +21,7 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { fifteenSquaredBlack, fifteenSquaredBlue } from "src/app/ui/common";
 import { RenumberGid } from "src/app/modifiers/grid-modifiers/renumber-grid";
+import { UpdateProvision } from "src/app/modifiers/puzzle-modifiers/update-provision";
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -269,6 +270,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             let reducers = [];
 
             reducers.push(new UpdateInfo({ source: result.text }));
+            reducers.push(new UpdateProvision(params.provisionOptions));
 
             if (result.grid) {
                 let grid = new Grid(result.grid)
