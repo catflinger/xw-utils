@@ -56,7 +56,7 @@ export class AddRemoveClueComponent extends EditorFormBase implements OnInit, On
 
     public onLetterClick(index: number) {
         // TO DO: ...
-        console.log("You clicked " + index)
+        // console.log("You clicked " + index)
     }
 
     public onRemoveClue() {

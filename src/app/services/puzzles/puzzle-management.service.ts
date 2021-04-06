@@ -270,7 +270,10 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             let reducers = [];
 
             reducers.push(new UpdateInfo({ source: result.text }));
-            reducers.push(new UpdateProvision(params.provisionOptions));
+
+            if (params.provisionOptions) {
+                reducers.push(new UpdateProvision(params.provisionOptions));
+            }
 
             if (result.grid) {
                 let grid = new Grid(result.grid)

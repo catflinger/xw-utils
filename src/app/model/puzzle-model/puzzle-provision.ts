@@ -25,9 +25,13 @@ export class PuzzleProvision implements IPuzzleProvision {
 
         this.parseErrors = errors;
         this.parseWarnings = warnings;
+
         this.source = data.source;
-        this.captionStyle = data.captionStyle || "numbered";
-        this.hasLetterCount = typeof data.hasLetterCount === "boolean" ? data.hasLetterCount : true;
-        this.hasCluesGroups = typeof data.hasCluesGroups === "boolean" ? data.hasCluesGroups : true;
+
+        this.captionStyle = data && data.captionStyle || "numbered";
+        this.hasLetterCount = data && typeof data.hasLetterCount === "boolean" ? data.hasLetterCount : true;
+        this.hasCluesGroups = data && typeof data.hasCluesGroups === "boolean" ? data.hasCluesGroups : true;
+
+
     }
 }
