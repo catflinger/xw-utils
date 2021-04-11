@@ -52,6 +52,28 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
 
     public ngOnInit() {
 
+        this.form = this.formBuilder.group({
+            caption: ["", 
+                [
+                    Validators.required, 
+                    Validators.pattern(clueCaptionExpression + String.raw`\s*`)
+                ]
+            ],
+            text: [
+                "",
+                [ 
+                    Validators.required,
+                    Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
+                ]
+            ],
+            group: [
+                "",
+                [
+                    Validators.required
+                ]
+            ],
+        });
+
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
                 let selectedClue = puzzle.getSelectedClue();
@@ -67,27 +89,10 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
 
                 this.title = this.clue ? "new clue" : "edit clue";
 
-                this.form = this.formBuilder.group({
-                    caption: [
-                        this.clue ? this.clue.caption : "", 
-                        [
-                            Validators.required, 
-                            Validators.pattern(clueCaptionExpression + String.raw`\s*`)
-                        ]
-                    ],
-                    text: [
-                        this.clue ? this.clue.text : "",
-                        [ 
-                            Validators.required,
-                            Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
-                        ]
-                    ],
-                    group: [
-                        this.clue ? this.clue.group : "",
-                        [
-                            Validators.required
-                        ]
-                    ],
+                this.form.patchValue({
+                    caption: this.clue ? this.clue.caption : "", 
+                    text: this.clue ? this.clue.text : "",
+                    group: this.clue ? this.clue.group : "",
                 });
         
             }

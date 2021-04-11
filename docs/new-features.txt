@@ -1,7 +1,5 @@
 General Bugs
 ============
-FIXED NEEDS TESTING Open button on home page does nothing if puzzle is not complete
-FIXED NEEDS TESTING Sort out button click/screen redraw on SpecialText screen
 
 Fifteensquared Theme
 ====================
@@ -40,7 +38,12 @@ Have an option to hide grid numbers in grids in the blog
 
 Clue Captions
 =============
-NEEDS TESTING Allow captions to be completely independent of grid numbers
-(default is to link captions to grid numbers)
-NEEDS TESTING AND POLISHING - Allow alphabeticals to be extracted from PDFs etc (letters as grid numbers)
-NEEDS TESTING AND POLISHING - Allow puzzles with no captions to be imported
+NEEDS TESTING - 
+  Allow captions to be completely independent of grid numbers (default is to link captions to grid numbers)
+Test this with clue editing etc: can you edit a clue without a caption?
+
+NEEDS TESTING AND POLISHING -
+  Allow alphabeticals to be extracted from PDFs etc (letters as grid numbers)
+
+NEEDS TESTING AND POLISHING -
+  Allow puzzles with no captions to be imported

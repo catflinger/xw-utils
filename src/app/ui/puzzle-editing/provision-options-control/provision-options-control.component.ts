@@ -56,9 +56,9 @@ export class ProvisionOptionsControlComponent implements ControlValueAccessor, O
 
     public writeValue(options: ProvisionOptions): void {
         if (options) {
-            this.form.patchValue(options);
+            this.form.patchValue(options, { emitEvent: false });
         } else {
-            this.form.patchValue(defaultProvisionOptions);
+            this.form.patchValue(defaultProvisionOptions, { emitEvent: false});
         }
     }
 

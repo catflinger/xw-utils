@@ -82,6 +82,7 @@ export const createPdfTrack: NavTrack = {
             route: "/special-text",
             actions: {
                 "parse": "parser",
+                "cancel": "abandon",
             }
         },
 

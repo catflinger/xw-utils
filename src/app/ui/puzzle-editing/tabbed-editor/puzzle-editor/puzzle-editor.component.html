@@ -9,22 +9,29 @@
             </ng-template>
         </li>
 
-        <li ngbNavItem="PuzzleOptionsComponent">
-            <a ngbNavLink>Annotation otions</a>
+        <li ngbNavItem="ClueOtionsComponent">
+            <a ngbNavLink>Clue Format</a>
             <ng-template ngbNavContent>
-                <app-puzzle-options (close)="onClose()"></app-puzzle-options>
+                <app-clue-options-form (close)="onClose()"></app-clue-options-form>
             </ng-template>
         </li>
 
         <li ngbNavItem="AddClueComponent">
-            <a ngbNavLink>Add another clue</a>
+            <a ngbNavLink>Add Clue</a>
             <ng-template ngbNavContent>
                 <app-add-clue (close)="onClose()"></app-add-clue>
             </ng-template>
         </li>
 
+        <li ngbNavItem="PuzzleOptionsComponent">
+            <a ngbNavLink>Annotation Otions</a>
+            <ng-template ngbNavContent>
+                <app-puzzle-options (close)="onClose()"></app-puzzle-options>
+            </ng-template>
+        </li>
+
         <li ngbNavItem="GridFormComponent" *ngIf="puzzle.grid">
-            <a ngbNavLink>Edit the grid</a>
+            <a ngbNavLink>Edit Grid</a>
             <ng-template ngbNavContent>
                 <app-grid-form (close)="onClose()"></app-grid-form>
             </ng-template>

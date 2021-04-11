@@ -102,6 +102,7 @@ import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
 import { ProvisionOptionsControlComponent } from './ui/puzzle-editing/provision-options-control/provision-options-control.component';
+import { ClueOptionsFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/clue-options-form/clue-options-form.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -206,6 +207,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         NinaFinderComponent,
         GridImageComponent,
         ProvisionOptionsControlComponent,
+        ClueOptionsFormComponent,
     ],
     imports: [
         BrowserModule,

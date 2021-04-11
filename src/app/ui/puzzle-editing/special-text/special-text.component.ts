@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { ITextParsingError } from 'src/app/model/interfaces';
 import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
-import { ProvisionOptions } from '../provision-options-control/provision-options-control.component';
 
 const defaultText: string = "ACROSS\n1 This is an across clue (5)\nDOWN\n2 This is a down clue (7)";
 
@@ -60,7 +59,7 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
                         } else {
                             this.parseError = null;
                         }
-                        
+
                         this.changeRef.detectChanges();
                     }
             ));
@@ -96,5 +95,6 @@ export class SpecialTextComponent implements OnInit, OnDestroy {
     public onAmend() {
         this.appService.clear();
         this.parseError = null;
+        this.changeRef.detectChanges();
     }
 }

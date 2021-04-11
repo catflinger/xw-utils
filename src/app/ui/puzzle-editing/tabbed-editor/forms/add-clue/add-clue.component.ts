@@ -88,12 +88,12 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
         this.close.emit();
     }
 
-    private getCaptionValidators(clueStyle: CaptionStyle): ValidatorFn[] {
+    private getCaptionValidators(captionStyle: CaptionStyle): ValidatorFn[] {
         let captionExpression: string;
 
-        if (clueStyle === "alphabetical") {
+        if (captionStyle === "alphabetical") {
             captionExpression = String.raw`^\s*[A-Z]\s+`;
-        } else if (clueStyle === "none") {
+        } else if (captionStyle === "none") {
             captionExpression = String.raw`^\s*`;
         } else {
             captionExpression = clueCaptionExpression;
