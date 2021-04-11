@@ -180,6 +180,9 @@ export interface IPublishOptions {
     useDefaults: boolean;
     includeGrid: boolean;
     spacing: Spacing;
+
+    showClueGroups: boolean;
+    showClueCaptions: boolean;
 }
 
 export interface IPuzzleAnnotation {

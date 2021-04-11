@@ -5,7 +5,8 @@ import { TextColumn } from './text-column';
 export class PublishOptions implements IPublishOptions {
     public readonly textCols: Array<TextColumn>;
     public readonly textStyles: Array<TextStyle>;
-
+    public readonly showClueCaptions: boolean;
+    public readonly showClueGroups: boolean;
     public readonly includeGrid: boolean;
     public readonly layout: Layouts;
     public readonly spacing: Spacing;
@@ -15,6 +16,10 @@ export class PublishOptions implements IPublishOptions {
     constructor(data) {
         this.useDefaults = typeof data.useDefaults === "undefined" ? true : !!data.useDefaults;
         this.includeGrid = !!(data.includeGrid);
+        
+        this.showClueCaptions = typeof data.showClueCaptions === "undefined" ? true : !!data.showClueCaptions;
+        this.showClueGroups = typeof data.showClueGroups === "undefined" ? true : !!data.showClueGroups;
+        
         this.layout = data.layout ? data.layout : "table";
         this.spacing = data.spacing ? data.spacing : "medium";
 

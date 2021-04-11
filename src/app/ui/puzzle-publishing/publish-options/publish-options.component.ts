@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { UpdatePublsihOptions, PublishOptionsUpdate } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdatePublsihOptionTextStyle } from 'src/app/modifiers/publish-options-modifiers/update-publish-option-text-style';
 import { fifteenSquaredBlack, fifteenSquaredBlue } from '../../common';
+import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
+import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 
 @Component({
     selector: 'app-publish-options',
@@ -44,10 +45,14 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
             this.subs.push(
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
+                        this.puzzle = puzzle;
+                        this.publishOptions = null;
+
                         if (puzzle) {
-                            this.puzzle = puzzle;
-                            this.publishOptions = this.puzzle.publishOptions;
+                            // clone the puzzle options so we can write to it (as a PublishOptionsUpdate)
+                            this.publishOptions = new PublishOptions(puzzle.publishOptions);
                         }
+
                         this.detRef.detectChanges();
                     }
                 )
@@ -85,13 +90,19 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     public onUseDefaultChange(event: any) {
+        const modifiers: IPuzzleModifier[] = [];
+
+        modifiers.push(new UpdatePublsihOptions(this.publishOptions));
+
         if (event.target.checked) {
-            this.activePuzzle.updateAndCommit(
+            modifiers.push(
                 new UpdatePublsihOptionTextStyle("clue", fifteenSquaredBlue, false, false, false),
                 new UpdatePublsihOptionTextStyle("definition", fifteenSquaredBlue, false, false, true),
                 new UpdatePublsihOptionTextStyle("answer", fifteenSquaredBlack, true, false, false),
+
             );
-        }
+        } 
+        this.activePuzzle.updateAndCommit(...modifiers);
     }
 
 }

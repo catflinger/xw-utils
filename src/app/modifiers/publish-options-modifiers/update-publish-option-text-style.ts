@@ -16,6 +16,5 @@ export class UpdatePublsihOptionTextStyle implements IPuzzleModifier {
         ts.bold = this.bold;
         ts.italic = this.italic;
         ts.underline = this.underline;
-
     }
 }

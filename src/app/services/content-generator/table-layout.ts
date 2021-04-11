@@ -48,13 +48,13 @@ export class TableLayout implements ContentGenerator {
                     new Tag("tbody",
                         
                         // ACROSS title
-                        new Tag("tr", 
+                        puzzle.publishOptions.showClueGroups ? new Tag("tr", 
                             new Tag("td", 
                                 new Text("ACROSS"), 
                                 new Attribute("colspan", (answerColumnCount + 2).toString()),
                                 new Attribute("class", "fts-group"),
                             )
-                        ),
+                        ) : null,
 
                         // optional heading when there are multiple answer columns
                         this.makeHeadingRow(puzzle.publishOptions),
@@ -65,13 +65,13 @@ export class TableLayout implements ContentGenerator {
                         .flat(),
 
                         // DOWN title
-                        new Tag("tr",
+                        puzzle.publishOptions.showClueGroups ? new Tag("tr",
                             new Tag("td", 
                                 new Text("DOWN"), 
                                 new Attribute("colspan", (answerColumnCount +2).toString()),
                                 new Attribute("class", "fts-group"),
                             )
-                        ),
+                        ) : null,
 
                         // optional heading when there are multiple answer columns
                         this.makeHeadingRow(puzzle.publishOptions),
@@ -112,7 +112,7 @@ export class TableLayout implements ContentGenerator {
 
                 new Tag("td", 
                     new Attribute("class", "fts-subgroup"),
-                    new Tag("span", new Text(clue.caption)),
+                    publishOptions.showClueCaptions ? new Tag("span", new Text(clue.caption)) : null,
                     this.makeTextStyleAttribute("clue", publishOptions),
                 ),
 

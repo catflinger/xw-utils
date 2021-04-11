@@ -5,6 +5,7 @@
                 <h3>publish options</h3>
             </div>
         </div>
+
         <div class="row mt-3" *ngIf="puzzle">
             <div class="col">
                 <div>
@@ -26,6 +27,7 @@
                 </div>
             </div>
         </div>
+    
         <div class="row mt-3" *ngIf="puzzle">
             <div class="col">
                 <div>
@@ -63,7 +65,7 @@
         </div>
 
 
-        <div class="row mt-3" *ngIf="puzzle && !puzzle.publishOptions.useDefaults">
+        <div class="row mt-3" *ngIf="puzzle && publishOptions && !publishOptions.useDefaults">
             <div class="col">
                 <div class="row">
 
@@ -97,6 +99,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <label>
+                    <input type="checkbox" [(ngModel)]="publishOptions.showClueGroups" (change)="onChange()">
+                    show Across/Down headings
+                </label>
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="puzzle">
+            <div class="col">
+                <label>
+                    <input type="checkbox" [(ngModel)]="publishOptions.showClueCaptions" (change)="onChange()">
+                    show captions for clues
+                </label>
             </div>
         </div>
 

@@ -6,7 +6,9 @@ export type PublishOptionsUpdate = {
     includeGrid?: boolean; 
     layout?: Layouts; 
     spacing?: Spacing;
-    useDefaults: boolean;
+    useDefaults?: boolean;
+    showClueGroups?: boolean;
+    showClueCaptions?: boolean;
     // textStyles?: ReadonlyArray<TextStyle>;
     // textCols?: ReadonlyArray<TextColumn>;
 };
@@ -19,8 +21,8 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
             return;
         }
 
-        if (typeof this.options.includeGrid !== "undefined" && this.options.includeGrid !== null) {
-            puzzle.publishOptions.includeGrid = this.options.includeGrid;
+        if (typeof this.options.includeGrid !== "undefined") {
+            puzzle.publishOptions.includeGrid = !!this.options.includeGrid;
         }
 
         if (typeof this.options.layout !== "undefined" && this.options.layout !== null) {
@@ -31,8 +33,16 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
             puzzle.publishOptions.spacing = this.options.spacing;
         }
 
-        if (typeof this.options.useDefaults !== "undefined" && this.options.useDefaults !== null) {
-            puzzle.publishOptions.useDefaults = this.options.useDefaults;
+        if (typeof this.options.useDefaults !== "undefined") {
+            puzzle.publishOptions.useDefaults = !!this.options.useDefaults;
+        }
+
+        if (typeof this.options.showClueCaptions !== "undefined") {
+            puzzle.publishOptions.showClueCaptions = !!this.options.showClueCaptions;
+        }
+
+        if (typeof this.options.showClueGroups !== "undefined") {
+            puzzle.publishOptions.showClueGroups = !!this.options.showClueGroups;
         }
 
         // if (typeof this.options.textStyles !== "undefined") {

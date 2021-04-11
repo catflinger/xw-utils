@@ -42,10 +42,10 @@ export class ListLayout implements ContentGenerator {
                 new Attribute("class", `fts fts-list fts-spacing-${puzzle.publishOptions.spacing}`),
 
                 // clues
-                new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")),
+                puzzle.publishOptions.showClueGroups ? new Tag("div", new Attribute("class", "fts-group"), new Text("ACROSS")) : null,
                 new Tag("div", ...puzzle.clues.filter(c => c.group === "across").map(clue => this.makeClue(clue, puzzle.publishOptions, puzzle.provision))),
 
-                new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")),
+                puzzle.publishOptions.showClueGroups ? new Tag("div", new Attribute("class", "fts-group"), new Text("DOWN")) : null,
                 new Tag("div", ...puzzle.clues.filter(c => c.group === "down").map(clue => this.makeClue(clue, puzzle.publishOptions, puzzle.provision))),
 
                 //footer
@@ -68,13 +68,15 @@ export class ListLayout implements ContentGenerator {
                 new Attribute("class", "fts-subgroup"),
 
                 // caption
+                publishOptions.showClueCaptions ?
                 new Tag("span",
                     new Text(clue.getDisplayCaption(provision.captionStyle)),
                     clue.caption ? new Text(". ") : null,
                     publishOptions.useDefaults ?
                         new Attribute("class", clueStyle.class) :
                         new Attribute("style", clueStyle.toCssStyleString()),
-                ),
+                )
+                : null,
 
                 // maked-up clue text with definition
                 ...clue.chunks.map(chunk =>
