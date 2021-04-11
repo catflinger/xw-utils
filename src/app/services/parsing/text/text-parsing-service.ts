@@ -29,7 +29,7 @@ export class TextParsingService {
             azedFeatures: textParsingOptions.azedFeatures,
             captionStyle: textParsingOptions.captionStyle,
             hasLetterCount: textParsingOptions.hasLetterCount,
-            hasClueGroups: textParsingOptions.hasClueGroups,
+            hasClueGroupHeadings: textParsingOptions.hasClueGroupHeadings,
         } :
         {
             allowPreamble: false,
@@ -38,7 +38,7 @@ export class TextParsingService {
             azedFeatures: false,
             captionStyle: "numbered",
             hasLetterCount: true,
-            hasClueGroups: true,
+            hasClueGroupHeadings: true,
         }
 
         let context = new ParseContext(_options);
@@ -187,7 +187,7 @@ export class TextParsingService {
                     message: "reached end of file and no clues found"});
 
             case "across":
-                if (context.textParsingOptions.hasClueGroups) {
+                if (context.textParsingOptions.hasClueGroupHeadings) {
                     throw new TextParsingError({
                         code: "endMarker_across",
                         tokens: context.tokenGroup,
@@ -220,7 +220,7 @@ export class TextParsingService {
 
         switch (context.state) {
             case null:
-                if (context.textParsingOptions.hasClueGroups === false) {
+                if (context.textParsingOptions.hasClueGroupHeadings === false) {
                     context.state = "across";
                     context.addClueText(token.text);
                     context.save();

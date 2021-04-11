@@ -6,13 +6,13 @@ import { CaptionStyle } from 'src/app/model/interfaces';
 export interface ProvisionOptions {
     captionStyle: CaptionStyle,
     hasLetterCount: boolean,
-    hasClueGroups: boolean,
+    hasClueGroupHeadings: boolean,
 }
 
 const defaultProvisionOptions: ProvisionOptions = {
     captionStyle: "numbered",
     hasLetterCount: true,
-    hasClueGroups: true,
+    hasClueGroupHeadings: true,
 }
 
 @Component({
@@ -43,7 +43,7 @@ export class ProvisionOptionsControlComponent implements ControlValueAccessor, O
         this.form = this.fb.group({
             captionStyle: [defaultProvisionOptions.captionStyle, Validators.required],
             hasLetterCount: defaultProvisionOptions.hasLetterCount,
-            hasClueGroups: defaultProvisionOptions.hasClueGroups,
+            hasClueGroupHeadings: defaultProvisionOptions.hasClueGroupHeadings,
         });
 
         this.subs.push(

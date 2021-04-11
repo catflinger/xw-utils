@@ -116,7 +116,7 @@ export class ParseText implements IPuzzleModifier {
             azedFeatures: false,
             captionStyle: provision.captionStyle,
             hasLetterCount: provision.hasLetterCount,
-            hasClueGroups: provision.hasCluesGroups,
+            hasClueGroupHeadings: provision.hasClueGroupHeadings,
         }
 
         if (provider !== "text") {

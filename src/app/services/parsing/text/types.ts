@@ -20,7 +20,7 @@ export interface TextParsingOptions {
     allowTypos: boolean,
     azedFeatures: boolean,
     hasLetterCount: boolean,
-    hasClueGroups: boolean,
+    hasClueGroupHeadings: boolean,
 }
 
 export type LineType = 
