@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Cheat } from 'src/app/modifiers/clue-modifiers/cheat';
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { EditorFormBase } from '../editor-form-base';

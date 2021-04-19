@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { FormGroup, FormControl } from '@angular/forms';
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 

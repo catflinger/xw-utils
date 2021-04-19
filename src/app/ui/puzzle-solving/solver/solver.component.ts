@@ -8,12 +8,12 @@ import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
-import { ClueEditorService } from '../../puzzle-editing/tabbed-editor/clue-editor.service';
+import { ClueEditorService } from '../../puzzle-editing/tabbed-dialogs/clue-editor.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
-import { ClueEditorComponent } from '../../puzzle-editing/tabbed-editor/clue-editor/clue-editor.component';
+import { ClueDialogComponent } from '../../puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PuzzleEditorComponent } from '../../puzzle-editing/tabbed-editor/puzzle-editor/puzzle-editor.component';
+import { PuzzleDialogComponent } from '../../puzzle-editing/tabbed-dialogs/puzzle-dialog/puzzle-dialog.component';
 import { AppService } from '../../general/app.service';
 
 @Component({
@@ -163,7 +163,7 @@ export class SolverComponent implements OnInit {
     }
 
     public onFix() {
-        let modalRef = this.modalService.open(PuzzleEditorComponent, { 
+        let modalRef = this.modalService.open(PuzzleDialogComponent, { 
             backdrop: "static",
             size: "lg",
         });
@@ -192,7 +192,7 @@ export class SolverComponent implements OnInit {
             this.editorService.lastKeyPress.put(key);
 
             if (this.appSettings.editorMode === "modal") {
-                let modalRef = this.modalService.open(ClueEditorComponent, { 
+                let modalRef = this.modalService.open(ClueDialogComponent, { 
                     backdrop: "static",
                     size: "lg",
                 });

@@ -14,7 +14,7 @@ import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettings } from 'src/app/services/common';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 import { PuzzleProvision } from 'src/app/model/puzzle-model/puzzle-provision';

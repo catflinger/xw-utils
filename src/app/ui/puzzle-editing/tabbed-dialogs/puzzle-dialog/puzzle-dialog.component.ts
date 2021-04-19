@@ -5,11 +5,11 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-puzzle-editor',
-  templateUrl: './puzzle-editor.component.html',
-  styleUrls: ['./puzzle-editor.component.css']
+  selector: 'app-puzzle-dialog',
+  templateUrl: './puzzle-dialog.component.html',
+  styleUrls: ['./puzzle-dialog.component.css']
 })
-export class PuzzleEditorComponent implements OnInit {
+export class PuzzleDialogComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
     public activeId: string = "PuzzleInfoFormComponent";

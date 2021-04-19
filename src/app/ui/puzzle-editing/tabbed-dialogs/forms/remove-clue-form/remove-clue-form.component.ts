@@ -3,19 +3,19 @@ import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { ClueEditorService } from '../../clue-editor.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
 import { DeleteClue } from 'src/app/modifiers/clue-modifiers/delete-clue';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { EditorFormBase } from '../editor-form-base';
 
 @Component({
-    selector: 'app-add-remove-clue',
-    templateUrl: './add-remove-clue.component.html',
-    styleUrls: ['./add-remove-clue.component.css'],
+    selector: 'app-remove-clue-form',
+    templateUrl: './remove-clue-form.component.html',
+    styleUrls: ['./remove-clue-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddRemoveClueComponent extends EditorFormBase implements OnInit, OnDestroy {
+export class RemoveClueFormComponent extends EditorFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     
     public  clue: Clue;

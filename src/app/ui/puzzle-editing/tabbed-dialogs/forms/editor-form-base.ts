@@ -1,4 +1,4 @@
-import { IClueEditorForm } from '../clue-editor/clue-editor.component';
+import { IClueEditorForm } from '../clue-dialog/clue-dialog.component';
 import { ClueEditorService } from '../clue-editor.service';
 import { OnDestroy } from '@angular/core';
 

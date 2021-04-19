@@ -8,7 +8,7 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
-import { ClueEditorComponent } from '../../puzzle-editing/tabbed-editor/clue-editor/clue-editor.component';
+import { ClueDialogComponent } from '../../puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from '../../general/app.service';
 
@@ -133,7 +133,7 @@ export class BloggerComponent implements OnInit, OnDestroy {
             this._showEditor = true;
 
             if (this.appSettings.editorMode === "modal") {
-                let modalRef = this.modalService.open(ClueEditorComponent, {
+                let modalRef = this.modalService.open(ClueDialogComponent, {
                     backdrop: "static",
                     size: "lg",
                 });

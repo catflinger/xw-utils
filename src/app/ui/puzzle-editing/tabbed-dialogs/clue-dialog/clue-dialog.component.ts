@@ -12,12 +12,12 @@ export interface IClueEditorForm {
 } 
 
 @Component({
-    selector: 'app-clue-editor',
-    templateUrl: './clue-editor.component.html',
-    styleUrls: ['./clue-editor.component.css'],
+    selector: 'app-clue-dialog',
+    templateUrl: './clue-dialog.component.html',
+    styleUrls: ['./clue-dialog.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueEditorComponent implements OnInit, OnDestroy {
+export class ClueDialogComponent implements OnInit, OnDestroy {
     @Output() close = new EventEmitter<void>();
 
     public activeId: string = "ClueAnnotatorComponent";
