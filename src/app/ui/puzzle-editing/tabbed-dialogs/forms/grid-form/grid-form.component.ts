@@ -6,9 +6,9 @@ import { UpdateCell } from 'src/app/modifiers/grid-modifiers/update-cell';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
-import { ClueEditorService } from '../../clue-editor.service';
+import { ClueDialogService } from '../../clue-dialog.service';
 import { BarClickEvent } from 'src/app/ui/grid/grid/grid.component';
-import { EditorFormBase } from '../editor-form-base';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdateGridProperties } from 'src/app/modifiers/grid-modifiers/updare-grid-properties';
 
@@ -18,7 +18,7 @@ import { UpdateGridProperties } from 'src/app/modifiers/grid-modifiers/updare-gr
     styleUrls: ['./grid-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridFormComponent extends EditorFormBase implements OnInit, OnDestroy {
+export class GridFormComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     private puzzle: Puzzle;
     
@@ -27,7 +27,7 @@ export class GridFormComponent extends EditorFormBase implements OnInit, OnDestr
    @Output() dirty = new EventEmitter<void>();
 
     constructor(
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
         private activePuzzle:IActivePuzzle,
         private changeRef: ChangeDetectorRef,
         private fb: FormBuilder,

@@ -11,10 +11,10 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
-import { ClueEditorService } from '../../clue-editor.service';
-import { EditorFormBase } from '../editor-form-base';
+import { ClueDialogService } from '../../clue-dialog.service';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
-import { ClueValidators } from "../clue-validators";
+import { ClueValidators } from "../../editors/clue-validators";
 
 export interface ClueEditModel {
     id: string;
@@ -29,7 +29,7 @@ export interface ClueEditModel {
     styleUrls: ['./edit-clue-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditClueFormComponent extends EditorFormBase implements OnInit, AfterViewInit, OnDestroy {
+export class EditClueFormComponent extends TabbedDialogFormBase implements OnInit, AfterViewInit, OnDestroy {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
@@ -46,7 +46,7 @@ export class EditClueFormComponent extends EditorFormBase implements OnInit, Aft
     constructor(
         private activePuzzle:IActivePuzzle,
         private formBuilder: FormBuilder,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
     ) {
         super(editorService)
     }

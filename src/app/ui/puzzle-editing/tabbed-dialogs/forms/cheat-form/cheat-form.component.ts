@@ -2,22 +2,22 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Cheat } from 'src/app/modifiers/clue-modifiers/cheat';
 import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
-import { ClueEditorService } from '../../clue-editor.service';
+import { ClueDialogService } from '../../clue-dialog.service';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
-import { EditorFormBase } from '../editor-form-base';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 
 @Component({
     selector: 'app-cheat-form',
     templateUrl: './cheat-form.component.html',
     styleUrls: ['./cheat-form.component.css']
 })
-export class CheatFormComponent extends EditorFormBase implements OnDestroy {
+export class CheatFormComponent extends TabbedDialogFormBase implements OnDestroy {
     
     @Output() close = new EventEmitter<void>();
 
     constructor(
         private activePuzzle: IActivePuzzle,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
     ) {
         super(editorService)
     }

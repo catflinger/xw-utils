@@ -16,7 +16,7 @@ import { PublishCompleteComponent } from './ui/puzzle-publishing/publish-complet
 import { PublishPreambleComponent } from './ui/puzzle-publishing/publish-preamble/publish-preamble.component';
 import { ClueListComponent } from './ui/clues/clue-list/clue-list.component';
 import { SolverComponent } from './ui/puzzle-solving/solver/solver.component';
-import { ClueAnnotationComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/clue-annotator/clue-annotator.component';
+import { ClueAnnotatorFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/clue-annotator-form/clue-annotator-form.component';
 import { ClueTextChunkComponent } from './ui/clues/clue-text-chunk/clue-text-chunk.component';
 
 import { PuzzleManagementService, IPuzzleManager, IActivePuzzle } from './services/puzzles/puzzle-management.service';
@@ -73,9 +73,7 @@ import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 import { EditClueFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/edit-clue-form/edit-clue-form.component';
-import { PuzzleOptionsComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/puzzle-options/puzzle-options.component';
-import { GridReferenceComponent } from './ui/puzzle-editing/tabbed-dialogs/grid-reference/grid-reference.component';
-import { GridLinkerComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/grid-linker/grid-linker.component';
+import { PuzzleOptionsComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/puzzle-options/puzzle-options.component';
 import { ClueDialogComponent } from './ui/puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
 import { GridFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/grid-form/grid-form.component';
 import { RemoveClueFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/remove-clue-form/remove-clue-form.component';
@@ -102,7 +100,7 @@ import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
 import { ProvisionOptionsControlComponent } from './ui/puzzle-editing/provision-options-control/provision-options-control.component';
-import { ProvisionOptionsEditorComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/provision-options-editor/provision-options-editor.component';
+import { ProvisionOptionsEditorComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/provision-options-editor/provision-options-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -134,7 +132,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridComponent,
         ClueListComponent,
         SolverComponent,
-        ClueAnnotationComponent,
+        ClueAnnotatorFormComponent,
         ClueTextControlComponent,
         ClueTextChunkComponent,
         HomeComponent,
@@ -182,8 +180,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         NavLogComponent,
         EditClueFormComponent,
         PuzzleOptionsComponent,
-        GridReferenceComponent,
-        GridLinkerComponent,
         ClueDialogComponent,
         GridFormComponent,
         RemoveClueFormComponent,
@@ -231,7 +227,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         {provide: NAV_PROCESSOR, useClass: UIProcessService},
     ],
     entryComponents: [
-        ClueAnnotationComponent,
+        ClueAnnotatorFormComponent,
         ConfirmModalComponent,
         EditClueFormComponent,
     ],

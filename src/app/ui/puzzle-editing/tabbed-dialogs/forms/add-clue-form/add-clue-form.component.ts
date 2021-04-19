@@ -8,11 +8,11 @@ import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { v4 as uuid } from "uuid";
-import { ClueEditorService } from '../../clue-editor.service';
-import { EditorFormBase } from '../editor-form-base';
+import { ClueDialogService } from '../../clue-dialog.service';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { CaptionStyle } from 'src/app/model/interfaces';
-import { ClueValidators } from '../clue-validators';
+import { ClueValidators } from '../../editors/clue-validators';
 
 @Component({
   selector: 'app-add-clue-form',
@@ -20,7 +20,7 @@ import { ClueValidators } from '../clue-validators';
   styleUrls: ['./add-clue-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddClueFormComponent extends EditorFormBase implements OnInit {
+export class AddClueFormComponent extends TabbedDialogFormBase implements OnInit {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
@@ -34,7 +34,7 @@ export class AddClueFormComponent extends EditorFormBase implements OnInit {
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
     ) { 
         super(editorService)
     }

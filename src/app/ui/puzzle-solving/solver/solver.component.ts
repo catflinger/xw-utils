@@ -8,7 +8,7 @@ import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
 import { SelectClueByCell } from 'src/app/modifiers/clue-modifiers/select-clue-by-cell';
-import { ClueEditorService } from '../../puzzle-editing/tabbed-dialogs/clue-editor.service';
+import { ClueDialogService } from '../../puzzle-editing/tabbed-dialogs/clue-dialog.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { ClueDialogComponent } from '../../puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
@@ -35,7 +35,7 @@ export class SolverComponent implements OnInit {
         private navService: NavService<AppTrackData>,
         private activePuzzle: IActivePuzzle,
         private appSettingsService: AppSettingsService,
-        private editorService: ClueEditorService,
+        private editorService: ClueDialogService,
         private modalService: NgbModal,
         private detRef: ChangeDetectorRef,
     ) { }

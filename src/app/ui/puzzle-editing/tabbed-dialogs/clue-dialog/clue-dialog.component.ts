@@ -3,7 +3,7 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { ClueEditorService } from '../clue-editor.service';
+import { ClueDialogService } from '../clue-dialog.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 
@@ -31,7 +31,7 @@ export class ClueDialogComponent implements OnInit, OnDestroy {
     constructor(
         private settingsService: AppSettingsService,
         private activePuzzle: IActivePuzzle,
-        private editorService: ClueEditorService,
+        private editorService: ClueDialogService,
         private detRef: ChangeDetectorRef,
     ) { }
 

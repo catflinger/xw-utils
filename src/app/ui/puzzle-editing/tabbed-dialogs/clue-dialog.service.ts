@@ -26,7 +26,7 @@ class LastKeypress {
 @Injectable({
     providedIn: 'root'
 })
-export class ClueEditorService {
+export class ClueDialogService {
     private currentInstance: IEditorInstance = null;
 
     public readonly lastKeyPress: LastKeypress;

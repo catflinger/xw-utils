@@ -7,8 +7,8 @@
             <li ngbNavItem="ClueAnnotatorComponent">
                 <a ngbNavLink>Solve and annotate</a>
                 <ng-template ngbNavContent>
-                    <app-clue-annotator (dirty)="onDirty()">
-                    </app-clue-annotator>
+                    <app-clue-annotator-form (dirty)="onDirty()">
+                    </app-clue-annotator-form>
                 </ng-template>
             </li>
 
@@ -26,12 +26,6 @@
                 </ng-template>
             </li>
 
-            <li ngbNavItem="GridLinkerComponent" *ngIf="puzzle.grid">
-                <a ngbNavLink>Grid entries</a>
-                <ng-template ngbNavContent>
-                    <app-grid-linker (dirty)="onDirty()"></app-grid-linker>
-                </ng-template>
-            </li>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="my-3"></div>
@@ -39,7 +33,7 @@
     </ng-container>
 
     <ng-container *ngIf="!showTabs">
-        <app-clue-annotator (dirty)="onDirty()"></app-clue-annotator>
+        <app-clue-annotator-form (dirty)="onDirty()"></app-clue-annotator-form>
     </ng-container>
 
 </div>

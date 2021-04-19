@@ -3,8 +3,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { UpdateInfo } from 'src/app/modifiers/puzzle-modifiers/update-info';
-import { ClueEditorService } from '../../clue-editor.service';
-import { EditorFormBase } from '../editor-form-base';
+import { ClueDialogService } from '../../clue-dialog.service';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 
 @Component({
     selector: 'app-puzzle-info-form',
@@ -12,7 +12,7 @@ import { EditorFormBase } from '../editor-form-base';
     styleUrls: ['./puzzle-info-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PuzzleInfoFormComponent extends EditorFormBase implements OnInit, OnDestroy {
+export class PuzzleInfoFormComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     public form: FormGroup;
 
     @Input() public clueId: string;
@@ -24,7 +24,7 @@ export class PuzzleInfoFormComponent extends EditorFormBase implements OnInit, O
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
     ) { 
         super(editorService)
     }

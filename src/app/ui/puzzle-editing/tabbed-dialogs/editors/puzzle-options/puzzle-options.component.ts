@@ -6,8 +6,8 @@ import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-text-column';
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
-import { ClueEditorService } from '../../clue-editor.service';
-import { EditorFormBase } from '../editor-form-base';
+import { ClueDialogService } from '../../clue-dialog.service';
+import { TabbedDialogFormBase } from '../../forms/tabbed-dialog-form-base';
 
 @Component({
     selector: 'app-puzzle-options',
@@ -15,7 +15,7 @@ import { EditorFormBase } from '../editor-form-base';
     styleUrls: ['./puzzle-options.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PuzzleOptionsComponent extends EditorFormBase implements OnInit, OnDestroy {
+export class PuzzleOptionsComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     public form: FormGroup;
 
     @Input() public clueId: string;
@@ -25,7 +25,7 @@ export class PuzzleOptionsComponent extends EditorFormBase implements OnInit, On
     constructor(
         private activePuzzle: IActivePuzzle,
         private detRef: ChangeDetectorRef,
-        editorService: ClueEditorService
+        editorService: ClueDialogService
     ) { 
         super(editorService)
     }

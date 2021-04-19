@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { ClueEditorService } from '../../clue-editor.service';
+import { ClueDialogService } from '../../clue-dialog.service';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
 import { DeleteClue } from 'src/app/modifiers/clue-modifiers/delete-clue';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
-import { EditorFormBase } from '../editor-form-base';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 
 @Component({
     selector: 'app-remove-clue-form',
@@ -15,7 +15,7 @@ import { EditorFormBase } from '../editor-form-base';
     styleUrls: ['./remove-clue-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RemoveClueFormComponent extends EditorFormBase implements OnInit, OnDestroy {
+export class RemoveClueFormComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
     
     public  clue: Clue;
@@ -26,7 +26,7 @@ export class RemoveClueFormComponent extends EditorFormBase implements OnInit, O
 
     constructor(
         private activePuzzle: IActivePuzzle,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
     ) { 
         super(editorService)
     }

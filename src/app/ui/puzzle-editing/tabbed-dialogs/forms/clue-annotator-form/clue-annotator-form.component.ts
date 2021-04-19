@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ElementRef, AfterViewInit, ViewChildren, QueryList, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { Clue } from 'src/app/model/puzzle-model/clue';
 import { Subscription } from 'rxjs';
@@ -12,12 +12,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../../../general/confirm-modal/confirm-modal.component';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { AppSettings } from 'src/app/services/common';
-import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { IClueEditorForm } from '../../clue-dialog/clue-dialog.component';
-import { ClueEditorService } from '../../clue-editor.service';
-import { EditorFormBase } from '../editor-form-base';
-import { PuzzleProvision } from 'src/app/model/puzzle-model/puzzle-provision';
+import { ClueDialogService } from '../../clue-dialog.service';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 
 type AnswerTextKlass = "editorEntry" | "gridEntry" | "placeholder" | "pointing" | "separator" | "clash";
 
@@ -33,12 +30,12 @@ class AnswerTextChunk {
 }
 
 @Component({
-    selector: 'app-clue-annotator',
-    templateUrl: './clue-annotator.component.html',
-    styleUrls: ['./clue-annotator.component.css'],
+    selector: 'app-clue-annotator-form',
+    templateUrl: './clue-annotator-form.component.html',
+    styleUrls: ['./clue-annotator-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueAnnotationComponent extends EditorFormBase implements OnInit, AfterViewInit, OnDestroy {
+export class ClueAnnotatorFormComponent extends TabbedDialogFormBase implements OnInit, AfterViewInit, OnDestroy {
 
     @Output() dirty = new EventEmitter<void>();
 
@@ -61,7 +58,7 @@ export class ClueAnnotationComponent extends EditorFormBase implements OnInit, A
     constructor(
         private activePuzzle: IActivePuzzle,
         private appSettingsService: AppSettingsService,
-        editorService: ClueEditorService,
+        editorService: ClueDialogService,
         private formBuilder: FormBuilder,
         private modalService: NgbModal,
         private detRef: ChangeDetectorRef,
