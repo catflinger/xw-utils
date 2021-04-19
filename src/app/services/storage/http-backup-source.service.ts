@@ -149,8 +149,7 @@ export class HttpBackupSourceService {
             username: creds.username,
             password: creds.password,
         }
-        return this.http.request(
-            "delete", 
+        return this.http.put(
             getApiRoot() + `backup/${id}`, 
             {body: body}
         ).toPromise()

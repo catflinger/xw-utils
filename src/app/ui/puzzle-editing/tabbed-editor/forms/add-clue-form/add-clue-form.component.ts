@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef, SimpleChange, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -8,23 +8,25 @@ import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { v4 as uuid } from "uuid";
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { CaptionStyle } from 'src/app/model/interfaces';
+import { ClueValidators } from '../clue-validators';
 
 @Component({
-  selector: 'app-add-clue',
-  templateUrl: './add-clue.component.html',
-  styleUrls: ['./add-clue.component.css']
+  selector: 'app-add-clue-form',
+  templateUrl: './add-clue-form.component.html',
+  styleUrls: ['./add-clue-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddClueComponent extends EditorFormBase implements OnInit {
+export class AddClueFormComponent extends EditorFormBase implements OnInit {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
     public  puzzle: Puzzle;
     public letters: string[];
+    public showAdvancedOptions = false;
 
     @Output() close = new EventEmitter<void>();
 
@@ -41,26 +43,19 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
 
         this.form = this.formBuilder.group({
             caption: "",
-            text: [
-                "",
-                [ 
-                    Validators.required,
-                    Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
-                ]
-            ],
-            group: [
-                "across",
-                [
-                    Validators.required
-                ]
-            ],
+            text: "",
+            group: "across"
         });
 
         this.subs.push(
             this.activePuzzle.observe().subscribe(puzzle => {
                 this.puzzle = puzzle;
                 if (puzzle) {
-                    this.form.get("caption").setValidators(this.getCaptionValidators(puzzle.provision.captionStyle));
+                    this.form.get("caption").setValidators(ClueValidators.getCaptionValidators(puzzle.provision.captionStyle));
+                    this.form.get("caption").updateValueAndValidity();
+
+                    this.form.get("text").setValidators(ClueValidators.getTextValidators(puzzle.provision.hasLetterCount));
+                    this.form.get("text").updateValueAndValidity();
                 }
                 this.detRef.detectChanges();
             })
@@ -88,17 +83,5 @@ export class AddClueComponent extends EditorFormBase implements OnInit {
         this.close.emit();
     }
 
-    private getCaptionValidators(captionStyle: CaptionStyle): ValidatorFn[] {
-        let captionExpression: string;
 
-        if (captionStyle === "alphabetical") {
-            captionExpression = String.raw`^\s*[A-Z]\s+`;
-        } else if (captionStyle === "none") {
-            captionExpression = String.raw`^\s*`;
-        } else {
-            captionExpression = clueCaptionExpression;
-        }
-
-        return [Validators.required, Validators.pattern(captionExpression + String.raw`\s*`)]
-    }
 }

@@ -72,7 +72,7 @@ import { createPdfTrack } from './services/navigation/tracks/create-pdf-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
-import { ClueTextEditorComponent } from './ui/puzzle-editing/tabbed-editor/forms/clue-text-editor/clue-text-editor.component';
+import { EditClueFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/edit-clue-form/edit-clue-form.component';
 import { PuzzleOptionsComponent } from './ui/puzzle-editing/tabbed-editor/forms/puzzle-options/puzzle-options.component';
 import { GridReferenceComponent } from './ui/puzzle-editing/tabbed-editor/grid-reference/grid-reference.component';
 import { GridLinkerComponent } from './ui/puzzle-editing/tabbed-editor/forms/grid-linker/grid-linker.component';
@@ -80,7 +80,7 @@ import { ClueEditorComponent } from './ui/puzzle-editing/tabbed-editor/clue-edit
 import { GridFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/grid-form/grid-form.component';
 import { AddRemoveClueComponent } from './ui/puzzle-editing/tabbed-editor/forms/add-remove-clue/add-remove-clue.component';
 import { PuzzleEditorComponent } from './ui/puzzle-editing/tabbed-editor/puzzle-editor/puzzle-editor.component';
-import { AddClueComponent } from './ui/puzzle-editing/tabbed-editor/forms/add-clue/add-clue.component';
+import { AddClueFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/add-clue-form/add-clue-form.component';
 import { BackupComponent } from './ui/backup/backup/backup.component';
 import { BackupsComponent } from './ui/backup/backups/backups.component';
 import { BackupSettingsComponent } from './ui/backup/backup-settings/backup-settings.component';
@@ -102,7 +102,7 @@ import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
 import { ProvisionOptionsControlComponent } from './ui/puzzle-editing/provision-options-control/provision-options-control.component';
-import { ClueOptionsFormComponent } from './ui/puzzle-editing/tabbed-editor/forms/clue-options-form/clue-options-form.component';
+import { ProvisionOptionsEditorComponent } from './ui/puzzle-editing/tabbed-editor/forms/provision-options-editor/provision-options-editor.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -180,7 +180,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         NavErrorComponent,
         ClueListItemComponent,
         NavLogComponent,
-        ClueTextEditorComponent,
+        EditClueFormComponent,
         PuzzleOptionsComponent,
         GridReferenceComponent,
         GridLinkerComponent,
@@ -188,7 +188,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridFormComponent,
         AddRemoveClueComponent,
         PuzzleEditorComponent,
-        AddClueComponent,
+        AddClueFormComponent,
         BackupComponent,
         BackupsComponent,
         BackupSettingsComponent,
@@ -207,7 +207,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         NinaFinderComponent,
         GridImageComponent,
         ProvisionOptionsControlComponent,
-        ClueOptionsFormComponent,
+        ProvisionOptionsEditorComponent,
     ],
     imports: [
         BrowserModule,
@@ -233,7 +233,7 @@ const tracks: ReadonlyArray<NavTrack> = [
     entryComponents: [
         ClueAnnotationComponent,
         ConfirmModalComponent,
-        ClueTextEditorComponent,
+        EditClueFormComponent,
     ],
     bootstrap: [AppComponent]
 })

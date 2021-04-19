@@ -9,17 +9,10 @@
             </ng-template>
         </li>
 
-        <li ngbNavItem="ClueOtionsComponent">
-            <a ngbNavLink>Clue Format</a>
-            <ng-template ngbNavContent>
-                <app-clue-options-form (close)="onClose()"></app-clue-options-form>
-            </ng-template>
-        </li>
-
         <li ngbNavItem="AddClueComponent">
             <a ngbNavLink>Add Clue</a>
             <ng-template ngbNavContent>
-                <app-add-clue (close)="onClose()"></app-add-clue>
+                <app-add-clue-form (close)="onClose()"></app-add-clue-form>
             </ng-template>
         </li>
 

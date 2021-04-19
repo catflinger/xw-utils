@@ -11,10 +11,10 @@ import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-ref
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
-import { IClueEditorForm } from '../../clue-editor/clue-editor.component';
 import { ClueEditorService } from '../../clue-editor.service';
 import { EditorFormBase } from '../editor-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
+import { ClueValidators } from "../clue-validators";
 
 export interface ClueEditModel {
     id: string;
@@ -24,17 +24,18 @@ export interface ClueEditModel {
 }
 
 @Component({
-    selector: 'app-clue-text-editor',
-    templateUrl: './clue-text-editor.component.html',
-    styleUrls: ['./clue-text-editor.component.css'],
+    selector: 'app-edit-clue-form',
+    templateUrl: './edit-clue-form.component.html',
+    styleUrls: ['./edit-clue-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueTextEditorComponent extends EditorFormBase implements OnInit, AfterViewInit, OnDestroy {
+export class EditClueFormComponent extends EditorFormBase implements OnInit, AfterViewInit, OnDestroy {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
     public title = "";
     public clue: ClueEditModel;
+    public showAdvancedOptions: false;
 
     @ViewChild("text", { static: false }) textInput: ElementRef;
 
@@ -53,25 +54,9 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            caption: ["", 
-                [
-                    Validators.required, 
-                    Validators.pattern(clueCaptionExpression + String.raw`\s*`)
-                ]
-            ],
-            text: [
-                "",
-                [ 
-                    Validators.required,
-                    Validators.pattern(String.raw`^.*` + clueLetterCountExpression),
-                ]
-            ],
-            group: [
-                "",
-                [
-                    Validators.required
-                ]
-            ],
+            caption: "",
+            text: "",
+            group: "",
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
@@ -94,7 +79,12 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
                     text: this.clue ? this.clue.text : "",
                     group: this.clue ? this.clue.group : "",
                 });
-        
+
+                this.form.get("caption").setValidators(ClueValidators.getCaptionValidators(puzzle.provision.captionStyle));
+                this.form.get("caption").updateValueAndValidity();
+
+                this.form.get("text").setValidators(ClueValidators.getTextValidators(puzzle.provision.hasLetterCount));
+                this.form.get("text").updateValueAndValidity();
             }
         }));
 
@@ -134,6 +124,7 @@ export class ClueTextEditorComponent extends EditorFormBase implements OnInit, A
                         text: this.form.value.text,
                     })
                 );
+
             } else {
                 const clueId = uuid();
                 mods.push(
