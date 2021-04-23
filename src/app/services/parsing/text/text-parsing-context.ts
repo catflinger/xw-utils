@@ -71,7 +71,11 @@ export class ParseContext implements IParseContext {
     public save() {
 
         if (this._state === "across" || this._state === "down") {
-            this._clues.push(Clue.makeClue(this._clueBuffer, this._state));
+            this._clues.push(Clue.makeClue(
+                this._clueBuffer.caption,
+                this._clueBuffer.clue,
+                this._clueBuffer.letterCount,
+                this._state));
         }
         this._clueBuffer = null;
     }

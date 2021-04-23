@@ -199,30 +199,55 @@ export class Clue implements IClue {
         return result;
     }
 
-    public static makeClue(buffer: ClueBuffer, group: ClueGroup, clueId?: string): Clue {
+    public static makeClue(caption: string, text: string, letterCount: string, group: ClueGroup, clueId?: string): Clue {
         return new Clue({
             id: clueId || uuid(),
             group,
-            caption: buffer.caption,
-            text: buffer.clue,
-            letterCount: buffer.letterCount,
+            caption,
+            text,
+            letterCount,
             answers: [""],
             solution: "",
             annotation: null,
             redirect: null,
-            format: Clue.getAnswerFormat(buffer.letterCount),
+            format: Clue.getAnswerFormat(letterCount),
             comment: new QuillDelta(),
             highlight: false,
             entries: [],
             warnings: [],
             chunks: [
                 {
-                    text: buffer.clue,
+                    text,
                     isDefinition: false,
                 }
             ],
         });
     }
+
+    // public static makeClueFromBuffer(buffer: ClueBuffer, group: ClueGroup, clueId?: string): Clue {
+    //     return new Clue({
+    //         id: clueId || uuid(),
+    //         group,
+    //         caption: buffer.caption,
+    //         text: buffer.clue,
+    //         letterCount: buffer.letterCount,
+    //         answers: [""],
+    //         solution: "",
+    //         annotation: null,
+    //         redirect: null,
+    //         format: Clue.getAnswerFormat(buffer.letterCount),
+    //         comment: new QuillDelta(),
+    //         highlight: false,
+    //         entries: [],
+    //         warnings: [],
+    //         chunks: [
+    //             {
+    //                 text: buffer.clue,
+    //                 isDefinition: false,
+    //             }
+    //         ],
+    //     });
+    // }
 
     public toMutable(): IClue {
         return JSON.parse(JSON.stringify(this));

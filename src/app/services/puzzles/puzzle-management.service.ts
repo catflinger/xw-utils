@@ -141,25 +141,25 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public update(...reducers: IPuzzleModifier[]): void {
-        //let puzzle = this.getMutableCopy(this.bsActive.value);
-        let puzzle = this.bsActive.value;
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.bsActive.value;
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
             new MarkAsUncommitted().exec(puzzle);
-            this.bsActive.next(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
         }
     }
 
     public commit() {
-        //let puzzle = this.getMutableCopy(this.bsActive.value);
-        let puzzle = this.bsActive.value;
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.bsActive.value;
 
         if (puzzle) {
             new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
-            this.bsActive.next(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
         }
     }
 
@@ -172,15 +172,15 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
     }
 
     public updateAndCommit(...reducers: IPuzzleModifier[]) {
-        //let puzzle = this.getMutableCopy(this.bsActive.value);
-        let puzzle = this.bsActive.value;
+        let puzzle = this.getMutableCopy(this.bsActive.value);
+        //let puzzle = this.bsActive.value;
 
         if (puzzle) {
             reducers.forEach(reducer => reducer.exec(puzzle));
             new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
-            this.bsActive.next(puzzle);
+            this.bsActive.next(new Puzzle(puzzle));
         }
     }
 

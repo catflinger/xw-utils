@@ -16,7 +16,13 @@ export class AddClue implements IPuzzleModifier {
             let fullText = this.caption + " " + this.text;
             const cb: ClueBuffer = new ClueBuffer(puzzle.provision.captionStyle, fullText, this.group);
 
-            const clue = Clue.makeClue(cb, this.group, this.clueId).toMutable();
+            const clue = Clue.makeClue(
+                cb.caption,
+                cb.clue,
+                cb.letterCount,
+                this.group,
+                this.clueId
+            ).toMutable();
             clue.warnings = Clue.validateAnnotation(clue.answers[0], clue.comment, clue.chunks);
 
             puzzle.clues.push(clue);

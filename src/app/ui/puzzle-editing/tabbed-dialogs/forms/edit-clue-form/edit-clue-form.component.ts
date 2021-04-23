@@ -1,27 +1,20 @@
 import { v4 as uuid } from "uuid";
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
-import { ClueGroup } from 'src/app/model/interfaces';
-import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
-import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
-import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
-import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
-import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { ClueDialogService } from '../../clue-dialog.service';
 import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
+import { ClueEditValue } from "../../editors/clue-editor-control/clue-editor-control.component";
+import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
+import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
+import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
+import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
+import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
-import { ClueValidators } from "../../editors/clue-validators";
-
-export interface ClueEditModel {
-    id: string;
-    caption: string;
-    group: ClueGroup;
-    text: string;
-}
+import { Clue } from "src/app/model/puzzle-model/clue";
+import { UpdateProvision } from "src/app/modifiers/puzzle-modifiers/update-provision";
 
 @Component({
     selector: 'app-edit-clue-form',
@@ -29,24 +22,20 @@ export interface ClueEditModel {
     styleUrls: ['./edit-clue-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditClueFormComponent extends TabbedDialogFormBase implements OnInit, AfterViewInit, OnDestroy {
+export class EditClueFormComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     public form: FormGroup;
-    public title = "";
-    public clue: ClueEditModel;
-    public showAdvancedOptions: false;
-
-    @ViewChild("text", { static: false }) textInput: ElementRef;
+    public clue: Clue = null;
 
     @Input() showHelp: boolean = true;
     @Output() dirty = new EventEmitter<void>();
-
 
     constructor(
         private activePuzzle:IActivePuzzle,
         private formBuilder: FormBuilder,
         editorService: ClueDialogService,
+        private changeRef: ChangeDetectorRef,
     ) {
         super(editorService)
     }
@@ -54,38 +43,31 @@ export class EditClueFormComponent extends TabbedDialogFormBase implements OnIni
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            caption: "",
-            text: "",
-            group: "",
+            edits: {},
         });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             if (puzzle) {
-                let selectedClue = puzzle.getSelectedClue();
+                this.clue = puzzle.getSelectedClue();
 
-                if (selectedClue) {
-                    this.clue = {
-                        id: selectedClue.id,
-                        caption: selectedClue.caption,
-                        group: selectedClue.group,
-                        text: selectedClue.text,
-                    }
+                if (this.clue) {
+                    const edits: ClueEditValue = 
+                    {
+                        caption: this.clue.caption,
+                        text: this.clue.text,
+                        group: this.clue.group,
+                        options: {
+                            hasLetterCount: puzzle.provision.hasLetterCount,
+                            hasClueGroupHeadings: puzzle.provision.hasClueGroupHeadings,
+                            captionStyle: puzzle.provision.captionStyle,
+                        }
+                    };
+                    this.form.get("edits").setValue(edits);
                 }
-
-                this.title = this.clue ? "new clue" : "edit clue";
-
-                this.form.patchValue({
-                    caption: this.clue ? this.clue.caption : "", 
-                    text: this.clue ? this.clue.text : "",
-                    group: this.clue ? this.clue.group : "",
-                });
-
-                this.form.get("caption").setValidators(ClueValidators.getCaptionValidators(puzzle.provision.captionStyle));
-                this.form.get("caption").updateValueAndValidity();
-
-                this.form.get("text").setValidators(ClueValidators.getTextValidators(puzzle.provision.hasLetterCount));
-                this.form.get("text").updateValueAndValidity();
+            } else {
+                this.clue = null;
             }
+            this.changeRef.detectChanges();
         }));
 
         this.subs.push(this.form.valueChanges.subscribe(x => {
@@ -96,57 +78,33 @@ export class EditClueFormComponent extends TabbedDialogFormBase implements OnIni
 
     }
 
-    public ngAfterViewInit() {
-        this.textInput.nativeElement.focus();
-    }
-
     public ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
         super.ngOnDestroy();
     }
 
-    protected onSave(): Promise<boolean> {
+    protected onSave() {
         let result: boolean = false;
 
-        let mods: IPuzzleModifier[] = [];
 
-        if (this.form.dirty) {
-           
-            // TO DO: validate the entry
-            // return result = true if validation fails
-            
-            if (this.clue) {
-                mods.push(
-                    new UpdateClue({
-                        id: this.clue.id, 
-                        caption: this.form.value.caption,
-                        group: this.form.value.group,
-                        text: this.form.value.text,
-                    })
-                );
+        if (this.clue) {
 
-            } else {
-                const clueId = uuid();
-                mods.push(
-                    new AddClue(
-                        this.form.value.caption,
-                        this.form.value.group,
-                        this.form.value.text,
-                        clueId)
-                );
-            }
-
-            mods.push(
+            this.activePuzzle.updateAndCommit(
+                new UpdateProvision(this.form.value.edits.options),
+                new UpdateClue({
+                    id: this.clue.id, 
+                    caption: this.form.value.edits.caption,
+                    group: this.form.value.edits.group,
+                    text: this.form.value.edits.text,
+                }),
                 new SetGridReferences([this.clue.id]),
                 new SetRedirects(),
                 new ValidateLetterCounts(),
                 new SortClues(),
                 //new Clear(),
             );
-
-            this.activePuzzle.update(...mods);
         }
-        
+
         return Promise.resolve(result);
     }
 }

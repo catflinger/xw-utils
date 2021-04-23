@@ -1,0 +1,73 @@
+<div [formGroup]="form">
+
+    <div class="row mt-3" *ngIf="form.value.options.hasClueGroupHeadings">
+        <div class="col">
+            <label class="form-label" for="group">clue group</label>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="form.value.options.hasClueGroupHeadings">
+        <div class="col">
+            <select id="group" class="form-control" formControlName="group">
+                <option value="across">Across</option>
+                <option value="down">Down</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-2">
+            <label class="form-label" for="text">caption</label>
+        </div>
+        <div class="col-10">
+            <label class="form-label" for="text">text</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2">
+            <input id="caption" type="text" class="form-control" formControlName="caption">
+        </div>
+        <div class="col-10">
+            <input #text id="text" type="text" class="form-control" formControlName="text">
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!form.get('caption').valid">
+        <div class="col text-danger" *ngIf="form.value.options.captionStyle === 'numbered'">
+            The clue caption is invalid: expected
+            <strong class="font-weight-bold">2</strong> or
+            <strong class="font-weight-bold">8, 21</strong> or
+            <strong class="font-weight-bold">8, 3 Down</strong> for example
+        </div>
+        <div class="col text-danger" *ngIf="form.value.options.captionStyle === 'alphabetical'">
+            The clue caption is invalid: expected an upper case letter
+        </div>
+    </div>
+
+    <div class="row" *ngIf="form.get('text').errors && form.get('text').hasError('required')">
+        <div class="col text-danger">
+            The clue text is missing
+        </div>
+    </div>
+
+    <div class="row" *ngIf="form.get('text').errors && form.get('text').hasError('pattern')">
+        <div class="col text-danger">
+            The clue text has a missing or incomplete lettercount: (2,3) or (8, 2 words) for example
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <button type="button" class="btn btn-link" *ngIf="!showAdvancedOptions" (click)="showAdvancedOptions = !showAdvancedOptions">Show advanced options</button>
+            <button type="button" class="btn btn-link" *ngIf="showAdvancedOptions" (click)="showAdvancedOptions = !showAdvancedOptions">Hide advanced options</button>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="showAdvancedOptions">
+        <div class="col">
+            <app-provision-options-control formControlName="options"></app-provision-options-control>
+        </div>
+    </div>
+
+</div>

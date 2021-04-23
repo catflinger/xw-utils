@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormGroup, FormBuilder, Validators, Validator, ValidatorFn } from '@angular/forms';
-import { clueCaptionExpression, clueLetterCountExpression } from 'src/app/services/parsing/text/types';
 import { AddClue } from 'src/app/modifiers/clue-modifiers/add-clue';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
@@ -11,8 +10,19 @@ import { v4 as uuid } from "uuid";
 import { ClueDialogService } from '../../clue-dialog.service';
 import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
-import { CaptionStyle } from 'src/app/model/interfaces';
-import { ClueValidators } from '../../editors/clue-validators';
+import { ClueEditValue } from '../../editors/clue-editor-control/clue-editor-control.component';
+import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
+
+const defaultValue: ClueEditValue = {
+    text: "",
+    caption: "",
+    group: "across",
+    options: {
+        hasClueGroupHeadings: true,
+        hasLetterCount: true,
+        captionStyle: "numbered",
+    }
+}
 
 @Component({
   selector: 'app-add-clue-form',
@@ -42,21 +52,12 @@ export class AddClueFormComponent extends TabbedDialogFormBase implements OnInit
     public ngOnInit() {
 
         this.form = this.formBuilder.group({
-            caption: "",
-            text: "",
-            group: "across"
+            edits: defaultValue,
         });
 
         this.subs.push(
             this.activePuzzle.observe().subscribe(puzzle => {
                 this.puzzle = puzzle;
-                if (puzzle) {
-                    this.form.get("caption").setValidators(ClueValidators.getCaptionValidators(puzzle.provision.captionStyle));
-                    this.form.get("caption").updateValueAndValidity();
-
-                    this.form.get("text").setValidators(ClueValidators.getTextValidators(puzzle.provision.hasLetterCount));
-                    this.form.get("text").updateValueAndValidity();
-                }
                 this.detRef.detectChanges();
             })
         );
@@ -69,18 +70,23 @@ export class AddClueFormComponent extends TabbedDialogFormBase implements OnInit
     public onAddClue() {
         const id = uuid();
 
-        this.activePuzzle.update(
+        this.activePuzzle.updateAndCommit(
+            new UpdateProvision(this.edits.options),
             new AddClue(
-                this.form.value.caption,
-                this.form.value.group,
-                this.form.value.text,
+                this.edits.caption,
+                this.edits.group,
+                this.edits.text,
                 id,
             ),
             new SetGridReferences([id]),
             new SetRedirects(),
             new SortClues(),
-            );
+        );
         this.close.emit();
+    }
+
+    private get edits(): ClueEditValue {
+        return this.form.value.edits;
     }
 
 

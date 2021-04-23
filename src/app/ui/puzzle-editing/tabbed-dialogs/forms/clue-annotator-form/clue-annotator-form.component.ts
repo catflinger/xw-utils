@@ -79,6 +79,13 @@ export class ClueAnnotatorFormComponent extends TabbedDialogFormBase implements 
         });
 
         this.subs.push(
+            this.form.valueChanges.subscribe(() => {
+                this.setLatestAnswer();
+                //this.detRef.detectChanges();
+            })
+        );
+
+        this.subs.push(
             this.activePuzzle.observe().subscribe(
                 (puzzle) => {
                     this.puzzle = puzzle;
@@ -122,13 +129,6 @@ export class ClueAnnotatorFormComponent extends TabbedDialogFormBase implements 
                                 chunks: this.clue.chunks,
                             });
 
-                            this.subs.push(
-                                this.form.valueChanges.subscribe(() => {
-                                    this.setLatestAnswer();
-                                    //this.detRef.detectChanges();
-                                })
-                            );
-
                             this.warnings = [];
                             this.clue.warnings.forEach(warning => this.warnings.push(warning));
 
@@ -136,7 +136,6 @@ export class ClueAnnotatorFormComponent extends TabbedDialogFormBase implements 
                         }
                     }
                     this.detRef.detectChanges();
-
                 }
             )
         );
