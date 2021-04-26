@@ -37,7 +37,7 @@ export class Line {
     }
 
     private get hasStartMarker(): boolean {
-        if (this.options.captionStyle === "none") {
+        if (this.options.captionStyle === "any") {
             return true;
         
         } else if (this.options.captionStyle === "alphabetical") {

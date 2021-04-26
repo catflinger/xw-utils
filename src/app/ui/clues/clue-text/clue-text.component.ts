@@ -42,22 +42,16 @@ export class ClueTextComponent implements OnInit, OnDestroy {
     makeChunkStyle(chunk: TextChunk): any {
         let result: any = {};
 
-        // if (this.publishOptions.useDefaults) {
-        //     result.color = "blue";
-        //     result["text-decoration"] = chunk.isDefinition ?  "underline": "none";
-        //     result["font-weight"] = "normal";
-        //     result["font-style"] = "normal";
-        // } else {
-            let textStyle: TextStyle = chunk.isDefinition ? 
-            this.publishOptions.definitionStyle :
-            this.publishOptions.clueStyle;
+        let textStyle: TextStyle = chunk.isDefinition ? 
+        this.publishOptions.definitionStyle :
+        this.publishOptions.clueStyle;
 
-            result.color = textStyle.color;
+        result.color = textStyle.color;
 
-            result["text-decoration"] = textStyle.underline ?  "underline": "none";
-            result["font-weight"] = textStyle.bold ?  "bold": "normal";
-            result["font-style"] = textStyle.italic ?  "italic": "normal";
-        // }
+        result["text-decoration"] = textStyle.underline ?  "underline": "none";
+        result["font-weight"] = textStyle.bold ?  "bold": "normal";
+        result["font-style"] = textStyle.italic ?  "italic": "normal";
+
         return result;
     }
 }

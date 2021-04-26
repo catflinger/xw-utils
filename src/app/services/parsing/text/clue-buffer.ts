@@ -63,8 +63,8 @@ export class ClueBuffer {
 
         } else {
 
-            if (this.captionStyle === "none") {
-                this._caption = null;
+            if (this.captionStyle === "any") {
+                this._caption = this._caption || "";
                 this._clue = this._rawText.trim();
 
             } else {

@@ -13,7 +13,7 @@ export type Layouts = "table" | "list";
 export type Spacing = "small" | "medium" | "large";
 export type TextStyleName = "answer" | "clue" | "definition";
 export type GridStyle = "standard" | "barred";
-export type CaptionStyle = "numbered" | "alphabetical" | "none";
+export type CaptionStyle = "numbered" | "alphabetical" | "any";
 
 
 

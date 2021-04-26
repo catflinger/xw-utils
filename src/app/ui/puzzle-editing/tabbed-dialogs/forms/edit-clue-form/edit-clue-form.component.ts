@@ -1,14 +1,12 @@
 import { v4 as uuid } from "uuid";
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Type, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ClueDialogService } from '../../clue-dialog.service';
 import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { ClueEditValue } from "../../editors/clue-editor-control/clue-editor-control.component";
 import { UpdateClue } from 'src/app//modifiers/clue-modifiers/update-clue';
-import { AddClue } from 'src/app//modifiers/clue-modifiers/add-clue';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SortClues } from 'src/app/modifiers/clue-modifiers/sort-clues';
 import { ValidateLetterCounts } from 'src/app/modifiers/clue-modifiers/validate-letter-counts';
