@@ -8,12 +8,25 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Grid } from 'src/app/model/puzzle-model/grid';
 import { map, reduce } from 'rxjs/operators';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 
-interface PangramLetter {
-    letter: string,
-    count: number,
+class PangramLetter {
+    private count: number = 0;
+
+    constructor(
+        private letter: string,
+    ) {}
+
+    public isMatchFor(s: string): boolean {
+        if (s && typeof (s) === "string") {
+            return s.toUpperCase().includes(this.letter);
+        }
+        return false;
+    }
+
+    public incrementCount() {
+        this.count ++;
+    }
 }
 
 @Component({
@@ -94,20 +107,22 @@ export class NinaFinderComponent implements OnInit {
         this.pangramCounter = [];
 
         range(0, 26)
-        .subscribe(offset => this.pangramCounter.push({
-            letter: String.fromCharCode("A".charCodeAt(0) + offset),
-            count: 0
-        }));
-
+        .subscribe(offset => 
+            this.pangramCounter.push(
+                new PangramLetter(
+                    String.fromCharCode("A".charCodeAt(0) + offset)
+                )
+            )
+        );
     }
 
     private countLetters(grid: Grid) {
         this.clearPangramCounter();
 
         grid.cells.forEach(cell => {
-            let entry = this.pangramCounter.find(pl => cell.light && pl.letter.toUpperCase() === cell.content);
+            let entry = this.pangramCounter.find(pl => cell.light && pl.isMatchFor(cell.content));
             if (entry) {
-                entry.count++;
+                entry.incrementCount();
             }
         });
     }
