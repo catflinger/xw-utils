@@ -83,23 +83,23 @@ export class Clue implements IClue {
         this.warnings = warnings;
     }
 
-    public getDisplayCaption(captionStyle: CaptionStyle) {
-        let result = "";
+    // public getDisplayCaption(captionStyle: CaptionStyle) {
+    //     let result = "";
 
-        if (captionStyle === "numbered") {
-            result = this.caption;
-            let exp = new RegExp(String.raw`(across|down)`, "i");
+    //     if (captionStyle === "numbered") {
+    //         result = this.caption;
+    //         let exp = new RegExp(String.raw`(across|down)`, "i");
 
-            if (!exp.test(this.caption)) {
-                result += " " + this.group;
-            }
+    //         if (!exp.test(this.caption)) {
+    //             result += " " + this.group;
+    //         }
         
-        } else if (captionStyle === "alphabetical") {
-            result = this.caption;
-        }
+    //     } else if (captionStyle === "alphabetical") {
+    //         result = this.caption;
+    //     }
 
-        return result;
-    }
+    //     return result;
+    // }
 
     public static validateAnnotation(answer: string, comment: QuillDelta, chunks: readonly TextChunk[]): ClueValidationWarning[] {
         let warnings: ClueValidationWarning[] = [];

@@ -2,7 +2,7 @@
 
     <div class="row mt-3">
         <div class="col text-left">
-            <h5 class="text-capitalize">{{clue.getDisplayCaption(puzzle.provision.clueStyle)}}</h5>
+            <h5 class="text-capitalize">{{clue.caption}}</h5>
         </div>
         <div class="col text-right">
             <button type="button" class="btn btn-link"
@@ -43,11 +43,13 @@
             <div formArrayName="answers" class="form-group" *ngFor="let item of answersFormArray.controls; index as i; trackBy: trackAnswersBy">
                 <div [formGroup]="item">
 
-                    <div class="float-left"><label [for]="item.value.id">{{item.value.caption}}</label></div>
+                    <div class="float-left">
+                        <label [for]="item.value.id">{{item.value.caption}}</label>
+                    </div>
 
                     <div class="float-right" *ngIf="i === 0 && clue.solution && appSettings.general.showCheat.enabled">
                         <button type="button" class="btn btn-link"
-                            *ngIf="!(publishOptions && publishOptions.textCols.length > 1)"
+                            *ngIf="!(puzzle.publishOptions && puzzle.publishOptions.textCols.length > 1)"
                             (click)="onCheat()">cheat</button>
                         <button type="button" class="btn btn-link" (click)="onAnnotation()"
                             *ngIf="clue.annotation">annotation</button>
