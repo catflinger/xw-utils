@@ -151,15 +151,14 @@ export class HttpBackupSourceService {
         }
         return this.http.put(
             getApiRoot() + `backup/${id}`, 
-            {body: body}
-        ).toPromise()
+            body).toPromise()
         .then((response: HttpApiResult) => {
             if (response.success === ApiResponseStatus.OK) {
                 return null;
             } else if (response.success === ApiResponseStatus.authorizationFailure) {
                 throw AppResultSymbols.AuthorizationFailure;
             } else {
-                throw "Error trying to get delete backup: " + response.message;
+                throw "Error trying to delete backup: " + response.message;
             }
         });
     }

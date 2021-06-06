@@ -25,25 +25,8 @@ BUG - sometimes creates a file called untitled.jpg on first attempt (see mail fr
 Advanced cryptic support
 ========================
 Have a new grid-layout for IQs etc
-FIXED NEEDS TESTING Highlight conflicts in grid (also useful for standard puzzles)
 
 Animated GIF creator
 ====================
 Stitch together several grid images as an animated GIF (difficult client side?)
 
-Grid Numbering
-==============
-Have an option to show/hide the numbers in Downloaded Grids
-Have an option to hide grid numbers in grids in the blog
-
-Clue Captions
-=============
-NEEDS TESTING - 
-  Allow captions to be completely independent of grid numbers (default is to link captions to grid numbers)
-Test this with clue editing etc: can you edit a clue without a caption?
-
-NEEDS TESTING AND POLISHING -
-  Allow alphabeticals to be extracted from PDFs etc (letters as grid numbers)
-
-NEEDS TESTING AND POLISHING -
-  Allow puzzles with no captions to be imported

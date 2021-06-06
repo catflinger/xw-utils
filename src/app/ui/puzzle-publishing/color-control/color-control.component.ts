@@ -1,5 +1,5 @@
 import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cssNamedColors } from "./colors";
 
 class ColorPickerOption {
@@ -19,28 +19,29 @@ class ColorPickerOption {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColorControlComponent implements ControlValueAccessor, OnInit {
-    public color: ColorPickerOption;
     private propagateChange = (_: any) => { };
     public options: ColorPickerOption[];
+    public form: FormGroup;
 
-    constructor(private detRef: ChangeDetectorRef) {
+    constructor(
+        private fb: FormBuilder,
+        private detRef: ChangeDetectorRef
+    ) {
         this.options = cssNamedColors;
     }
 
     public ngOnInit() {
-        this.color = this.options[0];
+
+        this.form = this.fb.group({
+            colorValue: ""
+        });
+
+        this.form.valueChanges.subscribe(values => this.propagateChange(values.colorValue));
     }
 
     public writeValue(color: string) {
-        let option = color ? 
-            this.options.find(opt => opt.value.replace(";", "") === color.toLowerCase().replace(";", "")) :
-            null;
 
-        if (option) {
-            this.color = option;
-        } else {
-            this.color = this.options[0];
-        }
+        this.form.patchValue({ colorValue: color }, { emitEvent: false });
         this.detRef.detectChanges();
     }
 
@@ -51,7 +52,4 @@ export class ColorControlComponent implements ControlValueAccessor, OnInit {
     public registerOnTouched() {
     }
 
-    public onColorChange() {
-        this.propagateChange(this.color.value);
-    }
 }

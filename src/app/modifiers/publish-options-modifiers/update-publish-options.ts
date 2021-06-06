@@ -9,8 +9,6 @@ export type PublishOptionsUpdate = {
     useDefaults?: boolean;
     showClueGroups?: boolean;
     showClueCaptions?: boolean;
-    // textStyles?: ReadonlyArray<TextStyle>;
-    // textCols?: ReadonlyArray<TextColumn>;
 };
 
 export class UpdatePublsihOptions implements IPuzzleModifier {
@@ -44,14 +42,5 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
         if (typeof this.options.showClueGroups !== "undefined") {
             puzzle.publishOptions.showClueGroups = !!this.options.showClueGroups;
         }
-
-        // if (typeof this.options.textStyles !== "undefined") {
-        //     puzzle.publishOptions.textStyles = JSON.parse(JSON.stringify(this.options.textStyles));
-        // }
-
-        // if (typeof this.options.textCols !== "undefined") {
-        //     puzzle.publishOptions.textCols = JSON.parse(JSON.stringify(this.options.textCols));
-        // }
-
     }
 }

@@ -3,13 +3,14 @@ import { Subscription } from 'rxjs';
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { UpdatePublsihOptions, PublishOptionsUpdate } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';
+import { UpdatePublsihOptions } from 'src/app//modifiers/publish-options-modifiers/update-publish-options';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdatePublsihOptionTextStyle } from 'src/app/modifiers/publish-options-modifiers/update-publish-option-text-style';
 import { fifteenSquaredBlack, fifteenSquaredBlue } from '../../common';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
-import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { fifteensquaredAnswerStyle, fifteensquaredClueStyle, fifteensquaredDefinitionStyle } from 'src/app/model/puzzle-model/text-style';
 
 @Component({
     selector: 'app-publish-options',
@@ -20,7 +21,7 @@ import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 export class PublishOptionsComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public appStatus: AppStatus;
-    public publishOptions: PublishOptionsUpdate = null;
+    public form: FormGroup;
     
     private subs: Subscription[] = [];
 
@@ -28,14 +29,41 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private appService: AppService,
         private activePuzzle: IActivePuzzle,
+        private fb: FormBuilder,
         private detRef: ChangeDetectorRef,
     ) { }
 
     ngOnInit() {
 
+        this.form = this.fb.group({
+            includeGrid: null, 
+            layout: null, 
+            spacing: null,
+            useDefaults: null,
+            showClueGroups: null,
+            showClueCaptions: null,
+            answerStyle: null,
+            clueStyle: null,
+            definitionStyle: null,
+        });
+
         this.subs.push(this.appService.getObservable().subscribe(appStatus => {
             this.appStatus = appStatus;
             this.detRef.detectChanges();
+        }));
+
+        this.subs.push(this.form.valueChanges.subscribe(values =>
+            this.saveAndCommit(values)
+        ));
+
+        this.subs.push(this.form.get("useDefaults").valueChanges.subscribe(useDefaults => {
+            if (useDefaults) {
+                this.form.patchValue({
+                    answerStyle: fifteensquaredAnswerStyle,
+                    clueStyle: fifteensquaredClueStyle,
+                    definitionStyle: fifteensquaredDefinitionStyle,
+                });
+            }
         }));
 
         if (!this.activePuzzle.hasPuzzle) {
@@ -46,11 +74,25 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
-                        this.publishOptions = null;
 
                         if (puzzle) {
-                            // clone the puzzle options so we can write to it (as a PublishOptionsUpdate)
-                            this.publishOptions = new PublishOptions(puzzle.publishOptions);
+
+                            this.form.patchValue(
+                            {
+                                includeGrid: puzzle.publishOptions.includeGrid, 
+                                layout: puzzle.publishOptions.layout, 
+                                spacing: puzzle.publishOptions.spacing,
+                                useDefaults: puzzle.publishOptions.useDefaults,
+                                showClueGroups: puzzle.publishOptions.showClueGroups,
+                                showClueCaptions: puzzle.publishOptions.showClueCaptions,
+                                answerStyle: puzzle.publishOptions.answerStyle,
+                                clueStyle: puzzle.publishOptions.clueStyle,
+                                definitionStyle: puzzle.publishOptions.definitionStyle,
+                            },
+                            { 
+                                emitEvent: false
+                            }
+                            );
                         }
 
                         this.detRef.detectChanges();
@@ -65,44 +107,63 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
     }
 
     public onContinue() {
-        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
         this.navService.navigate("continue");
     }
 
     public onBack() {
-        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
         this.navService.navigate("back");
     }
 
     public onGrid() {
-        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
         this.navService.navigate("grid");
     }
 
     public onNina() {
-        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
         this.navService.navigate("nina");
     }
 
-    public onChange() {
-        this.activePuzzle.updateAndCommit(new UpdatePublsihOptions(this.publishOptions));
-        //this.detRef.detectChanges();
+    private saveAndCommit(values: PublishOptions) {
+
+        this.activePuzzle.updateAndCommit(
+            new UpdatePublsihOptions(values),
+            new UpdatePublsihOptionTextStyle(
+                "answer",
+                values.answerStyle.color,
+                values.answerStyle.bold,
+                values.answerStyle.italic,
+                values.answerStyle.underline,
+            ),
+            new UpdatePublsihOptionTextStyle(
+                "definition",
+                values.definitionStyle.color,
+                values.definitionStyle.bold,
+                values.definitionStyle.italic,
+                values.definitionStyle.underline,
+            ),
+            new UpdatePublsihOptionTextStyle(
+                "clue",
+                values.clueStyle.color,
+                values.clueStyle.bold,
+                values.clueStyle.italic,
+                values.clueStyle.underline,
+            ),
+        );
     }
 
-    public onUseDefaultChange(event: any) {
-        const modifiers: IPuzzleModifier[] = [];
+    // public onUseDefaultChange(event: any) {
+    //     const modifiers: IPuzzleModifier[] = [];
 
-        modifiers.push(new UpdatePublsihOptions(this.publishOptions));
+    //     modifiers.push(new UpdatePublsihOptions(this.publishOptions));
 
-        if (event.target.checked) {
-            modifiers.push(
-                new UpdatePublsihOptionTextStyle("clue", fifteenSquaredBlue, false, false, false),
-                new UpdatePublsihOptionTextStyle("definition", fifteenSquaredBlue, false, false, true),
-                new UpdatePublsihOptionTextStyle("answer", fifteenSquaredBlack, true, false, false),
+    //     if (event.target.checked) {
+    //         modifiers.push(
+    //             new UpdatePublsihOptionTextStyle("clue", fifteenSquaredBlue, false, false, false),
+    //             new UpdatePublsihOptionTextStyle("definition", fifteenSquaredBlue, false, false, true),
+    //             new UpdatePublsihOptionTextStyle("answer", fifteenSquaredBlack, true, false, false),
 
-            );
-        } 
-        this.activePuzzle.updateAndCommit(...modifiers);
-    }
+    //         );
+    //     } 
+    //     this.activePuzzle.updateAndCommit(...modifiers);
+    // }
 
 }

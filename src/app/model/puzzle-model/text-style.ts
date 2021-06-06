@@ -1,6 +1,33 @@
 import { fifteenSquaredBlack, fifteenSquaredBlue } from 'src/app/ui/common';
 import { ITextStyle, TextStyleName } from '../interfaces';
 
+export const fifteensquaredAnswerStyle = {
+    name: "answer",
+    color: fifteenSquaredBlack,
+    bold: false,
+    italic: false,
+    underline: false,
+    class: "fts-answer",
+};
+
+export const fifteensquaredClueStyle = {
+    name: "clue",
+    color: fifteenSquaredBlue,
+    bold: false,
+    italic: false,
+    underline: false,
+    class: "fts-clue",
+};
+
+export const fifteensquaredDefinitionStyle = {
+    name: "definition",
+    color: fifteenSquaredBlue,
+    bold: false,
+    italic: false,
+    underline: false,
+    class: "fts-definition",
+};
+
 export class TextStyle implements ITextStyle {
         public readonly name: TextStyleName;
         public readonly color: string;
@@ -11,11 +38,20 @@ export class TextStyle implements ITextStyle {
 
         constructor(data) {
             this.name = data.name;
-            this.color = data.color || data.name === "answer" ? fifteenSquaredBlack : fifteenSquaredBlue;
+            if (data.color) {
+                this.color = data.color;
+            } else {
+                this.color = data.name === "answer" ? fifteenSquaredBlack : fifteenSquaredBlue;
+            }
+
             this.bold = data.bold || false;
             this.italic = data.italic || false;
             this.underline = data.underline || false;
-            this.class = data.class || `fts-${data.name}`;
+            if (data.class) {
+                this.class = data.class;
+            } else {
+                this.class = `fts-${data.name}`;
+            }
         }
 
         public toCssStyleString(): string {

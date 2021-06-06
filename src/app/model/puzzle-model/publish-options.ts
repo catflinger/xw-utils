@@ -1,10 +1,10 @@
-import { TextStyle } from './text-style';
+import { fifteensquaredAnswerStyle, fifteensquaredClueStyle, fifteensquaredDefinitionStyle, TextStyle } from './text-style';
 import { IPublishOptions, Layouts, Spacing } from '../interfaces';
 import { TextColumn } from './text-column';
 
 export class PublishOptions implements IPublishOptions {
-    public readonly textCols: Array<TextColumn>;
-    public readonly textStyles: Array<TextStyle>;
+    public readonly textCols: TextColumn[];
+    public readonly textStyles: TextStyle[];
     public readonly showClueCaptions: boolean;
     public readonly showClueGroups: boolean;
     public readonly includeGrid: boolean;
@@ -28,20 +28,10 @@ export class PublishOptions implements IPublishOptions {
             data.textStyles.forEach(style => styles.push(new TextStyle(style)));
             this.textStyles = styles;
         } else {
-            // backward compatibility Feb 2020
-            let answer = data.answerStyle || {};
-            answer.name = "answer";
-
-            let clue = data.clueStyle || {};
-            clue.name = "clue";
-
-            let def = data.definitionStyle || {};
-            def.name = "definition";
-
             this.textStyles = [
-                new TextStyle(answer),
-                new TextStyle(clue),
-                new TextStyle(def),
+                new TextStyle(fifteensquaredAnswerStyle),
+                new TextStyle(fifteensquaredClueStyle),
+                new TextStyle(fifteensquaredDefinitionStyle),
             ]
         }
 
@@ -50,11 +40,12 @@ export class PublishOptions implements IPublishOptions {
             data.textCols.forEach(col => cols.push(new TextColumn(col)));
             this.textCols = cols;
         } else {
-            // backward compatibility Feb 2020
-            this.textCols = [new TextColumn({
-                caption: "Entry",
-                style: "answer",
-            })];
+            this.textCols = [
+                new TextColumn({
+                    caption: "Answer",
+                    style: "answer",
+                })
+            ]
         }
     }
 

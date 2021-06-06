@@ -22,6 +22,7 @@ import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { fifteenSquaredBlack, fifteenSquaredBlue } from "src/app/ui/common";
 import { RenumberGid } from "src/app/modifiers/grid-modifiers/renumber-grid";
 import { UpdateProvision } from "src/app/modifiers/puzzle-modifiers/update-provision";
+import { fifteensquaredAnswerStyle, fifteensquaredClueStyle, fifteensquaredDefinitionStyle } from "src/app/model/puzzle-model/text-style";
 
 // Note: using abstract classes rather than interfaces to enable them to be used
 // as injection tokens in the Angular DI. Interfaces cannot be used directly as injection tokens.
@@ -176,11 +177,17 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         //let puzzle = this.bsActive.value;
 
         if (puzzle) {
-            reducers.forEach(reducer => reducer.exec(puzzle));
+            reducers.forEach(reducer => {
+                // console.log(`Executing modifier ${reducer.constructor.name}`);
+                reducer.exec(puzzle);
+            });
             new MarkAsCommitted().exec(puzzle);
             puzzle.revision += 1;
             this.savePuzzle(puzzle);
-            this.bsActive.next(new Puzzle(puzzle));
+            
+            const next = new Puzzle(puzzle)
+
+            this.bsActive.next(next);
         }
     }
 
@@ -360,30 +367,9 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
             },
             publishOptions: {
                 textStyles: [
-                    {
-                        name: "answer",
-                        color: fifteenSquaredBlack,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        class: "fts-answer",
-                    },
-                    {
-                        name: "clue",
-                        color: fifteenSquaredBlue,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        class: "fts-clue",
-                    },
-                    {
-                        name: "definition",
-                        color: fifteenSquaredBlue,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        class: "fts-definition",
-                    },
+                    fifteensquaredClueStyle,
+                    fifteensquaredAnswerStyle,
+                    fifteensquaredDefinitionStyle,
                 ],
                 textCols: [
                     {
