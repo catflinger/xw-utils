@@ -29,22 +29,21 @@ export class CreateClues implements IPuzzleModifier {
     }
 
     private makeClues(puzzle: IPuzzle, grid: Grid, group: ClueGroup) {
-        let clueNumber = 1;
         const maxCaption = grid.getMaxCaption();
         
-        for (let n = 1; n <= maxCaption; n++) {
+        for (let clueNumber = 1; clueNumber <= maxCaption; clueNumber++) {
+
             let gridRef: GridReference = new GridReference({
                 caption: clueNumber,
                 direction: group,
             });
-            
+
             let cells: ReadonlyArray<GridCell> = grid.getGridEntryFromReference(gridRef);
  
-            if (cells.length) {
+            if (cells.length > 1) {
                 let clue = this.makeClue(group, clueNumber, gridRef, cells.length);
                 puzzle.clues.push(clue);
             }
-            clueNumber++;
         };
     }
 
