@@ -1,0 +1,28 @@
+<div *ngIf="puzzle">
+    <div class="row">
+        <div class="col">
+            <h5>{{puzzle.info.title}}</h5>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="showPuzzle">
+        <div class="col" *ngIf="puzzle.grid">
+            <app-grid [options]="{ hideShading: true, showConflicts: true }"></app-grid>
+        </div>
+
+        <div class="col">
+            <app-clue-list direction="across" [followRedirects]="true"></app-clue-list>
+        </div>
+
+        <div class="col">
+            <app-clue-list direction="down" [followRedirects]="true"></app-clue-list>
+        </div>
+    </div>
+
+    <div class="row  mb-5" *ngIf="showPuzzle">
+        <div class="col text-left">
+            <button type="button" class="btn btn-primary mr-3" (click)="onStartFill()">Start</button>
+            <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Close</button>
+        </div>
+    </div>
+</div>

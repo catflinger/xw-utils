@@ -1,13 +1,13 @@
-import { IPuzzleOptions } from '../interfaces';
+import { GridLinkMethod, IPuzzleOptions } from '../interfaces';
 
 export class PuzzleOptions implements IPuzzleOptions {
-    public readonly setGridRefsFromCaptions: boolean;
+    public readonly linkMethod: GridLinkMethod; // I think this is not used
 
     constructor(data: any) {
-        if (data) {
-            this.setGridRefsFromCaptions = !! data.setGridRefsFromCaptions;
+        if (data && typeof data.linkMethod === "string") {
+            this.linkMethod = data.linkMethod;
         } else {
-            this.setGridRefsFromCaptions = true;
+            this.linkMethod = "auto";
         }
     }
 }

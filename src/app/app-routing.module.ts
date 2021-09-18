@@ -41,6 +41,7 @@ import { AdminComponent } from './ui/general/admin/admin.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
+import { GridFillerComponent } from './ui/puzzle-solving/jigsaw/grid-filler/grid-filler.component';
 
 const routes: Routes = [
 
@@ -51,6 +52,7 @@ const routes: Routes = [
     // solving and blogging puzzles
     { path: "solver", component: SolverComponent },
     { path: "blogger", component: BloggerComponent },
+    { path: "jigsaw", component: GridFillerComponent },
 
     // publishing puzzles
     { path: "publish-options", component: PublishOptionsComponent },

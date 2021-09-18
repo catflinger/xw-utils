@@ -73,7 +73,7 @@ import { parseTrack } from './services/navigation/tracks/parse-track';
 import { NavLogComponent } from './ui/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 import { EditClueFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/edit-clue-form/edit-clue-form.component';
-import { PuzzleOptionsComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/puzzle-options/puzzle-options.component';
+import { PublishOptionsFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/publish-options-form/publish-options-form.component';
 import { ClueDialogComponent } from './ui/puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
 import { GridFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/grid-form/grid-form.component';
 import { RemoveClueFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/remove-clue-form/remove-clue-form.component';
@@ -102,6 +102,7 @@ import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.co
 import { ProvisionOptionsControlComponent } from './ui/puzzle-editing/provision-options-control/provision-options-control.component';
 import { ProvisionOptionsEditorComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/provision-options-editor/provision-options-editor.component';
 import { ClueEditorControlComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/clue-editor-control/clue-editor-control.component';
+import { GridFillerComponent } from './ui/puzzle-solving/jigsaw/grid-filler/grid-filler.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -180,7 +181,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         ClueListItemComponent,
         NavLogComponent,
         EditClueFormComponent,
-        PuzzleOptionsComponent,
+        PublishOptionsComponent,
         ClueDialogComponent,
         GridFormComponent,
         RemoveClueFormComponent,
@@ -206,6 +207,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         ProvisionOptionsControlComponent,
         ProvisionOptionsEditorComponent,
         ClueEditorControlComponent,
+        GridFillerComponent,
     ],
     imports: [
         BrowserModule,

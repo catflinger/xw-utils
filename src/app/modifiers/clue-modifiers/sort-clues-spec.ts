@@ -107,7 +107,7 @@ function getEmptyPuzzle(): IPuzzle {
         ready: true,
         uncommitted: false,
         options: {
-            setGridRefsFromCaptions: true,
+            setGridRefsFromCaptionsX: true,
         },
         info: {
             id: "abc123",
@@ -125,6 +125,9 @@ function getEmptyPuzzle(): IPuzzle {
             footer: { ops: [] },
         },
         publishOptions: {
+            showClueCaptions: true,
+            showClueGroups: true,
+            useDefaults: true,
             textStyles: [
                 {
                     name: "clue",
@@ -132,6 +135,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: ""
                 },
                 {
                     name: "answer",
@@ -139,6 +143,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: ""
                 },
                 {
                     name: "definition",
@@ -146,6 +151,7 @@ function getEmptyPuzzle(): IPuzzle {
                     bold: false,
                     italic: false,
                     underline: false,
+                    class: ""
                 },
             ],
             textCols: [

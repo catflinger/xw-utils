@@ -73,13 +73,16 @@ export class CluesEditorComponent implements OnInit, OnDestroy {
 
     public onAddClue(group: ClueGroup) {
         const id = uuid();
+        console.log("A")
         const maxClueCaption = this.puzzle.getMaxClueCaption(group) + 1;
 
+        console.log("B")
         this.activePuzzle.updateAndCommit(
             new AddClue(maxClueCaption.toString(), group, "New clue...", id),
             new SortClues(),
             new SelectClue(id)
         );
+        console.log("C")
     }
 
     public onContinue() {

@@ -20,8 +20,17 @@ export const solveTrack: NavTrack = {
             actions: {
                 "continue": "publish",
                 "blog": "blogger",
+                "jigsaw": "jigsaw",
                 "back": "exit",
                 "edit": "edit-puzzle",
+            }
+        },
+        {
+            name: "jigsaw",
+            type: "route",
+            route: "/jigsw",
+            actions: {
+                "back": "solver",
             }
         },
         {

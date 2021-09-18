@@ -14,10 +14,12 @@ export class ClueBuffer {
     private _gridRefs: ReadonlyArray<GridReference>;
 
     constructor (
-        private captionStyle: CaptionStyle, 
+        private captionStyle: CaptionStyle,
+        //caption: string | null,
         text: string, 
         direction: ClueGroup, 
-        private grid?: Grid) {
+        private grid?: Grid
+    ) {
         this._rawText = text.trim();
         this._direction = direction;
 

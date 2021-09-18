@@ -25,7 +25,7 @@ export const createPuzzleTrack: NavTrack = {
                 "edit-info": "puzzle-info",
                 "add-grid": "grid-start",
                 "edit-grid": "edit-grid",
-                "add-clues": "make-clues",
+                "add-clues-manual": "make-clues-manual",
                 "add-clues-grid": "make-clues",
                 "add-clues-text": "special-text",
                 "reload-clues": "special-text",
@@ -91,6 +91,14 @@ export const createPuzzleTrack: NavTrack = {
             name: "make-clues",
             type: "process",
             process: "make-clues",
+            actions: {
+                "ok": "clues-editor",
+            }
+        },
+        {
+            name: "make-clues-manual",
+            type: "process",
+            process: "make-clues-manual",
             actions: {
                 "ok": "clues-editor",
             }

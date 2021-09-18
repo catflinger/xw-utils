@@ -29,7 +29,7 @@ export class SetGridReferences implements IPuzzleModifier {
             clues.forEach(clue => {
                 clue.link.gridRefs = [];
 
-                if (clue.caption && clue.group) {
+                if (puzzle.options.linkMethod === "auto" && clue.caption && clue.group) {
                     let refs = ClueBuffer.makeGridReferences(clue.caption, clue.group, grid);
 
                     if (refs) {

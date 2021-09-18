@@ -14,7 +14,7 @@ export type Spacing = "small" | "medium" | "large";
 export type TextStyleName = "answer" | "clue" | "definition";
 export type GridStyle = "standard" | "barred";
 export type CaptionStyle = "numbered" | "alphabetical" | "any";
-
+export type GridLinkMethod = "auto" | "manual";
 
 
 export type TextParsingErrorCode =
@@ -155,7 +155,7 @@ export interface IPuzzleInfo {
 } 
 
 export interface IPuzzleOptions {
-    setGridRefsFromCaptions: boolean;
+    linkMethod: GridLinkMethod;
 }
 
 export interface ITextStyle {

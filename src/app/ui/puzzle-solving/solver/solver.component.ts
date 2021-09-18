@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle'; 
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
@@ -22,7 +22,7 @@ import { AppService } from '../../general/app.service';
   styleUrls: ['./solver.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SolverComponent implements OnInit {
+export class SolverComponent implements OnInit, OnDestroy {
 
     public puzzle: Puzzle = null;
     public appSettings: AppSettings = null;
@@ -149,7 +149,11 @@ export class SolverComponent implements OnInit {
     public onBlogger() {
         this.navService.navigate("blog");
     }
-    
+
+    public onJigsaw() {
+        this.navService.navigate("autofill");
+    }
+
     public onCellClick(cell: GridCell) {
         if (!cell.highlight) {
             this.activePuzzle.updateAndCommit(new SelectClueByCell(cell.id));

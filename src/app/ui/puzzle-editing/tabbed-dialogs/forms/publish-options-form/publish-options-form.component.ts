@@ -7,15 +7,15 @@ import { AddTextColumn } from 'src/app//modifiers/publish-options-modifiers/add-
 import { DeleteTextColumn } from 'src/app//modifiers/publish-options-modifiers/delete-text-column';
 import { UpdateTextColumn } from 'src/app/modifiers/publish-options-modifiers/update-text-column';
 import { ClueDialogService } from '../../clue-dialog.service';
-import { TabbedDialogFormBase } from '../../forms/tabbed-dialog-form-base';
+import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 
 @Component({
-    selector: 'app-puzzle-options',
-    templateUrl: './puzzle-options.component.html',
-    styleUrls: ['./puzzle-options.component.css'],
+    selector: 'app-publish-options-form',
+    templateUrl: './publish-options-form.component.html',
+    styleUrls: ['./publish-options-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PuzzleOptionsComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
+export class PublishOptionsFormComponent extends TabbedDialogFormBase implements OnInit, OnDestroy {
     public form: FormGroup;
 
     @Input() public clueId: string;

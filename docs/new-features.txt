@@ -1,6 +1,8 @@
 General Bugs
 ============
 
+BUG Deletings clues and grid in puzzle needs a confirm dialog!
+
 Fifteensquared Theme
 ====================
 Find a mechanism to hide/show off-topic comment

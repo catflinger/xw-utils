@@ -129,7 +129,7 @@ export class PuzzleHubComponent implements OnInit, OnDestroy {
 
     public onAddCluesManual() {
         this.appService.clear();
-        this.navService.navigate("add-clues");
+        this.navService.navigate("add-clues-manual");
     }
 
     public onMarkFinished() {

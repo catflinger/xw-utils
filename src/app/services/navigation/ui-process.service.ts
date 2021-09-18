@@ -15,6 +15,8 @@ import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-cont
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
 import { TraceService } from '../app/trace.service';
 import { UpdateProvision } from 'src/app/modifiers/puzzle-modifiers/update-provision';
+import { FactoryResetClues } from 'src/app/modifiers/clue-modifiers/factory-reset-clues';
+import { UpdatePuzzleOptions } from 'src/app/modifiers/publish-options-modifiers/update-puzzle-options';
 
 @Injectable({
     providedIn: 'root'
@@ -68,11 +70,21 @@ export class UIProcessService implements NavProcessor<AppTrackData> {
                     new InitAnnotationWarnings()
                 );
                 action = Promise.resolve("ok");
-                break;
+            break;
+
+            case "make-clues-manual":
+                // TO DO: work out what to do if puzzle aready has clues
+                this.activePuzzle.updateAndCommit(
+                    new FactoryResetClues(),
+                    new UpdateProvision({ captionStyle: "any" }),
+                    new UpdatePuzzleOptions("manual")
+                );
+                action = Promise.resolve("ok");
+            break;
 
             case "parse":
                 action = this.parse();
-                break;
+            break;
 
             case "pdf-extract":
                 try {

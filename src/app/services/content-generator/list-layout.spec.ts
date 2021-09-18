@@ -127,7 +127,7 @@ function getEmptyPuzzle(): IPuzzle {
         ready: true,
         uncommitted: false,
         options: {
-            setGridRefsFromCaptions: true,
+            linkMethod: "auto",
         },
         info: {
             id: "abc123",
