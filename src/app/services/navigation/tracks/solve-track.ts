@@ -28,7 +28,7 @@ export const solveTrack: NavTrack = {
         {
             name: "jigsaw",
             type: "route",
-            route: "/jigsw",
+            route: "/jigsaw",
             actions: {
                 "back": "solver",
             }

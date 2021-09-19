@@ -151,7 +151,7 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
 
     public onJigsaw() {
-        this.navService.navigate("autofill");
+        this.navService.navigate("jigsaw");
     }
 
     public onCellClick(cell: GridCell) {

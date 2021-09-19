@@ -5,9 +5,13 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="showPuzzle">
+    <div class="row">
         <div class="col" *ngIf="puzzle.grid">
             <app-grid [options]="{ hideShading: true, showConflicts: true }"></app-grid>
+            <div class="mt-5">
+                <button type="button" class="btn btn-secondary mr-3" (click)="onStartFill()">Autofill</button>
+                <button type="button" class="btn btn-secondary mr-3" (click)="onClear()">Clear all</button>
+            </div>
         </div>
 
         <div class="col">
@@ -19,9 +23,8 @@
         </div>
     </div>
 
-    <div class="row  mb-5" *ngIf="showPuzzle">
+    <div class="row  mb-5">
         <div class="col text-left">
-            <button type="button" class="btn btn-primary mr-3" (click)="onStartFill()">Start</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Close</button>
         </div>
     </div>

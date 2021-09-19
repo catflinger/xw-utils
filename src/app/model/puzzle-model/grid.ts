@@ -109,7 +109,7 @@ export class Grid implements IGrid {
         return entry;
     }
 
-    public getMaxCaption(): number {
+    public getMaxAnchor(): number {
         const cells = this.cells
             .filter(cell => cell.anchor)
             .sort((a, b) => b.anchor - a.anchor);

@@ -29,7 +29,7 @@ export class CreateClues implements IPuzzleModifier {
     }
 
     private makeClues(puzzle: IPuzzle, grid: Grid, group: ClueGroup) {
-        const maxCaption = grid.getMaxCaption();
+        const maxCaption = grid.getMaxAnchor();
         
         for (let clueNumber = 1; clueNumber <= maxCaption; clueNumber++) {
 
