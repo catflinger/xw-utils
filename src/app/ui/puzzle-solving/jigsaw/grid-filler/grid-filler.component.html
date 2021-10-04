@@ -7,7 +7,7 @@
 
     <div class="row">
         <div class="col" *ngIf="puzzle.grid">
-            <app-grid [options]="{ hideShading: true, showConflicts: true }"></app-grid>
+            <app-grid-view [puzzle]="puzzle" [options]="{ hideShading: true, showConflicts: true }"></app-grid-view>
             <div class="mt-5">
                 <button type="button" class="btn btn-secondary mr-3" (click)="onStartFill()">Autofill</button>
                 <button type="button" class="btn btn-secondary mr-3" (click)="onClear()">Clear all</button>

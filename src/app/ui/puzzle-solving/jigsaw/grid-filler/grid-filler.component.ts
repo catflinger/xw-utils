@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { Grid } from 'src/app/model/puzzle-model/grid';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { Subscription, combineLatest, Observable } from 'rxjs';
@@ -13,15 +12,12 @@ import { UpdatePuzzleOptions } from 'src/app/modifiers/publish-options-modifiers
 import { ClearGridReferences } from 'src/app/modifiers/clue-modifiers/clear-grid-references';
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
-import { Clue } from 'src/app/model/puzzle-model/clue';
-import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
-import { IClue, IPuzzle } from 'src/app/model/interfaces';
-import { setUncaughtExceptionCaptureCallback } from 'process';
+import { IClue, IPuzzle, IGridCell } from 'src/app/model/interfaces';
 
 
 interface Light {
     readonly ref: GridReference,
-    readonly cells: readonly GridCell[]
+    readonly cells: readonly IGridCell[]
 };
 
 @Component({
@@ -32,11 +28,14 @@ interface Light {
 })
 export class GridFillerComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
-    private scratchpad: IPuzzle;
 
-    public puzzle: Puzzle = null;
-    public appSettings: AppSettings = null;
+    private counter = 0;
+    private level = 0;
+    private scratchpad: IPuzzle = null;
     
+    public appSettings: AppSettings = null;
+    public puzzle: Puzzle = null;
+
     constructor(
         private appService: AppService,
         private navService: NavService < AppTrackData >,
@@ -66,8 +65,10 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                                 this.appService.setAlert("danger", "Cannot open this puzzle in solver: the puzzle is missing either clues or a grid");
                                 this.navService.goHome();
                             }
-                            this.puzzle = puzzle;
+                            //this.scratchpad = puzzle;
                             this.appSettings = appSettings;
+                            this.puzzle = puzzle;
+                            this.scratchpad = JSON.parse(JSON.stringify(puzzle));
                         }
 
                         this.detRef.detectChanges();
@@ -81,41 +82,61 @@ export class GridFillerComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        this.activePuzzle.updateAndCommit(new Clear());
+        //this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("back");
     }
 
     public onClear() {
-        this.activePuzzle.updateAndCommit(
-            new Clear(),
-            new UpdatePuzzleOptions("manual"),
-            new ClearGridReferences(),
-            new SyncGridContent()
-        );
+        new Clear()
+        .exec(this.scratchpad);
+
+        new UpdatePuzzleOptions("manual")
+        .exec(this.scratchpad);
+
+        new ClearGridReferences()
+        .exec(this.scratchpad);
+
+        new SyncGridContent()
+        .exec(this.scratchpad);
+
+        this.detRef.detectChanges();
+
     }
 
     public onStartFill() {
-        //this.activePuzzle.update(new ClearGridReferences());
-        //timer
+        this.counter = 0;
+
         this.placeNextWord();
+
+        console.log("FINISHED count = " + this.counter);
         
         //this.navService.navigate("back");
     }
 
     private placeNextWord(): boolean {
+        this.counter++;
+        this.level++;
+
+        if (this.counter > 10000) {
+            return true;
+        }
+
         const unplacedClues = this.getUnplacedClues();
 
+        console.log(`Unpalced clues ${unplacedClues.length}`);
         let unplacedClue = unplacedClues.pop();
 
         while (unplacedClue) {
             const lights = this.getIncompleteLights();
+            console.log(`Lights ${lights.length}`);
 
             let light = lights.pop();
             
             while (light) {
+
                 if (this.testFit(unplacedClue, light)) {
                     // DO THE BUSINESS!
-                    
+                    console.log("A");
                     // 1. assign a grid ref to the clue
                     unplacedClue.link = {
                         warning: null,
@@ -132,6 +153,7 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                     // 3. recursive call to carry on looking from here, 
                     //    break out if we have a success, if not just carry on trying
                     if (this.placeNextWord()) {
+                        console.log("B");
                         break;
                     }
                 
@@ -143,33 +165,29 @@ export class GridFillerComponent implements OnInit, OnDestroy {
             unplacedClue = unplacedClues.pop();
         }
 
+        this.level--;
+
         return unplacedClues.length === 0;
     }
 
     private testFit(clue: IClue, light: Light): boolean {
-        if (clue) {
-            // try and place the word in the grid
-            const lights = this.getIncompleteLights();
-            let found = false;
-            let index = entries.length - 1;
 
-            while (index >= 0 && !found) {
-                if (this.answerFitsEntry(clue.answers[0], entries[index])) {
-                    found = true;
-                }
+        if (!clue.answers[0] || !light || light.cells.length === 0) {
+            return false;
+        }
+
+        let answer = clue.answers[0].replace(/[^A-Z]/g, "");
+
+        if (answer.length !== light.cells.length) {
+            return false;
+        }
+
+        for(let i = 0; i < light.cells.length; i++) {
+            if (light.cells[i].content && light.cells[i].content !== answer.substr(i, 1)) {
+                return false;
             }
-
-            if (found) {
-                //TO DO:
-                
-            }
-
-        } else {
-            // TO DO: finshed
-        };
-
+        }
         return true;
-
     }
 
     private answerFitsEntry(answer: string, entry: Light): boolean {
@@ -190,16 +208,87 @@ export class GridFillerComponent implements OnInit, OnDestroy {
     private getIncompleteLights(): Light[] {
 
         const result: Light[] = [];
-        const maxAnchor = this.scratchpad.grid.getMaxAnchor();
 
-        for (let anchor = 1; anchor <= maxAnchor; anchor++) {
-            const entry = this.puzzle.grid.getGridEntryFromReference({ id: null, anchor, direction: "across"});
+        this.scratchpad.grid.cells
+        .filter(c => c.anchor)
+        .forEach(anchorCell => {
+            result.push(this.getIncompleteAcrossLight(anchorCell));
+            result.push(this.getIncompleteDownLight(anchorCell));
+        });
 
-            if (entry.filter(c => !c.content).length > 0) {
-                result.push({
-                    ref: {id: null, anchor, direction: "across"},
-                    cells: entry
-                });
+        return result.filter(light => light);
+    }
+
+    private getIncompleteAcrossLight(anchorCell: IGridCell): Light {
+        let result: Light = null;
+        const grid = this.scratchpad.grid;
+        const cells: IGridCell[] = [];
+
+        let x = anchorCell.x;
+        let y = anchorCell.y;
+        let incompletes = 0;
+
+        while (x < grid.properties.size.across) {
+            let cell = grid.cells.find(c => c.y === y && c.x === x);
+            cells.push(cell);
+
+            // TO DO: make this work for barred grids too...
+
+            if (!cell.light) {
+                break;
+            } else if (!cell.content) {
+                incompletes++;
+            }
+
+            x++;
+        }
+
+        if (incompletes > 0) {
+            result = {
+                ref: {
+                    id: null,
+                    anchor: anchorCell.anchor,
+                    direction: "across"
+                },
+                cells
+            }
+        }
+
+        return result;
+    }
+
+    private getIncompleteDownLight(anchorCell: IGridCell): Light {
+        let result: Light = null;
+        const grid = this.scratchpad.grid;
+        const cells: IGridCell[] = [];
+
+        let x = anchorCell.x;
+        let y = anchorCell.y;
+        let incompletes = 0;
+
+        while (y < grid.properties.size.down) {
+            let cell = grid.cells.find(c => c.y === y && c.x === x);
+            cells.push(cell);
+
+            // TO DO: make this work for barred grids too...
+
+            if (!cell.light) {
+                break;
+            } else if (!cell.content) {
+                incompletes++;
+            }
+
+            y++;
+        }
+
+        if (incompletes > 0) {
+            result = {
+                ref: {
+                    id: null,
+                    anchor: anchorCell.anchor,
+                    direction: "down"
+                },
+                cells
             }
         }
 
