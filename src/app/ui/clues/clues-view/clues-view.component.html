@@ -1,0 +1,10 @@
+<div *ngIf="clues && clues.length">
+    <table>
+        <tbody>
+            <tr *ngFor="let clue of clues">
+                <td class="caption">{{clue.caption}}</td>
+                <td>{{clue.text}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

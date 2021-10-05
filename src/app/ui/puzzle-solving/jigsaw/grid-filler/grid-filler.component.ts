@@ -13,6 +13,7 @@ import { ClearGridReferences } from 'src/app/modifiers/clue-modifiers/clear-grid
 import { SyncGridContent } from 'src/app/modifiers/grid-modifiers/sync-grid-content';
 import { GridReference } from 'src/app/model/puzzle-model/grid-reference';
 import { IClue, IPuzzle, IGridCell } from 'src/app/model/interfaces';
+import { ScratchpadService } from 'src/app/services/puzzles/scratchpad.service';
 
 
 interface Light {
@@ -40,8 +41,9 @@ export class GridFillerComponent implements OnInit, OnDestroy {
         private appService: AppService,
         private navService: NavService < AppTrackData >,
         private activePuzzle: IActivePuzzle,
+        private scratchpadService: ScratchpadService,
         private appSettingsService: AppSettingsService,
-        private detRef: ChangeDetectorRef,
+        private changeRef: ChangeDetectorRef,
     ) { }
     
         public ngOnInit() {
@@ -62,18 +64,25 @@ export class GridFillerComponent implements OnInit, OnDestroy {
 
                         if (puzzle && appSettings) {
                             if (!puzzle.solveable) {
-                                this.appService.setAlert("danger", "Cannot open this puzzle in solver: the puzzle is missing either clues or a grid");
+                                this.appService.setAlert("danger", "Cannot open this puzzle in grid filler: the puzzle is missing either clues or a grid");
                                 this.navService.goHome();
                             }
                             //this.scratchpad = puzzle;
                             this.appSettings = appSettings;
                             this.puzzle = puzzle;
-                            this.scratchpad = JSON.parse(JSON.stringify(puzzle));
+                            this.scratchpadService.usePuzzle(puzzle);
                         }
 
-                        this.detRef.detectChanges();
+                        this.changeRef.detectChanges();
                     }
                 ));
+
+                this.subs.push(
+                    this.scratchpadService.observe().subscribe(scratchpad => {
+                        this.scratchpad = scratchpad;
+                        this.changeRef.detectChanges();
+                    })
+                )
         }
     }
 
@@ -87,20 +96,12 @@ export class GridFillerComponent implements OnInit, OnDestroy {
     }
 
     public onClear() {
-        new Clear()
-        .exec(this.scratchpad);
-
-        new UpdatePuzzleOptions("manual")
-        .exec(this.scratchpad);
-
-        new ClearGridReferences()
-        .exec(this.scratchpad);
-
-        new SyncGridContent()
-        .exec(this.scratchpad);
-
-        this.detRef.detectChanges();
-
+            this.scratchpadService.update(
+            new Clear(),
+            new UpdatePuzzleOptions("manual"),
+            new ClearGridReferences(),
+            new SyncGridContent(),
+        );
     }
 
     public onStartFill() {

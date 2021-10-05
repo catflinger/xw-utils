@@ -1,4 +1,4 @@
-<div *ngIf="puzzle">
+<div *ngIf="scratchpad">
     <div class="row">
         <div class="col">
             <h5>{{puzzle.info.title}}</h5>
@@ -6,8 +6,8 @@
     </div>
 
     <div class="row">
-        <div class="col" *ngIf="puzzle.grid">
-            <app-grid-view [puzzle]="puzzle" [options]="{ hideShading: true, showConflicts: true }"></app-grid-view>
+        <div class="col" *ngIf="scratchpad.grid">
+            <app-grid-view [grid]="scratchpad.grid" [options]="{ hideShading: true, showConflicts: true }"></app-grid-view>
             <div class="mt-5">
                 <button type="button" class="btn btn-secondary mr-3" (click)="onStartFill()">Autofill</button>
                 <button type="button" class="btn btn-secondary mr-3" (click)="onClear()">Clear all</button>
@@ -15,11 +15,13 @@
         </div>
 
         <div class="col">
-            <app-clue-list direction="across" [followRedirects]="true"></app-clue-list>
+            <h5>Across</h5>
+            <app-clues-view [clues]="scratchpad.clues"></app-clues-view>
         </div>
 
         <div class="col">
-            <app-clue-list direction="down" [followRedirects]="true"></app-clue-list>
+            <h5>Down</h5>
+            <app-clues-view [clues]="scratchpad.clues"></app-clues-view>
         </div>
     </div>
 

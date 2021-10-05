@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Direction, IClue } from 'src/app/model/interfaces';
 import { Subscription } from 'rxjs';
 import { Clue } from 'src/app/model/puzzle-model/clue';
@@ -13,7 +13,7 @@ import { AppSettings } from 'src/app/services/common';
     styleUrls: ['./clue-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClueListComponent implements OnInit {
+export class ClueListComponent implements OnInit, OnDestroy {
     @Input() public direction: Direction;
     @Input() followRedirects: boolean = false;
     @Output() public clueClick = new EventEmitter<Clue>();
@@ -28,7 +28,7 @@ export class ClueListComponent implements OnInit {
         private detRef: ChangeDetectorRef,
         ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.appSettings = this.appSettingsService.settings;
         this.subs.push(this.appSettingsService.observe().subscribe(settings => this.appSettings = settings));
 
@@ -40,6 +40,10 @@ export class ClueListComponent implements OnInit {
                 this.detRef.detectChanges();
             }
         ));
+    }
+
+    public ngOnDestroy() {
+        this.subs.forEach(s => s.unsubscribe());
     }
 
     public onClueClick(clue: Clue) {

@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GridNavigation, WritingDirection } from 'src/app/model/interfaces';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
-import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridControlOptions, GridParameters, GridParametersSmall, GridParametersLarge, fifteenSquaredBlack } from '../../common';
 import { GridPainterService } from '../grid-painter.service';
 
@@ -55,7 +51,7 @@ export class GridViewComponent implements OnInit, AfterViewInit, OnChanges {
     public err: any;
     public model: GridInput = gridInputDefaults;
 
-    private gridParams: GridParameters;
+    private gridParams: GridParameters = new GridParametersLarge();
     private viewInitiated = false;
     private subs: Subscription[] = [];
 

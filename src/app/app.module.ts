@@ -104,6 +104,7 @@ import { ProvisionOptionsEditorComponent } from './ui/puzzle-editing/tabbed-dial
 import { ClueEditorControlComponent } from './ui/puzzle-editing/tabbed-dialogs/editors/clue-editor-control/clue-editor-control.component';
 import { GridFillerComponent } from './ui/puzzle-solving/jigsaw/grid-filler/grid-filler.component';
 import { GridViewComponent } from './ui/grid/grid-view/grid-view.component';
+import { CluesViewComponent } from './ui/clues/clues-view/clues-view.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -210,6 +211,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         ClueEditorControlComponent,
         GridFillerComponent,
         GridViewComponent,
+        CluesViewComponent,
     ],
     imports: [
         BrowserModule,
