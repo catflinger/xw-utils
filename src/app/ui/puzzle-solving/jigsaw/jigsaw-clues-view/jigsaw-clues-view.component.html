@@ -1,0 +1,10 @@
+<div *ngIf="answers && answers.length">
+    <table>
+        <tbody>
+            <tr *ngFor="let answer of answers">
+                <td class="caption">{{answer.text}}</td>
+                <td>{{answer.placed}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

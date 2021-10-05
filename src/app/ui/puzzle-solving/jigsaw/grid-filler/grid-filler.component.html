@@ -1,28 +1,24 @@
-<div *ngIf="scratchpad">
+<div>
     <div class="row">
         <div class="col">
-            <h5>{{puzzle.info.title}}</h5>
+            <h5 *ngIf="puzzle">{{puzzle.info.title}}</h5>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col" *ngIf="scratchpad.grid">
-            <app-grid-view [grid]="scratchpad.grid" [options]="{ hideShading: true, showConflicts: true }"></app-grid-view>
+    <div class="row" *ngIf="xxx">
+        <div class="col">
+            <app-jigsaw-grid-view [grid]="xxx"></app-jigsaw-grid-view>
             <div class="mt-5">
                 <button type="button" class="btn btn-secondary mr-3" (click)="onStartFill()">Autofill</button>
                 <button type="button" class="btn btn-secondary mr-3" (click)="onClear()">Clear all</button>
             </div>
         </div>
 
-        <div class="col">
-            <h5>Across</h5>
-            <app-clues-view [clues]="scratchpad.clues"></app-clues-view>
+        <div class="col" *ngIf="xxx">
+            <h5>Answers</h5>
+            <app-jigsaw-clues-view [answers]="xxx.answers"></app-jigsaw-clues-view>
         </div>
 
-        <div class="col">
-            <h5>Down</h5>
-            <app-clues-view [clues]="scratchpad.clues"></app-clues-view>
-        </div>
     </div>
 
     <div class="row  mb-5">
