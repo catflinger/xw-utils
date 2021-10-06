@@ -3,7 +3,7 @@
         <tbody>
             <tr *ngFor="let answer of answers">
                 <td class="caption">{{answer.text}}</td>
-                <td>{{answer.placed}}</td>
+                <td><span *ngIf="answer.placement">{{answer.placement.anchor}} {{answer.placement.direction}}</span></td>
             </tr>
         </tbody>
     </table>

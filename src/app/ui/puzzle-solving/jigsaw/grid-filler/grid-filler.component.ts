@@ -8,6 +8,7 @@ import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { AppService } from '../../../general/app.service';
 import { JigsawService, XXX } from 'src/app/services/puzzles/jigsaw.service';
+import { auditTime } from 'rxjs/operators';
 
 
 // interface Light {
@@ -61,7 +62,6 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                             //this.scratchpad = puzzle;
                             this.appSettings = appSettings;
                             this.puzzle = puzzle;
-                            this.jigsawService.start(puzzle);
                         }
 
                         this.changeRef.detectChanges();
@@ -69,7 +69,11 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                 ));
 
                 this.subs.push(
-                    this.jigsawService.observe().subscribe(xxx => {
+                    this.jigsawService.observe()
+                    .pipe(
+                        auditTime(500)
+                    )
+                    .subscribe(xxx => {
                         this.xxx = xxx;
                         this.changeRef.detectChanges();
                     })
@@ -87,10 +91,11 @@ export class GridFillerComponent implements OnInit, OnDestroy {
     }
 
     public onClear() {
-        this.jigsawService.start(this.puzzle);
+        //this.jigsawService.start(this.puzzle);
     }
 
     public onStartFill() {
+        this.jigsawService.start(this.puzzle);
         // this.counter = 0;
 
         // this.placeNextWord();
