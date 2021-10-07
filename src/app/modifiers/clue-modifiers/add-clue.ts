@@ -11,14 +11,9 @@ export class AddClue implements IPuzzleModifier {
         private text: string,
         private clueId?: string,
     ) { 
-        console.log(`ADD CLUE PARAMS: caption[${caption}]`)
-        console.log(`ADD CLUE PARAMS: group[${group}]`)
-        console.log(`ADD CLUE PARAMS: text[${text}]`)
-        console.log(`ADD CLUE PARAMS: id[${clueId}]`)
     }
 
     exec(puzzle: IPuzzle) {
-        console.log(`PUZZLE provision: ${JSON.stringify(puzzle.provision, null, 2)}`)
         if (puzzle) {
             let fullText = this.caption + " " + this.text;
             let clue: IClue = null;

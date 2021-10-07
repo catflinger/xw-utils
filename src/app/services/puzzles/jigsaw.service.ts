@@ -27,6 +27,11 @@ export class JigsawService {
         return this.bsXXX.asObservable();
     }
 
+    public stop() {
+        this.stack = [];
+        this.bsXXX.next(null);
+    }
+
     public start(puzzle: Puzzle) {
         this.depth = 0;
         this.stack = [];
@@ -46,13 +51,20 @@ export class JigsawService {
         setTimeout(_ => this.placeNextAnswer(), delayMillis);
     }
 
-    // TO DO: WORK OUT HOW TO CANCEL TIS IF NO-ONE IS LITENING
+    // TO DO: Test with barred grid
+    // TO DO: Test with incomplete set of answers
+    // TO DO: Test with an inconsistent set of answers
     private placeNextAnswer(): void {
 
         this.depth++;
 
         if (this.depth > maxAttempts) {
-            console.log(`Exceeded max numberof tries`);
+            // console.log(`Exceeded max numberof tries`);
+            return;
+        }
+
+        if (this.stack.length === 0) {
+            // console.log(`Empty stack, cancelling fill`);
             return;
         }
 
@@ -61,7 +73,7 @@ export class JigsawService {
 
         // no empty grid cells ? return "success"
         if (countEmptyGridCells(xxx) === 0) {
-            console.log(`SUCCESS: No empty cells left`);
+            // console.log(`SUCCESS: No empty cells left`);
             return;
         }
 
@@ -76,7 +88,7 @@ export class JigsawService {
                 }
             } else {
                 // no more unplaced answers so we are finished!
-                console.log(`SUCCESS: no unplaced answers left`);
+                // console.log(`SUCCESS: no unplaced answers left`);
                 return;
             }
         }
@@ -86,7 +98,6 @@ export class JigsawService {
 
         if (placement) {
             //found a place, so push and continue
-            console.log("B")
             // create a clone of current frame
             let clone: XXX = this.cloneIt(xxx);
 
@@ -104,20 +115,17 @@ export class JigsawService {
             this.stack.push(clone)
 
             // raise an event
-            console.log("C")
             this.bsXXX.next(this.cloneIt(clone));
 
         } else {
             // failed to find a place so at a dead end, abandon this branch
             this.stack.pop();
-            console.log("A")
             this.bsXXX.next(this.cloneIt(this.stack[this.stack.length - 1]));
             this.invokePlacement();
             return;
     }
 
         // invoke this function again (via a callback)
-        console.log("F");
         this.invokePlacement();
     }
 

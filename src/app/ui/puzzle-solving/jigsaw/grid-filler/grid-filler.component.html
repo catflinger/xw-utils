@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="puzzle">
     <div class="row">
         <div class="col">
             <h5 *ngIf="puzzle">{{puzzle.info.title}}</h5>
@@ -19,8 +19,8 @@
 
     <div class="row  mb-5">
         <div class="col text-left">
-            <button type="button" class="btn btn-secondary mr-3" (click)="onStartFill()">Autofill</button>
-            <button type="button" class="btn btn-secondary mr-3" (click)="onClear()">Clear all</button>
+            <button type="button" class="btn btn-primary mr-3" (click)="onStartFill()">Start</button>
+            <button type="button" class="btn btn-secondary mr-3" (click)="onStop()">Stop</button>
             <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Close</button>
         </div>
     </div>

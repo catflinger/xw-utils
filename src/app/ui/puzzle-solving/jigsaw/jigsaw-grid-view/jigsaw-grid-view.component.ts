@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GridControlOptions, GridParameters, GridParametersLarge } from 'src/app/ui/common';
 import { JigsawGridPainterService } from '../jigsaw-grid-painter.service';
@@ -37,7 +37,7 @@ const gridInputDefaults: GridInput = {
     styleUrls: ['./jigsaw-grid-view.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges {
+export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
     private options: GridControlOptions = {}
 

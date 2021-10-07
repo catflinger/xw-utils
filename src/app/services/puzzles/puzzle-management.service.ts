@@ -178,7 +178,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
 
         if (puzzle) {
             reducers.forEach(reducer => {
-                console.log(`Executing modifier ${reducer.constructor.name}`);
+                // console.log(`Executing modifier ${reducer.constructor.name}`);
                 reducer.exec(puzzle);
             });
             new MarkAsCommitted().exec(puzzle);

@@ -82,7 +82,8 @@ export class GridFillerComponent implements OnInit, OnDestroy {
         }
     }
 
-        public ngOnDestroy(){
+    public ngOnDestroy(){
+        this.jigsawService.stop();
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
@@ -91,8 +92,8 @@ export class GridFillerComponent implements OnInit, OnDestroy {
         this.navService.navigate("back");
     }
 
-    public onClear() {
-        //this.jigsawService.start(this.puzzle);
+    public onStop() {
+        this.jigsawService.stop();
     }
 
     public onStartFill() {
