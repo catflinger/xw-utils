@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { XAnswer } from 'src/app/services/puzzles/jigsaw.service';
+import { XAnswer } from '../jigsaw-model';
 
 @Component({
     selector: 'app-jigsaw-clues-view',

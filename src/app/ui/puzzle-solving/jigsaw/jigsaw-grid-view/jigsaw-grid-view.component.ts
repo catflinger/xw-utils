@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Grid } from 'src/app/model/puzzle-model/grid';
-import { XXX } from 'src/app/services/puzzles/jigsaw.service';
 import { GridControlOptions, GridParameters, GridParametersLarge } from 'src/app/ui/common';
 import { JigsawGridPainterService } from '../jigsaw-grid-painter.service';
+import { XXX } from '../jigsaw-model';
 
 type GridInput = { 
     text: string,

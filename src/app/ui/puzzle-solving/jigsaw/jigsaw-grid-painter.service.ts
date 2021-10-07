@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GridParameters, GridControlOptions, GridParametersSmall } from '../../common';
-import { XCell, XGridProperties, XXX } from 'src/app/services/puzzles/jigsaw.service';
+import { XCell, XGridProperties, XXX } from './jigsaw-model';
 
 export class GridDisplayInfo {
     public top: number;

@@ -1,51 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { ClueGroup, Direction } from 'src/app/model/interfaces';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
+import { countEmptyGridCells, getMaxAnchor, makeXXXFromPuzzle, XAnswer, XCell, XCurrent, XPlacement, XXX } from 'src/app/ui/puzzle-solving/jigsaw/jigsaw-model';
 
-type JigsawStatus = "working" | "failure" | "success";
+const maxAttempts = 10000;
+const delayMillis = 250;
 
-export interface XCell {
-    x: number,
-    y: number,
-    light: boolean,
-    rightBar: boolean,
-    bottomBar: boolean,
-    anchor: number | null,
-    content: string | null,
-}
-
-export interface XPlacement {
-    anchor: number,
-    direction: Direction,
-}
-
-export interface XAnswer {
-    clueId: string,
-    group: ClueGroup | null,
-    text: string | null,
-    placement: XPlacement | null;
-    attemptedAcross: boolean;
-    attemptedDown: boolean;
-}
-
-export interface XGridProperties {
-    across: number,
-    down: number,
-    numbered: boolean,
-}
-
-export interface XXX {
-    properties: XGridProperties,
-    cells: XCell[],
-    answers: XAnswer[],
-}
-
-export interface XPlacement {
-    clueId: string,
-    anchor: number,
-    direction: Direction,
-}
 
 @Injectable({
     providedIn: 'root'
@@ -57,7 +17,7 @@ export class JigsawService {
     private stack: XXX[] = [];
 
     // TO DO: figure out how to make the type of this readonly so subscribers can't accidentally modify the values they get
-    private bsXXX: BehaviorSubject<XXX | null> = new   BehaviorSubject<XXX | null>(null);
+    private bsXXX: BehaviorSubject<XXX | null> = new BehaviorSubject<XXX | null>(null);
 
     constructor(
         //private scratchpadService: ScratchpadService,
@@ -70,28 +30,28 @@ export class JigsawService {
     public start(puzzle: Puzzle) {
         this.depth = 0;
         this.stack = [];
-        
+
         // make a copy of the important bits
-        const xxx = this.makeXXXFromPuzzle(puzzle);
+        const xxx = makeXXXFromPuzzle(puzzle);
         //push it onto the stack as the first pristine grid
         this.stack.push(xxx);
         //push a clone the stack as the first attempt
-        this.stack.push(JSON.parse(JSON.stringify(xxx)));
+        this.stack.push(this.cloneIt(xxx));
 
         this.bsXXX.next(xxx);
         this.invokePlacement();
     }
 
     private invokePlacement() {
-        setTimeout(_ => this.placeNextAnswer(), 100);
-    } 
+        setTimeout(_ => this.placeNextAnswer(), delayMillis);
+    }
 
-
+    // TO DO: WORK OUT HOW TO CANCEL TIS IF NO-ONE IS LITENING
     private placeNextAnswer(): void {
 
         this.depth++;
 
-        if (this.depth > 1000000) {
+        if (this.depth > maxAttempts) {
             console.log(`Exceeded max numberof tries`);
             return;
         }
@@ -100,42 +60,36 @@ export class JigsawService {
         let xxx = this.stack[this.stack.length - 1];
 
         // no empty grid cells ? return "success"
-        if (this.countEmptyGridCells(xxx) === 0) {
-            //console.log(`No empty cells left`);
-            return;
-        }
-        // no unplaced answers left ? return "success"
-        if (this.countUnplacedAnswers(xxx) === 0) {
-            //console.log(`No unplaced answers left`);
+        if (countEmptyGridCells(xxx) === 0) {
+            console.log(`SUCCESS: No empty cells left`);
             return;
         }
 
-        // get the unplaced and unattempted answer
-        let unattempted = xxx.answers.find(a => !a.placement && (!a.attemptedAcross || !a.attemptedDown))
+        // see if we have a search in progress, if not then start a new one
+        if (!xxx.current) {
+            let unplaced = xxx.answers.find(a => !a.placement);
 
-        if (!unattempted) {
-            //console.log(`No more unattempted answers`);
-            
-            // this means we are at a dead end, abandon this route
-            this.stack.pop();
-            console.log("A")
-            this.bsXXX.next(JSON.parse(JSON.stringify(this.stack[this.stack.length - 1])));
-            this.invokePlacement();
-            return;
+            if (unplaced) {
+                xxx.current = {
+                    answer: this.cloneIt(unplaced),
+                    attemptedPlacements: []
+                }
+            } else {
+                // no more unplaced answers so we are finished!
+                console.log(`SUCCESS: no unplaced answers left`);
+                return;
+            }
         }
 
-        // find a place for it
-        //console.log(`Attempting to place ${unattempted.text}`);
-        const placement = !unattempted.attemptedAcross ?
-            this.tryAcrossPlacement(xxx, unattempted) :
-            this.tryDownPlacement(xxx, unattempted);
+        // try and find a place for this answer in the grid
+        let placement = this.tryPlacement(xxx.current, xxx);
 
         if (placement) {
-            //console.log(`Found a place for ${unattempted.text}`);
-            // create a clone of current frame
+            //found a place, so push and continue
             console.log("B")
-            let clone: XXX = JSON.parse(JSON.stringify(xxx));
-            
+            // create a clone of current frame
+            let clone: XXX = this.cloneIt(xxx);
+
             // update it with the placement
             let clue = clone.answers.find(c => c.clueId === placement.clueId);
             clue.placement = placement;
@@ -143,75 +97,79 @@ export class JigsawService {
             // update the placed answers in the grid
             this.syncGrid(clone);
 
-            // clear the attemped flags
-            clone.answers.forEach(a => {
-                if (!a.placement) {
-                    a.attemptedAcross = false;
-                    a.attemptedDown = false;
-                }
-            });
-            
+            // clear the current
+            clone.current = null;;
+
             // push it
             this.stack.push(clone)
-            
+
             // raise an event
             console.log("C")
-            this.bsXXX.next(JSON.parse(JSON.stringify(clone)));
+            this.bsXXX.next(this.cloneIt(clone));
 
         } else {
-            if (unattempted.attemptedAcross && unattempted.attemptedDown) {
-
-                // this means we are at a dead end, we have failed to place this word anywhere
-                //abandon this route
-                this.stack.pop();
-                console.log("D");
-                if (this.stack.length > 1) {
-                    this.bsXXX.next(JSON.parse(JSON.stringify(this.stack[this.stack.length - 1])));
-                    this.invokePlacement();
-                }
-                return;
-            }
-        }
-
-        // invoke this function again (via a callback)
-        this.invokePlacement();
-        //console.log(`Returning at end of function`);
-
-        //return Promise.resolve<JigsawStatus>("success");
+            // failed to find a place so at a dead end, abandon this branch
+            this.stack.pop();
+            console.log("A")
+            this.bsXXX.next(this.cloneIt(this.stack[this.stack.length - 1]));
+            this.invokePlacement();
+            return;
     }
 
-    private tryAcrossPlacement(xxx: XXX, answer: XAnswer): XPlacement | null {
-        const maxAnchor = this.getMaxAnchor(xxx.cells);
+        // invoke this function again (via a callback)
+        console.log("F");
+        this.invokePlacement();
+    }
+
+    private tryPlacement(current: XCurrent, xxx: XXX): XPlacement {
+
+        let placement = this.tryAcrossPlacement(xxx, current);
+
+        if (!placement) {
+            placement = this.tryDownPlacement(xxx, current);
+        }
+
+        return placement;
+    }
+
+    private tryAcrossPlacement(xxx: XXX, current: XCurrent): XPlacement | null {
+        const maxAnchor = getMaxAnchor(xxx.cells);
         let result: XPlacement | null = null;
 
-        answer.attemptedAcross = true;
-        
-        for(let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
-            if (this.tryAcrossFit(xxx, answer, anchor)) {
-                result = { 
-                    clueId: answer.clueId,
-                    anchor,
-                    direction: "across"
-                };
-            
+        for (let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
+            let alreadyTried = current.attemptedPlacements.find(p => p.anchor === anchor && p.direction === "across");
+
+            if (!alreadyTried) {
+                current.attemptedPlacements.push({anchor, direction: "across" })
+                
+                if (this.tryAcrossFit(xxx, current.answer, anchor)) {
+                    result = {
+                        clueId: current.answer.clueId,
+                        anchor,
+                        direction: "across"
+                    };
+                }
             }
         }
         return result;
     }
 
-    private tryDownPlacement(xxx: XXX, answer: XAnswer): XPlacement | null {
-        const maxAnchor = this.getMaxAnchor(xxx.cells);
+    private tryDownPlacement(xxx: XXX, current: XCurrent): XPlacement | null {
+        const maxAnchor = getMaxAnchor(xxx.cells);
         let result: XPlacement | null = null;
 
-        answer.attemptedDown = true;
+        for (let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
+            let alreadyTried = current.attemptedPlacements.find(p => p.anchor === anchor && p.direction === "down");
 
-        for(let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
-            if (this.tryDownFit(xxx, answer, anchor)) {
-                result = { 
-                    clueId: answer.clueId,
-                    anchor,
-                    direction: "down"
-                };
+            if (!alreadyTried) {
+                current.attemptedPlacements.push({anchor, direction: "down" })
+                if (this.tryDownFit(xxx, current.answer, anchor)) {
+                    result = {
+                        clueId: current.answer.clueId,
+                        anchor,
+                        direction: "down"
+                    };
+                }
             }
         }
         return result;
@@ -237,7 +195,7 @@ export class JigsawService {
                 const entryLetter = entry[i].content;
                 const answerLetter = answer.text.charAt(i);
 
-                if (entryLetter && entryLetter !== answerLetter ) {
+                if (entryLetter && entryLetter !== answerLetter) {
                     isFit = false;
                 }
             };
@@ -246,96 +204,18 @@ export class JigsawService {
     }
 
 
-    private makeXXXFromPuzzle(puzzle: Puzzle): XXX {
-        const x: XXX = {
-            cells: [],
-            answers: [],
-            properties: {
-                across: puzzle.grid.properties.size.across,
-                down: puzzle.grid.properties.size.down,
-                numbered: puzzle.grid.properties.numbered,
-            }
-        }
 
-        puzzle.grid.cells.forEach(c => x.cells.push({
-            x: c.x,
-            y: c.y,
-            anchor: c.anchor,
-            content: "", // this.trimContent(c.content),
-            light: c.light,
-            rightBar: c.rightBar,
-            bottomBar: c.bottomBar,
-        }));
+    // private countUnplacedAnswers(xxx: XXX): number {
+    //     let counter = 0;
 
-        const unsortedAnswers: XAnswer[] = [];
-        
-        puzzle.clues.forEach(c => {
-            let text = this.trimAnswer(c.answers[0]);
+    //     xxx.answers.forEach(a => {
+    //         if (!a.placement) {
+    //             counter++;
+    //         }
+    //     })
+    //     return counter;
+    // }
 
-            if (text) {
-                unsortedAnswers.push({
-                    clueId: c.id,
-                    group: c.group ? c.group : null,
-                    text,
-                    placement: null,
-                    attemptedAcross: false,
-                    attemptedDown: false,
-                });
-            }
-        });
-
-        x.answers = this.sortAnswers( this.shuffleAnswers(unsortedAnswers));
-        return x;
-    }
-
-    // TO DO: check that this really is redundant.  SHould it hav ebeen called somewhere?
-    //  if not then delete it
-    private trimContent(src: string): string | null {
-        if (!src) {
-            return null;
-        }
-        const match = src.match(/[A-Z]/);
-        return match ? match[0] : null;
-    }
-
-    private trimAnswer(src: string): string | null {
-        if (!src) {
-            return null;
-        }
-        return src.replace(/[^A-Z]/g, "");
-    }
-
-    private countEmptyGridCells(xxx: XXX): number {
-        let counter = 0;
-
-        xxx.cells.forEach(c => {
-            if(c.light && !c.content) {
-                counter++;
-            }
-        })
-        return counter;
-    }
-
-    private countUnplacedAnswers(xxx: XXX): number {
-        let counter = 0;
-
-        xxx.answers.forEach(a => {
-            if(!a.placement) {
-                counter++;
-            }
-        })
-        return counter;
-    }
-
-    private getMaxAnchor(cells: XCell[]): number {
-        let max = 0;
-        cells.forEach(c => {
-            if (c.anchor && c.anchor > 0 ) {
-                max = Math.max(max, c.anchor);
-            }
-        });
-        return max;
-    }
 
     private getAcrossEntry(xxx: XXX, anchor): XCell[] {
         const startCell = xxx.cells.find(c => c.anchor === anchor);
@@ -349,7 +229,7 @@ export class JigsawService {
             }
         }
 
-        for(
+        for (
             let x = startCell.x;
             x < xxx.properties.across;
             x++
@@ -362,7 +242,7 @@ export class JigsawService {
                 if (cell.rightBar) {
                     break;
                 }
-            
+
             } else {
                 break;
             }
@@ -382,7 +262,7 @@ export class JigsawService {
             }
         }
 
-        for(
+        for (
             let y = startCell.y;
             y < xxx.properties.down;
             y++
@@ -395,7 +275,7 @@ export class JigsawService {
                 if (cell.bottomBar) {
                     break;
                 }
-            
+
             } else {
                 break;
             }
@@ -407,38 +287,23 @@ export class JigsawService {
         xxx.cells.forEach(c => c.content = null);
 
         xxx.answers
-        .filter(a => a.placement)
-        .forEach(answer => {
-            let entry= answer.placement.direction === "across" ?
-                this.getAcrossEntry(xxx, answer.placement.anchor) :
-                this.getDownEntry(xxx, answer.placement.anchor);
+            .filter(a => a.placement)
+            .forEach(answer => {
+                let entry = answer.placement.direction === "across" ?
+                    this.getAcrossEntry(xxx, answer.placement.anchor) :
+                    this.getDownEntry(xxx, answer.placement.anchor);
 
-            for(let i = 0; i < entry.length; i++) {
-            entry[i].content = answer.text.charAt(i);
-            }
-        });
+                for (let i = 0; i < entry.length; i++) {
+                    entry[i].content = answer.text.charAt(i);
+                }
+            });
     }
 
-    private shuffleAnswers(answers: XAnswer[]): XAnswer[] {
-        let currentIndex = answers.length,  randomIndex;
-      
-        // While there remain elements to shuffle...
-        while (currentIndex != 0) {
-      
-          // Pick a remaining element...
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-      
-          // And swap it with the current element.
-          [answers[currentIndex], answers[randomIndex]] = [
-            answers[randomIndex], answers[currentIndex]];
-        }
-      
-        return answers;
-      }
 
-      private sortAnswers(answers: XAnswer[]): XAnswer[] {
-          return answers.sort((a,b) => b.text.length - a.text.length);
-      }
+
+    private cloneIt(src: any): any {
+        return JSON.parse(JSON.stringify(src));
+    }
 
 }
+
