@@ -28,6 +28,7 @@ export class JigsawService {
     private depth = 0;
     private puzzle: Puzzle | null = null;
     private stack: Jigsaw[] = [];
+    private cancelFlag = false;
 
     // TO DO: figure out how to make the type of this readonly so subscribers can't accidentally modify the values they get
     private bsJigsaw: BehaviorSubject<JigsawEvent | null> = new BehaviorSubject<JigsawEvent | null>(null);
@@ -41,8 +42,7 @@ export class JigsawService {
     }
 
     public stop() {
-        this.stack = [];
-        this.bsJigsaw.next(null);
+        this.cancelFlag = true;
     }
 
     public usePuzzle(puzzle: Puzzle) {
@@ -50,9 +50,7 @@ export class JigsawService {
 
         this.reset();
 
-        const jigsaw = this.stack.length ?
-            this.stack[this.stack.length - 1] :
-            null;
+        const jigsaw = this.peek();
 
         this.bsJigsaw.next({
             status: "new",
@@ -60,28 +58,35 @@ export class JigsawService {
         });
 }
 
-    public start(puzzle: Puzzle) {
+    public start() {
         this.reset();
 
-        const jigsaw = this.stack.length ?
-            this.stack[this.stack.length - 1] :
-            null;
+        const jigsaw = this.peek();
 
-        //push a clone the stack as the first attempt
-        // TO DO: do we need this, or can we make the first attempt right away?
-        this.stack.push(this.cloneIt(jigsaw));
+        if (jigsaw) {
+            // //push a clone the stack as the first attempt
+            // this.stack.push(this.cloneIt(jigsaw));
 
-        this.bsJigsaw.next({
-            status: "working",
-            jigsaw
-        });
-        
-        this.invokePlacement();
+            this.bsJigsaw.next({
+                status: "working",
+                jigsaw
+            });
+
+            this.invokePlacement();
+        } else {
+            this.bsJigsaw.next({
+                status: "finished",
+                jigsaw: null,
+                message: "No puzzle has been specified."
+            });
+        }
+
     }
 
     private reset() {
         this.depth = 0;
         this.stack = [];
+        this.cancelFlag = false;
 
         if (this.puzzle) {
             // make a copy of the important bits
@@ -101,6 +106,16 @@ export class JigsawService {
     // TO DO: Test with an inconsistent set of answers
     private placeNextAnswer(): void {
 
+        if (this.cancelFlag) {
+            // console.log(`Cancelled`);
+            this.bsJigsaw.next({
+                status: "finished",
+                jigsaw: null,
+                message: "The grid-fill has been cancelled."
+            });
+            return;
+        }
+
         this.depth++;
 
         if (this.depth > maxAttempts) {
@@ -118,14 +133,14 @@ export class JigsawService {
             this.bsJigsaw.next({
                 status: "finished",
                 jigsaw: null,
-                message: "Nothing to do here."
+                message: "Failed to find a way to fill the grid using these words."
 
             });
             return;
         }
 
         // use the current stack frame
-        let jigsaw = this.stack[this.stack.length - 1];
+        let jigsaw = this.peek();
 
         // no empty grid cells ? return "success"
         if (countEmptyGridCells(jigsaw) === 0) {
@@ -151,7 +166,13 @@ export class JigsawService {
             } else {
                 // no more unplaced answers so we are finished!
                 // console.log(`SUCCESS: no unplaced answers left`);
-                return;
+                this.bsJigsaw.next({
+                    status: "finished",
+                    jigsaw,
+                    message: "Success, all the available answers have been placed."
+    
+                });
+                    return;
             }
         }
 
@@ -187,7 +208,7 @@ export class JigsawService {
             this.stack.pop();
             this.bsJigsaw.next({
                 status: "working",
-                jigsaw: this.cloneIt(this.stack[this.stack.length - 1])
+                jigsaw: this.cloneIt(this.peek())
             });
             this.invokePlacement();
             return;
@@ -365,11 +386,14 @@ export class JigsawService {
             });
     }
 
-
-
     private cloneIt(src: Jigsaw): Jigsaw {
         return JSON.parse(JSON.stringify(src));
     }
 
+    private peek(): Jigsaw {
+        return this.stack.length ?
+            this.stack[this.stack.length - 1] :
+            null;
+    }
 }
 

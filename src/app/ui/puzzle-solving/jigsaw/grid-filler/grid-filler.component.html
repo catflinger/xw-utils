@@ -9,7 +9,7 @@
         <div class="col">
             <app-jigsaw-grid-view [jigsaw]="event.jigsaw">    </app-jigsaw-grid-view>
             <div>
-                Progress: {{event.status}}
+                Progress: {{event.status | titlecase}}
             </div>
             <div>
                 {{event.message}}

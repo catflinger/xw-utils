@@ -97,7 +97,7 @@ export class GridFillerComponent implements OnInit, OnDestroy {
     }
 
     public onStartFill() {
-        this.jigsawService.start(this.puzzle);
+        this.jigsawService.start();
     }
 
 }
