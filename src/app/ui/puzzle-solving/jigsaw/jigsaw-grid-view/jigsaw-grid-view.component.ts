@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output,
 import { Subscription } from 'rxjs';
 import { GridControlOptions, GridParameters, GridParametersLarge } from 'src/app/ui/common';
 import { JigsawGridPainterService } from '../jigsaw-grid-painter.service';
-import { XXX } from '../jigsaw-model';
+import { Jigsaw } from '../jigsaw-model';
 
 type GridInput = { 
     text: string,
@@ -42,7 +42,7 @@ export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges
     private options: GridControlOptions = {}
 
     @Input() caption: string = "";
-    @Input() grid: XXX;
+    @Input() jigsaw: Jigsaw;
 
     @ViewChild('gridCanvas', { static: false }) canvas: ElementRef;
 
@@ -63,7 +63,7 @@ export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges
 
     public ngOnInit() {
 
-            if (this.grid) {
+            if (this.jigsaw) {
                     this.model.style.display = "none";
 
                     this.resizeCanvas();
@@ -79,11 +79,11 @@ export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges
     }
 
     private resizeCanvas() {
-        if (this.grid) {
+        if (this.jigsaw) {
             const captionHeight = this.caption ? this.gridParams.cellSize + this.gridParams.gridPadding * 3 : 0;
 
-            this.canvasWidth = this.gridParams.cellSize * this.grid.properties.across + this.gridParams.gridPadding * 2;
-            this.canvasHeight = this.gridParams.cellSize * this.grid.properties.down + this.gridParams.gridPadding * 2 + captionHeight;
+            this.canvasWidth = this.gridParams.cellSize * this.jigsaw.properties.across + this.gridParams.gridPadding * 2;
+            this.canvasHeight = this.gridParams.cellSize * this.jigsaw.properties.down + this.gridParams.gridPadding * 2 + captionHeight;
             }
     }
 
@@ -116,14 +116,14 @@ export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges
         //     params.gridColor = this.options.color;
         // }
 
-        this.gridPainter.drawGrid(context, this.grid, this.options, params);
+        this.gridPainter.drawGrid(context, this.jigsaw, this.options, params);
 
         return canvas.toDataURL(`image/${encoding}`);
     }
 
 
     private drawGrid(caption: string): void {
-        if (this.grid && this.viewInitiated && this.canvas) {
+        if (this.jigsaw && this.viewInitiated && this.canvas) {
             const canvasEl = <HTMLCanvasElement>this.canvas.nativeElement;
             const context = canvasEl.getContext('2d');
 
@@ -133,7 +133,7 @@ export class JigsawGridViewComponent implements OnInit, AfterViewInit, OnChanges
                 params.gridColor = this.options.color;
             }
 
-            this.gridPainter.drawGrid(context, this.grid, this.options, params);
+            this.gridPainter.drawGrid(context, this.jigsaw, this.options, params);
         }
     }
 

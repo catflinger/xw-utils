@@ -1,7 +1,7 @@
 import { ClueGroup, Direction } from "src/app/model/interfaces";
 import { Puzzle } from "src/app/model/puzzle-model/puzzle";
 
-export interface XCell {
+export interface JCell {
     x: number,
     y: number,
     light: boolean,
@@ -11,47 +11,47 @@ export interface XCell {
     content: string | null,
 }
 
-export interface XPlacement {
+export interface JPlacement {
     anchor: number,
     direction: Direction,
 }
 
-export interface XAnswer {
+export interface JAnswer {
     clueId: string,
     group: ClueGroup | null,
     text: string | null,
-    placement: XPlacement | null;
+    placement: JPlacement | null;
 }
 
-export interface XGridProperties {
+export interface JGridProperties {
     across: number,
     down: number,
     numbered: boolean,
 }
-export interface XLight {
+export interface JLight {
     anchor: number,
     direction: Direction,
 }
 export interface XCurrent {
-    answer: XAnswer,
-    attemptedPlacements: XLight[],
+    answer: JAnswer,
+    attemptedPlacements: JLight[],
 }
 
-export interface XXX {
-    properties: XGridProperties,
-    cells: XCell[],
-    answers: XAnswer[],
+export interface Jigsaw {
+    properties: JGridProperties,
+    cells: JCell[],
+    answers: JAnswer[],
     current: XCurrent,
 }
 
-export interface XPlacement {
+export interface JPlacement {
     clueId: string,
     anchor: number,     // TO DO: nake this use XLight
     direction: Direction,
 }
 
-export function makeXXXFromPuzzle(puzzle: Puzzle): XXX {
-    const x: XXX = {
+export function makeJigsawFromPuzzle(puzzle: Puzzle): Jigsaw {
+    const jigsaw: Jigsaw = {
         cells: [],
         answers: [],
         properties: {
@@ -62,7 +62,7 @@ export function makeXXXFromPuzzle(puzzle: Puzzle): XXX {
         current: null
     }
 
-    puzzle.grid.cells.forEach(c => x.cells.push({
+    puzzle.grid.cells.forEach(c => jigsaw.cells.push({
         x: c.x,
         y: c.y,
         anchor: c.anchor,
@@ -72,7 +72,7 @@ export function makeXXXFromPuzzle(puzzle: Puzzle): XXX {
         bottomBar: c.bottomBar,
     }));
 
-    const unsortedAnswers: XAnswer[] = [];
+    const unsortedAnswers: JAnswer[] = [];
 
     puzzle.clues.forEach(c => {
         let text = trimAnswer(c.answers[0]);
@@ -89,11 +89,11 @@ export function makeXXXFromPuzzle(puzzle: Puzzle): XXX {
         }
     });
 
-    x.answers = sortAnswers(shuffleAnswers(unsortedAnswers));
-    return x;
+    jigsaw.answers = sortAnswers(shuffleAnswers(unsortedAnswers));
+    return jigsaw;
 }
 
-export function getMaxAnchor(cells: XCell[]): number {
+export function getMaxAnchor(cells: JCell[]): number {
     let max = 0;
     cells.forEach(c => {
         if (c.anchor && c.anchor > 0) {
@@ -103,17 +103,17 @@ export function getMaxAnchor(cells: XCell[]): number {
     return max;
 }
 
-export function countEmptyGridCells(xxx: XXX): number {
+export function countEmptyGridCells(jigsaw: Jigsaw): number {
     let counter = 0;
 
-    xxx.cells.forEach(c => {
+    jigsaw.cells.forEach(c => {
         if (c.light && !c.content) {
             counter++;
         }
     })
     return counter;
 }
-function shuffleAnswers(answers: XAnswer[]): XAnswer[] {
+function shuffleAnswers(answers: JAnswer[]): JAnswer[] {
     let currentIndex = answers.length, randomIndex;
 
     // While there remain elements to shuffle...
@@ -131,7 +131,7 @@ function shuffleAnswers(answers: XAnswer[]): XAnswer[] {
     return answers;
 }
 
-function sortAnswers(answers: XAnswer[]): XAnswer[] {
+function sortAnswers(answers: JAnswer[]): JAnswer[] {
     return answers.sort((a, b) => b.text.length - a.text.length);
 }
 

@@ -5,14 +5,14 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="xxx">
+    <div class="row" *ngIf="jigsaw">
         <div class="col">
-            <app-jigsaw-grid-view [grid]="xxx">    </app-jigsaw-grid-view>
+            <app-jigsaw-grid-view [jigsaw]="jigsaw">    </app-jigsaw-grid-view>
         </div>
 
-        <div class="col" *ngIf="xxx">
+        <div class="col" *ngIf="jigsaw">
             <h5>Answers</h5>
-            <app-jigsaw-clues-view [answers]="xxx.answers"></app-jigsaw-clues-view>
+            <app-jigsaw-clues-view [answers]="jigsaw.answers"></app-jigsaw-clues-view>
         </div>
 
     </div>

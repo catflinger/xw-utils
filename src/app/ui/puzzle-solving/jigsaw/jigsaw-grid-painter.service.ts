@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GridParameters, GridControlOptions, GridParametersSmall } from '../../common';
-import { XCell, XGridProperties, XXX } from './jigsaw-model';
+import { JCell, JGridProperties, Jigsaw } from './jigsaw-model';
 
 export class GridDisplayInfo {
     public top: number;
@@ -19,7 +19,7 @@ export class JigsawGridPainterService {
 
     public drawGrid(
         context: CanvasRenderingContext2D, 
-        progress: XXX, 
+        progress: Jigsaw, 
         options: GridControlOptions, 
         gridParams: GridParameters
     ): void {
@@ -39,7 +39,7 @@ export class JigsawGridPainterService {
         // }
     }
 
-    private drawCell(context: CanvasRenderingContext2D, cell: XCell, options: GridControlOptions, gridParams: GridParameters, gridProperties: XGridProperties) {
+    private drawCell(context: CanvasRenderingContext2D, cell: JCell, options: GridControlOptions, gridParams: GridParameters, gridProperties: JGridProperties) {
         const top = cell.y * gridParams.cellSize;
         const left = cell.x * gridParams.cellSize;
         const size = gridParams.cellSize;

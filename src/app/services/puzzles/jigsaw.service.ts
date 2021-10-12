@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { countEmptyGridCells, getMaxAnchor, makeXXXFromPuzzle, XAnswer, XCell, XCurrent, XPlacement, XXX } from 'src/app/ui/puzzle-solving/jigsaw/jigsaw-model';
+import { countEmptyGridCells, getMaxAnchor, makeJigsawFromPuzzle, JAnswer, JCell, XCurrent, JPlacement, Jigsaw } from 'src/app/ui/puzzle-solving/jigsaw/jigsaw-model';
 
 const maxAttempts = 50000;
 const delayMillis = 50;
@@ -14,22 +14,22 @@ export class JigsawService {
 
     private depth = 0;
 
-    private stack: XXX[] = [];
+    private stack: Jigsaw[] = [];
 
     // TO DO: figure out how to make the type of this readonly so subscribers can't accidentally modify the values they get
-    private bsXXX: BehaviorSubject<XXX | null> = new BehaviorSubject<XXX | null>(null);
+    private bsJigsaw: BehaviorSubject<Jigsaw | null> = new BehaviorSubject<Jigsaw | null>(null);
 
     constructor(
         //private scratchpadService: ScratchpadService,
     ) { }
 
-    public observe(): Observable<XXX> {
-        return this.bsXXX.asObservable();
+    public observe(): Observable<Jigsaw> {
+        return this.bsJigsaw.asObservable();
     }
 
     public stop() {
         this.stack = [];
-        this.bsXXX.next(null);
+        this.bsJigsaw.next(null);
     }
 
     public start(puzzle: Puzzle) {
@@ -37,13 +37,13 @@ export class JigsawService {
         this.stack = [];
 
         // make a copy of the important bits
-        const xxx = makeXXXFromPuzzle(puzzle);
+        const jigsaw = makeJigsawFromPuzzle(puzzle);
         //push it onto the stack as the first pristine grid
-        this.stack.push(xxx);
+        this.stack.push(jigsaw);
         //push a clone the stack as the first attempt
-        this.stack.push(this.cloneIt(xxx));
+        this.stack.push(this.cloneIt(jigsaw));
 
-        this.bsXXX.next(xxx);
+        this.bsJigsaw.next(jigsaw);
         this.invokePlacement();
     }
 
@@ -69,20 +69,20 @@ export class JigsawService {
         }
 
         // use the current stack frame
-        let xxx = this.stack[this.stack.length - 1];
+        let jigsaw = this.stack[this.stack.length - 1];
 
         // no empty grid cells ? return "success"
-        if (countEmptyGridCells(xxx) === 0) {
+        if (countEmptyGridCells(jigsaw) === 0) {
             // console.log(`SUCCESS: No empty cells left`);
             return;
         }
 
         // see if we have a search in progress, if not then start a new one
-        if (!xxx.current) {
-            let unplaced = xxx.answers.find(a => !a.placement);
+        if (!jigsaw.current) {
+            let unplaced = jigsaw.answers.find(a => !a.placement);
 
             if (unplaced) {
-                xxx.current = {
+                jigsaw.current = {
                     answer: this.cloneIt(unplaced),
                     attemptedPlacements: []
                 }
@@ -94,12 +94,12 @@ export class JigsawService {
         }
 
         // try and find a place for this answer in the grid
-        let placement = this.tryPlacement(xxx.current, xxx);
+        let placement = this.tryPlacement(jigsaw.current, jigsaw);
 
         if (placement) {
             //found a place, so push and continue
             // create a clone of current frame
-            let clone: XXX = this.cloneIt(xxx);
+            let clone: Jigsaw = this.cloneIt(jigsaw);
 
             // update it with the placement
             let clue = clone.answers.find(c => c.clueId === placement.clueId);
@@ -115,12 +115,12 @@ export class JigsawService {
             this.stack.push(clone)
 
             // raise an event
-            this.bsXXX.next(this.cloneIt(clone));
+            this.bsJigsaw.next(this.cloneIt(clone));
 
         } else {
             // failed to find a place so at a dead end, abandon this branch
             this.stack.pop();
-            this.bsXXX.next(this.cloneIt(this.stack[this.stack.length - 1]));
+            this.bsJigsaw.next(this.cloneIt(this.stack[this.stack.length - 1]));
             this.invokePlacement();
             return;
     }
@@ -129,20 +129,20 @@ export class JigsawService {
         this.invokePlacement();
     }
 
-    private tryPlacement(current: XCurrent, xxx: XXX): XPlacement {
+    private tryPlacement(current: XCurrent, jigsaw: Jigsaw): JPlacement {
 
-        let placement = this.tryAcrossPlacement(xxx, current);
+        let placement = this.tryAcrossPlacement(jigsaw, current);
 
         if (!placement) {
-            placement = this.tryDownPlacement(xxx, current);
+            placement = this.tryDownPlacement(jigsaw, current);
         }
 
         return placement;
     }
 
-    private tryAcrossPlacement(xxx: XXX, current: XCurrent): XPlacement | null {
-        const maxAnchor = getMaxAnchor(xxx.cells);
-        let result: XPlacement | null = null;
+    private tryAcrossPlacement(jigsaw: Jigsaw, current: XCurrent): JPlacement | null {
+        const maxAnchor = getMaxAnchor(jigsaw.cells);
+        let result: JPlacement | null = null;
 
         for (let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
             let alreadyTried = current.attemptedPlacements.find(p => p.anchor === anchor && p.direction === "across");
@@ -150,7 +150,7 @@ export class JigsawService {
             if (!alreadyTried) {
                 current.attemptedPlacements.push({anchor, direction: "across" })
                 
-                if (this.tryAcrossFit(xxx, current.answer, anchor)) {
+                if (this.tryAcrossFit(jigsaw, current.answer, anchor)) {
                     result = {
                         clueId: current.answer.clueId,
                         anchor,
@@ -162,16 +162,16 @@ export class JigsawService {
         return result;
     }
 
-    private tryDownPlacement(xxx: XXX, current: XCurrent): XPlacement | null {
-        const maxAnchor = getMaxAnchor(xxx.cells);
-        let result: XPlacement | null = null;
+    private tryDownPlacement(jigsaw: Jigsaw, current: XCurrent): JPlacement | null {
+        const maxAnchor = getMaxAnchor(jigsaw.cells);
+        let result: JPlacement | null = null;
 
         for (let anchor = 1; anchor <= maxAnchor && !result; anchor++) {
             let alreadyTried = current.attemptedPlacements.find(p => p.anchor === anchor && p.direction === "down");
 
             if (!alreadyTried) {
                 current.attemptedPlacements.push({anchor, direction: "down" })
-                if (this.tryDownFit(xxx, current.answer, anchor)) {
+                if (this.tryDownFit(jigsaw, current.answer, anchor)) {
                     result = {
                         clueId: current.answer.clueId,
                         anchor,
@@ -183,17 +183,17 @@ export class JigsawService {
         return result;
     }
 
-    private tryAcrossFit(xxx: XXX, answer: XAnswer, anchor): boolean {
-        const entry = this.getAcrossEntry(xxx, anchor);
+    private tryAcrossFit(jigsaw: Jigsaw, answer: JAnswer, anchor): boolean {
+        const entry = this.getAcrossEntry(jigsaw, anchor);
         return this.tryFit(answer, entry);
     }
 
-    private tryDownFit(xxx: XXX, answer: XAnswer, anchor: number): boolean {
-        const entry = this.getDownEntry(xxx, anchor);
+    private tryDownFit(jigsaw: Jigsaw, answer: JAnswer, anchor: number): boolean {
+        const entry = this.getDownEntry(jigsaw, anchor);
         return this.tryFit(answer, entry);
     }
 
-    private tryFit(answer: XAnswer, entry: XCell[]): boolean {
+    private tryFit(answer: JAnswer, entry: JCell[]): boolean {
         let isFit = true;
 
         if (entry.length < 2 || entry.length !== answer.text.length) {
@@ -211,13 +211,13 @@ export class JigsawService {
         return isFit;
     }
 
-    private getAcrossEntry(xxx: XXX, anchor): XCell[] {
-        const startCell = xxx.cells.find(c => c.anchor === anchor);
-        const cells = xxx.cells;
-        let result: XCell[] = [];
+    private getAcrossEntry(jigsaw: Jigsaw, anchor): JCell[] {
+        const startCell = jigsaw.cells.find(c => c.anchor === anchor);
+        const cells = jigsaw.cells;
+        let result: JCell[] = [];
 
         if (startCell.x > 0) {
-            const prev = xxx.cells.find(c => c.y === startCell.y && c.x === startCell.x - 1);
+            const prev = jigsaw.cells.find(c => c.y === startCell.y && c.x === startCell.x - 1);
             if (prev.light || prev.rightBar) {
                 return [];
             }
@@ -225,7 +225,7 @@ export class JigsawService {
 
         for (
             let x = startCell.x;
-            x < xxx.properties.across;
+            x < jigsaw.properties.across;
             x++
         ) {
             let cell = cells.find(c => c.x === x && c.y === startCell.y);
@@ -244,13 +244,13 @@ export class JigsawService {
         return result;
     }
 
-    private getDownEntry(xxx: XXX, anchor): XCell[] {
-        const startCell = xxx.cells.find(c => c.anchor === anchor);
-        const cells = xxx.cells;
-        let result: XCell[] = [];
+    private getDownEntry(jigsaw: Jigsaw, anchor): JCell[] {
+        const startCell = jigsaw.cells.find(c => c.anchor === anchor);
+        const cells = jigsaw.cells;
+        let result: JCell[] = [];
 
         if (startCell.y > 0) {
-            const prev = xxx.cells.find(c => c.x === startCell.x && c.y === startCell.y - 1);
+            const prev = jigsaw.cells.find(c => c.x === startCell.x && c.y === startCell.y - 1);
             if (prev.light || prev.rightBar) {
                 return [];
             }
@@ -258,7 +258,7 @@ export class JigsawService {
 
         for (
             let y = startCell.y;
-            y < xxx.properties.down;
+            y < jigsaw.properties.down;
             y++
         ) {
             let cell = cells.find(c => c.y === y && c.x === startCell.x);
@@ -277,15 +277,15 @@ export class JigsawService {
         return result;
     }
 
-    private syncGrid(xxx: XXX) {
-        xxx.cells.forEach(c => c.content = null);
+    private syncGrid(jigsaw: Jigsaw) {
+        jigsaw.cells.forEach(c => c.content = null);
 
-        xxx.answers
+        jigsaw.answers
             .filter(a => a.placement)
             .forEach(answer => {
                 let entry = answer.placement.direction === "across" ?
-                    this.getAcrossEntry(xxx, answer.placement.anchor) :
-                    this.getDownEntry(xxx, answer.placement.anchor);
+                    this.getAcrossEntry(jigsaw, answer.placement.anchor) :
+                    this.getDownEntry(jigsaw, answer.placement.anchor);
 
                 for (let i = 0; i < entry.length; i++) {
                     entry[i].content = answer.text.charAt(i);

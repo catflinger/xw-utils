@@ -9,13 +9,7 @@ import { AppSettings } from 'src/app/services/common';
 import { AppService } from '../../../general/app.service';
 import { JigsawService } from 'src/app/services/puzzles/jigsaw.service';
 import { auditTime } from 'rxjs/operators';
-import { XXX } from '../jigsaw-model';
-
-
-// interface Light {
-//     readonly ref: GridReference,
-//     readonly cells: readonly IGridCell[]
-// };
+import { Jigsaw } from '../jigsaw-model';
 
 @Component({
     selector: 'app-grid-filler',
@@ -28,7 +22,7 @@ export class GridFillerComponent implements OnInit, OnDestroy {
 
     public appSettings: AppSettings = null;
     public puzzle: Puzzle = null;
-    public xxx: XXX = null;
+    public jigsaw: Jigsaw = null;
 
     constructor(
         private appService: AppService,
@@ -74,8 +68,8 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                     .pipe(
                         auditTime(100)
                     )
-                    .subscribe(xxx => {
-                        this.xxx = xxx;
+                    .subscribe(jigsaw => {
+                        this.jigsaw = jigsaw;
                         this.changeRef.detectChanges();
                     })
                 )
