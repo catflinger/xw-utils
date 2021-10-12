@@ -3,8 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { countEmptyGridCells, getMaxAnchor, makeXXXFromPuzzle, XAnswer, XCell, XCurrent, XPlacement, XXX } from 'src/app/ui/puzzle-solving/jigsaw/jigsaw-model';
 
-const maxAttempts = 10000;
-const delayMillis = 250;
+const maxAttempts = 50000;
+const delayMillis = 50;
 
 
 @Injectable({
@@ -210,20 +210,6 @@ export class JigsawService {
         }
         return isFit;
     }
-
-
-
-    // private countUnplacedAnswers(xxx: XXX): number {
-    //     let counter = 0;
-
-    //     xxx.answers.forEach(a => {
-    //         if (!a.placement) {
-    //             counter++;
-    //         }
-    //     })
-    //     return counter;
-    // }
-
 
     private getAcrossEntry(xxx: XXX, anchor): XCell[] {
         const startCell = xxx.cells.find(c => c.anchor === anchor);

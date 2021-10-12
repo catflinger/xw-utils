@@ -92,6 +92,11 @@ export class GridFillerComponent implements OnInit, OnDestroy {
         this.navService.navigate("back");
     }
 
+    public onSave() {
+        //this.activePuzzle.updateAndCommit(new Clear());
+        this.navService.navigate("back");
+    }
+
     public onStop() {
         this.jigsawService.stop();
     }

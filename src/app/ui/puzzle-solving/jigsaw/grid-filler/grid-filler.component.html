@@ -7,7 +7,7 @@
 
     <div class="row" *ngIf="xxx">
         <div class="col">
-            <app-jigsaw-grid-view [grid]="xxx"></app-jigsaw-grid-view>
+            <app-jigsaw-grid-view [grid]="xxx">    </app-jigsaw-grid-view>
         </div>
 
         <div class="col" *ngIf="xxx">
@@ -21,7 +21,8 @@
         <div class="col text-left">
             <button type="button" class="btn btn-primary mr-3" (click)="onStartFill()">Start</button>
             <button type="button" class="btn btn-secondary mr-3" (click)="onStop()">Stop</button>
-            <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Close</button>
+            <button type="button" class="btn btn-primary mr-3" (click)="onSave()">Save</button>
+            <button type="button" class="btn btn-primary mr-3" (click)="onBack()">Cancel</button>
         </div>
     </div>
 </div>
