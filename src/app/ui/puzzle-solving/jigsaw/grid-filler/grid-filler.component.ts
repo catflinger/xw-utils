@@ -7,7 +7,7 @@ import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.servic
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { AppService } from '../../../general/app.service';
-import { JigsawService } from 'src/app/services/puzzles/jigsaw.service';
+import { JigsawEvent, JigsawService } from 'src/app/services/puzzles/jigsaw.service';
 import { auditTime } from 'rxjs/operators';
 import { Jigsaw } from '../jigsaw-model';
 
@@ -22,7 +22,7 @@ export class GridFillerComponent implements OnInit, OnDestroy {
 
     public appSettings: AppSettings = null;
     public puzzle: Puzzle = null;
-    public jigsaw: Jigsaw = null;
+    public event: JigsawEvent = null;
 
     constructor(
         private appService: AppService,
@@ -68,8 +68,8 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                     .pipe(
                         auditTime(100)
                     )
-                    .subscribe(jigsaw => {
-                        this.jigsaw = jigsaw;
+                    .subscribe(event => {
+                        this.event = event;
                         this.changeRef.detectChanges();
                     })
                 )

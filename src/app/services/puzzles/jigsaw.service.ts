@@ -3,6 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { countEmptyGridCells, getMaxAnchor, makeJigsawFromPuzzle, JAnswer, JCell, XCurrent, JLight, Jigsaw } from 'src/app/ui/puzzle-solving/jigsaw/jigsaw-model';
 
+export type JigsawStatus = "new" | "working"| "finished";
+
+export interface JigsawEvent {
+    status: JigsawStatus,
+    jigsaw: Jigsaw | null,
+    message?: string,
+}
+
 interface Placement {
     clueId: string,
     light: JLight,
@@ -22,13 +30,13 @@ export class JigsawService {
     private stack: Jigsaw[] = [];
 
     // TO DO: figure out how to make the type of this readonly so subscribers can't accidentally modify the values they get
-    private bsJigsaw: BehaviorSubject<Jigsaw | null> = new BehaviorSubject<Jigsaw | null>(null);
+    private bsJigsaw: BehaviorSubject<JigsawEvent | null> = new BehaviorSubject<JigsawEvent | null>(null);
 
     constructor(
         //private scratchpadService: ScratchpadService,
     ) { }
 
-    public observe(): Observable<Jigsaw> {
+    public observe(): Observable<JigsawEvent | null> {
         return this.bsJigsaw.asObservable();
     }
 
@@ -43,12 +51,18 @@ export class JigsawService {
 
         // make a copy of the important bits
         const jigsaw = makeJigsawFromPuzzle(puzzle);
-        //push it onto the stack as the first pristine grid
+
+        //push it onto the stack as the first pristine grid 
+        // TO DO: do we need this, or can we make the first attempt right away?
         this.stack.push(jigsaw);
+        
         //push a clone the stack as the first attempt
         this.stack.push(this.cloneIt(jigsaw));
 
-        this.bsJigsaw.next(jigsaw);
+        this.bsJigsaw.next({
+            status: "new",
+            jigsaw
+        });
         this.invokePlacement();
     }
 
@@ -65,11 +79,22 @@ export class JigsawService {
 
         if (this.depth > maxAttempts) {
             // console.log(`Exceeded max numberof tries`);
+            this.bsJigsaw.next({
+                status: "finished",
+                jigsaw: null,
+                message: "Maximum number if attempts exceeded."
+            });
             return;
         }
 
         if (this.stack.length === 0) {
             // console.log(`Empty stack, cancelling fill`);
+            this.bsJigsaw.next({
+                status: "finished",
+                jigsaw: null,
+                message: "Nothing to do here."
+
+            });
             return;
         }
 
@@ -78,6 +103,12 @@ export class JigsawService {
 
         // no empty grid cells ? return "success"
         if (countEmptyGridCells(jigsaw) === 0) {
+            this.bsJigsaw.next({
+                status: "finished",
+                jigsaw,
+                message: "Success, the grid is full."
+
+            });
             // console.log(`SUCCESS: No empty cells left`);
             return;
         }
@@ -88,7 +119,7 @@ export class JigsawService {
 
             if (unplaced) {
                 jigsaw.current = {
-                    answer: this.cloneIt(unplaced),
+                    answer: JSON.parse(JSON.stringify(unplaced)),
                     attemptedPlacements: []
                 }
             } else {
@@ -120,12 +151,18 @@ export class JigsawService {
             this.stack.push(clone)
 
             // raise an event
-            this.bsJigsaw.next(this.cloneIt(clone));
+            this.bsJigsaw.next({
+                status: "working",
+                jigsaw: this.cloneIt(clone)
+            });
 
         } else {
             // failed to find a place so at a dead end, abandon this branch
             this.stack.pop();
-            this.bsJigsaw.next(this.cloneIt(this.stack[this.stack.length - 1]));
+            this.bsJigsaw.next({
+                status: "working",
+                jigsaw: this.cloneIt(this.stack[this.stack.length - 1])
+            });
             this.invokePlacement();
             return;
     }
@@ -304,7 +341,7 @@ export class JigsawService {
 
 
 
-    private cloneIt(src: any): any {
+    private cloneIt(src: Jigsaw): Jigsaw {
         return JSON.parse(JSON.stringify(src));
     }
 

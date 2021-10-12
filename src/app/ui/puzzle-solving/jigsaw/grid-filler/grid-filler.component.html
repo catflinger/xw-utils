@@ -5,14 +5,20 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="jigsaw">
+    <div class="row mt-3" *ngIf="event">
         <div class="col">
-            <app-jigsaw-grid-view [jigsaw]="jigsaw">    </app-jigsaw-grid-view>
+            {{event.status}} {{event.message}}
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="event">
+        <div class="col">
+            <app-jigsaw-grid-view [jigsaw]="event.jigsaw">    </app-jigsaw-grid-view>
         </div>
 
-        <div class="col" *ngIf="jigsaw">
+        <div class="col" *ngIf="event.jigsaw">
             <h5>Answers</h5>
-            <app-jigsaw-clues-view [answers]="jigsaw.answers"></app-jigsaw-clues-view>
+            <app-jigsaw-clues-view [answers]="event.jigsaw.answers"></app-jigsaw-clues-view>
         </div>
 
     </div>
