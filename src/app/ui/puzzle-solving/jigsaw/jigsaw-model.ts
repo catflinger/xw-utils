@@ -11,7 +11,7 @@ export interface JCell {
     content: string | null,
 }
 
-export interface JPlacement {
+export interface JLight {
     anchor: number,
     direction: Direction,
 }
@@ -20,7 +20,7 @@ export interface JAnswer {
     clueId: string,
     group: ClueGroup | null,
     text: string | null,
-    placement: JPlacement | null;
+    light: JLight | null;
 }
 
 export interface JGridProperties {
@@ -28,10 +28,7 @@ export interface JGridProperties {
     down: number,
     numbered: boolean,
 }
-export interface JLight {
-    anchor: number,
-    direction: Direction,
-}
+
 export interface XCurrent {
     answer: JAnswer,
     attemptedPlacements: JLight[],
@@ -42,12 +39,6 @@ export interface Jigsaw {
     cells: JCell[],
     answers: JAnswer[],
     current: XCurrent,
-}
-
-export interface JPlacement {
-    clueId: string,
-    anchor: number,     // TO DO: nake this use XLight
-    direction: Direction,
 }
 
 export function makeJigsawFromPuzzle(puzzle: Puzzle): Jigsaw {
@@ -82,7 +73,7 @@ export function makeJigsawFromPuzzle(puzzle: Puzzle): Jigsaw {
                 clueId: c.id,
                 group: c.group ? c.group : null,
                 text,
-                placement: null,
+                light: null,
                 //attemptedAcross: false,
                 //attemptedDown: false,
             });
