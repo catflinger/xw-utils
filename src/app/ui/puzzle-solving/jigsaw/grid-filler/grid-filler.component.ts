@@ -57,6 +57,7 @@ export class GridFillerComponent implements OnInit, OnDestroy {
                             //this.scratchpad = puzzle;
                             this.appSettings = appSettings;
                             this.puzzle = puzzle;
+                            this.jigsawService.usePuzzle(puzzle);
                         }
 
                         this.changeRef.detectChanges();

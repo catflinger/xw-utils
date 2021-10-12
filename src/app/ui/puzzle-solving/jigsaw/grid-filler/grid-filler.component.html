@@ -7,13 +7,13 @@
 
     <div class="row mt-3" *ngIf="event">
         <div class="col">
-            {{event.status}} {{event.message}}
-        </div>
-    </div>
-
-    <div class="row mt-3" *ngIf="event">
-        <div class="col">
             <app-jigsaw-grid-view [jigsaw]="event.jigsaw">    </app-jigsaw-grid-view>
+            <div>
+                Progress: {{event.status}}
+            </div>
+            <div>
+                {{event.message}}
+            </div>
         </div>
 
         <div class="col" *ngIf="event.jigsaw">

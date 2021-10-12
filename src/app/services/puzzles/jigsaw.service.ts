@@ -26,7 +26,7 @@ const delayMillis = 50;
 export class JigsawService {
 
     private depth = 0;
-
+    private puzzle: Puzzle | null = null;
     private stack: Jigsaw[] = [];
 
     // TO DO: figure out how to make the type of this readonly so subscribers can't accidentally modify the values they get
@@ -45,25 +45,51 @@ export class JigsawService {
         this.bsJigsaw.next(null);
     }
 
-    public start(puzzle: Puzzle) {
-        this.depth = 0;
-        this.stack = [];
+    public usePuzzle(puzzle: Puzzle) {
+        this.puzzle = puzzle;
 
-        // make a copy of the important bits
-        const jigsaw = makeJigsawFromPuzzle(puzzle);
+        this.reset();
 
-        //push it onto the stack as the first pristine grid 
-        // TO DO: do we need this, or can we make the first attempt right away?
-        this.stack.push(jigsaw);
-        
-        //push a clone the stack as the first attempt
-        this.stack.push(this.cloneIt(jigsaw));
+        const jigsaw = this.stack.length ?
+            this.stack[this.stack.length - 1] :
+            null;
 
         this.bsJigsaw.next({
             status: "new",
             jigsaw
         });
+}
+
+    public start(puzzle: Puzzle) {
+        this.reset();
+
+        const jigsaw = this.stack.length ?
+            this.stack[this.stack.length - 1] :
+            null;
+
+        //push a clone the stack as the first attempt
+        // TO DO: do we need this, or can we make the first attempt right away?
+        this.stack.push(this.cloneIt(jigsaw));
+
+        this.bsJigsaw.next({
+            status: "working",
+            jigsaw
+        });
+        
         this.invokePlacement();
+    }
+
+    private reset() {
+        this.depth = 0;
+        this.stack = [];
+
+        if (this.puzzle) {
+            // make a copy of the important bits
+            const jigsaw = makeJigsawFromPuzzle(this.puzzle);
+
+            //push it onto the stack as the first pristine grid 
+            this.stack.push(jigsaw);
+        }
     }
 
     private invokePlacement() {
