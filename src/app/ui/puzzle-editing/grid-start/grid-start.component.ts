@@ -20,8 +20,8 @@ import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
 export class GridStartComponent implements OnInit, OnDestroy {
     public readonly minCellsAcross = 1;
     public readonly minCellsDown = 1;
-    public readonly maxCellsAcross = 25;
-    public readonly maxCellsDown = 25;   
+    public readonly maxCellsAcross = 30;
+    public readonly maxCellsDown = 30;
 
     public form: FormGroup;
 

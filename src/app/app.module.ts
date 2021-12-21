@@ -106,6 +106,7 @@ import { GridViewComponent } from './ui/grid/grid-view/grid-view.component';
 import { CluesViewComponent } from './ui/clues/clues-view/clues-view.component';
 import { JigsawGridViewComponent } from './ui/puzzle-solving/jigsaw/jigsaw-grid-view/jigsaw-grid-view.component';
 import { JigsawCluesViewComponent } from './ui/puzzle-solving/jigsaw/jigsaw-clues-view/jigsaw-clues-view.component';
+import { PublishOptionsFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/publish-options-form/publish-options-form.component';
 
 const quillGlobalConfig = {
     modules: {
@@ -213,6 +214,7 @@ const tracks: ReadonlyArray<NavTrack> = [
         GridFillerComponent,
         GridViewComponent,
         CluesViewComponent,
+        PublishOptionsFormComponent,
         JigsawGridViewComponent,
         JigsawCluesViewComponent,
     ],

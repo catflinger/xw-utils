@@ -2,7 +2,6 @@ import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@ang
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-puzzle-dialog',
