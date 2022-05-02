@@ -50,9 +50,11 @@ export class DiaryService {
         .then((data: DiaryResponse) => {
             if (data.success === ApiResponseStatus.authorizationFailure) {
                 return AppResultSymbols.AuthorizationFailure;
-            } else {
+            } else if (data.success === ApiResponseStatus.OK) {
                 this.bs.next(new Diary(data));
                 return AppResultSymbols.OK
+            } else {
+                return AppResultSymbols.Error;
             }
         })
         .catch(() => {

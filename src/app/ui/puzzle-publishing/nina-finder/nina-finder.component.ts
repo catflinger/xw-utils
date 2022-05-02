@@ -7,7 +7,7 @@ import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { map, reduce } from 'rxjs/operators';
+import { map, mergeMap, reduce, toArray } from 'rxjs/operators';
 
 
 class PangramLetter {
@@ -54,6 +54,8 @@ export class NinaFinderComponent implements OnInit {
     public uncheckedRowsR: string[] = [];
     public uncheckedColumnsR: string[] = [];
 
+    public diagonals: any = [];
+
     constructor(
         private navService: NavService<AppTrackData>,
         private appService: AppService,
@@ -84,6 +86,9 @@ export class NinaFinderComponent implements OnInit {
                             this.getExtractPerimiter(puzzle.grid);
                             this.extractUncheckedRows(puzzle.grid);
                             this.extractUncheckedColumns(puzzle.grid);
+
+                            this.getDiagonal(puzzle.grid)
+                            .subscribe(result => this.diagonals = result);
                         }
                     }
             ));
@@ -270,4 +275,35 @@ export class NinaFinderComponent implements OnInit {
 
         return checked;
     }
+
+    private getDiagonal(grid: Grid) {
+
+        return range(0, grid.properties.size.down)
+        .pipe(
+            mergeMap(n =>
+                range(0,Math.min(n + 1, grid.properties.size.across))
+                .pipe(
+                    map(val => grid.cellAt(val, n - val).content),
+                    reduce( (accum, val) => accum + val, ""),
+                )
+            ),
+            toArray(),
+        )
+    }
+
+    private getDiagonal2(grid: Grid) {
+
+        return range(1, grid.properties.size.across)
+        .pipe(
+            mergeMap(n =>
+                range(0, n + 1)
+                .pipe(
+                    map(val => grid.cellAt(val, n - val).content),
+                    reduce( (accum, val) => accum + val, ""),
+                )
+            ),
+            toArray(),
+        )
+    }
+
 }
