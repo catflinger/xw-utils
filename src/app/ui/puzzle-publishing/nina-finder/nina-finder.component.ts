@@ -7,7 +7,7 @@ import { AppService } from '../../general/app.service';
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { Grid } from 'src/app/model/puzzle-model/grid';
-import { map, mergeMap, reduce, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators';
 
 
 class PangramLetter {
@@ -54,7 +54,8 @@ export class NinaFinderComponent implements OnInit {
     public uncheckedRowsR: string[] = [];
     public uncheckedColumnsR: string[] = [];
 
-    public diagonals: any = [];
+    public diagonals: string[] = [];
+    public diagonals2: string[] = [];
 
     constructor(
         private navService: NavService<AppTrackData>,
@@ -87,8 +88,15 @@ export class NinaFinderComponent implements OnInit {
                             this.extractUncheckedRows(puzzle.grid);
                             this.extractUncheckedColumns(puzzle.grid);
 
-                            this.getDiagonal(puzzle.grid)
-                            .subscribe(result => this.diagonals = result);
+                            this.getDiagonals(puzzle.grid)
+                            .subscribe(result => {
+                                this.diagonals = result;
+                            });
+
+                            this.getDiagonals2(puzzle.grid)
+                            .subscribe(result => {
+                                this.diagonals2 = result;
+                            });
                         }
                     }
             ));
@@ -106,6 +114,10 @@ export class NinaFinderComponent implements OnInit {
     public onBack() {
         this.appService.clear();
         this.navService.navigate("back");
+    }
+
+    public reverseString(line: string) {
+        return [...line].reverse().join("");
     }
 
     private clearPangramCounter() {
@@ -276,14 +288,19 @@ export class NinaFinderComponent implements OnInit {
         return checked;
     }
 
-    private getDiagonal(grid: Grid) {
+    private getDiagonals(grid: Grid) {
+        const across = grid.properties.size.across;
+        const down = grid.properties.size.down;
+        const max = Math.max(across, down);
 
-        return range(0, grid.properties.size.down)
+        return range(0, max * 2)
         .pipe(
-            mergeMap(n =>
-                range(0,Math.min(n + 1, grid.properties.size.across))
+            mergeMap(x =>
+                range(0, max)
                 .pipe(
-                    map(val => grid.cellAt(val, n - val).content),
+                    map(y => grid.cellAt((x + y ) - max, max - 1 - y)),
+                    filter(cell => !!cell),
+                    map(cell => cell.content || "?"),
                     reduce( (accum, val) => accum + val, ""),
                 )
             ),
@@ -291,14 +308,19 @@ export class NinaFinderComponent implements OnInit {
         )
     }
 
-    private getDiagonal2(grid: Grid) {
+    private getDiagonals2(grid: Grid) {
+        const across = grid.properties.size.across;
+        const down = grid.properties.size.down;
+        const max = Math.max(across, down);
 
-        return range(1, grid.properties.size.across)
+        return range(0, max * 2)
         .pipe(
-            mergeMap(n =>
-                range(0, n + 1)
+            mergeMap(y =>
+                range(0, max)
                 .pipe(
-                    map(val => grid.cellAt(val, n - val).content),
+                    map(x => grid.cellAt(x, y + x - max)),
+                    filter(cell => !!cell),
+                    map(cell => cell.content || "?"),
                     reduce( (accum, val) => accum + val, ""),
                 )
             ),
