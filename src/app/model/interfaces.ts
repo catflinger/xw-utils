@@ -177,7 +177,6 @@ export interface IPublishOptions {
     textCols: Array<ITextColumn>;
     textStyles: Array<ITextStyle>;
     
-    useDefaults: boolean;
     includeGrid: boolean;
     spacing: Spacing;
 

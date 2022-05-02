@@ -107,7 +107,8 @@ function getEmptyPuzzle(): IPuzzle {
         ready: true,
         uncommitted: false,
         options: {
-            setGridRefsFromCaptionsX: true,
+            linkMethod: "auto",
+            //setGridRefsFromCaptionsX: true,
         },
         info: {
             id: "abc123",
@@ -127,7 +128,6 @@ function getEmptyPuzzle(): IPuzzle {
         publishOptions: {
             showClueCaptions: true,
             showClueGroups: true,
-            useDefaults: true,
             textStyles: [
                 {
                     name: "clue",

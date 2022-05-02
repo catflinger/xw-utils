@@ -141,17 +141,13 @@ export class TableLayout implements ContentGenerator {
     public makeTextStyleAttribute(styleName: TextStyleName, publishOptions: PublishOptions): ContentNode {
         const style = publishOptions.getStyle(styleName);
 
-        return publishOptions.useDefaults ? 
-            new Attribute("class", style.class) :
-            new Attribute("style", style.toCssStyleString());
+        return new Attribute("style", style.toCssStyleString());
     }
 
     public makeChunkStyleAttribute(chunk: TextChunk, publishOptions: PublishOptions): ContentNode {
         const clueStyle = publishOptions.getStyle("clue");
         const definitionStyle = publishOptions.getStyle("definition");
 
-        return publishOptions.useDefaults ? 
-            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
+        return new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString());
     }
 }

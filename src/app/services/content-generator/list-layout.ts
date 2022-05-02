@@ -72,18 +72,14 @@ export class ListLayout implements ContentGenerator {
                 new Tag("span",
                     new Text(clue.caption),
                     clue.caption ? new Text(". ") : null,
-                    publishOptions.useDefaults ?
-                        new Attribute("class", clueStyle.class) :
-                        new Attribute("style", clueStyle.toCssStyleString()),
+                    new Attribute("style", clueStyle.toCssStyleString()),
                 )
                 : null,
 
                 // maked-up clue text with definition
                 ...clue.chunks.map(chunk =>
                     new Tag("span",
-                        publishOptions.useDefaults ? 
-                            new Attribute("class", chunk.isDefinition ? definitionStyle.class : clueStyle.class) :
-                            new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
+                        new Attribute("style", chunk.isDefinition ? definitionStyle.toCssStyleString() : clueStyle.toCssStyleString()),
                         new Text(chunk.text),
                     )
                 ),
@@ -108,9 +104,7 @@ export class ListLayout implements ContentGenerator {
             result.push(
                 new Tag("div",
                     new Attribute("class", "fts-subgroup"),
-                    publishOptions.useDefaults ? 
-                        new Attribute("class", answerStyle.class) :
-                        new Attribute("style", answerStyle.toCssStyleString()),
+                    new Attribute("style", answerStyle.toCssStyleString()),
                 new Text(answer),
             )));
 

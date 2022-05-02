@@ -63,6 +63,7 @@ function emptyGridData(): IGrid {
 
     let grid: IGrid = {
         properties: {
+            numbered: true,
             style: "standard",
             symmetrical: false,
             size: {
@@ -112,7 +113,8 @@ function getEmptyPuzzle(): IPuzzle {
             instructions: null,
         },
         options: {
-            setGridRefsFromCaptions: true,
+            linkMethod: "auto",
+            //setGridRefsFromCaptions: true,
         },
         provision: null,
         notes: {
@@ -121,6 +123,8 @@ function getEmptyPuzzle(): IPuzzle {
             footer:  { ops:[] },
         },
         publishOptions: {
+            showClueCaptions: true,
+            showClueGroups: true,
             textStyles: [
                 {
                     name: "clue",
@@ -156,7 +160,6 @@ function getEmptyPuzzle(): IPuzzle {
             includeGrid: false,
             layout: "table",
             spacing: "small",
-            useDefaults: false,
         },
     };
 }

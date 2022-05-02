@@ -108,7 +108,8 @@ function getEmptyPuzzle(): IPuzzle {
         ready: true,
         uncommitted: false,
         options: {
-            setGridRefsFromCaptionsX: true,
+            linkMethod: "auto",
+            //setGridRefsFromCaptionsX: true,
         },
         info: {
             id: "abc123",
@@ -163,7 +164,6 @@ function getEmptyPuzzle(): IPuzzle {
             includeGrid: false,
             layout: "table",
             spacing: "small",
-            useDefaults: false,
         },
     };
 }

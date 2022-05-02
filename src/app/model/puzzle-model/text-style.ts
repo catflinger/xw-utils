@@ -24,7 +24,7 @@ export const fifteensquaredDefinitionStyle = {
     color: fifteenSquaredBlue,
     bold: false,
     italic: false,
-    underline: false,
+    underline: true,
     class: "fts-definition",
 };
 

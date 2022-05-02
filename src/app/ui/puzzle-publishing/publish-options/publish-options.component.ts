@@ -7,7 +7,6 @@ import { UpdatePublsihOptions } from 'src/app//modifiers/publish-options-modifie
 import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { UpdatePublsihOptionTextStyle } from 'src/app/modifiers/publish-options-modifiers/update-publish-option-text-style';
-import { fifteenSquaredBlack, fifteenSquaredBlue } from '../../common';
 import { PublishOptions } from 'src/app/model/puzzle-model/publish-options';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fifteensquaredAnswerStyle, fifteensquaredClueStyle, fifteensquaredDefinitionStyle } from 'src/app/model/puzzle-model/text-style';
@@ -82,7 +81,6 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                                 includeGrid: puzzle.publishOptions.includeGrid, 
                                 layout: puzzle.publishOptions.layout, 
                                 spacing: puzzle.publishOptions.spacing,
-                                useDefaults: puzzle.publishOptions.useDefaults,
                                 showClueGroups: puzzle.publishOptions.showClueGroups,
                                 showClueCaptions: puzzle.publishOptions.showClueCaptions,
                                 answerStyle: puzzle.publishOptions.answerStyle,

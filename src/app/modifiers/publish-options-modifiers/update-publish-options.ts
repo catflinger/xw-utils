@@ -6,7 +6,6 @@ export type PublishOptionsUpdate = {
     includeGrid?: boolean; 
     layout?: Layouts; 
     spacing?: Spacing;
-    useDefaults?: boolean;
     showClueGroups?: boolean;
     showClueCaptions?: boolean;
 };
@@ -29,10 +28,6 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
 
         if (typeof this.options.spacing !== "undefined" && this.options.spacing !== null) {
             puzzle.publishOptions.spacing = this.options.spacing;
-        }
-
-        if (typeof this.options.useDefaults !== "undefined") {
-            puzzle.publishOptions.useDefaults = !!this.options.useDefaults;
         }
 
         if (typeof this.options.showClueCaptions !== "undefined") {

@@ -145,6 +145,8 @@ function getEmptyPuzzle(): IPuzzle {
             footer: { ops: [] },
         },
         publishOptions: {
+            showClueCaptions: true,
+            showClueGroups: true,
             textStyles: [
                 {
                     name: "clue",
@@ -180,7 +182,6 @@ function getEmptyPuzzle(): IPuzzle {
             includeGrid: false,
             layout: "table",
             spacing: "small",
-            useDefaults: false,
         },
     };
 }
