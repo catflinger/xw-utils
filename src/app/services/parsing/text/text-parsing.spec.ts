@@ -54,7 +54,7 @@ function runParser(data: any) {
 
     const service: TextParsingService = new TextParsingService(tokeniser);
 
-    let parser = service.parser(parseData, { allowPostamble: true, allowPreamble: true });
+    let parser = service.parser(parseData, { allowPostamble: true, allowPreamble: true, captionStyle: "numbered" });
     let context = parser.next();
 
     while(!context.done) {

@@ -17,10 +17,10 @@ export interface TextParsingOptions {
     captionStyle: CaptionStyle,
     allowPreamble: boolean,
     allowPostamble: boolean,
-    allowTypos: boolean,
-    azedFeatures: boolean,
-    hasLetterCount: boolean,
-    hasClueGroupHeadings: boolean,
+    allowTypos?: boolean,
+    azedFeatures?: boolean,
+    hasLetterCount?: boolean,
+    hasClueGroupHeadings?: boolean,
 }
 
 export type LineType = 

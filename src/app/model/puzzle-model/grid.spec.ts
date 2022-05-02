@@ -169,6 +169,7 @@ function emptyGridData(): IGrid {
 
     let grid: IGrid = {
         properties: {
+            numbered: true,
             style: "standard",
             symmetrical: false,
             size: {

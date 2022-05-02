@@ -145,6 +145,7 @@ function getEmptyPuzzle(): IPuzzle {
             footer: { ops: [] },
         },
         publishOptions: {
+            useThemeDefaults: false,
             showClueCaptions: true,
             showClueGroups: true,
             textStyles: [

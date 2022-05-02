@@ -5,7 +5,7 @@ export class Line {
     constructor(
         public readonly rawText: string,
         public readonly lineNumber: number,
-        public readonly options: TextParsingOptions,
+        public readonly options?: TextParsingOptions,
     ) {}
 
     public get lineType(): LineType {
