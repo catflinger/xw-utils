@@ -8,6 +8,8 @@ export type PublishOptionsUpdate = {
     spacing?: Spacing;
     showClueGroups?: boolean;
     showClueCaptions?: boolean;
+    useThemeDefaults?: boolean;
+
 };
 
 export class UpdatePublsihOptions implements IPuzzleModifier {
@@ -16,6 +18,10 @@ export class UpdatePublsihOptions implements IPuzzleModifier {
     exec(puzzle: IPuzzle) {
         if (!this.options) {
             return;
+        }
+
+        if (typeof this.options.useThemeDefaults !== "undefined") {
+            puzzle.publishOptions.useThemeDefaults = !!this.options.useThemeDefaults;
         }
 
         if (typeof this.options.includeGrid !== "undefined") {

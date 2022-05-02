@@ -38,7 +38,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
             includeGrid: null, 
             layout: null, 
             spacing: null,
-            useDefaults: null,
+            useThemeDefaults: null,
             showClueGroups: null,
             showClueCaptions: null,
             answerStyle: null,
@@ -55,8 +55,8 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
             this.saveAndCommit(values)
         ));
 
-        this.subs.push(this.form.get("useDefaults").valueChanges.subscribe(useDefaults => {
-            if (useDefaults) {
+        this.subs.push(this.form.get("useThemeDefaults").valueChanges.subscribe(useThemeDefaults => {
+            if (useThemeDefaults) {
                 this.form.patchValue({
                     answerStyle: fifteensquaredAnswerStyle,
                     clueStyle: fifteensquaredClueStyle,
@@ -86,6 +86,7 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
                                 answerStyle: puzzle.publishOptions.answerStyle,
                                 clueStyle: puzzle.publishOptions.clueStyle,
                                 definitionStyle: puzzle.publishOptions.definitionStyle,
+                                useThemeDefaults: puzzle.publishOptions.useThemeDefaults,
                             },
                             { 
                                 emitEvent: false
@@ -147,21 +148,4 @@ export class PublishOptionsComponent implements OnInit, OnDestroy {
             ),
         );
     }
-
-    // public onUseDefaultChange(event: any) {
-    //     const modifiers: IPuzzleModifier[] = [];
-
-    //     modifiers.push(new UpdatePublsihOptions(this.publishOptions));
-
-    //     if (event.target.checked) {
-    //         modifiers.push(
-    //             new UpdatePublsihOptionTextStyle("clue", fifteenSquaredBlue, false, false, false),
-    //             new UpdatePublsihOptionTextStyle("definition", fifteenSquaredBlue, false, false, true),
-    //             new UpdatePublsihOptionTextStyle("answer", fifteenSquaredBlack, true, false, false),
-
-    //         );
-    //     } 
-    //     this.activePuzzle.updateAndCommit(...modifiers);
-    // }
-
 }

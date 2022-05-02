@@ -366,6 +366,7 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 footer: new QuillDelta(),
             },
             publishOptions: {
+                useThemeDefaults: true,
                 textStyles: [
                     fifteensquaredClueStyle,
                     fifteensquaredAnswerStyle,

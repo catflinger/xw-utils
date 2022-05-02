@@ -182,6 +182,8 @@ export interface IPublishOptions {
 
     showClueGroups: boolean;
     showClueCaptions: boolean;
+
+    useThemeDefaults: boolean;
 }
 
 export interface IPuzzleAnnotation {

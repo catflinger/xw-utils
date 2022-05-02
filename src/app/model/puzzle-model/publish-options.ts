@@ -10,10 +10,12 @@ export class PublishOptions implements IPublishOptions {
     public readonly includeGrid: boolean;
     public readonly layout: Layouts;
     public readonly spacing: Spacing;
+    public readonly useThemeDefaults: boolean;
 
 
     constructor(data) {
         this.includeGrid = !!(data.includeGrid);
+        this.useThemeDefaults = typeof data.useThemeDefaults === "undefined" ? true : !!data.useThemeDefaults;
         
         this.showClueCaptions = typeof data.showClueCaptions === "undefined" ? true : !!data.showClueCaptions;
         this.showClueGroups = typeof data.showClueGroups === "undefined" ? true : !!data.showClueGroups;
