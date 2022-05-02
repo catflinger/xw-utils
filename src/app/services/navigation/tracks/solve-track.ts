@@ -46,8 +46,8 @@ export const solveTrack: NavTrack = {
         },
         {
             name: "publish",
-            type: "switch",
-            switch: {
+            type: "call",
+            call: {
                 track: "publishPostTrack",
             },
             actions: {

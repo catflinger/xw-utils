@@ -5,8 +5,9 @@ export const publishPostTrack: NavTrack = {
     start: "publish-options",
     nodes: [
         {
-            name: "exit",
-            type: "exit",
+            name: "return",
+            type: "return",
+            return: "edit",
             actions: {}
         },
         {
@@ -17,7 +18,7 @@ export const publishPostTrack: NavTrack = {
                 "continue": "publish-preamble",
                 "grid": "publish-grid",
                 "nina": "nina-finder",
-                "back": "exit",
+                "back": "return",
             }
         },
         {
