@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 
 export const apiHosts = {
     primary: "crosswords.drurys.org",
-    secondary: "drurys2.org",
+    //secondary: "drurys2.org",
     development: "localhost:44301",
 }
 

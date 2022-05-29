@@ -21,7 +21,7 @@ export class BackupService {
 
     private _bsBackupLists = {
         primary: new BehaviorSubject<BackupInfo[]>([]),
-        secondary: new BehaviorSubject<BackupInfo[]>([]),
+        //secondary: new BehaviorSubject<BackupInfo[]>([]),
         development: new BehaviorSubject<BackupInfo[]>([]),
     };
 
@@ -41,7 +41,7 @@ export class BackupService {
 
         if (creds.authenticated) {
             this.refreshBackupStore(creds.username, "primary");
-            this.refreshBackupStore(creds.username, "secondary");
+            //this.refreshBackupStore(creds.username, "secondary");
 
             if (!environment.production) {
                 this.refreshBackupStore(creds.username, "development");
@@ -52,16 +52,16 @@ export class BackupService {
     public observe(): Observable<BackupInfo[]> {
         return combineLatest([
             this._bsBackupLists.primary.asObservable(),
-            this._bsBackupLists.secondary.asObservable(),
+            //this._bsBackupLists.secondary.asObservable(),
             this._bsBackupLists.development.asObservable(),
             ])
             .pipe(map((vals) => {
                 const a = vals[0];
                 const b = vals[1];
-                const c = vals[2];
+                //const c = vals[2];
 
                 let result: BackupInfo[] = [];
-                return result.concat(a).concat(b).concat(c);
+                return result.concat(a).concat(b); //.concat(c);
             }));
     }
 
@@ -71,9 +71,9 @@ export class BackupService {
         
         let result: BackupInfo = this.getBackupByHost("primary", id);
 
-        if(!result) {
-            result = this.getBackupByHost("secondary", id);
-        }
+        //if(!result) {
+        //    result = this.getBackupByHost("secondary", id);
+        //}
 
         if(!result && !environment.production) {
             result = this.getBackupByHost("development", id);
