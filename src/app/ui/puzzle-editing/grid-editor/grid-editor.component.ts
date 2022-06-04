@@ -77,13 +77,14 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                         if (puzzle) {
                             if (!puzzle.grid) {
                                 this.navService.goHome();
+                            } else {
+                                this.form.patchValue({title: puzzle.info.title});
+                                this.symmetrical = !!puzzle.grid.properties.symmetrical;
+                                this.numbered = puzzle.grid.properties.numbered;
+                                this.puzzle = puzzle;
+                                this.detRef.detectChanges();
                             }
-                            this.form.patchValue({title: puzzle.info.title});
-                            this.symmetrical = puzzle.grid.properties.symmetrical;
-                            this.numbered = puzzle.grid.properties.numbered;
                         }
-                        this.puzzle = puzzle;
-                        this.detRef.detectChanges();
                     }
                 ));
         }
@@ -120,6 +121,13 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("nina");
+    }
+
+    public onClone() {
+        this.appService.clear();
+        this.activePuzzle.cloneAsGrid();
+        this.appService.setAlert("info", 'A copy of the grid has been saved under the "Saved Grids" heading on this page');
+        this.navService.goHome();
     }
 
     public onClose() {

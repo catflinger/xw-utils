@@ -37,6 +37,7 @@ export abstract class IActivePuzzle {
     abstract commit(): void;
     abstract discard(): void;
     abstract updateAndCommit(...reducers: IPuzzleModifier[]): void;
+    abstract cloneAsGrid(): void;
 }
 export abstract class IPuzzleManager {
     // TO DO: rename these to make it clearer exactly what each one does
@@ -191,6 +192,19 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         }
     }
 
+    public cloneAsGrid() {
+        let puzzle = this.bsActive.value;
+
+        if (puzzle) {
+            let clone = this.getMutableCopy(this.newPuzzle("grid"));
+            
+            clone.info.title = "Copy of " + puzzle.info.title;
+            clone.grid = puzzle.grid;
+            clone.ready = true;
+            
+            this.savePuzzle(clone);
+        }
+    }
     //#endregion
 
     //#region General Puzzle management

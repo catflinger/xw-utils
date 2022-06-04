@@ -73,6 +73,13 @@ export class PublishGridComponent implements OnInit {
         this.navService.navigate("image");
     }
 
+    public onClone() {
+        this.appService.clear();
+        this.activePuzzle.cloneAsGrid();
+        this.appService.setAlert("info", 'A copy of the grid has been saved under the "Saved Grids" heading on this page');
+        this.navService.goHome();
+    }
+
     public onClearAll() {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new ClearShading());

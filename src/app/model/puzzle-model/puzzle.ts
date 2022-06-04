@@ -52,9 +52,16 @@ export class Puzzle implements IPuzzle {
         this.provision = new PuzzleProvision( data.provision || { 
             captionStyle: "numbered"
         } );
+        
         this.info = new PuzzleInfo(data.info);
-        this.notes = new PuzzleAnnotation(data.notes);
-        this.publishOptions = new PublishOptions(data.publishOptions);
+        
+        if (data.notes) {
+            this.notes = new PuzzleAnnotation(data.notes);
+        }
+        
+        if (data.publishOptions) {
+            this.publishOptions = new PublishOptions(data.publishOptions);
+        }
         this.ready = typeof data.ready === "boolean" ? data.ready : false;
 
     }

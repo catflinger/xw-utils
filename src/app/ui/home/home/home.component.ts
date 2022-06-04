@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { Subscription, combineLatest } from 'rxjs';
@@ -15,7 +15,8 @@ import { LocalStorageService } from 'src/app/services/storage/local-storage.serv
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
     public puzzleList: IPuzzleSummary[] = [];
@@ -33,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private settingsService: AppSettingsService,
         private localStotage: LocalStorageService,
+        private changeRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
@@ -53,9 +55,11 @@ export class HomeComponent implements OnInit, OnDestroy {
                         .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
                     this.gridList = list.filter(p => p.info.provider === "grid")
                         .sort((a, b) => b.info.puzzleDate.getTime() - a.info.puzzleDate.getTime() );
+                    this.changeRef.detectChanges();
                 },
                 error => {
                     this.appService.setAlert("danger", error.toString()); 
+                    this.changeRef.detectChanges();
                 }
             )
         );
@@ -76,6 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 } else {
                     this.navService.beginTrack("createPuzzleTrack", {}, "hub");
                 }
+                this.changeRef.detectChanges();
             }
         })
         .catch(error => this.appService.setAlertError(`Failed to open puzzle.`, error));
@@ -88,6 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             if (puzzle) {
                 this.navService.beginTrack("gridToolTrack", {}, "edit");
             }
+            this.changeRef.detectChanges();
         });
     }
 
@@ -101,6 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id, [new UpdateInfo({ready: false})])
         .then(() => {
             this.navService.beginTrack("createPuzzleTrack", {}, "hub");
+            this.changeRef.detectChanges();
         });
     }
 
@@ -109,6 +116,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.puzzleManagement.openPuzzle(id)
         .then(() => {
             this.navService.beginTrack("publishPostTrack", {}, "publish-preview");
+            this.changeRef.detectChanges();
         });
     }
 
