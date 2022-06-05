@@ -119,7 +119,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onTabChange(event: NgbTabChangeEvent) {
         this.appService.clear();
         //this.tool = event.nextId as ToolType;
-        this.options.hideShading = event.nextId !== "color";
+        //this.options.hideShading = event.nextId !== "color";
         this.activePuzzle.updateAndCommit(new Clear());
         this.detRef.detectChanges();
     }
