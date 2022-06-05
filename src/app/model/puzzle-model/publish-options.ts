@@ -7,6 +7,7 @@ export class PublishOptions implements IPublishOptions {
     public readonly textStyles: TextStyle[];
     public readonly showClueCaptions: boolean;
     public readonly showClueGroups: boolean;
+    //public readonly showGridCaptions: boolean;
     public readonly includeGrid: boolean;
     public readonly layout: Layouts;
     public readonly spacing: Spacing;
@@ -19,6 +20,7 @@ export class PublishOptions implements IPublishOptions {
         
         this.showClueCaptions = typeof data.showClueCaptions === "undefined" ? true : !!data.showClueCaptions;
         this.showClueGroups = typeof data.showClueGroups === "undefined" ? true : !!data.showClueGroups;
+        //this.showGridCaptions = typeof data.showGridCaptions === "undefined" ? true : !!data.showGridCaptions;
         
         this.layout = data.layout ? data.layout : "table";
         this.spacing = data.spacing ? data.spacing : "medium";

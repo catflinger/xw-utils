@@ -53,10 +53,6 @@
                         <span *ngIf="!barred">lights and dark cells</span>
                     </div>
                     <div class="form-check mt-5">
-                        <input id="numbered" type="checkbox" class="form-check-input" [checked]="numbered" (change)="onNumbered()"/>
-                        <label for="numbered" class="form-check-label">Grid has numbers</label>
-                    </div>
-                    <div class="form-check mt-5">
                         <input id="symmetrical" type="checkbox" class="form-check-input" [checked]="symmetrical" (change)="onSymmetrical(!symmetrical)"/>
                         <label for="symmetrical" class="form-check-label">Grid is symmetrical </label>
                     </div>
@@ -135,6 +131,42 @@
                     </form>
                 </ng-template>
             </li>
+
+            <li ngbNavItem="captions">
+                <a ngbNavLink>Numbers</a>
+                <ng-template ngbNavContent>
+                    <div class="form-check mt-5">
+                        <input id="showCaptions" type="checkbox" class="form-check-input" [checked]="showCaptions" (change)="onShowCaptions()"/>
+                        <label for="showCaptions" class="form-check-label">Show grid numbers</label>
+                    </div>
+
+                    <div class="form-check mt-5">
+                        <input id="numbered" type="checkbox" class="form-check-input" [checked]="numbered" (change)="onNumbered()"/>
+                        <label for="numbered" class="form-check-label">Number cells automatically</label>
+                    </div>
+
+                    <div class="mt-5" [style.display]="!numbered ? 'block' : 'none'">
+                        
+                        <div [formGroup]="captionForm">
+                            <div class="form-group mt-3">
+                                <label for="title">Click a cell and enter a new caption</label>
+                                <input #captionControl id="title" type="text" [maxLength]="2" class="form-control" formControlName="caption">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-outline-primary" [disabled]="!form.valid" (click)="onCaptionSubmit()">Update</button>
+                            </div>
+        
+                            <div class="form-group">
+                                <button type="button" class="btn btn-outline-primary" (click)="onClearCaptions()">Clear all</button>
+                            </div>
+        
+                        </div>
+                    </div>
+                    
+
+                </ng-template>
+            </li>
+
         </ul>
 
         <div [ngbNavOutlet]="nav" class="my-3"></div>

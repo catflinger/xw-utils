@@ -19,8 +19,11 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { IPuzzleModifier } from 'src/app/modifiers/puzzle-modifier';
 import { GridComponent, BarClickEvent, GridTextEvent, GridNavigationEvent } from '../../grid/grid/grid.component';
+import { SetGridCaptions } from 'src/app/modifiers/grid-modifiers/set-grid-captions';
+import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cells-for-edit';
+import { ClearGridCaptions } from 'src/app/modifiers/grid-modifiers/clear-grid-captions';
 
-type ToolType = "grid" | "text" | "color" | "properties";
+type ToolType = "grid" | "text" | "color" | "properties" | "captions";
 
 @Component({
     selector: 'app-grid-editor',
@@ -31,9 +34,11 @@ type ToolType = "grid" | "text" | "color" | "properties";
 export class GridEditorComponent implements OnInit, OnDestroy {
     public puzzle: Puzzle = null;
     public form: FormGroup;
+    public captionForm: FormGroup;
     public symmetrical: boolean = true;
     public numbered: boolean = true;
-    public options: GridControlOptions = { editor: GridEditors.cellEditor, hideShading: true };
+    public showCaptions: boolean = true;
+    public options: GridControlOptions = { editor: GridEditors.cellEditor };
     public gridEditors = GridEditors;
     public shadingColor: string;
 
@@ -42,6 +47,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     @ViewChild("downloadLink", { static: false }) downloadLink: ElementRef;
     @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
+    @ViewChild("captionControl", { static: false }) captionControl : ElementRef;
 
     private subs: Subscription[] = [];
     public tool: ToolType = "grid";
@@ -63,6 +69,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             title: ["", Validators.required],
         });
 
+        this.captionForm = this.formBuilder.group({
+            caption: ["", Validators.maxLength(2)],
+        });
+
         // TO DO: record preferences for next time
         this.shadingColor = "#f0f8ff";
 
@@ -78,9 +88,12 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                             if (!puzzle.grid) {
                                 this.navService.goHome();
                             } else {
+                                const selectedCell = puzzle.grid.cells.find(c => c.highlight);
                                 this.form.patchValue({title: puzzle.info.title});
+                                this.captionForm.patchValue({caption: selectedCell?.caption});
                                 this.symmetrical = !!puzzle.grid.properties.symmetrical;
                                 this.numbered = puzzle.grid.properties.numbered;
+                                this.showCaptions = puzzle.grid.properties.showCaptions;
                                 this.puzzle = puzzle;
                                 this.detRef.detectChanges();
                             }
@@ -143,6 +156,22 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         }));
     }
 
+    public onCaptionSubmit() {
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(
+            new UpdateCell(
+                this.puzzle.grid.cells.find(c => c.highlight)?.id,
+                { caption: this.captionForm.value.caption }
+            ),
+            new Clear(),
+        );
+    }
+
+    public onClearCaptions() {
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(new ClearGridCaptions());
+    }
+
     public onSymmetrical(val: boolean) {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new UpdateGridProperties({
@@ -156,6 +185,16 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.activePuzzle.updateAndCommit(
             new UpdateGridProperties({ numbered: !this.numbered }),
             new RenumberGid(),
+            new SetGridCaptions(),
+            new Clear(),
+        );
+    }
+
+    public onShowCaptions() {
+        // TO DO: Use reactive forms and observe grid properties
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(
+            new UpdateGridProperties({ showCaptions: !this.showCaptions }),
         );
     }
 
@@ -195,6 +234,16 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             case "color":
                 let color: string = cell.shading && cell.shading === this.shadingColor ? null : this.shadingColor;
                 this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
+                break;
+                        
+            case "captions":
+                if (!this.numbered) {
+                    this.activePuzzle.updateAndCommit(new SelectCellsForEdit([cell]));
+                    if (this.captionControl) {
+                        this.captionControl.nativeElement.focus();
+                    }
+                }
+
                 break;
                         
             default:

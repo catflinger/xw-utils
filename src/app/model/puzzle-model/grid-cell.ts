@@ -5,6 +5,7 @@ export class GridCell implements IGridCell {
     public readonly x: number;
     public readonly y: number;
     public readonly anchor: number;
+    public readonly caption: string;
     public readonly content: string;
     public readonly light: boolean;
     public readonly rightBar: boolean;
@@ -17,6 +18,8 @@ export class GridCell implements IGridCell {
         this.id = data.id;
         this.x = data.x;
         this.y = data.y;
+        this.anchor = data.anchor ?? 0;
+        this.caption = data.caption ?? null;
         this.content = data.content;
         this.light = data.light;
         this.rightBar = data.rightBar;

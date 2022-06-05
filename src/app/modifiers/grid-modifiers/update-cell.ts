@@ -6,7 +6,7 @@ export class UpdateCell implements IPuzzleModifier {
         public cellId: string,
         public args: {
             shading?: string,
-            caption?: number,
+            caption?: string,
             content?: string,
             light?: boolean,
             rightBar?: boolean,
@@ -23,7 +23,7 @@ export class UpdateCell implements IPuzzleModifier {
                     cell.shading = this.args.shading;
                 }
                 if (this.args.caption !== undefined) {
-                    cell.anchor = this.args.caption;
+                    cell.caption = this.args.caption;
                 }
                 if (this.args.content !== undefined) {
                     cell.content = this.args.content;

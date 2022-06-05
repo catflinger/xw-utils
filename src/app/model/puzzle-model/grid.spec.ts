@@ -187,6 +187,7 @@ function emptyGridData(): IGrid {
                 x,
                 y,
                 anchor: null,
+                caption: null,
                 content: "",
                 rightBar: false,
                 bottomBar: false,

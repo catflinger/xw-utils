@@ -11,6 +11,7 @@ import { GridStyles, IGridCell } from 'src/app/model/interfaces';
 import { UpdateInfo } from 'src/app//modifiers/puzzle-modifiers/update-info';
 import { AppService } from '../../general/app.service';
 import { RenumberGid } from 'src/app/modifiers/grid-modifiers/renumber-grid';
+import { SetGridCaptions } from 'src/app/modifiers/grid-modifiers/set-grid-captions';
 
 @Component({
     selector: 'app-grid-start',
@@ -105,18 +106,21 @@ export class GridStartComponent implements OnInit, OnDestroy {
             },
             symmetrical: this.form.value.symmetrical,
             numbered: this.form.value.numbered,
+            showCaptions: true,
         });
 
         if (this.activePuzzle.hasPuzzle) {
             this.activePuzzle.updateAndCommit(
                 new AddGrid({ grid }),
-                new RenumberGid()
+                new RenumberGid(),
+                new SetGridCaptions(),
             );
         } else {
             this.puzzleManager.newPuzzle("grid", [
                 new AddGrid({grid}),
                 new UpdateInfo({title: this.form.value.title}),
-                new RenumberGid()
+                new RenumberGid(),
+                new SetGridCaptions(),
             ]);
         }
 
@@ -135,7 +139,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
                     x,
                     y,
                     anchor: null,
-                    //caption: null,
+                    caption: null,
                     content: "",
                     light: true,
                     rightBar: false,

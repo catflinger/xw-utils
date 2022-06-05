@@ -182,6 +182,7 @@ export interface IPublishOptions {
 
     showClueGroups: boolean;
     showClueCaptions: boolean;
+    //showGridCaptions: boolean;
 
     useThemeDefaults: boolean;
 }
@@ -209,8 +210,12 @@ export interface IGridCell {
     x: number;
     y: number;
 
-    // the grid number: having a non-zero grid number marks the cell as the start of an across or down light
+    // having a non-zero anchor marks the cell as the start of an across or down light
+    // these anchors are always present and predictably numbered, even if the grid is displayed without them
     anchor: number;
+
+    // the grid caption: this is the small text to display in the top-left corner, usually just the the anchor number
+    caption: string;
 
     // the letter(s) the cell contains (normally the answer to a clue)
     content: string;
@@ -237,6 +242,7 @@ export interface IGridProperties {
     size: IGridSize;
     symmetrical: boolean;
     numbered: boolean;
+    showCaptions: boolean;
 }
 
 export interface IGrid {

@@ -11,6 +11,7 @@ import { BarClickEvent } from 'src/app/ui/grid/grid/grid.component';
 import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdateGridProperties } from 'src/app/modifiers/grid-modifiers/updare-grid-properties';
+import { UpdatePublsihOptions } from 'src/app/modifiers/publish-options-modifiers/update-publish-options';
 
 @Component({
     selector: 'app-grid-form',
@@ -36,20 +37,19 @@ export class GridFormComponent extends TabbedDialogFormBase implements OnInit, O
     }
 
     public ngOnInit() {
-        this.form = this.fb.group({ numbered: false });
+        this.form = this.fb.group({ showGridCaptions: false });
 
         this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
             this.puzzle = puzzle;
             if (puzzle) {
-                this.form.patchValue({ numbered: puzzle.grid.properties.numbered}, { emitEvent: false });
+                this.form.patchValue({ showGridCaptions: puzzle.grid.properties.showCaptions}, { emitEvent: false });
                 this.changeRef.detectChanges();
             }
         }));
 
         this.subs.push(this.form.valueChanges.subscribe(val => {
             this.activePuzzle.updateAndCommit(
-                new UpdateGridProperties({numbered: val.numbered}),
-                new RenumberGid()
+                new UpdateGridProperties({showCaptions: val.showGridCaptions}),
             );
         }));
     }
