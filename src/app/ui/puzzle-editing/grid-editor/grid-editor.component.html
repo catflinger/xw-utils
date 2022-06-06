@@ -6,27 +6,9 @@
 
 <div class="row justify-content-center" *ngIf="puzzle">
     <div class="col">
-        <app-grid 
-            #gridControl
-            (cellClick)="onCellClick($event)" 
-            (barClick)="onBarClick($event)" 
-            (gridText)="onGridText($event)" 
-            (gridNavigation)="onGridNavigation($event)" 
-            [options]="options">
+        <app-grid #gridControl (cellClick)="onCellClick($event)" (barClick)="onBarClick($event)"
+            (gridText)="onGridText($event)" (gridNavigation)="onGridNavigation($event)" [options]="options">
         </app-grid>
-    </div>
-
-    <div class="col-2">
-        <div>
-            <button type="button" class="btn btn-outline-primary" (click)="onNina()">Nina Helper</button>
-        </div>
-        <div class="mt-3">
-            <button type="button" class="btn btn-outline-primary" (click)="onDownload()">Download image</button>
-        </div>
-        <div class="mt-3">
-            <button type="button" class="btn btn-outline-primary mt-3" (click)="onClone()" title="Make another copy of this grid and save it to your home page">Clone grid</button>
-        </div>
-
     </div>
 
     <div class="col">
@@ -53,7 +35,8 @@
                         <span *ngIf="!barred">lights and dark cells</span>
                     </div>
                     <div class="form-check mt-5">
-                        <input id="symmetrical" type="checkbox" class="form-check-input" [checked]="symmetrical" (change)="onSymmetrical(!symmetrical)"/>
+                        <input id="symmetrical" type="checkbox" class="form-check-input" [checked]="symmetrical"
+                            (change)="onSymmetrical(!symmetrical)" />
                         <label for="symmetrical" class="form-check-label">Grid is symmetrical </label>
                     </div>
                 </ng-template>
@@ -75,27 +58,36 @@
                                 <li>Select cell - enter a letter then stop</li>
                                 <li>Select in sequence - move to the next cell in the grid</li>
                                 <li>Select empty cells - move to the next empty cell in the grid</li>
-                                <li>Select entries - select the entire grid entry and move to the next cell in that entry</li>
+                                <li>Select entries - select the entire grid entry and move to the next cell in that
+                                    entry</li>
                             </ul>
                         </app-tip>
 
                         <div class="form-check">
-                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <input type="radio" name="selectSingle" class="form-check-input"
+                                [value]="gridEditors.cellEditor" [(ngModel)]="options.editor"
+                                (change)="onOptionChange()">
                             <label class="form-check-label">Select cell</label>
                         </div>
 
                         <div class="form-check">
-                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <input type="radio" name="selectSingle" class="form-check-input"
+                                [value]="gridEditors.cellEditorFluid" [(ngModel)]="options.editor"
+                                (change)="onOptionChange()">
                             <label class="form-check-label">Select in sequence</label>
                         </div>
 
                         <div class="form-check">
-                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.cellEditorEmptyFluid" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <input type="radio" name="selectSingle" class="form-check-input"
+                                [value]="gridEditors.cellEditorEmptyFluid" [(ngModel)]="options.editor"
+                                (change)="onOptionChange()">
                             <label class="form-check-label">Select empty cells</label>
                         </div>
 
                         <div class="form-check">
-                            <input type="radio" name="selectSingle" class="form-check-input" [value]="gridEditors.entryEditor" [(ngModel)]="options.editor" (change)="onOptionChange()">
+                            <input type="radio" name="selectSingle" class="form-check-input"
+                                [value]="gridEditors.entryEditor" [(ngModel)]="options.editor"
+                                (change)="onOptionChange()">
                             <label class="form-check-label">Select entries</label>
                         </div>
                     </div>
@@ -109,10 +101,12 @@
                         Choose a colour then click a cell to apply highlighting
                     </div>
                     <div class="mt-5">
-                        <app-color-control [(ngModel)]="shadingColor" [ngModelOptions]="{standalone: true}"></app-color-control>
+                        <app-color-control [(ngModel)]="shadingColor" [ngModelOptions]="{standalone: true}">
+                        </app-color-control>
                     </div>
                     <div class="mt-3">
-                        <button type="button" class="btn btn-link pl-1" (click)="onClearAll()">clear all shading</button>
+                        <button type="button" class="btn btn-link pl-1" (click)="onClearAll()">clear all
+                            shading</button>
                     </div>
                 </ng-template>
             </li>
@@ -126,7 +120,8 @@
                             <input id="title" type="text" class="form-control" formControlName="title">
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" [disabled]="!form.valid || form.pristine" (click)="onSubmit()">Save</button>
+                            <button type="button" class="btn btn-primary" [disabled]="!form.valid || form.pristine"
+                                (click)="onSubmit()">Save</button>
                         </div>
                     </form>
                 </ng-template>
@@ -136,34 +131,55 @@
                 <a ngbNavLink>Numbers</a>
                 <ng-template ngbNavContent>
                     <div class="form-check mt-5">
-                        <input id="showCaptions" type="checkbox" class="form-check-input" [checked]="showCaptions" (change)="onShowCaptions()"/>
+                        <input id="showCaptions" type="checkbox" class="form-check-input" [checked]="showCaptions"
+                            (change)="onShowCaptions()" />
                         <label for="showCaptions" class="form-check-label">Show grid numbers</label>
                     </div>
 
                     <div class="form-check mt-5">
-                        <input id="numbered" type="checkbox" class="form-check-input" [checked]="numbered" (change)="onNumbered()"/>
+                        <input id="numbered" type="checkbox" class="form-check-input" [checked]="numbered"
+                            (change)="onNumbered()" />
                         <label for="numbered" class="form-check-label">Number cells automatically</label>
                     </div>
 
                     <div class="mt-5" [style.display]="!numbered ? 'block' : 'none'">
-                        
+
                         <div [formGroup]="captionForm">
                             <div class="form-group mt-3">
                                 <label for="title">Click a cell and enter a new caption</label>
-                                <input #captionControl id="title" type="text" [maxLength]="2" class="form-control" formControlName="caption">
+                                <input #captionControl id="title" type="text" [maxLength]="2" class="form-control"
+                                    formControlName="caption">
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-outline-primary" [disabled]="!form.valid" (click)="onCaptionSubmit()">Apply</button>
+                                <button type="button" class="btn btn-outline-primary" [disabled]="!form.valid"
+                                    (click)="onCaptionSubmit()">Apply</button>
                             </div>
-        
+
                             <div class="form-group">
-                                <button type="button" class="btn btn-outline-primary" (click)="onClearCaptions()">Clear all</button>
+                                <button type="button" class="btn btn-link pl-1" (click)="onClearCaptions()">Clear
+                                    all</button>
                             </div>
-        
+
                         </div>
                     </div>
-                    
 
+
+                </ng-template>
+            </li>
+
+            <li ngbNavItem="cells">
+                <a ngbNavLink>Cells</a>
+                <ng-template ngbNavContent>
+                    <div class="mt-3">
+                        This tab allows you to hide a cell in the grid. This is for advanced grids where the grid may
+                        contain holes or may not be completely rectangular.
+                    </div>
+                    <div class="mt-5">
+                        Click the grid to hide/unhide a cell.
+                    </div>
+                    <div class="mt-5">
+                        <button type="button" class="btn btn-link pl-1" (click)="onClearHidden()">Remove all hidden cells</button>
+                    </div>
                 </ng-template>
             </li>
 
@@ -173,6 +189,16 @@
 
     </div>
 </div>
+
+<div class="row mt-5" *ngIf="puzzle">
+    <div class="col">
+            <button type="button" class="btn btn-outline-primary mr-3" (click)="onNina()">Nina Helper</button>
+            <button type="button" class="btn btn-outline-primary mr-3" (click)="onDownload()">Download image</button>
+            <button type="button" class="btn btn-outline-primary mr-3" (click)="onClone()"
+                title="Make another copy of this grid and save it to your home page">Clone grid</button>
+    </div>
+</div>
+
 
 <div class="row mt-5" *ngIf="puzzle">
     <div class="col">

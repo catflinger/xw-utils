@@ -63,6 +63,7 @@ export interface GridControlOptions {
     editor?: Symbol;
     size?: GridSizes;
     color?: string;
+    showHiddenCells?: boolean;
 }
 
 export const GridEditors = {

@@ -145,6 +145,7 @@ export class GridStartComponent implements OnInit, OnDestroy {
                     rightBar: false,
                     bottomBar: false,
                     highlight: false,
+                    hidden: false,
                     shading: null,
                     edit: false,
                 };

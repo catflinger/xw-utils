@@ -15,7 +15,7 @@
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">
-    <div class="col">Step 2: Add a grid (optional)</div>
+    <div class="col">Step 2: {{puzzle.grid ? 'Edit the' : 'Add a'}} grid (optional)</div>
     <div class="col" *ngIf="!puzzle.grid">
         <button type="button" class="btn btn-primary" (click)="onAddGrid()">Add grid</button>
     </div>
@@ -26,7 +26,7 @@
 </div>
 
 <div class="row mt-5" *ngIf="puzzle">
-    <div class="col">Step 3: Add some clues</div>
+    <div class="col">Step 3: {{puzzle.clues ? 'Edit the' : 'Add some'}} clues</div>
 
     <div class="col" *ngIf="puzzle.clues">
         <button type="button" class="btn btn-outline-primary mr-3" (click)="onEditClues()">Edit clues</button>

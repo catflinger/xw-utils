@@ -22,8 +22,9 @@ import { GridComponent, BarClickEvent, GridTextEvent, GridNavigationEvent } from
 import { SetGridCaptions } from 'src/app/modifiers/grid-modifiers/set-grid-captions';
 import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cells-for-edit';
 import { ClearGridCaptions } from 'src/app/modifiers/grid-modifiers/clear-grid-captions';
+import { ClearHiddenCells } from 'src/app/modifiers/grid-modifiers/clear-hidden-cells';
 
-type ToolType = "grid" | "text" | "color" | "properties" | "captions";
+type ToolType = "grid" | "text" | "color" | "properties" | "captions" | "cells";
 
 @Component({
     selector: 'app-grid-editor',
@@ -38,7 +39,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public symmetrical: boolean = true;
     public numbered: boolean = true;
     public showCaptions: boolean = true;
-    public options: GridControlOptions = { editor: GridEditors.cellEditor };
+    public options: GridControlOptions = { editor: GridEditors.cellEditor, showHiddenCells: false };
     public gridEditors = GridEditors;
     public shadingColor: string;
 
@@ -119,7 +120,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onTabChange(event: NgbTabChangeEvent) {
         this.appService.clear();
         //this.tool = event.nextId as ToolType;
-        //this.options.hideShading = event.nextId !== "color";
+        this.options.showHiddenCells = event.nextId === "cells";
         this.activePuzzle.updateAndCommit(new Clear());
         this.detRef.detectChanges();
     }
@@ -170,6 +171,11 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public onClearCaptions() {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new ClearGridCaptions());
+    }
+
+    public onClearHidden() {
+        this.appService.clear();
+        this.activePuzzle.updateAndCommit(new ClearHiddenCells());
     }
 
     public onSymmetrical(val: boolean) {
@@ -243,10 +249,18 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                         this.captionControl.nativeElement.focus();
                     }
                 }
-
                 break;
                         
-            default:
+            case "cells":
+                this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { 
+                    hidden: !cell.hidden,
+                    light: cell.hidden,
+                    shading: null,
+                    content: null,
+                }));
+                break;
+
+                default:
                 // do nothing
                 break;
         }

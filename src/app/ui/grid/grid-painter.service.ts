@@ -71,6 +71,8 @@ export class GridPainterService {
             this.drawCell(context, cell, options, gridParams, grid.properties);
         });
 
+        this.drawOuterBoders(context, grid, gridParams)
+
         if (caption) {
             this.drawGridCaption(context, caption, gridParams, grid.properties);
         }
@@ -81,7 +83,12 @@ export class GridPainterService {
         const left = cell.x * gridParams.cellSize;
         const size = gridParams.cellSize;
 
-        if (!cell.light) {
+        if (cell.hidden) {
+            if (options.showHiddenCells) {
+                this.fillCellWithHatching(context, left, top, "lightgray", gridParams);
+            }
+
+        } else if (!cell.light) {
             // blank-out  the cells that can't hold content
             this.fillCell(context, left, top, gridParams.gridColor, gridParams);
 
@@ -93,12 +100,12 @@ export class GridPainterService {
 
             // highlight cells that are in focus
             let bgColor: string = null;
-            
-            if (showConflicts && cell.hasConflict)  {
+
+            if (showConflicts && cell.hasConflict) {
                 bgColor = gridParams.conflictColor;
             } else if (cell.highlight && !hideHighlight) {
                 bgColor = gridParams.highlightColor;
-            } else if (cell.shading && !hideShading)  {
+            } else if (cell.shading && !hideShading) {
                 bgColor = cell.shading;
             }
 
@@ -144,59 +151,61 @@ export class GridPainterService {
             }
         }
 
-        // all cells get borders regardless of whether they hold content
+        if (!cell.hidden) {
 
-        // draw top border for cells at the top of the grid
-        if (cell.y === 0) {
+
+            // draw right border for all cells
             this.drawLine(
                 context,
-                [left, top - 0.5],
-                [left + size, top - 0.5],
+                [left + size - 0.5, top],
+                [left + size - 0.5, top + size],
+                gridParams.borderWidth,
+                gridParams.gridColor);
+
+            // draw bottom border for all cells
+            this.drawLine(
+                context,
+                [left, top + size - 0.5],
+                [left + size, top + size - 0.5],
                 gridParams.borderWidth,
                 gridParams.gridColor);
         }
 
-        // draw left border for cells at the left of the grid
-        if (cell.x === 0) {
-            this.drawLine(
-                context,
-                [left - 0.5, top],
-                [left - 0.5, top + size],
-                gridParams.borderWidth,
-                gridParams.gridColor);
-        }
-
-        // draw right border for all cells
-        this.drawLine(
-            context,
-            [left + size - 0.5, top],
-            [left + size - 0.5, top + size],
-            gridParams.borderWidth,
-            gridParams.gridColor);
-
-        // draw bottom border for all cells
-        this.drawLine(
-            context,
-            [left, top + size - 0.5],
-            [left + size, top + size - 0.5],
-            gridParams.borderWidth,
-            gridParams.gridColor);
     }
 
     private fillCell(context: CanvasRenderingContext2D, left: number, top: number, color: string, gridParams: GridParameters) {
         if (color) {
             context.beginPath();
             context.fillStyle = color;
-    
+
             context.rect(
                 left - 1 + gridParams.borderWidth,
                 top - 1 + gridParams.borderWidth,
                 gridParams.cellSize - gridParams.borderWidth * 2 + 1,
                 gridParams.cellSize - gridParams.borderWidth * 2 + 1);
-    
+
             context.fill();
         }
     }
+
+    private fillCellWithHatching(context: CanvasRenderingContext2D, left: number, top: number, color: string, gridParams: GridParameters) {
+        const dashLength: number = gridParams.cellSize / 10;
+
+        if (color) {
+            for (let y = top; y < top + gridParams.cellSize; y = y + dashLength) {
+                context.beginPath();
+                context.strokeStyle = color;
+                context.lineWidth = 1;
+                context.setLineDash([dashLength, dashLength]);
+                context.moveTo(left, y);
+                context.lineTo(left + gridParams.cellSize, y);
+                context.stroke();
+
+                context.setLineDash([]);
+            }
+        }
+    }
+
 
     private drawLine(context: CanvasRenderingContext2D, from: [number, number], to: [number, number], width: number, color: string) {
         context.beginPath();
@@ -246,7 +255,60 @@ export class GridPainterService {
         context.fillText(
             caption,
             textLeft,
-            gridParams.cellSize *  gridProps.size.down + gridParams.gridPadding * 2);
+            gridParams.cellSize * gridProps.size.down + gridParams.gridPadding * 2);
+
+    }
+
+    private drawOuterBoders(context: CanvasRenderingContext2D, grid: Grid, gridParams: GridParameters) {
+        grid.cells.forEach((cell) => {
+            let drawLeftBorder = false;
+            let drawTopBorder = false;
+
+            if (cell.x === 0) {
+                if (!cell.hidden) {
+                    drawLeftBorder = true;
+                }
+            } else {
+                let previousCell = grid.cellAt(cell.x - 1, cell.y);
+
+                if (!cell.hidden && previousCell.hidden) {
+                    drawLeftBorder = true;
+                }
+            }
+
+            if (cell.y === 0) {
+                if (!cell.hidden) {
+                    drawTopBorder = true;
+                }
+            } else {
+                let previousCell = grid.cellAt(cell.x, cell.y - 1);
+
+                if (!cell.hidden && previousCell.hidden) {
+                    drawTopBorder = true;
+                }
+            }
+
+            const top = cell.y * gridParams.cellSize;
+            const left = cell.x * gridParams.cellSize;
+
+            if (drawLeftBorder) {
+                this.drawLine(
+                    context,
+                    [left - 0.5, top],
+                    [left - 0.5, top + gridParams.cellSize],
+                    gridParams.borderWidth,
+                    gridParams.gridColor);
+            }
+
+            if (drawTopBorder) {
+                this.drawLine(
+                    context,
+                    [left, top - 0.5],
+                    [left + gridParams.cellSize, top - 0.5],
+                    gridParams.borderWidth,
+                    gridParams.gridColor);
+            }
+        });
 
     }
 

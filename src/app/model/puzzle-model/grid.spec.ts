@@ -172,6 +172,7 @@ function emptyGridData(): IGrid {
             numbered: true,
             style: "standard",
             symmetrical: false,
+            showCaptions: true,
             size: {
                 across: 5,
                 down: 5,
@@ -195,6 +196,7 @@ function emptyGridData(): IGrid {
                 light: true,
                 shading: "",
                 edit: false,
+                hidden: false,
             }
             grid.cells.push(cell);
         }

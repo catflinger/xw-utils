@@ -11,6 +11,7 @@ export class UpdateCell implements IPuzzleModifier {
             light?: boolean,
             rightBar?: boolean,
             bottomBar?: boolean,
+            hidden?: boolean,
         }
     ) { }
 
@@ -36,6 +37,9 @@ export class UpdateCell implements IPuzzleModifier {
                 }
                 if (this.args.bottomBar !== undefined) {
                     cell.bottomBar = this.args.bottomBar;
+                }
+                if (this.args.hidden !== undefined) {
+                    cell.hidden = this.args.hidden;
                 }
             }
         }

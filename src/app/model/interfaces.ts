@@ -226,8 +226,12 @@ export interface IGridCell {
     rightBar: boolean;
     bottomBar: boolean;
 
+    // indicates this cell is a placeholder and is not shown in the grid (useful for advanced puzzles where grid contains holes)
+    hidden: boolean;
+
     // transitory property indicating the cell is part of a user selection
     highlight: boolean;
+
     // transitory property indicating the cell is being edited
     edit: boolean;
 }
