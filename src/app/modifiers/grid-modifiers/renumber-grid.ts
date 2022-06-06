@@ -50,13 +50,13 @@ export class RenumberGid implements IPuzzleModifier {
             result = cell.light && 
                 !cell.rightBar &&
                 next &&
-                (!previous || previous.rightBar); 
+                (!previous || previous.rightBar || !previous.light); 
 
         } else if (gridStyle === "barred" && direction === "down") {
             result = cell.light && 
                 !cell.bottomBar &&
                 next &&
-                (!previous || previous.bottomBar); 
+                (!previous || previous.bottomBar || !previous.light); 
         }
 
         return result;

@@ -211,12 +211,15 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 const symCell = this.getSymCell(cell);
                 if (this.puzzle.grid.properties.style === "standard") {
                     const newVal = !cell.light;
+                    let mods: IPuzzleModifier[] = [new UpdateCell(cell.id, { light: newVal })]
 
-                    this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { light: newVal }));
                     if (symCell) {
-                        this.activePuzzle.updateAndCommit(new UpdateCell(symCell.id, { light: newVal }));
+                        mods.push(new UpdateCell(symCell.id, { light: newVal }));
                     }
-                    this.activePuzzle.updateAndCommit(new RenumberGid());
+                    mods.push(new RenumberGid());
+                    mods.push(new SetGridCaptions());
+
+                    this.activePuzzle.updateAndCommit(...mods);
                 }
                 break;
 
@@ -225,11 +228,11 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                     if (cell.highlight) {
                         // cell is already part of a text edit
                         let updates = this.gridEditor.onGridNavigation(this.puzzle, "absolute", { x: cell.x, y: cell.y});
-                        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
+                        this.activePuzzle.updateAndCommit(...updates);
                     } else {
                         // this is a new edit
                         let updates = this.gridEditor.startEdit(this.puzzle, cell);
-                        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
+                        this.activePuzzle.updateAndCommit(...updates);
                     }
 
                 } else {
@@ -252,15 +255,26 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 break;
                         
             case "cells":
-                this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { 
-                    hidden: !cell.hidden,
-                    light: cell.hidden,
-                    shading: null,
-                    content: null,
-                }));
+                let mods: IPuzzleModifier[] = [
+                    new UpdateCell(cell.id, { 
+                        hidden: !cell.hidden,
+                        light: cell.hidden,
+                        shading: null,
+                        content: null,
+                        rightBar: false,
+                        bottomBar: false,
+                    }),
+                    new RenumberGid()
+                ];
+
+                if (this.puzzle.grid.properties.numbered) {
+                    mods.push(new SetGridCaptions());
+                }
+                
+                this.activePuzzle.updateAndCommit(...mods);
                 break;
 
-                default:
+            default:
                 // do nothing
                 break;
         }
@@ -292,6 +306,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 }
             }
             updates.push(new RenumberGid());
+            updates.push(new SetGridCaptions());
 
             this.activePuzzle.updateAndCommit(...updates);
         }
@@ -308,14 +323,14 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
 
         let updates = this.gridEditor.onGridText(this.puzzle, event.text, event.writingDirection);
-        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
+        this.activePuzzle.updateAndCommit(...updates);
     }
 
     public onGridNavigation(event: GridNavigationEvent) {
         this.appService.clear();
 
         let updates = this.gridEditor.onGridNavigation(this.puzzle, event.navigation);
-        updates.forEach(update => this.activePuzzle.updateAndCommit(update));
+        this.activePuzzle.updateAndCommit(...updates);
     }
 
     public onClearAll() {
@@ -328,16 +343,6 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("image");
-
-        // this.filename = "grid-image.png";
-        // this.dataUrl = this.gridControl.getDataUrl();
-
-        // setTimeout(
-        //     () => {
-        //         this.downloadLink.nativeElement.click();
-        //     },
-        //     250
-        // );
     }
 
     private getSymCell(cell: GridCell): GridCell {
@@ -350,8 +355,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
             // use matricies and transformations?
 
             result = this.puzzle.grid.cellAt(
-                this.puzzle.grid.properties.size.across - 1 - cell.x, 
-                this.puzzle.grid.properties.size.down -  1- cell.y, 
+                this.puzzle.grid.properties.size.across - 1 - cell.x,
+                this.puzzle.grid.properties.size.down - 1 - cell.y,
             );
         }
 

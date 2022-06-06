@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { Injectable, ChangeDetectorRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageService } from '../storage/local-storage.service';
 import { Puzzle } from '../../model/puzzle-model/puzzle';
@@ -19,8 +19,8 @@ import { IPuzzle } from 'src/app/model/interfaces';
 import { QuillDelta } from 'src/app/model/puzzle-model/quill-delta';
 import { SetGridReferences } from 'src/app/modifiers/clue-modifiers/set-grid-references';
 import { SetRedirects } from 'src/app/modifiers/clue-modifiers/set-redirects';
-import { fifteenSquaredBlack, fifteenSquaredBlue } from "src/app/ui/common";
 import { RenumberGid } from "src/app/modifiers/grid-modifiers/renumber-grid";
+import { SetGridCaptions } from "src/app/modifiers/grid-modifiers/set-grid-captions";
 import { UpdateProvision } from "src/app/modifiers/puzzle-modifiers/update-provision";
 import { fifteensquaredAnswerStyle, fifteensquaredClueStyle, fifteensquaredDefinitionStyle } from "src/app/model/puzzle-model/text-style";
 
@@ -221,7 +221,12 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
         return this.localStorageService.getPuzzle(id)
         .then((puzzle) => {
             if (puzzle) {
-                this.usePuzzle(puzzle);
+
+                // TEMPORARY puzzle modofication for backward compatibility for existing puzzles from grid work June 2022
+                // these modifiers can be removed after a few weeks
+                let tempMods: IPuzzleModifier[] = [new RenumberGid(), new SetGridCaptions()];
+
+                this.usePuzzle(puzzle, tempMods);
             }
             return puzzle;
         });
