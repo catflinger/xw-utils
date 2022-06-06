@@ -1,8 +1,9 @@
 import { IClueEditorForm } from '../clue-dialog/clue-dialog.component';
 import { ClueDialogService } from '../clue-dialog.service';
-import { OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 
 // TODO: Add Angular decorator.
+@Injectable()
 export class TabbedDialogFormBase implements IClueEditorForm, OnDestroy {
     
     protected readonly instanceId: string = null;
