@@ -12,6 +12,7 @@ import { TabbedDialogFormBase } from '../tabbed-dialog-form-base';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdateGridProperties } from 'src/app/modifiers/grid-modifiers/updare-grid-properties';
 import { UpdatePublsihOptions } from 'src/app/modifiers/publish-options-modifiers/update-publish-options';
+import { SetGridCaptions } from 'src/app/modifiers/grid-modifiers/set-grid-captions';
 
 @Component({
     selector: 'app-grid-form',
@@ -65,6 +66,7 @@ export class GridFormComponent extends TabbedDialogFormBase implements OnInit, O
             this.activePuzzle.update(
                 new UpdateCell(cell.id, { light: !cell.light}),
                 new RenumberGid(),
+                new SetGridCaptions(),
             );
         }
     }
@@ -78,6 +80,7 @@ export class GridFormComponent extends TabbedDialogFormBase implements OnInit, O
             this.activePuzzle.update(
                 new UpdateCell(event.cell.id, barData),
                 new RenumberGid(),
+                new SetGridCaptions(),
             );
         }
     }
