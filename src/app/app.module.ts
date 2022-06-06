@@ -42,8 +42,6 @@ import { IndyComponent } from './ui/puzzle-editing/indy/indy.component';
 import { ConfirmModalComponent } from './ui/general/confirm-modal/confirm-modal.component';
 import { GridEditorComponent } from './ui/puzzle-editing/grid-editor/grid-editor.component';
 import { GridStartComponent } from './ui/puzzle-editing/grid-start/grid-start.component';
-import { DiaryAliasControlComponent } from './ui/diary/diary-alias-control/diary-alias-control.component';
-import { DiarySettingsEditorComponent } from './ui/diary/diary-settings-editor/diary-settings-editor.component';
 import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf.component';
 import { SpecialComponent } from './ui/puzzle-editing/special/special.component';
 import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-text.component';
@@ -63,7 +61,6 @@ import { HomeComponent } from './ui/home/home/home.component';
 import { LoginComponent } from './ui/general/login/login.component';
 import { ReadmeComponent } from './ui/home/readme/readme.component';
 import { SettingsComponent } from './ui/general/settings/settings.component';
-import { DiaryComponent } from './ui/diary/diary/diary.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
 import { ClueListItemComponent } from './ui/clues/clue-list-item/clue-list-item.component';
@@ -167,9 +164,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         ConfirmModalComponent,
         GridEditorComponent,
         GridStartComponent,
-        DiaryComponent,
-        DiaryAliasControlComponent,
-        DiarySettingsEditorComponent,
         SpecialPdfComponent,
         SpecialComponent,
         SpecialTextComponent,
