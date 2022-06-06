@@ -20,6 +20,7 @@ import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-t
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
 import { HomeComponent } from './ui/home/home/home.component';
 import { LoginComponent } from './ui/general/login/login.component';
+import { DiaryComponent } from './ui/diary/diary/diary.component';
 import { ReadmeComponent } from './ui/home/readme/readme.component';
 import { SettingsComponent } from './ui/general/settings/settings.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
@@ -90,6 +91,7 @@ const routes: Routes = [
     { path: "readme", component: ReadmeComponent },
     { path: "admin", component: AdminComponent },
 
+    { path: "diary", component: DiaryComponent },
     { path: "settings", component: SettingsComponent },
     { path: "backups", component: BackupsComponent },
     { path: "backup", component: BackupComponent },

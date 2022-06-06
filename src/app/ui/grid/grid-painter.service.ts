@@ -84,7 +84,7 @@ export class GridPainterService {
         const size = gridParams.cellSize;
 
         if (cell.hidden) {
-            if (options?.showHiddenCells) {
+            if (options.showHiddenCells) {
                 this.fillCellWithHatching(context, left, top, "lightgray", gridParams);
             }
 
@@ -93,9 +93,9 @@ export class GridPainterService {
             this.fillCell(context, left, top, gridParams.gridColor, gridParams);
 
         } else {
-            const showConflicts = options?.showConflicts;
-            const hideShading = options?.hideShading;
-            const hideHighlight = options?.hideHighlight;
+            const showConflicts = options && options.showConflicts;
+            const hideShading = options && options.hideShading;
+            const hideHighlight = options && options.hideHighlight;
             const cellText = (cell.content && cell.content.trim()) ? cell.content.trim().charAt(0) : null;
 
             // highlight cells that are in focus
