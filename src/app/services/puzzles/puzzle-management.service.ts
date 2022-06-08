@@ -248,8 +248,13 @@ export class PuzzleManagementService implements IPuzzleManager, IActivePuzzle {
                 reducers.push(new UpdateInfo({ source: pdfExtract.text }));
     
                 if (pdfExtract.grid) {
-                    let grid = new Grid(pdfExtract.grid)
-                    reducers.push(new AddGrid({ grid }));
+                    let grid = new Grid(pdfExtract.grid);
+
+                    reducers.push(
+                        new AddGrid({ grid }),
+                        new RenumberGid(),
+                        new SetGridCaptions(),
+                    );
                 }
                 return this.newPuzzle(params.provider, reducers);
             });
