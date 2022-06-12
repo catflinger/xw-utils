@@ -31,6 +31,9 @@ export class UpdateCell implements IPuzzleModifier {
                 }
                 if (this.args.light !== undefined) {
                     cell.light = this.args.light;
+                    if (!cell.light) {
+                        cell.shading = null;
+                    }
                 }
                 if (this.args.rightBar !== undefined) {
                     cell.rightBar = this.args.rightBar;

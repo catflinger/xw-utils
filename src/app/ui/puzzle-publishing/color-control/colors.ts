@@ -1,5 +1,9 @@
 import { fifteenSquaredBlack, fifteenSquaredBlue } from '../../common';
 
+export function cssColorNameFromValue(rgb: string): string {
+    return cssNamedColors.find(color => color.value === rgb)?.caption;
+}
+
 export const cssNamedColors = [
     { caption:     "fifteensquared black", value:  fifteenSquaredBlack },
     { caption:     "fifteensquared blue", value:  fifteenSquaredBlue },

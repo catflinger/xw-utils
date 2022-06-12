@@ -12,17 +12,26 @@
 
     <div class="col-2">
         <div class="mt-3">
-            <button type="button" class="btn btn-outline-primary mr-3" (click)="onDownload()" title="Take a snapshot of the grid and download it to you computer">Download image</button>
-            <button type="button" class="btn btn-outline-primary mt-3" (click)="onClone()" title="Make another copy of this grid and save it to your home page">Clone grid</button>
+            <button type="button" class="btn btn-outline-primary mr-3 mt-3" (click)="onDownload()"
+                title="Take a snapshot of the grid and download it to you computer">Download</button>
+            <button type="button" class="btn btn-outline-primary mt-3" (click)="onClone()"
+                title="Make another copy of this grid and save it to your home page">Clone grid</button>
         </div>
     </div>
 
 
     <div class="col">
         <p>shading colour</p>
-        <form>
-            <app-color-control [(ngModel)]="color" name="color"></app-color-control>
+        <form [formGroup]="form">
+            <app-color-control name="color" formControlName="color"></app-color-control>
         </form>
+        <div *ngIf="colorsUsed.length > 0">
+            <p>colours used</p>
+            <div>
+                <div class="d-inline-block border m-2" style="height:30px; width: 30px" *ngFor="let c of colorsUsed"
+                    [ngStyle]="{'background-color': c}" (click)="onColorUsed(c)" [title]="cssColorNameFromValue(c)"></div>
+            </div>
+        </div>
         <p class="mt-5"><button type="button" class="btn btn-link" (click)="onClearAll()">clear all shading</button></p>
     </div>
 </div>

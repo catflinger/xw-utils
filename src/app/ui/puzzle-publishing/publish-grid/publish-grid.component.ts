@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { UpdateCell } from 'src/app//modifiers/grid-modifiers/update-cell';
@@ -10,29 +10,37 @@ import { NavService } from '../../../services/navigation/nav.service';
 import { AppTrackData } from '../../../services/navigation/tracks/app-track-data';
 import { GridComponent } from '../../grid/grid/grid.component';
 import { Clear } from 'src/app/modifiers/puzzle-modifiers/clear';
+import { distinct, filter, map, toArray } from 'rxjs/operators';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { cssColorNameFromValue} from "../../puzzle-publishing/color-control/colors";
 
 @Component({
-  selector: 'app-publish-grid',
-  templateUrl: './publish-grid.component.html',
-  styleUrls: ['./publish-grid.component.css']
+    selector: 'app-publish-grid',
+    templateUrl: './publish-grid.component.html',
+    styleUrls: ['./publish-grid.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PublishGridComponent implements OnInit {
     public puzzle: Puzzle = null;
     private subs: Subscription[] = [];
-    public color: string;
+    public colorsUsed: string[] = [];
+    public form: FormGroup;
+    public cssColorNameFromValue = cssColorNameFromValue;
 
-    @ViewChild(GridComponent, { static: false }) 
+    @ViewChild(GridComponent, { static: false })
     public gridControl: GridComponent;
 
     constructor(
         private navService: NavService<AppTrackData>,
         private appService: AppService,
-        private activePuzzle: IActivePuzzle, 
+        private activePuzzle: IActivePuzzle,
+        private fromBuilder: FormBuilder,
+        private changeRef: ChangeDetectorRef,
     ) { }
 
     public ngOnInit() {
-        // TO DO: record preferences for next time
-        this.color = "#ffebcd";
+
+        this.form = this.fromBuilder.group({ color: "#ffebcd"});
 
         if (!this.activePuzzle.hasPuzzle) {
             this.navService.goHome();
@@ -41,20 +49,36 @@ export class PublishGridComponent implements OnInit {
                 this.activePuzzle.observe().subscribe(
                     (puzzle) => {
                         this.puzzle = puzzle;
+
+                        from(puzzle.grid.cells)
+                        .pipe(
+                            map(cell => cell.shading),
+                            filter(color => !!color),
+                            distinct(),
+                            toArray()
+                        ).subscribe(colors => {
+                            this.colorsUsed = colors;
+                            this.changeRef.detectChanges();
+                        });
+
+                        this.changeRef.detectChanges();
+
                     }
-            ));
+                ));
         }
     }
 
-    public ngOnDestroy(){
+    public ngOnDestroy() {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
     public onCellClick(cell: GridCell) {
         this.appService.clear();
         // overwrite if a new color, clear if the same color
-        let color: string = cell.shading && cell.shading === this.color ? null : this.color;
-        this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
+        let color: string = cell.shading && cell.shading === this.form.value.color ? null : this.form.value.color;
+        if (cell.light) {
+            this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
+        }
     }
 
     public onContinue() {
@@ -84,4 +108,9 @@ export class PublishGridComponent implements OnInit {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new ClearShading());
     }
+
+    public onColorUsed(color: string) {
+        this.form.patchValue({color});
+    }
+
 }

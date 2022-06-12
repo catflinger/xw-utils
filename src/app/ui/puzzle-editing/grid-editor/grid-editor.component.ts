@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { GridCell } from 'src/app/model/puzzle-model/grid-cell';
 import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
@@ -23,6 +23,8 @@ import { SetGridCaptions } from 'src/app/modifiers/grid-modifiers/set-grid-capti
 import { SelectCellsForEdit } from 'src/app/modifiers/grid-modifiers/select-cells-for-edit';
 import { ClearGridCaptions } from 'src/app/modifiers/grid-modifiers/clear-grid-captions';
 import { ClearHiddenCells } from 'src/app/modifiers/grid-modifiers/clear-hidden-cells';
+import { distinct, filter, map, toArray } from 'rxjs/operators';
+import { cssColorNameFromValue} from "../../puzzle-publishing/color-control/colors";
 
 type ToolType = "grid" | "text" | "color" | "properties" | "captions" | "cells";
 
@@ -41,10 +43,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
     public showCaptions: boolean = true;
     public options: GridControlOptions = { editor: GridEditors.cellEditor, showHiddenCells: false };
     public gridEditors = GridEditors;
-    public shadingColor: string;
 
     public dataUrl: string;
     public filename: string;
+    public cssColorNameFromValue = cssColorNameFromValue;
 
     @ViewChild("downloadLink", { static: false }) downloadLink: ElementRef;
     @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
@@ -52,7 +54,8 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
     public tool: ToolType = "grid";
-
+    public colorsUsed: string[] = [];
+    
     private gridEditor: GridEditor;
 
     constructor(
@@ -68,14 +71,12 @@ export class GridEditorComponent implements OnInit, OnDestroy {
 
         this.form = this.formBuilder.group({
             title: ["", Validators.required],
+            shadingColor: "#f0f8ff",
         });
 
         this.captionForm = this.formBuilder.group({
             caption: ["", Validators.maxLength(2)],
         });
-
-        // TO DO: record preferences for next time
-        this.shadingColor = "#f0f8ff";
 
         this.gridEditor = this.gridEditorService.getEditor(this.options.editor);
 
@@ -96,7 +97,20 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                                 this.numbered = puzzle.grid.properties.numbered;
                                 this.showCaptions = puzzle.grid.properties.showCaptions;
                                 this.puzzle = puzzle;
+                                
+                                from(puzzle.grid.cells)
+                                .pipe(
+                                    map(cell => cell.shading),
+                                    filter(color => !!color),
+                                    distinct(),
+                                    toArray()
+                                ).subscribe(colors => {
+                                    this.colorsUsed = colors;
+                                    this.detRef.detectChanges();
+                                });
+                                
                                 this.detRef.detectChanges();
+
                             }
                         }
                     }
@@ -211,7 +225,7 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 const symCell = this.getSymCell(cell);
                 if (this.puzzle.grid.properties.style === "standard") {
                     const newVal = !cell.light;
-                    let mods: IPuzzleModifier[] = [new UpdateCell(cell.id, { light: newVal })]
+                    let mods: IPuzzleModifier[] = [new UpdateCell(cell.id, { light: newVal })];
 
                     if (symCell) {
                         mods.push(new UpdateCell(symCell.id, { light: newVal }));
@@ -241,8 +255,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
                 break;
                 
             case "color":
-                let color: string = cell.shading && cell.shading === this.shadingColor ? null : this.shadingColor;
-                this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
+                let color: string = cell.shading && cell.shading === this.form.value.shadingColor ? null : this.form.value.shadingColor;
+                if (cell.light) {
+                    this.activePuzzle.updateAndCommit(new UpdateCell(cell.id, { shading: color }));
+                }
                 break;
                         
             case "captions":
@@ -343,6 +359,10 @@ export class GridEditorComponent implements OnInit, OnDestroy {
         this.appService.clear();
         this.activePuzzle.updateAndCommit(new Clear());
         this.navService.navigate("image");
+    }
+
+    public onColorUsed(color: string) {
+        this.form.patchValue({shadingColor: color});
     }
 
     private getSymCell(cell: GridCell): GridCell {
