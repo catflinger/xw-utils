@@ -18,9 +18,8 @@ import { SpecialPdfComponent } from './ui/puzzle-editing/special-pdf/special-pdf
 import { SpecialComponent } from './ui/puzzle-editing/special/special.component';
 import { SpecialTextComponent } from './ui/puzzle-editing/special-text/special-text.component';
 import { CreatePuzzleComponent } from './ui/puzzle-editing/create-puzzle/create-puzzle.component';
-import { HomeComponent } from './ui/home/home/home.component';
+import { HomeComponent } from './ui/general/home/home.component';
 import { LoginComponent } from './ui/general/login/login.component';
-import { ReadmeComponent } from './ui/home/readme/readme.component';
 import { SettingsComponent } from './ui/general/settings/settings.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
@@ -31,12 +30,8 @@ import { BackupsComponent } from './ui/backup/backups/backups.component';
 import { BackupComponent } from './ui/backup/backup/backup.component';
 import { BackupSettingsComponent } from './ui/backup/backup-settings/backup-settings.component';
 import { BackupOptionsComponent } from './ui/backup/backup-options/backup-options.component';
-import { AnnouncementsComponent } from './ui/home/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
-import { AboutComponent } from './ui/home/about/about.component';
-import { IssuesComponent } from './ui/home/issues/issues.component';
-import { AdminComponent } from './ui/general/admin/admin.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
 import { GridImageComponent } from './ui/puzzle-editing/grid-image/grid-image.component';
@@ -84,12 +79,6 @@ const routes: Routes = [
     { path: "link-error", component: LinkErrorComponent },
 
     // general
-    { path: "about", component: AboutComponent },
-    { path: "announcements", component: AnnouncementsComponent },
-    { path: "issues", component: IssuesComponent },
-    { path: "readme", component: ReadmeComponent },
-    { path: "admin", component: AdminComponent },
-
     { path: "settings", component: SettingsComponent },
     { path: "backups", component: BackupsComponent },
     { path: "backup", component: BackupComponent },

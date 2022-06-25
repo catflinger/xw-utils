@@ -57,9 +57,8 @@ import { ValidatePuzzleComponent } from './ui/puzzle-editing/validate-puzzle/val
 import { UIProcessService } from './services/navigation/ui-process.service';
 import { CluesStartComponent } from './ui/puzzle-editing/clues-start/clues-start.component';
 import { LinkErrorComponent } from './ui/puzzle-editing/link-error/link-error.component';
-import { HomeComponent } from './ui/home/home/home.component';
+import { HomeComponent } from './ui/general/home/home.component';
 import { LoginComponent } from './ui/general/login/login.component';
-import { ReadmeComponent } from './ui/home/readme/readme.component';
 import { SettingsComponent } from './ui/general/settings/settings.component';
 import { SpecialLoginComponent } from './ui/puzzle-editing/special-login/special-login.component';
 import { NavErrorComponent } from './ui/puzzle-editing/nav-error/nav-error.component';
@@ -80,16 +79,12 @@ import { BackupSettingsComponent } from './ui/backup/backup-settings/backup-sett
 import { BackupOptionsComponent } from './ui/backup/backup-options/backup-options.component';
 import { InfoPanelComponent } from './ui/general/guides/info-panel/info-panel.component';
 import { PuzzleInfoFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/puzzle-info-form/puzzle-info-form.component';
-import { AnnouncementsComponent } from './ui/home/announcements/announcements.component';
 import { PuzzleHubComponent } from './ui/puzzle-editing/puzzle-hub/puzzle-hub.component';
 import { createPuzzleTrack } from './services/navigation/tracks/create-puzzle-track';
 import { ClueEditListComponent } from './ui/clues/clue-edit-list/clue-edit-list.component';
 import { PuzzleInfoComponent } from './ui/puzzle-editing/puzzle-info/puzzle-info.component';
 import { gridToolTrack } from './services/navigation/tracks/grid-tool-track';
-import { AboutComponent } from './ui/home/about/about.component';
-import { IssuesComponent } from './ui/home/issues/issues.component';
 import { GridComponent } from './ui/grid/grid/grid.component';
-import { AdminComponent } from './ui/general/admin/admin.component';
 import { CheatFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/cheat-form/cheat-form.component';
 import { PublishPreviewComponent } from './ui/puzzle-publishing/publish-preview/publish-preview.component';
 import { NinaFinderComponent } from './ui/puzzle-publishing/nina-finder/nina-finder.component';
@@ -155,7 +150,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         ColorControlComponent,
         PublishLoginComponent,
         TipComponent,
-        ReadmeComponent,
         SettingsComponent,
         OpenPuzzleComponent,
         WordpressIdPipe,
@@ -189,13 +183,9 @@ const tracks: ReadonlyArray<NavTrack> = [
         BackupOptionsComponent,
         InfoPanelComponent,
         PuzzleInfoFormComponent,
-        AnnouncementsComponent,
         PuzzleHubComponent,
         ClueEditListComponent,
         PuzzleInfoComponent,
-        AboutComponent,
-        IssuesComponent,
-        AdminComponent,
         CheatFormComponent,
         PublishPreviewComponent,
         NinaFinderComponent,

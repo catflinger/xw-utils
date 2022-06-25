@@ -191,6 +191,8 @@ export class NavService<T> {
             defaultIfEmpty(null)
         )
         .subscribe(queryString => {
+            this.callStack = null;
+            
             if (queryString) {
                 this.router.navigate(route, { queryParams: { nav: queryString}});
             } else {
