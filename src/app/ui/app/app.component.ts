@@ -27,8 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        private router: Router,
-        private modalService: NgbModal,
+        //private router: Router,
+        //private modalService: NgbModal,
         private navService: NavService<AppTrackData>,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,
@@ -58,17 +58,17 @@ export class AppComponent implements OnInit, OnDestroy {
             this.detref.detectChanges();
         }));
 
-        this.subs.push(this.router.events
-            .pipe(
-                filter(event => event instanceof NavigationStart)
-            )
-            .subscribe((event: NavigationStart) => {
-                this.modalService.dismissAll();
-                if (event.restoredState) {
-                    this.appService.setAlert("danger", "Please don't use the browser's back or forward button to navigate.  Use the buttons in the app instead.");
-                  }
-                this.detref.detectChanges();
-        }));
+        // this.subs.push(this.router.events
+        //     .pipe(
+        //         filter(event => event instanceof NavigationStart)
+        //     )
+        //     .subscribe((event: NavigationStart) => {
+        //         this.modalService.dismissAll();
+        //         if (event.restoredState) {
+        //             this.appService.setAlert("danger", "Please don't use the browser's back or forward button to navigate.  Use the buttons in the app instead.");
+        //           }
+        //         this.detref.detectChanges();
+        // }));
 
     }
 

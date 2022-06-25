@@ -1,9 +1,10 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterStateSnapshot } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { defaultIfEmpty, map, reduce, tap } from 'rxjs/operators';
 
-class _NavContext<T> implements NavContext {
+class _NavContext implements NavContext {
     public track: NavTrack;
     public currentNode: NavTrackNode;
 
@@ -20,44 +21,28 @@ export const NAV_PROCESSOR = new InjectionToken<NavProcessor<any>>("Navigation P
     providedIn: 'root'
 })
 export class NavService<T> {
-    private callStack: _NavContext<T>[] = [];
+    private callStack: _NavContext[] = [];
     private _appData: T;
-
-    private _log: BehaviorSubject<string[]>;
 
     constructor(
         private router: Router,
+        private activatedRote: ActivatedRoute,
         @Inject(NAV_TRACKS) private tracks: ReadonlyArray<NavTrack>,
         @Inject(NAV_PROCESSOR) private processor: NavProcessor<T>
         ) { 
-            this._log = new BehaviorSubject<string[]>([]);
         }
-
-    public observe(): Observable<ReadonlyArray<string>> {
-        return this._log.asObservable();
-    }
 
     public get appData(): T {
         return this._appData;
     }
 
     /*
-    Used as an entry check on each page to deal with the situation where the
-    user has jumped into the middle of a track via he browser history or something
-    */
-    public validateRoute(): void {
-
-    // TO DO: check that the route matched the navigation state
-    }
-
-    /*
     Start a new track, if we have a current track then abandon it
     */
    public beginTrack(track: string, data: T, start?: string) {
-        this.abandonAll();
         this._appData = data;
+        this.callStack = [];
 
-        this.log("BEGINNING TRACK " + track);
         this.callTrack(track, start);
     }
 
@@ -66,6 +51,10 @@ export class NavService<T> {
     */
     public async navigate(action: string): Promise<void> {
         let result = Promise.resolve();
+
+        if (!this.callStack) {
+            this.callStack = this.getCallStack();
+        }
 
         try {
             if (this.callStack.length > 0) {
@@ -78,7 +67,7 @@ export class NavService<T> {
     
                     } else {
                         let nextNodeName = context.currentNode.actions[action];
-                        let nextNode = context.track.nodes.find(n => n.name === nextNodeName);
+                        let nextNode = this.getTrackNode(context.track, nextNodeName);
         
                         if (nextNode) {
                             result = this.invokeNode(nextNode, context);
@@ -95,7 +84,6 @@ export class NavService<T> {
                 this.goHome();
             }
         } catch (error) {
-            this.log("ERROR " + error.toString());
             result = Promise.reject();
         }
 
@@ -106,82 +94,80 @@ export class NavService<T> {
     Go directly to the page named, abandon any current track.
     */
    public gotoRoute(route: string[]) {
-        this.abandonAll();
-        this.router.navigate(route);
+        this.callStack = [];
+        this._navigate(route);
     }
 
     /*
     Go to the home page, abandon any current track.
     */
     public goHome() {
-        this.abandonAll();
         this.gotoRoute(["/home"]);
     }
 
-public async invokeNode(node: NavTrackNode, context: _NavContext<T>): Promise<void> {
-    let result = Promise.resolve();
-    let action: string;
+    private async invokeNode(node: NavTrackNode, context: _NavContext): Promise<void> {
+        let result = Promise.resolve();
+        let action: string;
 
-    this.log("INVOKING " + node.name);
-
-    switch (node.type) {
-        case "route":
-            context.currentNode = node;
-            this.router.navigate([node.route]);
-            break;
-        case "switch":
-            context.currentNode = node;
-            this.switchTrack(node.switch.track, node.switch.start);
-            break;
-        case "call":
-            context.currentNode = node;
-            this.callTrack(node.call.track, node.call.start);
-            break;
-        case "return":
-            action = node.return;
-            this.callStack.pop();
-            result = this.navigate(action);
-            break;
-        case "process":
-            action = await this.processor.exec(node.process, this._appData);
-            context.currentNode = node;
-            result = this.navigate(action);
-            break;
-        case "exit":
-            this.goHome();
-            break;
-    }
-    return result;
-}
-
-private switchTrack(trackName: string, start: string) {
-        let track = this.tracks.find(t => t.name === trackName);
-
-        if (track) {
-            const nodeName = start || track.start;
-            let startNode = track.nodes.find(n => n.name === nodeName);
-
-            if (startNode) {
-                let context = new _NavContext();
-                context.track = track;
-                context.currentNode = startNode;
+        switch (node.type) {
+            case "route":
+                context.currentNode = node;
+                this._navigate([node.route]);
+                break;
+            case "switch":
+                context.currentNode = node;
+                this.switchTrack(node.switch.track, node.switch.start);
+                break;
+            case "call":
+                context.currentNode = node;
+                this.callTrack(node.call.track, node.call.start);
+                break;
+            case "return":
+                action = node.return;
                 this.callStack.pop();
-                this.callStack.push(context);
-                this.invokeNode(startNode, context);
-            } else {
-                throw "Navigation Error - could not find start node";
-            }
-        } else {
-                throw "Navigation Error - could not find track with name " + trackName;
+                result = this.navigate(action);
+                break;
+            case "process":
+                action = await this.processor.exec(node.process, this._appData);
+                context.currentNode = node;
+                result = this.navigate(action);
+                break;
+            case "exit":
+                this.goHome();
+                break;
         }
-}
+        return result;
+    }
+
+    private switchTrack(trackName: string, start: string) {
+            let track = this.getTrack(trackName);
+
+            if (track) {
+                const nodeName = start || track.start;
+                let startNode = this.getTrackNode(track, nodeName);
+
+                if (startNode) {
+                    let context = new _NavContext();
+                    context.track = track;
+                    context.currentNode = startNode;
+                    this.callStack.pop();
+                    this.callStack.push(context);
+                    this.invokeNode(startNode, context);
+                } else {
+                    throw "Navigation Error - could not find start node";
+                }
+            } else {
+                    throw "Navigation Error - could not find track with name " + trackName;
+            }
+    }
+
     private callTrack(trackName: string, start: string) {
 
-        let track = this.tracks.find(t => t.name === trackName);
+        let track = this.getTrack(trackName);
 
         if (track) {
             const nodeName = start || track.start;
-            let startNode = track.nodes.find(n => n.name === nodeName);
+            let startNode = this.getTrackNode(track, nodeName);
 
             if (startNode) {
                 let context = new _NavContext();
@@ -197,23 +183,51 @@ private switchTrack(trackName: string, start: string) {
         }
     }
 
-    private abandonAll() {
-        try {
-            while(this.callStack.length > 0) {
-                this.callStack.pop();
+    private _navigate(route: string[]) {
+
+        from(this.callStack).pipe(
+            map(frame => `${frame.track.name}.${frame.currentNode.name}`),
+            reduce((queryStr, value) => `${queryStr}~${value}`),
+            defaultIfEmpty(null)
+        )
+        .subscribe(queryString => {
+            if (queryString) {
+                this.router.navigate(route, { queryParams: { nav: queryString}});
+            } else {
+                this.router.navigate(route);
             }
-            this.clearLog();
-        } catch {}
+        });
     }
 
-    private log(msg: string): void {
-        let current = this._log.value;
-        current.push(msg);
-        this._log.next(current);
+    private getCallStack(): _NavContext[] {
+        let result: _NavContext[] = [];
+
+        let navParam = this.activatedRote.snapshot.queryParamMap.get('nav');
+
+        if (navParam) {
+            let frames = navParam.split("~");
+            frames.forEach(frame => {
+                if (frame) {
+                    let parts = frame.split(".");
+                    if (parts.length === 2) {
+                        let track = this.getTrack(parts[0]);
+                        let currentNode = this.getTrackNode(track, parts[1]);
+                        result.push({track, currentNode});
+                    }
+                }
+            })
+        }
+
+        return result;
     }
 
-    private clearLog(): void {
-        this._log.next([]);
+    private getTrack(name: string): NavTrack {
+        return this.tracks.find(t => t.name === name);
+    }
+
+    private getTrackNode(track: NavTrack, name: string): NavTrackNode {
+        return track.nodes.find(n => n.name === name);
+
     }
 
 }

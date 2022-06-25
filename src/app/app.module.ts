@@ -67,7 +67,6 @@ import { ClueListItemComponent } from './ui/clues/clue-list-item/clue-list-item.
 import { solveTrack } from './services/navigation/tracks/solve-track';
 import { createPdfTrack } from './services/navigation/tracks/create-pdf-track';
 import { parseTrack } from './services/navigation/tracks/parse-track';
-import { NavLogComponent } from './ui/general/nav-log/nav-log.component';
 import { editPuzzleTrack } from './services/navigation/tracks/edit-puzzle-track';
 import { EditClueFormComponent } from './ui/puzzle-editing/tabbed-dialogs/forms/edit-clue-form/edit-clue-form.component';
 import { ClueDialogComponent } from './ui/puzzle-editing/tabbed-dialogs/clue-dialog/clue-dialog.component';
@@ -177,7 +176,6 @@ const tracks: ReadonlyArray<NavTrack> = [
         SpecialLoginComponent,
         NavErrorComponent,
         ClueListItemComponent,
-        NavLogComponent,
         EditClueFormComponent,
         PublishOptionsComponent,
         ClueDialogComponent,

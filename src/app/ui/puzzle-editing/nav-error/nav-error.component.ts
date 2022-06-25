@@ -27,7 +27,6 @@ export class NavErrorComponent implements OnInit, OnDestroy {
         try {
             this.appData = this.navService.appData;
 
-            this.subs.push(this.navService.observe().subscribe(log => this.navHistory = log));
             this.subs.push(this.activePuzzle.observe().subscribe(puzzle => {
                 try {
                     if (puzzle) {
