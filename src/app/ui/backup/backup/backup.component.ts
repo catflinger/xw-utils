@@ -3,7 +3,6 @@ import { BackupService } from 'src/app/services/storage/backup.service';
 import { Subscription, combineLatest } from 'rxjs';
 import { IPuzzleManager } from 'src/app/services/puzzles/puzzle-management.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { IPuzzleSummary } from 'src/app/model/interfaces';
 import * as Bowser from "bowser";
 import { AuthService } from 'src/app/services/app/auth.service';
@@ -32,7 +31,6 @@ export class BackupComponent implements OnInit, OnDestroy {
         private navService: NavService<AppTrackData>,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        private router: Router,
     ) { }
 
     public ngOnInit(): void {
@@ -74,7 +72,7 @@ export class BackupComponent implements OnInit, OnDestroy {
             this.form.value.caption)
         .then(() => {
             this.appService.clearBusy();
-            this.router.navigate(["backups"]);
+            this.navService.gotoRoute(["backups"]);
         })
         .catch((error) => {
             this.appService.clearBusy();

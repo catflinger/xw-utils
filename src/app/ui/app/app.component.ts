@@ -1,16 +1,13 @@
-import { Component, OnInit, OnDestroy, Inject, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { Subscription } from 'rxjs';
 import { IActivePuzzle } from 'src/app/services/puzzles/puzzle-management.service';
 import { AuthService, Credentials } from 'src/app/services/app/auth.service';
 import { NavService } from '../../services/navigation/nav.service';
 import { AppTrackData } from '../../services/navigation/tracks/app-track-data';
-import { Router, NavigationStart } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
 import { TraceService } from 'src/app/services/app/trace.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -27,8 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private subs: Subscription[] = [];
 
     constructor(
-        //private router: Router,
-        //private modalService: NgbModal,
         private navService: NavService<AppTrackData>,
         private authService: AuthService,
         private activePuzzle: IActivePuzzle,

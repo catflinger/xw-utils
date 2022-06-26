@@ -5,9 +5,7 @@ import { BackupService } from 'src/app/services/storage/backup.service';
 import { AuthService } from 'src/app/services/app/auth.service';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
-import { Router } from '@angular/router';
 import Bowser from 'bowser';
-import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings, AppResultSymbols } from 'src/app/services/common';
 import { AppService } from '../../general/app.service';
 
@@ -29,7 +27,6 @@ export class BackupSettingsComponent implements OnInit {
         private navService: NavService<AppTrackData>,
         private detRef: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        private router: Router,
     ) { }
 
     public ngOnInit(): void {
@@ -56,7 +53,7 @@ export class BackupSettingsComponent implements OnInit {
         
         this.backupService.backupSettings(origin, this.form.value.caption)
         .then(() => {
-            this.router.navigate(["backups"]);
+            this.navService.gotoRoute(["backups"]);
         })
         .catch((error) => {
             const message = error === AppResultSymbols.AuthorizationFailure ?

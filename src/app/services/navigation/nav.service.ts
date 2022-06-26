@@ -1,8 +1,8 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavTrack, NavTrackNode, NavContext, NavProcessor } from './interfaces';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { defaultIfEmpty, map, reduce, tap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { defaultIfEmpty, map, reduce } from 'rxjs/operators';
 
 class _NavContext implements NavContext {
     public track: NavTrack;

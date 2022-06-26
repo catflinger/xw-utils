@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Puzzle } from 'src/app/model/puzzle-model/puzzle'; 
+import { Puzzle } from 'src/app/model/puzzle-model/puzzle';
 import { NavService } from 'src/app/services/navigation/nav.service';
 import { AppTrackData } from 'src/app/services/navigation/tracks/app-track-data';
 import { Subscription, combineLatest, Observable } from 'rxjs';

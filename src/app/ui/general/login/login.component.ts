@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 import { AppService, AppStatus } from 'src/app/ui/general/app.service';
 import { AppSettingsService } from 'src/app/services/app/app-settings.service';
 import { AppSettings } from 'src/app/services/common';
