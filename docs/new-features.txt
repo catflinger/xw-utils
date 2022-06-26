@@ -1,23 +1,6 @@
 General Bugs
 ============
 
-BUG Deletings clues and grid in puzzle needs a confirm dialog!
-
-Fifteensquared Theme
-====================
-Find a mechanism to hide/show off-topic comment
-
-Upgrade to iText7
-===================
-Get Guardian working
-Test for other PDF
-Move grid finder to TypeScript?
-
-Navigation Issues
-===================
-Browser Back Button - Send the user back to a landing page when they click the browser back/forward buttons.
-This should display a message to reasure users that their work will not be lost but accessible from the home page
-
 Warn the user when leaving the Settings page with unsaved changes.  Other pages too?
 
 Grid Image Maker

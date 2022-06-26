@@ -23,7 +23,6 @@ export class GridImageComponent implements OnInit, OnDestroy {
     public dataUrl: string;
     public filename: string;
 
-    @ViewChild("downloadLink", { static: false }) downloadLink: ElementRef;
     @ViewChild(GridComponent, { static: false }) gridControl: GridComponent;
 
     private subs: Subscription[] = [];
@@ -113,10 +112,18 @@ export class GridImageComponent implements OnInit, OnDestroy {
 
             setTimeout(
                 () => {
-                    this.downloadLink.nativeElement.click();
+                    this.downloadFile(this.dataUrl, this.form.value.filename);
+                    this.appService.setAlert("info", `The image is being downloaded.  Look in your to your browser's downloads folder.`);
                 },
                 250
             );
         }
     }
+
+    private downloadFile(url: string, fileName: string): void {
+        const downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.href = url;
+        downloadLink.click();
+     }
 }
